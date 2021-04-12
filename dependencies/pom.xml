@@ -10,6 +10,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>gls-dependencies</artifactId>
+    <packaging>pom</packaging>
 
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.gls.framework.api</groupId>
+                <artifactId>gls-framework-api</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.framework.core</groupId>
+                <artifactId>gls-framework-core</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

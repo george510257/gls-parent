@@ -11,5 +11,17 @@
 
     <groupId>com.gls.demo</groupId>
     <artifactId>gls-demo</artifactId>
+    <packaging>pom</packaging>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.gls</groupId>
+                <artifactId>gls-dependencies</artifactId>
+                <version>${parent.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

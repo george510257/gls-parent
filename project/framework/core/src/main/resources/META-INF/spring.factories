@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.gls.starter.data.jpa.DataJpaConfig
+  com.gls.framework.core.FrameworkCoreConfig
