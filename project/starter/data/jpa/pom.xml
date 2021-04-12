@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gls.starter.data.jpa</groupId>
-    <artifactId>gls-data-jpa-starter</artifactId>
+    <artifactId>gls-starter-data-jpa</artifactId>
 
     <dependencies>
         <dependency>

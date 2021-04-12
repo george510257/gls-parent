@@ -9,13 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gls-project</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>starter</module>
-        <module>security</module>
-        <module>framework</module>
-    </modules>
-
+    <groupId>com.gls.demo</groupId>
+    <artifactId>gls-demo</artifactId>
 
 </project>

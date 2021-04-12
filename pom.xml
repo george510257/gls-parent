@@ -6,6 +6,7 @@
     <modules>
         <module>dependencies</module>
         <module>project</module>
+        <module>demo</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
