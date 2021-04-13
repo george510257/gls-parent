@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gls-security</artifactId>
+        <groupId>com.gls.security</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gls.security.browser</groupId>
+    <artifactId>gls-security-browser</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gls.security.captcha</groupId>
+            <artifactId>gls-security-captcha</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gls.security.social</groupId>
+            <artifactId>gls-security-social</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

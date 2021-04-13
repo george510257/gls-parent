@@ -18,6 +18,7 @@
         <module>social</module>
         <module>auth</module>
         <module>app</module>
+        <module>browser</module>
     </modules>
 
 </project>
