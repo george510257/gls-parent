@@ -3,7 +3,7 @@ package com.gls.framework.core.constants;
 /**
  * @author george
  */
-public interface FrameworkCoreConstants {
+public interface FrameworkConstants {
 
     String BASE_PACKAGE = "com.gls";
 

@@ -20,7 +20,7 @@ public class SnowflakeIdentifierGenerator implements Configurable, IdentifierGen
 
     public static final String NAME = "snowflakeIdentifierGenerator";
 
-    public static final String STRATEGY = "com.aiad.starter.data.jpa.generator.SnowflakeIdentifierGenerator";
+    public static final String STRATEGY = SnowflakeIdentifierGenerator.class.getName();
 
     /**
      * 工作机器ID(0~31)

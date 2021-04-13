@@ -2,7 +2,7 @@ package com.gls.starter.web.result;
 
 import com.alibaba.fastjson.JSON;
 import com.gls.framework.api.result.Result;
-import com.gls.framework.core.constants.FrameworkCoreConstants;
+import com.gls.framework.core.constants.FrameworkConstants;
 import com.gls.framework.core.result.ResultHelper;
 import com.gls.framework.core.result.ResultProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.List;
  * @author george
  */
 @Slf4j
-@ControllerAdvice(basePackages = FrameworkCoreConstants.BASE_PACKAGE)
+@ControllerAdvice(basePackages = FrameworkConstants.BASE_PACKAGE)
 public class ResultHandler implements ResponseBodyAdvice<Object> {
 
     @Resource

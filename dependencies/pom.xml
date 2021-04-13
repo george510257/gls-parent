@@ -22,12 +22,34 @@
             <dependency>
                 <groupId>com.gls.framework.api</groupId>
                 <artifactId>gls-framework-api</artifactId>
-                <version>${parent.version}</version>
+                <version>${project.parent.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.gls.framework.core</groupId>
                 <artifactId>gls-framework-core</artifactId>
-                <version>${parent.version}</version>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <!-- 启动器模块 -->
+            <dependency>
+                <groupId>com.gls.starter.data.jpa</groupId>
+                <artifactId>gls-starter-data-jpa</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.starter.data.redis</groupId>
+                <artifactId>gls-starter-data-redis</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.starter.web</groupId>
+                <artifactId>gls-starter-web</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.starter.webflux</groupId>
+                <artifactId>gls-starter-webflux</artifactId>
+                <version>${project.parent.version}</version>
             </dependency>
 
             <!-- 第三方库 -->

@@ -11,5 +11,9 @@
 
     <groupId>com.gls.security</groupId>
     <artifactId>gls-security</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>core</module>
+    </modules>
 
 </project>

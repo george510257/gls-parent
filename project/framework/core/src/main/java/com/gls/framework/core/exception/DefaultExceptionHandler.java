@@ -3,7 +3,7 @@ package com.gls.framework.core.exception;
 import com.alibaba.cloud.sentinel.rest.SentinelClientHttpResponse;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.gls.framework.api.result.Result;
-import com.gls.framework.core.constants.FrameworkCoreConstants;
+import com.gls.framework.core.constants.FrameworkConstants;
 import com.gls.framework.core.result.ResultHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
@@ -17,7 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
  * @author george
  */
 @Slf4j
-@ControllerAdvice(basePackages = FrameworkCoreConstants.BASE_PACKAGE)
+@ControllerAdvice(basePackages = FrameworkConstants.BASE_PACKAGE)
 public class DefaultExceptionHandler {
 
     public static SentinelClientHttpResponse handleException(HttpRequest request, byte[] body, ClientHttpRequestExecution execution, BlockException ex) {
