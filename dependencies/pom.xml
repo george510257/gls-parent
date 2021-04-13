@@ -12,8 +12,13 @@
     <artifactId>gls-dependencies</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <springfox.version>3.0.0</springfox.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
+            <!-- 架构模块 -->
             <dependency>
                 <groupId>com.gls.framework.api</groupId>
                 <artifactId>gls-framework-api</artifactId>
@@ -23,6 +28,13 @@
                 <groupId>com.gls.framework.core</groupId>
                 <artifactId>gls-framework-core</artifactId>
                 <version>${parent.version}</version>
+            </dependency>
+
+            <!-- 第三方库 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
