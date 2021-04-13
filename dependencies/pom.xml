@@ -14,6 +14,7 @@
 
     <properties>
         <springfox.version>3.0.0</springfox.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
 
     <dependencyManagement>
@@ -27,6 +28,18 @@
             <dependency>
                 <groupId>com.gls.framework.core</groupId>
                 <artifactId>gls-framework-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
+            <!-- 权限模块 -->
+            <dependency>
+                <groupId>com.gls.security.core</groupId>
+                <artifactId>gls-security-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.security.captcha</groupId>
+                <artifactId>gls-security-captcha</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 
@@ -57,6 +70,11 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

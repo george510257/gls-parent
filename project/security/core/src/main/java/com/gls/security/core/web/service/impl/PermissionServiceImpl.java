@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 @AllArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public boolean hasPermission(Authentication authentication) {
