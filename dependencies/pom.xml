@@ -34,6 +34,16 @@
 
             <!-- 权限模块 -->
             <dependency>
+                <groupId>com.gls.security.app</groupId>
+                <artifactId>gls-security-app</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.security.auth</groupId>
+                <artifactId>gls-security-auth</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.gls.security.core</groupId>
                 <artifactId>gls-security-core</artifactId>
                 <version>${project.parent.version}</version>
@@ -41,6 +51,11 @@
             <dependency>
                 <groupId>com.gls.security.captcha</groupId>
                 <artifactId>gls-security-captcha</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.security.social</groupId>
+                <artifactId>gls-security-social</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 

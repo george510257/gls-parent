@@ -18,6 +18,10 @@
             <artifactId>gls-security-captcha</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.gls.security.social</groupId>
+            <artifactId>gls-security-social</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
