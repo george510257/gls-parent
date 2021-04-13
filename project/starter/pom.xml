@@ -15,6 +15,7 @@
     <modules>
         <module>data/jpa</module>
         <module>web</module>
+        <module>webflux</module>
     </modules>
 
 
