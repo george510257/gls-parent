@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SmsCaptchaDTO extends CaptchaDTO {
+public class SmsCaptcha extends Captcha {
 }

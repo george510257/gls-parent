@@ -1,13 +1,11 @@
 package com.gls.security.captcha.web.service;
 
-import com.gls.security.captcha.web.model.CaptchaDTO;
-
 /**
  * 校验码处理器，封装不同校验码的处理逻辑
  *
  * @author george
  */
-public interface CaptchaService<Captcha extends CaptchaDTO> {
+public interface CaptchaService {
 
     /**
      * 创建校验码

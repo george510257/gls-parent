@@ -2,7 +2,7 @@ package com.gls.security.captcha.support.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.ImagesCaptchaGenerator;
-import com.gls.security.captcha.web.model.ImagesCaptchaDTO;
+import com.gls.security.captcha.web.model.ImagesCaptcha;
 import com.gls.starter.web.support.ServletHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -23,9 +23,9 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
     private final CaptchaProperties captchaProperties;
 
     @Override
-    public ImagesCaptchaDTO generate() {
+    public ImagesCaptcha generate() {
         CaptchaProperties.Images images = captchaProperties.getImages();
-        ImagesCaptchaDTO imagesCaptchaDTO = new ImagesCaptchaDTO();
+        ImagesCaptcha imagesCaptcha = new ImagesCaptcha();
 
         int width = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "width", images.getWidth());
         int height = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "height", images.getHeight());
@@ -55,11 +55,11 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
 
         g.dispose();
 
-        imagesCaptchaDTO.setImages(image);
-        imagesCaptchaDTO.setCode(sRand.toString());
-        imagesCaptchaDTO.setExpireTime(LocalDateTime.now().plusSeconds(images.getExpireIn()));
+        imagesCaptcha.setImages(image);
+        imagesCaptcha.setCode(sRand.toString());
+        imagesCaptcha.setExpireTime(LocalDateTime.now().plusSeconds(images.getExpireIn()));
 
-        return imagesCaptchaDTO;
+        return imagesCaptcha;
     }
 
     private Color getRandColor(int fc, int bc) {

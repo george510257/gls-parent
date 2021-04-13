@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author george
  */
 @Data
-public class CaptchaDTO implements Serializable {
+public class Captcha implements Serializable {
 
     private String code;
 

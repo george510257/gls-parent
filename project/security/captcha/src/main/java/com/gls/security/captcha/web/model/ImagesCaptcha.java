@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ImagesCaptchaDTO extends CaptchaDTO {
+public class ImagesCaptcha extends Captcha {
 
     @JsonIgnore
     private transient BufferedImage images;

@@ -2,7 +2,7 @@ package com.gls.security.captcha.web.service.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.SmsCaptchaSender;
-import com.gls.security.captcha.web.model.SmsCaptchaDTO;
+import com.gls.security.captcha.web.model.SmsCaptcha;
 import com.gls.security.core.constants.SecurityProperties;
 import com.gls.starter.web.support.ServletHelper;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @author george
  */
 @Service
-public class SmsCaptchaService extends BaseCaptchaService<SmsCaptchaDTO> {
+public class SmsCaptchaService extends BaseCaptchaService<SmsCaptcha> {
 
     @Resource
     private SmsCaptchaSender smsCaptchaSender;
@@ -29,19 +29,19 @@ public class SmsCaptchaService extends BaseCaptchaService<SmsCaptchaDTO> {
     private SecurityProperties securityProperties;
 
     @Override
-    protected SmsCaptchaDTO generateCaptcha() {
-        SmsCaptchaDTO smsCaptchaDTO = new SmsCaptchaDTO();
+    protected SmsCaptcha generateCaptcha() {
+        SmsCaptcha smsCaptcha = new SmsCaptcha();
         String code = getRandom(captchaProperties.getSms().getLength());
-        smsCaptchaDTO.setCode(code);
-        smsCaptchaDTO.setExpireTime(LocalDateTime.now().plusSeconds(captchaProperties.getSms().getExpireIn()));
-        return smsCaptchaDTO;
+        smsCaptcha.setCode(code);
+        smsCaptcha.setExpireTime(LocalDateTime.now().plusSeconds(captchaProperties.getSms().getExpireIn()));
+        return smsCaptcha;
     }
 
     @Override
-    protected void sendCaptcha(SmsCaptchaDTO smsCaptchaDTO) throws IOException {
+    protected void sendCaptcha(SmsCaptcha smsCaptcha) throws IOException {
         String mobileParameter = captchaProperties.getSms().getMobileParameter();
         String mobile = ServletHelper.getRequest().getParameter(mobileParameter);
-        smsCaptchaSender.send(mobile, smsCaptchaDTO.getCode());
+        smsCaptchaSender.send(mobile, smsCaptcha.getCode());
     }
 
     @Override

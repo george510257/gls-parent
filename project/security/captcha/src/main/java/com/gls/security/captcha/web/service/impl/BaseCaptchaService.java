@@ -2,7 +2,7 @@ package com.gls.security.captcha.web.service.impl;
 
 import com.gls.framework.core.utils.UrlUtils;
 import com.gls.security.captcha.exception.CaptchaException;
-import com.gls.security.captcha.web.model.CaptchaDTO;
+import com.gls.security.captcha.web.model.Captcha;
 import com.gls.security.captcha.web.repository.CaptchaRepository;
 import com.gls.security.captcha.web.service.CaptchaService;
 import com.gls.starter.web.support.ServletHelper;
@@ -20,14 +20,14 @@ import java.util.Set;
  * @author george
  */
 @Slf4j
-public abstract class BaseCaptchaService<Captcha extends CaptchaDTO> implements CaptchaService<Captcha> {
+public abstract class BaseCaptchaService<C extends Captcha> implements CaptchaService {
 
     @Resource
     private CaptchaRepository captchaRepository;
 
     @Override
     public void create() throws Exception {
-        Captcha captcha = generateCaptcha();
+        C captcha = generateCaptcha();
         saveCaptcha(captcha);
         sendCaptcha(captcha);
     }
@@ -35,7 +35,7 @@ public abstract class BaseCaptchaService<Captcha extends CaptchaDTO> implements 
     @Override
     public void validate() {
         String codeInRequest = getCodeInRequest();
-        CaptchaDTO codeInSession = captchaRepository.getCaptcha(getType());
+        Captcha codeInSession = captchaRepository.getCaptcha(getType());
 
         if (codeInRequest == null || "".equals(codeInRequest)) {
             throw new CaptchaException("验证码的值不能为空");
@@ -67,7 +67,7 @@ public abstract class BaseCaptchaService<Captcha extends CaptchaDTO> implements 
      *
      * @return
      */
-    protected abstract Captcha generateCaptcha();
+    protected abstract C generateCaptcha();
 
     /**
      * 发送校验码
@@ -75,7 +75,7 @@ public abstract class BaseCaptchaService<Captcha extends CaptchaDTO> implements 
      * @param captcha
      * @throws IOException
      */
-    protected abstract void sendCaptcha(Captcha captcha) throws IOException;
+    protected abstract void sendCaptcha(C captcha) throws IOException;
 
     /**
      * 获取输入的校验码
@@ -91,7 +91,7 @@ public abstract class BaseCaptchaService<Captcha extends CaptchaDTO> implements 
      */
     protected abstract Set<String> getUrls();
 
-    private void saveCaptcha(Captcha captcha) {
+    private void saveCaptcha(C captcha) {
         captchaRepository.saveCaptcha(getType(), captcha);
     }
 

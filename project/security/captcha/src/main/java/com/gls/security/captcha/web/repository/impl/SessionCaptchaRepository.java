@@ -1,6 +1,6 @@
 package com.gls.security.captcha.web.repository.impl;
 
-import com.gls.security.captcha.web.model.CaptchaDTO;
+import com.gls.security.captcha.web.model.Captcha;
 import com.gls.security.captcha.web.repository.CaptchaRepository;
 import com.gls.starter.web.support.ServletHelper;
 
@@ -16,13 +16,13 @@ public class SessionCaptchaRepository implements CaptchaRepository {
     private static final String SESSION_KEY_PREFIX = "SESSION_KEY_FOR_CODE_";
 
     @Override
-    public void saveCaptcha(String type, CaptchaDTO captcha) {
+    public void saveCaptcha(String type, Captcha captcha) {
         ServletHelper.getSession().setAttribute(getSessionKey(type), captcha);
     }
 
     @Override
-    public CaptchaDTO getCaptcha(String type) {
-        return (CaptchaDTO) ServletHelper.getSession().getAttribute(getSessionKey(type));
+    public Captcha getCaptcha(String type) {
+        return (Captcha) ServletHelper.getSession().getAttribute(getSessionKey(type));
     }
 
     @Override

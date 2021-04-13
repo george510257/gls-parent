@@ -2,7 +2,7 @@ package com.gls.security.captcha.web.service.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.ImagesCaptchaGenerator;
-import com.gls.security.captcha.web.model.ImagesCaptchaDTO;
+import com.gls.security.captcha.web.model.ImagesCaptcha;
 import com.gls.security.core.constants.SecurityProperties;
 import com.gls.starter.web.support.ServletHelper;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.Set;
  * @author george
  */
 @Service
-public class ImagesCaptchaService extends BaseCaptchaService<ImagesCaptchaDTO> {
+public class ImagesCaptchaService extends BaseCaptchaService<ImagesCaptcha> {
 
     @Resource
     private ImagesCaptchaGenerator imagesCaptchaGenerator;
@@ -28,13 +28,13 @@ public class ImagesCaptchaService extends BaseCaptchaService<ImagesCaptchaDTO> {
     private SecurityProperties securityProperties;
 
     @Override
-    protected ImagesCaptchaDTO generateCaptcha() {
+    protected ImagesCaptcha generateCaptcha() {
         return imagesCaptchaGenerator.generate();
     }
 
     @Override
-    protected void sendCaptcha(ImagesCaptchaDTO imagesCaptchaDTO) throws IOException {
-        ImageIO.write(imagesCaptchaDTO.getImages(), "JPEG", ServletHelper.getResponse().getOutputStream());
+    protected void sendCaptcha(ImagesCaptcha imagesCaptcha) throws IOException {
+        ImageIO.write(imagesCaptcha.getImages(), "JPEG", ServletHelper.getResponse().getOutputStream());
     }
 
     @Override
