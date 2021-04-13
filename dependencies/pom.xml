@@ -15,6 +15,7 @@
     <properties>
         <springfox.version>3.0.0</springfox.version>
         <kaptcha.version>2.3.2</kaptcha.version>
+        <JustAuth.version>1.16.0</JustAuth.version>
     </properties>
 
     <dependencyManagement>
@@ -75,6 +76,11 @@
                 <groupId>com.github.penggle</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>me.zhyd.oauth</groupId>
+                <artifactId>JustAuth</artifactId>
+                <version>${JustAuth.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
