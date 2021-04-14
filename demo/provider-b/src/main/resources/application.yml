@@ -1,8 +1,8 @@
 spring:
   application:
-    name: gls-demo-provider1
+    name: gls-demo-provider-b
 server:
   port: 8803
 dubbo:
   scan:
-    base-packages: com.gls.demo.provider.web.remote
+    base-packages: com.gls.demo.provider.web.rpc

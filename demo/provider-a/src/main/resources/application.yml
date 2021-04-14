@@ -5,4 +5,4 @@ server:
   port: 8802
 dubbo:
   scan:
-    base-packages: com.gls.demo.provider.web.remote
+    base-packages: com.gls.demo.provider.web.rpc

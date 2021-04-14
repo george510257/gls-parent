@@ -16,6 +16,7 @@
         <module>provider-api</module>
         <module>provider-a</module>
         <module>provider-b</module>
+        <module>consumer</module>
     </modules>
 
     <dependencyManagement>
