@@ -20,6 +20,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 样例模块 -->
+            <dependency>
+                <groupId>com.gls.demo.provider.api</groupId>
+                <artifactId>gls-demo-provider-api</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
             <!-- 架构模块 -->
             <dependency>
                 <groupId>com.gls.framework.api</groupId>

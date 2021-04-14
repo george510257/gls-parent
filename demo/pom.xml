@@ -12,6 +12,10 @@
     <groupId>com.gls.demo</groupId>
     <artifactId>gls-demo</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>provider-api</module>
+        <module>provider-a</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
