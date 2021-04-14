@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: gls-cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          route-id-prefix: gls-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8821/oauth/jwt/jwks.json
+server:
+  port: 8812
+
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /apidoc

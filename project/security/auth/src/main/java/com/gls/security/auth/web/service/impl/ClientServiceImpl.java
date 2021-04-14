@@ -22,7 +22,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         log.info("clientId: {}", clientId);
-        String password = passwordEncoder.encode("aiadver");
+        String password = passwordEncoder.encode("glseven");
         log.info("password: {}", password);
         BaseClientDetails clientDetails = new BaseClientDetails(clientId, "", "read,write,all", "authorization_code,password,client_credentials,implicit,refresh_token,images_captcha,sms_captcha", "ROLE_USER");
         clientDetails.setClientSecret(password);
