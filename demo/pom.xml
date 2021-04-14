@@ -15,6 +15,7 @@
     <modules>
         <module>provider-api</module>
         <module>provider-a</module>
+        <module>provider-b</module>
     </modules>
 
     <dependencyManagement>

@@ -1,4 +1,4 @@
-package com.gls.demo.provider.web.remote;
+package com.gls.demo.provider.web.rpc;
 
 import com.gls.demo.provider.api.DubboDemoApi;
 import com.gls.demo.provider.api.model.DemoModel;
