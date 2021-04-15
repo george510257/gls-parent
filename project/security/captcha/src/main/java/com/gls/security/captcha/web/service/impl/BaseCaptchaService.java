@@ -2,7 +2,8 @@ package com.gls.security.captcha.web.service.impl;
 
 import com.gls.framework.core.utils.UrlUtils;
 import com.gls.security.captcha.exception.CaptchaException;
-import com.gls.security.captcha.web.model.Captcha;
+import com.gls.security.captcha.web.converter.CaptchaConverter;
+import com.gls.security.captcha.web.model.CaptchaModel;
 import com.gls.security.captcha.web.repository.CaptchaRepository;
 import com.gls.security.captcha.web.service.CaptchaService;
 import com.gls.starter.web.support.ServletHelper;
@@ -20,10 +21,13 @@ import java.util.Set;
  * @author george
  */
 @Slf4j
-public abstract class BaseCaptchaService<C extends Captcha> implements CaptchaService {
+public abstract class BaseCaptchaService<C extends CaptchaModel> implements CaptchaService {
 
     @Resource
     private CaptchaRepository captchaRepository;
+
+    @Resource
+    private CaptchaConverter captchaConverter;
 
     @Override
     public void create() throws Exception {
@@ -35,7 +39,7 @@ public abstract class BaseCaptchaService<C extends Captcha> implements CaptchaSe
     @Override
     public void validate() {
         String codeInRequest = getCodeInRequest();
-        Captcha codeInSession = captchaRepository.getCaptcha(getType());
+        CaptchaModel codeInSession = captchaConverter.sourceToTarget(captchaRepository.getCaptcha(getType()));
 
         if (codeInRequest == null || "".equals(codeInRequest)) {
             throw new CaptchaException("验证码的值不能为空");
@@ -92,7 +96,7 @@ public abstract class BaseCaptchaService<C extends Captcha> implements CaptchaSe
     protected abstract Set<String> getUrls();
 
     private void saveCaptcha(C captcha) {
-        captchaRepository.saveCaptcha(getType(), captcha);
+        captchaRepository.saveCaptcha(getType(), captchaConverter.targetToSource(captcha));
     }
 
     private String getType() {

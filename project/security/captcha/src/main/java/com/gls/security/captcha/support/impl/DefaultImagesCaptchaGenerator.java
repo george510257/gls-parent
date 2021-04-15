@@ -2,7 +2,7 @@ package com.gls.security.captcha.support.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.ImagesCaptchaGenerator;
-import com.gls.security.captcha.web.model.ImagesCaptcha;
+import com.gls.security.captcha.web.model.ImagesCaptchaModel;
 import com.gls.starter.web.support.ServletHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -23,9 +23,9 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
     private final CaptchaProperties captchaProperties;
 
     @Override
-    public ImagesCaptcha generate() {
+    public ImagesCaptchaModel generate() {
         CaptchaProperties.Images images = captchaProperties.getImages();
-        ImagesCaptcha imagesCaptcha = new ImagesCaptcha();
+        ImagesCaptchaModel imagesCaptcha = new ImagesCaptchaModel();
 
         int width = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "width", images.getWidth());
         int height = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "height", images.getHeight());

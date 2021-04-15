@@ -1,6 +1,6 @@
 package com.gls.security.captcha.web.repository;
 
-import com.gls.security.captcha.web.model.Captcha;
+import com.gls.security.captcha.web.entity.CaptchaEntity;
 
 /**
  * @author george
@@ -13,7 +13,7 @@ public interface CaptchaRepository {
      * @param type
      * @param captcha
      */
-    void saveCaptcha(String type, Captcha captcha);
+    void saveCaptcha(String type, CaptchaEntity captcha);
 
     /**
      * 获取验证码
@@ -21,7 +21,7 @@ public interface CaptchaRepository {
      * @param type
      * @return
      */
-    Captcha getCaptcha(String type);
+    CaptchaEntity getCaptcha(String type);
 
     /**
      * 移除验证码

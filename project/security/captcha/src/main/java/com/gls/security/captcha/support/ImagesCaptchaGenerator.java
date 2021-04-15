@@ -1,6 +1,6 @@
 package com.gls.security.captcha.support;
 
-import com.gls.security.captcha.web.model.ImagesCaptcha;
+import com.gls.security.captcha.web.model.ImagesCaptchaModel;
 
 /**
  * @author george
@@ -12,5 +12,5 @@ public interface ImagesCaptchaGenerator {
      *
      * @return
      */
-    ImagesCaptcha generate();
+    ImagesCaptchaModel generate();
 }

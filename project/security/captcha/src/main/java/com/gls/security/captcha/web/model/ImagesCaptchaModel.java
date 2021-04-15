@@ -1,6 +1,5 @@
 package com.gls.security.captcha.web.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,8 +10,7 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ImagesCaptcha extends Captcha {
+public class ImagesCaptchaModel extends CaptchaModel {
 
-    @JsonIgnore
     private transient BufferedImage images;
 }

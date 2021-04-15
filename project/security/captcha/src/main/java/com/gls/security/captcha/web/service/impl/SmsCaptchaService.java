@@ -2,7 +2,7 @@ package com.gls.security.captcha.web.service.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.SmsCaptchaSender;
-import com.gls.security.captcha.web.model.SmsCaptcha;
+import com.gls.security.captcha.web.model.SmsCaptchaModel;
 import com.gls.security.core.constants.SecurityProperties;
 import com.gls.starter.web.support.ServletHelper;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @author george
  */
 @Service
-public class SmsCaptchaService extends BaseCaptchaService<SmsCaptcha> {
+public class SmsCaptchaService extends BaseCaptchaService<SmsCaptchaModel> {
 
     @Resource
     private SmsCaptchaSender smsCaptchaSender;
@@ -29,8 +29,8 @@ public class SmsCaptchaService extends BaseCaptchaService<SmsCaptcha> {
     private SecurityProperties securityProperties;
 
     @Override
-    protected SmsCaptcha generateCaptcha() {
-        SmsCaptcha smsCaptcha = new SmsCaptcha();
+    protected SmsCaptchaModel generateCaptcha() {
+        SmsCaptchaModel smsCaptcha = new SmsCaptchaModel();
         String code = getRandom(captchaProperties.getSms().getLength());
         smsCaptcha.setCode(code);
         smsCaptcha.setExpireTime(LocalDateTime.now().plusSeconds(captchaProperties.getSms().getExpireIn()));
@@ -38,7 +38,7 @@ public class SmsCaptchaService extends BaseCaptchaService<SmsCaptcha> {
     }
 
     @Override
-    protected void sendCaptcha(SmsCaptcha smsCaptcha) throws IOException {
+    protected void sendCaptcha(SmsCaptchaModel smsCaptcha) throws IOException {
         String mobileParameter = captchaProperties.getSms().getMobileParameter();
         String mobile = ServletHelper.getRequest().getParameter(mobileParameter);
         smsCaptchaSender.send(mobile, smsCaptcha.getCode());

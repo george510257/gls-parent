@@ -1,4 +1,4 @@
-package com.gls.security.captcha.web.model;
+package com.gls.security.captcha.web.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -6,14 +6,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * @author george
  */
 @Data
-public class Captcha implements Serializable {
+public class CaptchaEntity {
 
     private String code;
 

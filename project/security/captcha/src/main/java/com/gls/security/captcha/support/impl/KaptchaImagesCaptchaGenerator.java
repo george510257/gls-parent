@@ -2,7 +2,7 @@ package com.gls.security.captcha.support.impl;
 
 import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.support.ImagesCaptchaGenerator;
-import com.gls.security.captcha.web.model.ImagesCaptcha;
+import com.gls.security.captcha.web.model.ImagesCaptchaModel;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import lombok.AllArgsConstructor;
@@ -22,13 +22,13 @@ public class KaptchaImagesCaptchaGenerator implements ImagesCaptchaGenerator {
     private final CaptchaProperties captchaProperties;
 
     @Override
-    public ImagesCaptcha generate() {
+    public ImagesCaptchaModel generate() {
         CaptchaProperties.Images images = captchaProperties.getImages();
         DefaultKaptcha defaultKaptcha = getDefaultKaptcha(images);
         String text = defaultKaptcha.createText();
         log.info("text: {}", text);
         BufferedImage image = defaultKaptcha.createImage(text);
-        ImagesCaptcha imagesCaptcha = new ImagesCaptcha();
+        ImagesCaptchaModel imagesCaptcha = new ImagesCaptchaModel();
         imagesCaptcha.setCode(text);
         imagesCaptcha.setImages(image);
         imagesCaptcha.setExpireTime(LocalDateTime.now().plusSeconds(images.getExpireIn()));
