@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gls-demo-security
+  redis:
+    host: 172.31.124.62
+    port: 6379
+    database: 7
+    jedis:
+      pool:
+        max-idle: 8
+        max-active: 8
+        max-wait: 500
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: http://localhost:${server.port}/oauth/check_token
+          client-id: glseven
+          client-secret: glseven
+      client:
+        registration:
+          github:
+            client-id: 6eaed4a111193a7a93ee
+            client-secret: a1b6c083ff10a4a83520697c2e3e13cdaaeb5846
+server:
+  port: 8804
+gls:
+  security:
+    captcha:
+      repository-type: session

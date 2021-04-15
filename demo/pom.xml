@@ -17,6 +17,7 @@
         <module>provider-a</module>
         <module>provider-b</module>
         <module>consumer</module>
+        <module>security</module>
     </modules>
 
     <dependencyManagement>
