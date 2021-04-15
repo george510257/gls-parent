@@ -50,6 +50,7 @@ import static org.hibernate.cfg.BinderHelper.toAliasTableMap;
  *
  * @author Emmanuel Bernard
  */
+@SuppressWarnings("ALL")
 public class EntityBinder {
     private static final CoreMessageLogger LOG = Logger.getMessageLogger(CoreMessageLogger.class, EntityBinder.class.getName());
     private static final String NATURAL_ID_CACHE_SUFFIX = "##NaturalId";

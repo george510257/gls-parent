@@ -32,6 +32,7 @@ import java.util.Map;
  *
  * @author Emmanuel Bernard
  */
+@SuppressWarnings("ALL")
 public class Ejb3Column {
 
     public static final int DEFAULT_COLUMN_LENGTH = 255;
