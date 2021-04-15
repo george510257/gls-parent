@@ -50,9 +50,9 @@ public class UserController {
     @JsonView(UserModel.UserDetailView.class)
     public UserModel getInfo(@PathVariable String id) {
         log.info("进入getInfo服务");
-        UserModel userDTO = new UserModel();
-        userDTO.setUsername("tom");
-        return userDTO;
+        UserModel userModel = new UserModel();
+        userModel.setUsername("tom");
+        return userModel;
     }
 
     @PostMapping

@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: gls-common-user
+  datasource:
+    url: jdbc:mysql://172.31.124.62:3306/${spring.application.name}?serverTimezone=UTC&characterEncoding=utf8&useSSL=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  redis:
+    host: 172.31.124.62
+    port: 6379
+    database: 8
+    jedis:
+      pool:
+        max-idle: 8
+        max-active: 8
+        max-wait: 500
+server:
+  port: 8822
+
+dubbo:
+  scan:
+    base-packages: com.gls.common.user.web.rpc
+
+gls:
+  user:
+    default:
+      user:
+        name: admin
+        password: admin
+        roles:
+          - "ROLE_USER"
+          - "ROLE_ADMIN"
+      client:
+        client-id: glsver
+        client-secret: glsver
+        scope:
+          - "read"
+          - "write"
+        resource-ids:
+          - "gls-cloud-gateway"
+        authorized-grant-types:
+          - "authorization_code"
+          - "password"
+          - "client_credentials"
+          - "implicit"
+          - "refresh_token"
+          - "images_captcha"
+          - "sms_captcha"
+        roles:
+          - "ROLE_USER"
+        access-token-validity-seconds: 3000
+        refresh-token-validity-seconds: 3000

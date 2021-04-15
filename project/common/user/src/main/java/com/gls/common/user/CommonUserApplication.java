@@ -1,4 +1,4 @@
-package com.gls.demo.provider;
+package com.gls.common.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author george
  */
 @SpringBootApplication
-public class DemoProviderBApplication {
+public class CommonUserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoProviderBApplication.class, args);
+        SpringApplication.run(CommonUserApplication.class, args);
     }
 }

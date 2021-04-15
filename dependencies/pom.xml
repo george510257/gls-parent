@@ -27,6 +27,13 @@
                 <version>${project.parent.version}</version>
             </dependency>
 
+            <!-- 基础服务模块 -->
+            <dependency>
+                <groupId>com.gls.common.user.api</groupId>
+                <artifactId>gls-common-user-api</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+
             <!-- 架构模块 -->
             <dependency>
                 <groupId>com.gls.framework.api</groupId>

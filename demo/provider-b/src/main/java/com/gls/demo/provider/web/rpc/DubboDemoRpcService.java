@@ -15,13 +15,13 @@ import java.util.Map;
  */
 @Slf4j
 @DubboService(group = "gls-demo-provider-b")
-public class DubboDemoService implements DubboDemoApi {
+public class DubboDemoRpcService implements DubboDemoApi {
 
     private static final Map<Integer, DemoModel> DEMO_MODEL_MAP = new HashMap<>();
 
     @Override
-    public List<DemoModel> query(DemoModel demoDTO) {
-        log.info("query model: " + demoDTO.toString());
+    public List<DemoModel> query(DemoModel demoModel) {
+        log.info("query model: " + demoModel.toString());
         return new ArrayList<>(DEMO_MODEL_MAP.values());
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @author george
  */
 @DubboService(group = "gls-demo-provider-a")
-public class DubboDemoService implements DubboDemoApi {
+public class DubboDemoRpcService implements DubboDemoApi {
 
     @Resource
     private DemoService demoService;

@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswo
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
 /**
- * @author georg
+ * @author george
  */
 public abstract class BaseCaptchaTokenGranter<Service extends CaptchaService> extends ResourceOwnerPasswordTokenGranter {
 

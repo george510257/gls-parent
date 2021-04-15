@@ -3,18 +3,20 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>gls-project</artifactId>
-        <groupId>com.gls</groupId>
+        <artifactId>gls-common</artifactId>
+        <groupId>com.gls.common</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gls.common</groupId>
-    <artifactId>gls-common</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>user-api</module>
-        <module>user</module>
-    </modules>
+    <groupId>com.gls.common.user.api</groupId>
+    <artifactId>gls-common-user-api</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gls.framework.api</groupId>
+            <artifactId>gls-framework-api</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

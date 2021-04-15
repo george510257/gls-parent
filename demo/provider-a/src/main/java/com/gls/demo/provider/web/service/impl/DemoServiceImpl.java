@@ -20,8 +20,8 @@ public class DemoServiceImpl implements DemoService {
     private static final Map<Integer, DemoModel> DEMO_MODEL_MAP = new HashMap<>();
 
     @Override
-    public List<DemoModel> query(DemoModel demoDTO) {
-        log.info("query model: " + demoDTO.toString());
+    public List<DemoModel> query(DemoModel demoModel) {
+        log.info("query model: " + demoModel.toString());
         return new ArrayList<>(DEMO_MODEL_MAP.values());
     }
 
