@@ -1,6 +1,6 @@
 package com.gls.demo.provider.web.controller;
 
-import com.gls.demo.provider.api.FeignDemoApi;
+import com.gls.demo.provider.api.feign.FeignDemoApi;
 import com.gls.demo.provider.api.model.DemoModel;
 import com.gls.demo.provider.web.service.DemoService;
 import lombok.extern.slf4j.Slf4j;

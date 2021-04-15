@@ -1,7 +1,7 @@
 package com.gls.demo.provider.web.rpc;
 
-import com.gls.demo.provider.api.DubboDemoApi;
 import com.gls.demo.provider.api.model.DemoModel;
+import com.gls.demo.provider.api.rpc.DubboDemoApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 

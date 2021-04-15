@@ -1,4 +1,4 @@
-package com.gls.demo.provider.api;
+package com.gls.demo.provider.api.rpc;
 
 import com.gls.demo.provider.api.model.DemoModel;
 

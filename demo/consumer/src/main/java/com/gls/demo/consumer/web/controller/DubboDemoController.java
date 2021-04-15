@@ -1,8 +1,8 @@
 package com.gls.demo.consumer.web.controller;
 
 import com.gls.demo.consumer.config.FeignConfig;
-import com.gls.demo.provider.api.DubboDemoApi;
 import com.gls.demo.provider.api.model.DemoModel;
+import com.gls.demo.provider.api.rpc.DubboDemoApi;
 import com.gls.framework.core.support.RpcServiceHelper;
 import org.springframework.web.bind.annotation.*;
 

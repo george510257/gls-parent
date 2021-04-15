@@ -1,5 +1,6 @@
-package com.gls.demo.provider.api;
+package com.gls.demo.provider.api.feign.impl;
 
+import com.gls.demo.provider.api.feign.FeignDemoApi;
 import com.gls.demo.provider.api.model.DemoModel;
 
 import java.util.Collections;

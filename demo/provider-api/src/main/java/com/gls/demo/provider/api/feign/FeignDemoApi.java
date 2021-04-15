@@ -1,4 +1,4 @@
-package com.gls.demo.provider.api;
+package com.gls.demo.provider.api.feign;
 
 import com.gls.demo.provider.api.model.DemoModel;
 import org.springframework.web.bind.annotation.*;
