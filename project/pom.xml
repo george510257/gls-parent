@@ -17,6 +17,7 @@
         <module>framework</module>
         <module>cloud</module>
         <module>common</module>
+        <module>job</module>
     </modules>
 
     <dependencyManagement>
