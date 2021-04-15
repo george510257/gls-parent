@@ -4,12 +4,11 @@ import com.gls.security.captcha.constants.CaptchaProperties;
 import com.gls.security.captcha.exception.CaptchaException;
 import com.gls.security.captcha.web.entity.CaptchaEntity;
 import com.gls.security.captcha.web.repository.CaptchaRepository;
+import com.gls.starter.data.redis.support.RedisHelper;
 import com.gls.starter.web.support.ServletHelper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author george
@@ -17,18 +16,18 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class RedisCaptchaRepository implements CaptchaRepository {
 
-    private final RedisTemplate<Object, Object> redisTemplate;
+    private final RedisHelper redisHelper;
 
     private final CaptchaProperties captchaProperties;
 
     @Override
     public void saveCaptcha(String type, CaptchaEntity captcha) {
-        redisTemplate.opsForValue().set(buildKey(type), captcha, 30, TimeUnit.MINUTES);
+        redisHelper.set(buildKey(type), captcha);
     }
 
     @Override
     public CaptchaEntity getCaptcha(String type) {
-        Object value = redisTemplate.opsForValue().get(buildKey(type));
+        Object value = redisHelper.get(buildKey(type));
         if (value == null) {
             return null;
         }
@@ -37,7 +36,7 @@ public class RedisCaptchaRepository implements CaptchaRepository {
 
     @Override
     public void removeCaptcha(String type) {
-        redisTemplate.delete(buildKey(type));
+        redisHelper.del(buildKey(type));
     }
 
     private String buildKey(String type) {

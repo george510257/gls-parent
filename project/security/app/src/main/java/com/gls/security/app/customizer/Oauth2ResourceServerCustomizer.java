@@ -1,5 +1,6 @@
 package com.gls.security.app.customizer;
 
+import com.gls.security.core.constants.SecurityConstants;
 import com.gls.security.core.constants.SecurityProperties;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,7 @@ public class Oauth2ResourceServerCustomizer implements Customizer<OAuth2Resource
     @Override
     public void customize(OAuth2ResourceServerConfigurer<HttpSecurity> oAuth2ResourceServerConfigurer) {
         String type = securityProperties.getTokenStore().getType();
-        if ("redis".equalsIgnoreCase(type)) {
+        if (SecurityConstants.DEFAULT_TOKEN_STORE_TYPE.equalsIgnoreCase(type)) {
             oAuth2ResourceServerConfigurer.opaqueToken();
         } else {
             oAuth2ResourceServerConfigurer.jwt();

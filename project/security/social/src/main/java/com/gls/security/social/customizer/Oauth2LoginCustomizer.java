@@ -11,55 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Oauth2LoginCustomizer implements Customizer<OAuth2LoginConfigurer<HttpSecurity>> {
 
-//    @Resource
-//    private SocialProperties socialProperties;
-//
-//    @Resource
-//    private OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
-//
-//    @Resource
-//    private OAuth2AuthorizationRequestResolver authorizationRequestResolver;
-//
-//    @Resource
-//    private AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
-//
-//    @Resource
-//    private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient;
-//
-//    @Resource
-//    private OAuth2UserService<OAuth2UserRequest, OAuth2User> userService;
-//
-//    @Resource
-//    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
-//
-//    @Resource
-//    private GrantedAuthoritiesMapper userAuthoritiesMapper;
-
     @Override
     public void customize(OAuth2LoginConfigurer<HttpSecurity> oAuth2LoginConfigurer) {
-//        oAuth2LoginConfigurer
-//                .loginPage(socialProperties.getLoginPage())
-//                .loginProcessingUrl(socialProperties.getLoginProcessingUrl())
-//                .authorizedClientRepository(oAuth2AuthorizedClientRepository)
-//                .authorizationEndpoint(authorizationEndpointConfig -> {
-//                    authorizationEndpointConfig
-//                            .baseUri(socialProperties.getAuthorizationRequestBaseUri())
-//                            .authorizationRequestResolver(authorizationRequestResolver)
-//                            .authorizationRequestRepository(authorizationRequestRepository);
-//                })
-//                .tokenEndpoint(tokenEndpointConfig -> {
-//                    tokenEndpointConfig
-//                            .accessTokenResponseClient(accessTokenResponseClient);
-//                })
-//                .userInfoEndpoint(userInfoEndpointConfig -> {
-//                    userInfoEndpointConfig
-//                            .userService(userService)
-//                            .oidcUserService(oidcUserService)
-//                            .userAuthoritiesMapper(userAuthoritiesMapper);
-//                })
-//                .redirectionEndpoint(redirectionEndpointConfig -> {
-//                    redirectionEndpointConfig
-//                            .baseUri(socialProperties.getAuthorizationResponseBaseUri());
-//                });
     }
 }

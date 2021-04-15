@@ -20,6 +20,8 @@ import java.util.Random;
 @AllArgsConstructor
 public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
 
+    private static final int RANDOM_MAX_1 = 155;
+    private static final int RANDOM_MAX_2 = 255;
     private final CaptchaProperties captchaProperties;
 
     @Override
@@ -37,7 +39,7 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
         g.fillRect(0, 0, width, height);
         g.setFont(new Font("Times New Roman", Font.ITALIC, images.getFontSize()));
         g.setColor(getRandColor(160, 200));
-        for (int i = 0; i < 155; i++) {
+        for (int i = 0; i < RANDOM_MAX_1; i++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int xl = random.nextInt(12);
@@ -64,11 +66,11 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
 
     private Color getRandColor(int fc, int bc) {
         Random random = new Random();
-        if (fc > 255) {
-            fc = 255;
+        if (fc > RANDOM_MAX_2) {
+            fc = RANDOM_MAX_2;
         }
-        if (bc > 255) {
-            bc = 255;
+        if (bc > RANDOM_MAX_2) {
+            bc = RANDOM_MAX_2;
         }
         int r = fc + random.nextInt(bc - fc);
         int g = fc + random.nextInt(bc - fc);

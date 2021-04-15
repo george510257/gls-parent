@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author george
  */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 @SpringBootApplication
 public class DemoProviderBApplication {
 

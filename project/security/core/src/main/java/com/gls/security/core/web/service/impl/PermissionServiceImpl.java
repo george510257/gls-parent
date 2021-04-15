@@ -41,6 +41,7 @@ public class PermissionServiceImpl implements PermissionService {
             return authenticatedPrincipal.getAttribute("user_name");
         }
         if (principal instanceof DefaultOAuth2User) {
+            @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
             DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) principal;
             log.info("DefaultOAuth2User.attributes: {}", defaultOAuth2User.getAttributes());
             log.info("DefaultOAuth2User.authorities: {}", defaultOAuth2User.getAuthorities());

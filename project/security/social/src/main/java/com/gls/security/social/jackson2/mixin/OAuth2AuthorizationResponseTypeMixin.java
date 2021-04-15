@@ -8,6 +8,7 @@ import com.gls.security.social.jackson2.deserializer.OAuth2AuthorizationResponse
 /**
  * @author george
  */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, property = "@class")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, isGetterVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonDeserialize(using = OAuth2AuthorizationResponseTypeDeserializer.class)

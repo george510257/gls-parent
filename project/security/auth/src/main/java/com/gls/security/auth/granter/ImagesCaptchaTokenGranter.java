@@ -18,6 +18,7 @@ public class ImagesCaptchaTokenGranter extends BaseCaptchaTokenGranter<ImagesCap
         super(service, authenticationManager, tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
     }
 
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
         try {

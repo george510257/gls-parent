@@ -13,4 +13,6 @@ public interface SecurityConstants extends FrameworkConstants {
      * 默认的处理验证码的url前缀
      */
     String DEFAULT_CAPTCHA_URL_PREFIX = "/captcha";
+
+    String DEFAULT_TOKEN_STORE_TYPE = "redis";
 }

@@ -13,7 +13,12 @@ import java.io.IOException;
 /**
  * @author george
  */
+@SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 public class OAuth2AuthorizationResponseTypeDeserializer extends StdDeserializer<OAuth2AuthorizationResponseType> {
+
+    private static final String CODE = "code";
+
+    private static final String TOKEN = "token";
 
     protected OAuth2AuthorizationResponseTypeDeserializer() {
         super(OAuth2AuthorizationResponseType.class);
@@ -28,9 +33,9 @@ public class OAuth2AuthorizationResponseTypeDeserializer extends StdDeserializer
         JsonNode valueJsonNode = jsonNode.get("value");
         String value = objectMapper.readValue(valueJsonNode.traverse(objectMapper), String.class);
 
-        if ("code".equals(value)) {
+        if (CODE.equals(value)) {
             return OAuth2AuthorizationResponseType.CODE;
-        } else if ("token".equals(value)) {
+        } else if (TOKEN.equals(value)) {
             return OAuth2AuthorizationResponseType.TOKEN;
         }
         return null;

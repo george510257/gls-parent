@@ -1,12 +1,15 @@
 package com.gls.demo.security.support;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.*;
 
 /**
  * @author george
  */
+@Slf4j
 @Component
 public class MockQueue {
 
@@ -14,23 +17,25 @@ public class MockQueue {
 
     private String completeOrder;
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     public String getPlaceOrder() {
         return placeOrder;
     }
 
     public void setPlaceOrder(String placeOrder) throws Exception {
-        new Thread(() -> {
-            logger.info("接到下单请求, " + placeOrder);
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("mock-queue-%d").build();
+        ExecutorService singleThreadPool = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        singleThreadPool.execute(() -> {
+            log.info("接到下单请求, " + placeOrder);
             try {
                 Thread.sleep(1000);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             this.completeOrder = placeOrder;
-            logger.info("下单请求处理完毕," + placeOrder);
-        }).start();
+            log.info("下单请求处理完毕," + placeOrder);
+        });
+        singleThreadPool.shutdown();
     }
 
     public String getCompleteOrder() {

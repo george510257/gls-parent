@@ -434,7 +434,8 @@ public class EntityBinder {
             } else if ("integer".equals(discriminator.getType().getName())) {
                 persistentClass.setDiscriminatorValue(String.valueOf(name.hashCode()));
             } else {
-                persistentClass.setDiscriminatorValue(name); //Spec compliant
+                //Spec compliant
+                persistentClass.setDiscriminatorValue(name);
             }
         } else {
             //persistentClass.getDiscriminator()
@@ -491,7 +492,8 @@ public class EntityBinder {
                 }
             }
         } else {
-            lazy = true; //needed to allow association lazy loading.
+            //needed to allow association lazy loading.
+            lazy = true;
             proxyClass = annotatedClass;
         }
     }
@@ -982,7 +984,8 @@ public class EntityBinder {
             //default
             join.setSequentialSelect(false);
             join.setInverse(false);
-            join.setOptional(true); //perhaps not quite per-spec, but a Good Thing anyway
+            //perhaps not quite per-spec, but a Good Thing anyway
+            join.setOptional(true);
         }
 
         if (noDelayInPkColumnCreation) {

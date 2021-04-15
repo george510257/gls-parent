@@ -117,7 +117,7 @@ public class SecurityProperties {
     @Data
     public static class TokenStore {
 
-        private String type = "redis";
+        private String type = SecurityConstants.DEFAULT_TOKEN_STORE_TYPE;
 
         private Jwt jwt = new Jwt();
     }

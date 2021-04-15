@@ -472,7 +472,8 @@ public class Ejb3Column {
             this.mappingColumn = new Column();
             redefineColumnName(columnName, propertyName, applyNamingStrategy);
             this.mappingColumn.setLength(length);
-            if (precision > 0) {  //revelent precision
+            if (precision > 0) {
+                //revelent precision
                 this.mappingColumn.setPrecision(precision);
                 this.mappingColumn.setScale(scale);
             }

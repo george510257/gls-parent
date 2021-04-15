@@ -28,6 +28,7 @@ public class SmsCaptchaTokenGranter extends BaseCaptchaTokenGranter<SmsCaptchaSe
         this.authenticationManager = authenticationManager;
     }
 
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
         try {
@@ -35,7 +36,7 @@ public class SmsCaptchaTokenGranter extends BaseCaptchaTokenGranter<SmsCaptchaSe
         } catch (CaptchaException e) {
             throw new InvalidGrantException(e.getMessage());
         }
-        Map<String, String> parameters = new LinkedHashMap<String, String>(tokenRequest.getRequestParameters());
+        Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
         String mobile = parameters.get("mobile");
         Authentication userAuth = new MobileAuthenticationToken(mobile);
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);

@@ -9,13 +9,13 @@ import com.gls.security.captcha.web.repository.CaptchaRepository;
 import com.gls.security.captcha.web.repository.impl.RedisCaptchaRepository;
 import com.gls.security.captcha.web.repository.impl.SessionCaptchaRepository;
 import com.gls.security.core.constants.SecurityConstants;
+import com.gls.starter.data.redis.support.RedisHelper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author george
@@ -43,8 +43,8 @@ public class SecurityCaptchaConfig {
 
         @Bean
         @ConditionalOnMissingBean(CaptchaRepository.class)
-        public CaptchaRepository captchaRepository(RedisTemplate<Object, Object> redisTemplate, CaptchaProperties captchaProperties) {
-            return new RedisCaptchaRepository(redisTemplate, captchaProperties);
+        public CaptchaRepository captchaRepository(RedisHelper redisHelper, CaptchaProperties captchaProperties) {
+            return new RedisCaptchaRepository(redisHelper, captchaProperties);
         }
     }
 
