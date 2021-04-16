@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.biz.model.ReturnT;
-import com.gls.job.core.biz.model.TriggerParam;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class ExecutorRouteLast extends ExecutorRouter {
 
     @Override
-    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
-        return new ReturnT<String>(addressList.get(addressList.size() - 1));
+    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
+        return new Result<String>(addressList.get(addressList.size() - 1));
     }
 
 }

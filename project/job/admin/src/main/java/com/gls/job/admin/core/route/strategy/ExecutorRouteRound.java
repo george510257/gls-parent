@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.biz.model.ReturnT;
-import com.gls.job.core.biz.model.TriggerParam;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
 
 import java.util.List;
 import java.util.Random;
@@ -38,9 +38,9 @@ public class ExecutorRouteRound extends ExecutorRouter {
     }
 
     @Override
-    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
-        String address = addressList.get(count(triggerParam.getJobId()) % addressList.size());
-        return new ReturnT<String>(address);
+    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
+        String address = addressList.get(count(triggerModel.getJobId()) % addressList.size());
+        return new Result<String>(address);
     }
 
 }

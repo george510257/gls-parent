@@ -3,8 +3,8 @@ package com.gls.job.admin.core.thread;
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.model.XxlJobGroup;
 import com.gls.job.admin.core.model.XxlJobRegistry;
-import com.gls.job.core.biz.model.RegistryParam;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.api.model.Result;
 import com.gls.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,13 +146,13 @@ public class JobRegistryHelper {
 
     // ---------------------- helper ----------------------
 
-    public ReturnT<String> registry(RegistryParam registryParam) {
+    public Result<String> registry(RegistryModel registryParam) {
 
         // valid
         if (!StringUtils.hasText(registryParam.getRegistryGroup())
                 || !StringUtils.hasText(registryParam.getRegistryKey())
                 || !StringUtils.hasText(registryParam.getRegistryValue())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+            return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
         // async execute
@@ -169,16 +169,16 @@ public class JobRegistryHelper {
             }
         });
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
-    public ReturnT<String> registryRemove(RegistryParam registryParam) {
+    public Result<String> registryRemove(RegistryModel registryParam) {
 
         // valid
         if (!StringUtils.hasText(registryParam.getRegistryGroup())
                 || !StringUtils.hasText(registryParam.getRegistryKey())
                 || !StringUtils.hasText(registryParam.getRegistryValue())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+            return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
         // async execute
@@ -193,10 +193,10 @@ public class JobRegistryHelper {
             }
         });
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
-    private void freshGroupRegistryInfo(RegistryParam registryParam) {
+    private void freshGroupRegistryInfo(RegistryModel registryParam) {
         // Under consideration, prevent affecting core tables
     }
 

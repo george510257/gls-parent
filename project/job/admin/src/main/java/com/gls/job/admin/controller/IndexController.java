@@ -3,7 +3,7 @@ package com.gls.job.admin.controller;
 import com.gls.job.admin.controller.annotation.PermissionLimit;
 import com.gls.job.admin.service.LoginService;
 import com.gls.job.admin.service.XxlJobService;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.Result;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,8 +46,8 @@ public class IndexController {
 
     @RequestMapping("/chartInfo")
     @ResponseBody
-    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = glsJobService.chartInfo(startDate, endDate);
+    public Result<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+        Result<Map<String, Object>> chartInfo = glsJobService.chartInfo(startDate, endDate);
         return chartInfo;
     }
 
@@ -64,7 +64,7 @@ public class IndexController {
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
     @PermissionLimit(limit = false)
-    public ReturnT<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember) {
+    public Result<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember) {
         boolean ifRem = (ifRemember != null && ifRemember.trim().length() > 0 && "on".equals(ifRemember)) ? true : false;
         return loginService.login(request, response, userName, password, ifRem);
     }
@@ -72,7 +72,7 @@ public class IndexController {
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
     @PermissionLimit(limit = false)
-    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public Result<String> logout(HttpServletRequest request, HttpServletResponse response) {
         return loginService.logout(request, response);
     }
 

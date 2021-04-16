@@ -7,9 +7,9 @@ import com.gls.job.admin.core.model.XxlJobLog;
 import com.gls.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.gls.job.admin.core.scheduler.XxlJobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.core.biz.ExecutorBiz;
-import com.gls.job.core.biz.model.ReturnT;
-import com.gls.job.core.biz.model.TriggerParam;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.api.rpc.ExecutorBiz;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
@@ -121,23 +121,23 @@ public class XxlJobTrigger {
         logger.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
-        TriggerParam triggerParam = new TriggerParam();
-        triggerParam.setJobId(jobInfo.getId());
-        triggerParam.setExecutorHandler(jobInfo.getExecutorHandler());
-        triggerParam.setExecutorParams(jobInfo.getExecutorParam());
-        triggerParam.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        triggerParam.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        triggerParam.setLogId(jobLog.getId());
-        triggerParam.setLogDateTime(jobLog.getTriggerTime().getTime());
-        triggerParam.setGlueType(jobInfo.getGlueType());
-        triggerParam.setGlueSource(jobInfo.getGlueSource());
-        triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
-        triggerParam.setBroadcastIndex(index);
-        triggerParam.setBroadcastTotal(total);
+        TriggerModel triggerModel = new TriggerModel();
+        triggerModel.setJobId(jobInfo.getId());
+        triggerModel.setExecutorHandler(jobInfo.getExecutorHandler());
+        triggerModel.setExecutorParams(jobInfo.getExecutorParam());
+        triggerModel.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
+        triggerModel.setExecutorTimeout(jobInfo.getExecutorTimeout());
+        triggerModel.setLogId(jobLog.getId());
+        triggerModel.setLogDateTime(jobLog.getTriggerTime().getTime());
+        triggerModel.setGlueType(jobInfo.getGlueType());
+        triggerModel.setGlueSource(jobInfo.getGlueSource());
+        triggerModel.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
+        triggerModel.setBroadcastIndex(index);
+        triggerModel.setBroadcastTotal(total);
 
         // 3、init address
         String address = null;
-        ReturnT<String> routeAddressResult = null;
+        Result<String> routeAddressResult = null;
         if (group.getRegistryList() != null && !group.getRegistryList().isEmpty()) {
             if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) {
                 if (index < group.getRegistryList().size()) {
@@ -146,21 +146,21 @@ public class XxlJobTrigger {
                     address = group.getRegistryList().get(0);
                 }
             } else {
-                routeAddressResult = executorRouteStrategyEnum.getRouter().route(triggerParam, group.getRegistryList());
-                if (routeAddressResult.getCode() == ReturnT.SUCCESS_CODE) {
+                routeAddressResult = executorRouteStrategyEnum.getRouter().route(triggerModel, group.getRegistryList());
+                if (routeAddressResult.getCode() == Result.SUCCESS_CODE) {
                     address = routeAddressResult.getContent();
                 }
             }
         } else {
-            routeAddressResult = new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("jobconf_trigger_address_empty"));
+            routeAddressResult = new Result<String>(Result.FAIL_CODE, I18nUtil.getString("jobconf_trigger_address_empty"));
         }
 
         // 4、trigger remote executor
-        ReturnT<String> triggerResult = null;
+        Result<String> triggerResult = null;
         if (address != null) {
-            triggerResult = runExecutor(triggerParam, address);
+            triggerResult = runExecutor(triggerModel, address);
         } else {
-            triggerResult = new ReturnT<String>(ReturnT.FAIL_CODE, null);
+            triggerResult = new Result<String>(Result.FAIL_CODE, null);
         }
 
         // 5、collection trigger info
@@ -198,18 +198,18 @@ public class XxlJobTrigger {
     /**
      * run executor
      *
-     * @param triggerParam
+     * @param triggerModel
      * @param address
      * @return
      */
-    public static ReturnT<String> runExecutor(TriggerParam triggerParam, String address) {
-        ReturnT<String> runResult = null;
+    public static Result<String> runExecutor(TriggerModel triggerModel, String address) {
+        Result<String> runResult = null;
         try {
             ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
-            runResult = executorBiz.run(triggerParam);
+            runResult = executorBiz.run(triggerModel);
         } catch (Exception e) {
             logger.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
-            runResult = new ReturnT<String>(ReturnT.FAIL_CODE, ThrowableUtil.toString(e));
+            runResult = new Result<String>(Result.FAIL_CODE, ThrowableUtil.toString(e));
         }
 
         StringBuffer runResultSB = new StringBuffer(I18nUtil.getString("jobconf_trigger_run") + "：");

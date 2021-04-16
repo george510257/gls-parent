@@ -1,8 +1,8 @@
 package com.gls.job.core.thread;
 
-import com.gls.job.core.biz.AdminBiz;
-import com.gls.job.core.biz.model.RegistryParam;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.rpc.AdminBiz;
 import com.gls.job.core.enums.RegistryConfig;
 import com.gls.job.core.executor.XxlJobExecutor;
 import org.slf4j.Logger;
@@ -43,12 +43,12 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
-                        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        RegistryModel registryParam = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
                         for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
                             try {
-                                ReturnT<String> registryResult = adminBiz.registry(registryParam);
-                                if (registryResult != null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
-                                    registryResult = ReturnT.SUCCESS;
+                                Result<String> registryResult = adminBiz.registry(registryParam);
+                                if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
+                                    registryResult = Result.SUCCESS;
                                     logger.debug(">>>>>>>>>>> gls-job registry success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
                                     break;
                                 } else {
@@ -79,12 +79,12 @@ public class ExecutorRegistryThread {
 
                 // registry remove
                 try {
-                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                    RegistryModel registryParam = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
                     for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
                         try {
-                            ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);
-                            if (registryResult != null && ReturnT.SUCCESS_CODE == registryResult.getCode()) {
-                                registryResult = ReturnT.SUCCESS;
+                            Result<String> registryResult = adminBiz.registryRemove(registryParam);
+                            if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
+                                registryResult = Result.SUCCESS;
                                 logger.info(">>>>>>>>>>> gls-job registry-remove success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
                                 break;
                             } else {

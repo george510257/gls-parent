@@ -1,8 +1,8 @@
 package com.gls.job.core.thread;
 
-import com.gls.job.core.biz.model.HandleCallbackParam;
-import com.gls.job.core.biz.model.ReturnT;
-import com.gls.job.core.biz.model.TriggerParam;
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.context.XxlJobContext;
 import com.gls.job.core.context.XxlJobHelper;
 import com.gls.job.core.executor.XxlJobExecutor;
@@ -29,7 +29,7 @@ public class JobThread extends Thread {
 
     private int jobId;
     private IJobHandler handler;
-    private LinkedBlockingQueue<TriggerParam> triggerQueue;
+    private LinkedBlockingQueue<TriggerModel> triggerQueue;
     private Set<Long> triggerLogIdSet;        // avoid repeat trigger for the same TRIGGER_LOG_ID
 
     private volatile boolean toStop = false;
@@ -41,7 +41,7 @@ public class JobThread extends Thread {
     public JobThread(int jobId, IJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
-        this.triggerQueue = new LinkedBlockingQueue<TriggerParam>();
+        this.triggerQueue = new LinkedBlockingQueue<TriggerModel>();
         this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<Long>());
     }
 
@@ -52,19 +52,19 @@ public class JobThread extends Thread {
     /**
      * new trigger to queue
      *
-     * @param triggerParam
+     * @param triggerModel
      * @return
      */
-    public ReturnT<String> pushTriggerQueue(TriggerParam triggerParam) {
+    public Result<String> pushTriggerQueue(TriggerModel triggerModel) {
         // avoid repeat
-        if (triggerLogIdSet.contains(triggerParam.getLogId())) {
-            logger.info(">>>>>>>>>>> repeate trigger job, logId:{}", triggerParam.getLogId());
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "repeate trigger job, logId:" + triggerParam.getLogId());
+        if (triggerLogIdSet.contains(triggerModel.getLogId())) {
+            logger.info(">>>>>>>>>>> repeate trigger job, logId:{}", triggerModel.getLogId());
+            return new Result<String>(Result.FAIL_CODE, "repeate trigger job, logId:" + triggerModel.getLogId());
         }
 
-        triggerLogIdSet.add(triggerParam.getLogId());
-        triggerQueue.add(triggerParam);
-        return ReturnT.SUCCESS;
+        triggerLogIdSet.add(triggerModel.getLogId());
+        triggerQueue.add(triggerModel);
+        return Result.SUCCESS;
     }
 
     /**
@@ -106,23 +106,23 @@ public class JobThread extends Thread {
             running = false;
             idleTimes++;
 
-            TriggerParam triggerParam = null;
+            TriggerModel triggerModel = null;
             try {
                 // to check toStop signal, we need cycle, so wo cannot use queue.take(), instand of poll(timeout)
-                triggerParam = triggerQueue.poll(3L, TimeUnit.SECONDS);
-                if (triggerParam != null) {
+                triggerModel = triggerQueue.poll(3L, TimeUnit.SECONDS);
+                if (triggerModel != null) {
                     running = true;
                     idleTimes = 0;
-                    triggerLogIdSet.remove(triggerParam.getLogId());
+                    triggerLogIdSet.remove(triggerModel.getLogId());
 
                     // log filename, like "logPath/yyyy-MM-dd/9999.log"
-                    String logFileName = XxlJobFileAppender.makeLogFileName(new Date(triggerParam.getLogDateTime()), triggerParam.getLogId());
+                    String logFileName = XxlJobFileAppender.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
                     XxlJobContext glsJobContext = new XxlJobContext(
-                            triggerParam.getJobId(),
-                            triggerParam.getExecutorParams(),
+                            triggerModel.getJobId(),
+                            triggerModel.getExecutorParams(),
                             logFileName,
-                            triggerParam.getBroadcastIndex(),
-                            triggerParam.getBroadcastTotal());
+                            triggerModel.getBroadcastIndex(),
+                            triggerModel.getBroadcastTotal());
 
                     // init job context
                     XxlJobContext.setXxlJobContext(glsJobContext);
@@ -130,7 +130,7 @@ public class JobThread extends Thread {
                     // execute
                     XxlJobHelper.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + glsJobContext.getJobParam());
 
-                    if (triggerParam.getExecutorTimeout() > 0) {
+                    if (triggerModel.getExecutorTimeout() > 0) {
                         // limit timeout
                         Thread futureThread = null;
                         try {
@@ -148,7 +148,7 @@ public class JobThread extends Thread {
                             futureThread = new Thread(futureTask);
                             futureThread.start();
 
-                            Boolean tempResult = futureTask.get(triggerParam.getExecutorTimeout(), TimeUnit.SECONDS);
+                            Boolean tempResult = futureTask.get(triggerModel.getExecutorTimeout(), TimeUnit.SECONDS);
                         } catch (TimeoutException e) {
 
                             XxlJobHelper.log("<br>----------- gls-job job execute timeout");
@@ -201,21 +201,21 @@ public class JobThread extends Thread {
 
                 XxlJobHelper.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
             } finally {
-                if (triggerParam != null) {
+                if (triggerModel != null) {
                     // callback handler info
                     if (!toStop) {
                         // commonm
-                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(
-                                triggerParam.getLogId(),
-                                triggerParam.getLogDateTime(),
+                        TriggerCallbackThread.pushCallBack(new CallbackModel(
+                                triggerModel.getLogId(),
+                                triggerModel.getLogDateTime(),
                                 XxlJobContext.getXxlJobContext().getHandleCode(),
                                 XxlJobContext.getXxlJobContext().getHandleMsg())
                         );
                     } else {
                         // is killed
-                        TriggerCallbackThread.pushCallBack(new HandleCallbackParam(
-                                triggerParam.getLogId(),
-                                triggerParam.getLogDateTime(),
+                        TriggerCallbackThread.pushCallBack(new CallbackModel(
+                                triggerModel.getLogId(),
+                                triggerModel.getLogDateTime(),
                                 XxlJobContext.HANDLE_COCE_FAIL,
                                 stopReason + " [job running, killed]")
                         );
@@ -226,12 +226,12 @@ public class JobThread extends Thread {
 
         // callback trigger request in queue
         while (triggerQueue != null && triggerQueue.size() > 0) {
-            TriggerParam triggerParam = triggerQueue.poll();
-            if (triggerParam != null) {
+            TriggerModel triggerModel = triggerQueue.poll();
+            if (triggerModel != null) {
                 // is killed
-                TriggerCallbackThread.pushCallBack(new HandleCallbackParam(
-                        triggerParam.getLogId(),
-                        triggerParam.getLogDateTime(),
+                TriggerCallbackThread.pushCallBack(new CallbackModel(
+                        triggerModel.getLogId(),
+                        triggerModel.getLogDateTime(),
                         XxlJobContext.HANDLE_COCE_FAIL,
                         stopReason + " [job not executed, in the job queue, killed.]")
                 );

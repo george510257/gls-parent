@@ -1,8 +1,8 @@
-package com.gls.job.core.biz;
+package com.gls.job.core.api.rpc;
 
-import com.gls.job.core.biz.model.HandleCallbackParam;
-import com.gls.job.core.biz.model.RegistryParam;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.api.model.Result;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ public interface AdminBiz {
     /**
      * callback
      *
-     * @param callbackParamList
+     * @param callbackModelList
      * @return
      */
-    public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
+    public Result<String> callback(List<CallbackModel> callbackModelList);
 
     // ---------------------- registry ----------------------
 
@@ -29,7 +29,7 @@ public interface AdminBiz {
      * @param registryParam
      * @return
      */
-    public ReturnT<String> registry(RegistryParam registryParam);
+    public Result<String> registry(RegistryModel registryParam);
 
     /**
      * registry remove
@@ -37,7 +37,7 @@ public interface AdminBiz {
      * @param registryParam
      * @return
      */
-    public ReturnT<String> registryRemove(RegistryParam registryParam);
+    public Result<String> registryRemove(RegistryModel registryParam);
 
     // ---------------------- biz (custome) ----------------------
     // group、job ... manage

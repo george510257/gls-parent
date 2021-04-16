@@ -1,8 +1,8 @@
 package com.gls.job.core.thread;
 
-import com.gls.job.core.biz.AdminBiz;
-import com.gls.job.core.biz.model.HandleCallbackParam;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.rpc.AdminBiz;
 import com.gls.job.core.context.XxlJobContext;
 import com.gls.job.core.context.XxlJobHelper;
 import com.gls.job.core.enums.RegistryConfig;
@@ -32,7 +32,7 @@ public class TriggerCallbackThread {
     /**
      * job results callback queue
      */
-    private LinkedBlockingQueue<HandleCallbackParam> callBackQueue = new LinkedBlockingQueue<HandleCallbackParam>();
+    private LinkedBlockingQueue<CallbackModel> callBackQueue = new LinkedBlockingQueue<CallbackModel>();
     /**
      * callback thread
      */
@@ -44,7 +44,7 @@ public class TriggerCallbackThread {
         return instance;
     }
 
-    public static void pushCallBack(HandleCallbackParam callback) {
+    public static void pushCallBack(CallbackModel callback) {
         getInstance().callBackQueue.add(callback);
         logger.debug(">>>>>>>>>>> gls-job, push callback request, logId:{}", callback.getLogId());
     }
@@ -66,17 +66,17 @@ public class TriggerCallbackThread {
                 // normal callback
                 while (!toStop) {
                     try {
-                        HandleCallbackParam callback = getInstance().callBackQueue.take();
+                        CallbackModel callback = getInstance().callBackQueue.take();
                         if (callback != null) {
 
                             // callback list param
-                            List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
-                            int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
-                            callbackParamList.add(callback);
+                            List<CallbackModel> callbackModelList = new ArrayList<CallbackModel>();
+                            int drainToNum = getInstance().callBackQueue.drainTo(callbackModelList);
+                            callbackModelList.add(callback);
 
                             // callback, will retry if error
-                            if (callbackParamList != null && callbackParamList.size() > 0) {
-                                doCallback(callbackParamList);
+                            if (callbackModelList != null && callbackModelList.size() > 0) {
+                                doCallback(callbackModelList);
                             }
                         }
                     } catch (Exception e) {
@@ -88,10 +88,10 @@ public class TriggerCallbackThread {
 
                 // last callback
                 try {
-                    List<HandleCallbackParam> callbackParamList = new ArrayList<HandleCallbackParam>();
-                    int drainToNum = getInstance().callBackQueue.drainTo(callbackParamList);
-                    if (callbackParamList != null && callbackParamList.size() > 0) {
-                        doCallback(callbackParamList);
+                    List<CallbackModel> callbackModelList = new ArrayList<CallbackModel>();
+                    int drainToNum = getInstance().callBackQueue.drainTo(callbackModelList);
+                    if (callbackModelList != null && callbackModelList.size() > 0) {
+                        doCallback(callbackModelList);
                     }
                 } catch (Exception e) {
                     if (!toStop) {
@@ -164,36 +164,36 @@ public class TriggerCallbackThread {
     /**
      * do callback, will retry if error
      *
-     * @param callbackParamList
+     * @param callbackModelList
      */
-    private void doCallback(List<HandleCallbackParam> callbackParamList) {
+    private void doCallback(List<CallbackModel> callbackModelList) {
         boolean callbackRet = false;
         // callback, will retry if error
         for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
             try {
-                ReturnT<String> callbackResult = adminBiz.callback(callbackParamList);
-                if (callbackResult != null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
-                    callbackLog(callbackParamList, "<br>----------- gls-job job callback finish.");
+                Result<String> callbackResult = adminBiz.callback(callbackModelList);
+                if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
+                    callbackLog(callbackModelList, "<br>----------- gls-job job callback finish.");
                     callbackRet = true;
                     break;
                 } else {
-                    callbackLog(callbackParamList, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
+                    callbackLog(callbackModelList, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
                 }
             } catch (Exception e) {
-                callbackLog(callbackParamList, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
+                callbackLog(callbackModelList, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
             }
         }
         if (!callbackRet) {
-            appendFailCallbackFile(callbackParamList);
+            appendFailCallbackFile(callbackModelList);
         }
     }
 
     /**
      * callback log
      */
-    private void callbackLog(List<HandleCallbackParam> callbackParamList, String logContent) {
-        for (HandleCallbackParam callbackParam : callbackParamList) {
-            String logFileName = XxlJobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
+    private void callbackLog(List<CallbackModel> callbackModelList, String logContent) {
+        for (CallbackModel callbackModel : callbackModelList) {
+            String logFileName = XxlJobFileAppender.makeLogFileName(new Date(callbackModel.getLogDateTim()), callbackModel.getLogId());
             XxlJobContext.setXxlJobContext(new XxlJobContext(
                     -1,
                     null,
@@ -204,14 +204,14 @@ public class TriggerCallbackThread {
         }
     }
 
-    private void appendFailCallbackFile(List<HandleCallbackParam> callbackParamList) {
+    private void appendFailCallbackFile(List<CallbackModel> callbackModelList) {
         // valid
-        if (callbackParamList == null || callbackParamList.size() == 0) {
+        if (callbackModelList == null || callbackModelList.size() == 0) {
             return;
         }
 
         // append file
-        byte[] callbackParamList_bytes = JdkSerializeTool.serialize(callbackParamList);
+        byte[] callbackModelList_bytes = JdkSerializeTool.serialize(callbackModelList);
 
         File callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
@@ -222,7 +222,7 @@ public class TriggerCallbackThread {
                 }
             }
         }
-        FileUtil.writeFileContent(callbackLogFile, callbackParamList_bytes);
+        FileUtil.writeFileContent(callbackLogFile, callbackModelList_bytes);
     }
 
     private void retryFailCallbackFile() {
@@ -241,18 +241,18 @@ public class TriggerCallbackThread {
 
         // load and clear file, retry
         for (File callbaclLogFile : callbackLogPath.listFiles()) {
-            byte[] callbackParamList_bytes = FileUtil.readFileContent(callbaclLogFile);
+            byte[] callbackModelList_bytes = FileUtil.readFileContent(callbaclLogFile);
 
             // avoid empty file
-            if (callbackParamList_bytes == null || callbackParamList_bytes.length < 1) {
+            if (callbackModelList_bytes == null || callbackModelList_bytes.length < 1) {
                 callbaclLogFile.delete();
                 continue;
             }
 
-            List<HandleCallbackParam> callbackParamList = (List<HandleCallbackParam>) JdkSerializeTool.deserialize(callbackParamList_bytes, List.class);
+            List<CallbackModel> callbackModelList = (List<CallbackModel>) JdkSerializeTool.deserialize(callbackModelList_bytes, List.class);
 
             callbaclLogFile.delete();
-            doCallback(callbackParamList);
+            doCallback(callbackModelList);
         }
 
     }

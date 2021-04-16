@@ -1,6 +1,6 @@
 package com.gls.job.core.log;
 
-import com.gls.job.core.biz.model.LogResult;
+import com.gls.job.core.api.model.LogResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,16 +138,16 @@ public class XxlJobFileAppender {
      * @param logFileName
      * @return log content
      */
-    public static LogResult readLog(String logFileName, int fromLineNum) {
+    public static LogResultModel readLog(String logFileName, int fromLineNum) {
 
         // valid log file
         if (logFileName == null || logFileName.trim().length() == 0) {
-            return new LogResult(fromLineNum, 0, "readLog fail, logFile not found", true);
+            return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not found", true);
         }
         File logFile = new File(logFileName);
 
         if (!logFile.exists()) {
-            return new LogResult(fromLineNum, 0, "readLog fail, logFile not exists", true);
+            return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not exists", true);
         }
 
         // read file
@@ -178,7 +178,7 @@ public class XxlJobFileAppender {
         }
 
         // result
-        LogResult logResult = new LogResult(fromLineNum, toLineNum, logContentBuffer.toString(), false);
+        LogResultModel logResult = new LogResultModel(fromLineNum, toLineNum, logContentBuffer.toString(), false);
         return logResult;
 
 		/*

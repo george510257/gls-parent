@@ -1,9 +1,9 @@
-package com.gls.job.core.biz.client;
+package com.gls.job.core.api.rpc.client;
 
-import com.gls.job.core.biz.AdminBiz;
-import com.gls.job.core.biz.model.HandleCallbackParam;
-import com.gls.job.core.biz.model.RegistryParam;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.rpc.AdminBiz;
 import com.gls.job.core.util.XxlJobRemotingUtil;
 
 import java.util.List;
@@ -33,17 +33,17 @@ public class AdminBizClient implements AdminBiz {
     }
 
     @Override
-    public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "api/callback", accessToken, timeout, callbackParamList, String.class);
+    public Result<String> callback(List<CallbackModel> callbackModelList) {
+        return XxlJobRemotingUtil.postBody(addressUrl + "api/callback", accessToken, timeout, callbackModelList, String.class);
     }
 
     @Override
-    public ReturnT<String> registry(RegistryParam registryParam) {
+    public Result<String> registry(RegistryModel registryParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "api/registry", accessToken, timeout, registryParam, String.class);
     }
 
     @Override
-    public ReturnT<String> registryRemove(RegistryParam registryParam) {
+    public Result<String> registryRemove(RegistryModel registryParam) {
         return XxlJobRemotingUtil.postBody(addressUrl + "api/registryRemove", accessToken, timeout, registryParam, String.class);
     }
 

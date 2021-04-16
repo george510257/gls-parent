@@ -5,7 +5,7 @@ import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.dao.XxlJobUserDao;
-import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.api.model.Result;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.DigestUtils;
 
@@ -40,28 +40,28 @@ public class LoginService {
         return glsJobUser;
     }
 
-    public ReturnT<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password, boolean ifRemember) {
+    public Result<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password, boolean ifRemember) {
 
         // param
         if (username == null || username.trim().length() == 0 || password == null || password.trim().length() == 0) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_empty"));
+            return new Result<String>(500, I18nUtil.getString("login_param_empty"));
         }
 
         // valid passowrd
         XxlJobUser glsJobUser = glsJobUserDao.loadByUserName(username);
         if (glsJobUser == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("login_param_unvalid"));
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!passwordMd5.equals(glsJobUser.getPassword())) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("login_param_unvalid"));
         }
 
         String loginToken = makeToken(glsJobUser);
 
         // do login
         CookieUtil.set(response, LOGIN_IDENTITY_KEY, loginToken, ifRemember);
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
     /**
@@ -70,9 +70,9 @@ public class LoginService {
      * @param request
      * @param response
      */
-    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public Result<String> logout(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.remove(request, response, LOGIN_IDENTITY_KEY);
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
     /**

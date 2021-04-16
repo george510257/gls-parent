@@ -1,7 +1,7 @@
 package com.gls.job.core.executor;
 
-import com.gls.job.core.biz.AdminBiz;
-import com.gls.job.core.biz.client.AdminBizClient;
+import com.gls.job.core.api.rpc.AdminBiz;
+import com.gls.job.core.api.rpc.client.AdminBizClient;
 import com.gls.job.core.handler.IJobHandler;
 import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.core.server.EmbedServer;

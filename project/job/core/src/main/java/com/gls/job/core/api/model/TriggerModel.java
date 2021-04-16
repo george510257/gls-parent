@@ -1,11 +1,11 @@
-package com.gls.job.core.biz.model;
+package com.gls.job.core.api.model;
 
 import java.io.Serializable;
 
 /**
  * Created by xuxueli on 16/7/22.
  */
-public class TriggerParam implements Serializable {
+public class TriggerModel implements Serializable {
     private static final long serialVersionUID = 42L;
 
     private int jobId;
