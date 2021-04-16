@@ -16,7 +16,7 @@ import java.io.IOException;
  * 1、obj need private and set/get；
  * 2、do not support inner class；
  *
- * @author xuxueli 2015-9-25 18:02:56
+ * @author george 2015-9-25 18:02:56
  */
 public class JacksonUtil {
     private final static ObjectMapper objectMapper = new ObjectMapper();

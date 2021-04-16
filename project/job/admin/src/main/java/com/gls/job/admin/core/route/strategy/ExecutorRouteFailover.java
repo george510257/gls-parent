@@ -10,7 +10,7 @@ import com.gls.job.core.api.rpc.ExecutorBiz;
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * Created by george on 17/3/10.
  */
 public class ExecutorRouteFailover extends ExecutorRouter {
 

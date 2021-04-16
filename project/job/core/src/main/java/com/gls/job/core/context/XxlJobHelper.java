@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * helper for gls-job
  *
- * @author xuxueli 2020-11-05
+ * @author george 2020-11-05
  */
 public class XxlJobHelper {
 

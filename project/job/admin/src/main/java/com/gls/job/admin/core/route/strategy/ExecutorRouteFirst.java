@@ -7,7 +7,7 @@ import com.gls.job.core.api.model.TriggerModel;
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * Created by george on 17/3/10.
  */
 public class ExecutorRouteFirst extends ExecutorRouter {
 

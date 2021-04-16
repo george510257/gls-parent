@@ -16,7 +16,7 @@ import java.util.Arrays;
 /**
  * gls-job config
  *
- * @author xuxueli 2017-04-28
+ * @author george 2017-04-28
  */
 
 @Component

@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * gls-job info
  *
- * @author xuxueli  2016-1-12 18:25:49
+ * @author george  2016-1-12 18:25:49
  */
 public class XxlJobInfo {
 

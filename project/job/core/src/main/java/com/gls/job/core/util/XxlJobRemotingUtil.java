@@ -14,7 +14,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
- * @author xuxueli 2018-11-25 00:55:31
+ * @author george 2018-11-25 00:55:31
  */
 public class XxlJobRemotingUtil {
     public static final String XXL_JOB_ACCESS_TOKEN = "XXL-JOB-ACCESS-TOKEN";

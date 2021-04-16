@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * job log
  *
- * @author xuxueli 2019-11-22
+ * @author george 2019-11-22
  */
 @Mapper
 public interface XxlJobLogReportDao {

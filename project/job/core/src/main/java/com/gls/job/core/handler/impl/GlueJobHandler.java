@@ -6,7 +6,7 @@ import com.gls.job.core.handler.IJobHandler;
 /**
  * glue job handler
  *
- * @author xuxueli 2016-5-19 21:05:45
+ * @author george 2016-5-19 21:05:45
  */
 public class GlueJobHandler extends IJobHandler {
 

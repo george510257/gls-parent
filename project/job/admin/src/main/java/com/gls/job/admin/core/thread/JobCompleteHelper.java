@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 /**
  * job lose-monitor instance
  *
- * @author xuxueli 2015-9-1 18:05:56
+ * @author george 2015-9-1 18:05:56
  */
 public class JobCompleteHelper {
     private static Logger logger = LoggerFactory.getLogger(JobCompleteHelper.class);

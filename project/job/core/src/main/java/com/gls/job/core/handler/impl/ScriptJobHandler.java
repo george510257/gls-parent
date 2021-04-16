@@ -10,7 +10,7 @@ import com.gls.job.core.util.ScriptUtil;
 import java.io.File;
 
 /**
- * Created by xuxueli on 17/4/27.
+ * Created by george on 17/4/27.
  */
 public class ScriptJobHandler extends IJobHandler {
 

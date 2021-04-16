@@ -3,7 +3,7 @@ package com.gls.job.core.context;
 /**
  * gls-job context
  *
- * @author xuxueli 2020-05-21
+ * @author george 2020-05-21
  * [Dear hj]
  */
 public class XxlJobContext {

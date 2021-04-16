@@ -1,7 +1,7 @@
 package com.gls.job.core.enums;
 
 /**
- * Created by xuxueli on 17/5/9.
+ * Created by george on 17/5/9.
  */
 public enum ExecutorBlockStrategyEnum {
 

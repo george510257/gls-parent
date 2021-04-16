@@ -13,7 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * @author xuxueli 2018-11-01
+ * @author george 2018-11-01
  */
 public class SpringGlueFactory extends GlueFactory {
     private static Logger logger = LoggerFactory.getLogger(SpringGlueFactory.class);

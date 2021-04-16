@@ -5,7 +5,7 @@ import com.gls.job.core.handler.IJobHandler;
 import java.lang.reflect.Method;
 
 /**
- * @author xuxueli 2019-12-11 21:12:18
+ * @author george 2019-12-11 21:12:18
  */
 public class MethodJobHandler extends IJobHandler {
 

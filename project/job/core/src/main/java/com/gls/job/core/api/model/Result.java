@@ -6,7 +6,7 @@ import java.io.Serializable;
  * common return
  *
  * @param <T>
- * @author xuxueli 2015-12-4 16:32:31
+ * @author george 2015-12-4 16:32:31
  */
 public class Result<T> implements Serializable {
     public static final long serialVersionUID = 42L;

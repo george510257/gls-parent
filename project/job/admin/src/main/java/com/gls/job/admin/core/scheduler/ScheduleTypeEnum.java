@@ -3,7 +3,7 @@ package com.gls.job.admin.core.scheduler;
 import com.gls.job.admin.core.util.I18nUtil;
 
 /**
- * @author xuxueli 2020-10-29 21:11:23
+ * @author george 2020-10-29 21:11:23
  */
 public enum ScheduleTypeEnum {
 

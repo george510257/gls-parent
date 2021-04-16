@@ -1,7 +1,7 @@
 package com.gls.job.core.glue;
 
 /**
- * Created by xuxueli on 17/4/26.
+ * Created by george on 17/4/26.
  */
 public enum GlueTypeEnum {
 

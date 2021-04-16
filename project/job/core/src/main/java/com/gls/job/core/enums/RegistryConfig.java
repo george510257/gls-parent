@@ -1,7 +1,7 @@
 package com.gls.job.core.enums;
 
 /**
- * Created by xuxueli on 17/5/10.
+ * Created by george on 17/5/10.
  */
 public class RegistryConfig {
 

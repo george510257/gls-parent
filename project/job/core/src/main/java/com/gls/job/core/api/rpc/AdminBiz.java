@@ -7,7 +7,7 @@ import com.gls.job.core.api.model.Result;
 import java.util.List;
 
 /**
- * @author xuxueli 2017-07-27 21:52:49
+ * @author george 2017-07-27 21:52:49
  */
 public interface AdminBiz {
 

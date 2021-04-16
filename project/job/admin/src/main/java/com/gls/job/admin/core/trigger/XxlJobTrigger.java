@@ -20,7 +20,7 @@ import java.util.Date;
 
 /**
  * gls-job trigger
- * Created by xuxueli on 17/7/13.
+ * Created by george on 17/7/13.
  */
 public class XxlJobTrigger {
     private static Logger logger = LoggerFactory.getLogger(XxlJobTrigger.class);

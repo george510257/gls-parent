@@ -3,7 +3,7 @@ package com.gls.job.admin.core.model;
 import java.util.Date;
 
 /**
- * Created by xuxueli on 16/9/30.
+ * Created by george on 16/9/30.
  */
 public class XxlJobRegistry {
 

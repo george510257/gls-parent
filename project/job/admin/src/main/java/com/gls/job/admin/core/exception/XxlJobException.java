@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.exception;
 
 /**
- * @author xuxueli 2019-05-04 23:19:29
+ * @author george 2019-05-04 23:19:29
  */
 public class XxlJobException extends RuntimeException {
 

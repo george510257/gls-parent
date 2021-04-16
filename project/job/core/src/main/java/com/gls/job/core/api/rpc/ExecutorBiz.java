@@ -3,7 +3,7 @@ package com.gls.job.core.api.rpc;
 import com.gls.job.core.api.model.*;
 
 /**
- * Created by xuxueli on 17/3/1.
+ * Created by george on 17/3/1.
  */
 public interface ExecutorBiz {
 

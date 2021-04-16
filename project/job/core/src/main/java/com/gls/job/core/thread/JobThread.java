@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 /**
  * handler thread
  *
- * @author xuxueli 2016-1-16 19:52:47
+ * @author george 2016-1-16 19:52:47
  */
 public class JobThread extends Thread {
     private static Logger logger = LoggerFactory.getLogger(JobThread.class);

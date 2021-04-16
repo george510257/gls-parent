@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author xuxueli 2019-05-21
+ * @author george 2019-05-21
  */
 public class JobScheduleHelper {
     public static final long PRE_READ_MS = 5000;    // pre read
