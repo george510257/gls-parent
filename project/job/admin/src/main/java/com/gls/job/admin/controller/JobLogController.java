@@ -137,13 +137,13 @@ public class JobLogController {
 
     @RequestMapping("/logDetailCat")
     @ResponseBody
-    public Result<LogResultModel> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum) {
+    public Result<LogResultModel> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNumber) {
         try {
             ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(executorAddress);
-            Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNum));
+            Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNumber));
 
             // is end
-            if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+            if (logResult.getContent() != null && logResult.getContent().getFromLineNumber() > logResult.getContent().getToLineNumber()) {
                 XxlJobLog jobLog = glsJobLogDao.load(logId);
                 if (jobLog.getHandleCode() > 0) {
                     logResult.getContent().setEnd(true);

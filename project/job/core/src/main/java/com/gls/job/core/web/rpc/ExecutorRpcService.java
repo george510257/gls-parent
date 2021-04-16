@@ -164,9 +164,9 @@ public class ExecutorRpcService implements ExecutorApi {
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logModel.getLogDateTim()), logModel.getLogId());
+        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
 
-        LogResultModel logResult = XxlJobFileAppender.readLog(logFileName, logModel.getFromLineNum());
+        LogResultModel logResult = XxlJobFileAppender.readLog(logFileName, logModel.getFromLineNumber());
         return new Result<LogResultModel>(logResult);
     }
 

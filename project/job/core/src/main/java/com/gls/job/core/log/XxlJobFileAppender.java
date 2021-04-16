@@ -138,21 +138,21 @@ public class XxlJobFileAppender {
      * @param logFileName
      * @return log content
      */
-    public static LogResultModel readLog(String logFileName, int fromLineNum) {
+    public static LogResultModel readLog(String logFileName, int fromLineNumber) {
 
         // valid log file
         if (logFileName == null || logFileName.trim().length() == 0) {
-            return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not found", true);
+            return new LogResultModel(fromLineNumber, 0, "readLog fail, logFile not found", true);
         }
         File logFile = new File(logFileName);
 
         if (!logFile.exists()) {
-            return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not exists", true);
+            return new LogResultModel(fromLineNumber, 0, "readLog fail, logFile not exists", true);
         }
 
         // read file
         StringBuffer logContentBuffer = new StringBuffer();
-        int toLineNum = 0;
+        int toLineNumber = 0;
         LineNumberReader reader = null;
         try {
             //reader = new LineNumberReader(new FileReader(logFile));
@@ -160,8 +160,8 @@ public class XxlJobFileAppender {
             String line = null;
 
             while ((line = reader.readLine()) != null) {
-                toLineNum = reader.getLineNumber();        // [from, to], start as 1
-                if (toLineNum >= fromLineNum) {
+                toLineNumber = reader.getLineNumber();        // [from, to], start as 1
+                if (toLineNumber >= fromLineNumber) {
                     logContentBuffer.append(line).append("\n");
                 }
             }
@@ -178,14 +178,14 @@ public class XxlJobFileAppender {
         }
 
         // result
-        LogResultModel logResult = new LogResultModel(fromLineNum, toLineNum, logContentBuffer.toString(), false);
+        LogResultModel logResult = new LogResultModel(fromLineNumber, toLineNumber, logContentBuffer.toString(), false);
         return logResult;
 
 		/*
         // it will return the number of characters actually skipped
         reader.skip(Long.MAX_VALUE);
-        int maxLineNum = reader.getLineNumber();
-        maxLineNum++;	// 最大行号
+        int maxLineNumber = reader.getLineNumber();
+        maxLineNumber++;	// 最大行号
         */
     }
 

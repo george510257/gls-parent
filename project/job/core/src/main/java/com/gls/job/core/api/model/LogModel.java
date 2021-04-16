@@ -14,8 +14,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LogModel implements Serializable {
 
-    private long logDateTim;
+    private long logDateTime;
     private long logId;
-    private int fromLineNum;
+    private int fromLineNumber;
 
 }

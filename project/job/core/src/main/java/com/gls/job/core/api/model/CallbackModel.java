@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class CallbackModel implements Serializable {
 
     private long logId;
-    private long logDateTim;
+    private long logDateTime;
 
     private int handleCode;
     private String handleMsg;
