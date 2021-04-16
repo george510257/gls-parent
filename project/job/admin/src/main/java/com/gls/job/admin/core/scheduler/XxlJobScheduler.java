@@ -3,8 +3,8 @@ package com.gls.job.admin.core.scheduler;
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.thread.*;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.core.api.rpc.ExecutorBiz;
-import com.gls.job.core.api.rpc.client.ExecutorBizClient;
+import com.gls.job.core.api.rpc.ExecutorApi;
+import com.gls.job.core.api.rpc.client.ExecutorApiClient;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentMap;
 public class XxlJobScheduler {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobScheduler.class);
     // ---------------------- executor-client ----------------------
-    private static ConcurrentMap<String, ExecutorBiz> executorBizRepository = new ConcurrentHashMap<String, ExecutorBiz>();
+    private static ConcurrentMap<String, ExecutorApi> executorApiRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
-    public static ExecutorBiz getExecutorBiz(String address) throws Exception {
+    public static ExecutorApi getExecutorApi(String address) throws Exception {
         // valid
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -29,16 +29,16 @@ public class XxlJobScheduler {
 
         // load-cache
         address = address.trim();
-        ExecutorBiz executorBiz = executorBizRepository.get(address);
-        if (executorBiz != null) {
-            return executorBiz;
+        ExecutorApi executorApi = executorApiRepository.get(address);
+        if (executorApi != null) {
+            return executorApi;
         }
 
         // set-cache
-        executorBiz = new ExecutorBizClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
+        executorApi = new ExecutorApiClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
 
-        executorBizRepository.put(address, executorBiz);
-        return executorBiz;
+        executorApiRepository.put(address, executorApi);
+        return executorApi;
     }
 
     // ---------------------- I18n ----------------------

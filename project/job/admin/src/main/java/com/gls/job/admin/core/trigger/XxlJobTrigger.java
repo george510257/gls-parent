@@ -9,7 +9,7 @@ import com.gls.job.admin.core.scheduler.XxlJobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
@@ -131,7 +131,7 @@ public class XxlJobTrigger {
         triggerModel.setLogDateTime(jobLog.getTriggerTime().getTime());
         triggerModel.setGlueType(jobInfo.getGlueType());
         triggerModel.setGlueSource(jobInfo.getGlueSource());
-        triggerModel.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
+        triggerModel.setGlueUpdateTime(jobInfo.getGlueUpdateTime().getTime());
         triggerModel.setBroadcastIndex(index);
         triggerModel.setBroadcastTotal(total);
 
@@ -205,8 +205,8 @@ public class XxlJobTrigger {
     public static Result<String> runExecutor(TriggerModel triggerModel, String address) {
         Result<String> runResult = null;
         try {
-            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
-            runResult = executorBiz.run(triggerModel);
+            ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(address);
+            runResult = executorApi.run(triggerModel);
         } catch (Exception e) {
             logger.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
             runResult = new Result<String>(Result.FAIL_CODE, ThrowableUtil.toString(e));

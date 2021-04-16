@@ -5,7 +5,7 @@ import com.gls.job.admin.core.thread.JobRegistryHelper;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.rpc.AdminBiz;
+import com.gls.job.core.api.rpc.AdminApi;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author george 2017-07-27 21:54:20
  */
 @Service
-public class AdminBizImpl implements AdminBiz {
+public class AdminApiImpl implements AdminApi {
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackModelList) {
@@ -22,13 +22,13 @@ public class AdminBizImpl implements AdminBiz {
     }
 
     @Override
-    public Result<String> registry(RegistryModel registryParam) {
-        return JobRegistryHelper.getInstance().registry(registryParam);
+    public Result<String> registry(RegistryModel registryModel) {
+        return JobRegistryHelper.getInstance().registry(registryModel);
     }
 
     @Override
-    public Result<String> registryRemove(RegistryModel registryParam) {
-        return JobRegistryHelper.getInstance().registryRemove(registryParam);
+    public Result<String> registryRemove(RegistryModel registryModel) {
+        return JobRegistryHelper.getInstance().registryRemove(registryModel);
     }
 
 }

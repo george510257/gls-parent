@@ -2,7 +2,7 @@ package com.gls.job.core.thread;
 
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.rpc.AdminBiz;
+import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.context.XxlJobContext;
 import com.gls.job.core.context.XxlJobHelper;
 import com.gls.job.core.enums.RegistryConfig;
@@ -52,7 +52,7 @@ public class TriggerCallbackThread {
     public void start() {
 
         // valid
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (XxlJobExecutor.getAdminApiList() == null) {
             logger.warn(">>>>>>>>>>> gls-job, executor callback config fail, adminAddresses is null.");
             return;
         }
@@ -169,9 +169,9 @@ public class TriggerCallbackThread {
     private void doCallback(List<CallbackModel> callbackModelList) {
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
+        for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
             try {
-                Result<String> callbackResult = adminBiz.callback(callbackModelList);
+                Result<String> callbackResult = adminApi.callback(callbackModelList);
                 if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
                     callbackLog(callbackModelList, "<br>----------- gls-job job callback finish.");
                     callbackRet = true;

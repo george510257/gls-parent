@@ -2,7 +2,7 @@ package com.gls.job.core.thread;
 
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.rpc.AdminBiz;
+import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.enums.RegistryConfig;
 import com.gls.job.core.executor.XxlJobExecutor;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class ExecutorRegistryThread {
             logger.warn(">>>>>>>>>>> gls-job, executor registry config fail, appname is null.");
             return;
         }
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (XxlJobExecutor.getAdminApiList() == null) {
             logger.warn(">>>>>>>>>>> gls-job, executor registry config fail, adminAddresses is null.");
             return;
         }
@@ -43,19 +43,19 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
-                        RegistryModel registryParam = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
-                        for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
+                        RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
                             try {
-                                Result<String> registryResult = adminBiz.registry(registryParam);
+                                Result<String> registryResult = adminApi.registry(registryModel);
                                 if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
                                     registryResult = Result.SUCCESS;
-                                    logger.debug(">>>>>>>>>>> gls-job registry success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
+                                    logger.debug(">>>>>>>>>>> gls-job registry success, registryModel:{}, registryResult:{}", new Object[]{registryModel, registryResult});
                                     break;
                                 } else {
-                                    logger.info(">>>>>>>>>>> gls-job registry fail, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
+                                    logger.info(">>>>>>>>>>> gls-job registry fail, registryModel:{}, registryResult:{}", new Object[]{registryModel, registryResult});
                                 }
                             } catch (Exception e) {
-                                logger.info(">>>>>>>>>>> gls-job registry error, registryParam:{}", registryParam, e);
+                                logger.info(">>>>>>>>>>> gls-job registry error, registryModel:{}", registryModel, e);
                             }
 
                         }
@@ -79,20 +79,20 @@ public class ExecutorRegistryThread {
 
                 // registry remove
                 try {
-                    RegistryModel registryParam = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
-                    for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
+                    RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                    for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
                         try {
-                            Result<String> registryResult = adminBiz.registryRemove(registryParam);
+                            Result<String> registryResult = adminApi.registryRemove(registryModel);
                             if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
                                 registryResult = Result.SUCCESS;
-                                logger.info(">>>>>>>>>>> gls-job registry-remove success, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
+                                logger.info(">>>>>>>>>>> gls-job registry-remove success, registryModel:{}, registryResult:{}", new Object[]{registryModel, registryResult});
                                 break;
                             } else {
-                                logger.info(">>>>>>>>>>> gls-job registry-remove fail, registryParam:{}, registryResult:{}", new Object[]{registryParam, registryResult});
+                                logger.info(">>>>>>>>>>> gls-job registry-remove fail, registryModel:{}, registryResult:{}", new Object[]{registryModel, registryResult});
                             }
                         } catch (Exception e) {
                             if (!toStop) {
-                                logger.info(">>>>>>>>>>> gls-job registry-remove error, registryParam:{}", registryParam, e);
+                                logger.info(">>>>>>>>>>> gls-job registry-remove error, registryModel:{}", registryModel, e);
                             }
 
                         }

@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 /**
  * @author george
- * @date 17/3/2
  */
 @Data
 @NoArgsConstructor

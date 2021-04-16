@@ -1,7 +1,7 @@
 package com.gls.job.core.executor;
 
-import com.gls.job.core.api.rpc.AdminBiz;
-import com.gls.job.core.api.rpc.client.AdminBizClient;
+import com.gls.job.core.api.rpc.AdminApi;
+import com.gls.job.core.api.rpc.client.AdminApiClient;
 import com.gls.job.core.handler.IJobHandler;
 import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.core.server.EmbedServer;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 public class XxlJobExecutor {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobExecutor.class);
     // ---------------------- admin-client (rpc invoker) ----------------------
-    private static List<AdminBiz> adminBizList;
+    private static List<AdminApi> adminApiList;
     // ---------------------- job handler repository ----------------------
     private static ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<String, IJobHandler>();
     // ---------------------- job thread repository ----------------------
@@ -42,8 +42,8 @@ public class XxlJobExecutor {
     // ---------------------- executor-server (rpc provider) ----------------------
     private EmbedServer embedServer = null;
 
-    public static List<AdminBiz> getAdminBizList() {
-        return adminBizList;
+    public static List<AdminApi> getAdminApiList() {
+        return adminApiList;
     }
 
     public static IJobHandler loadJobHandler(String name) {
@@ -124,7 +124,7 @@ public class XxlJobExecutor {
         XxlJobFileAppender.initLogPath(logPath);
 
         // init invoker, admin-client
-        initAdminBizList(adminAddresses, accessToken);
+        initAdminApiList(adminAddresses, accessToken);
 
         // init JobLogFileCleanThread
         JobLogFileCleanThread.getInstance().start(logRetentionDays);
@@ -165,17 +165,17 @@ public class XxlJobExecutor {
 
     }
 
-    private void initAdminBizList(String adminAddresses, String accessToken) throws Exception {
+    private void initAdminApiList(String adminAddresses, String accessToken) throws Exception {
         if (adminAddresses != null && adminAddresses.trim().length() > 0) {
             for (String address : adminAddresses.trim().split(",")) {
                 if (address != null && address.trim().length() > 0) {
 
-                    AdminBiz adminBiz = new AdminBizClient(address.trim(), accessToken);
+                    AdminApi adminApi = new AdminApiClient(address.trim(), accessToken);
 
-                    if (adminBizList == null) {
-                        adminBizList = new ArrayList<AdminBiz>();
+                    if (adminApiList == null) {
+                        adminApiList = new ArrayList<AdminApi>();
                     }
-                    adminBizList.add(adminBiz);
+                    adminApiList.add(adminApi);
                 }
             }
         }

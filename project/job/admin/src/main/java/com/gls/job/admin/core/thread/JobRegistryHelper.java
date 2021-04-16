@@ -146,12 +146,12 @@ public class JobRegistryHelper {
 
     // ---------------------- helper ----------------------
 
-    public Result<String> registry(RegistryModel registryParam) {
+    public Result<String> registry(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryParam.getRegistryGroup())
-                || !StringUtils.hasText(registryParam.getRegistryKey())
-                || !StringUtils.hasText(registryParam.getRegistryValue())) {
+        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+                || !StringUtils.hasText(registryModel.getRegistryKey())
+                || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
@@ -159,12 +159,12 @@ public class JobRegistryHelper {
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
                 if (ret < 1) {
-                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
 
                     // fresh
-                    freshGroupRegistryInfo(registryParam);
+                    freshGroupRegistryInfo(registryModel);
                 }
             }
         });
@@ -172,12 +172,12 @@ public class JobRegistryHelper {
         return Result.SUCCESS;
     }
 
-    public Result<String> registryRemove(RegistryModel registryParam) {
+    public Result<String> registryRemove(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryParam.getRegistryGroup())
-                || !StringUtils.hasText(registryParam.getRegistryKey())
-                || !StringUtils.hasText(registryParam.getRegistryValue())) {
+        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+                || !StringUtils.hasText(registryModel.getRegistryKey())
+                || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
@@ -185,10 +185,10 @@ public class JobRegistryHelper {
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
                 if (ret > 0) {
                     // fresh
-                    freshGroupRegistryInfo(registryParam);
+                    freshGroupRegistryInfo(registryModel);
                 }
             }
         });
@@ -196,7 +196,7 @@ public class JobRegistryHelper {
         return Result.SUCCESS;
     }
 
-    private void freshGroupRegistryInfo(RegistryModel registryParam) {
+    private void freshGroupRegistryInfo(RegistryModel registryModel) {
         // Under consideration, prevent affecting core tables
     }
 

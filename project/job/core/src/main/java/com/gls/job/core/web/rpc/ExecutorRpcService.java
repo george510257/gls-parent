@@ -1,7 +1,7 @@
 package com.gls.job.core.web.rpc;
 
 import com.gls.job.core.api.model.*;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import com.gls.job.core.executor.XxlJobExecutor;
 import com.gls.job.core.glue.GlueFactory;
@@ -20,8 +20,8 @@ import java.util.Date;
  * @author george
  * @date 17/3/1
  */
-public class ExecutorBizImpl implements ExecutorBiz {
-    private static Logger logger = LoggerFactory.getLogger(ExecutorBizImpl.class);
+public class ExecutorRpcService implements ExecutorApi {
+    private static Logger logger = LoggerFactory.getLogger(ExecutorRpcService.class);
 
     @Override
     public Result<String> beat() {
@@ -80,7 +80,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
             // valid old jobThread
             if (jobThread != null &&
                     !(jobThread.getHandler() instanceof GlueJobHandler
-                            && ((GlueJobHandler) jobThread.getHandler()).getGlueUpdatetime() == triggerModel.getGlueUpdatetime())) {
+                            && ((GlueJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
                 // change handler or gluesource updated, need kill old thread
                 removeOldReason = "change job source or glue type, and terminate the old job thread.";
 
@@ -92,7 +92,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
             if (jobHandler == null) {
                 try {
                     IJobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
-                    jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdatetime());
+                    jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdateTime());
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                     return new Result<String>(Result.FAIL_CODE, e.getMessage());
@@ -103,7 +103,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
             // valid old jobThread
             if (jobThread != null &&
                     !(jobThread.getHandler() instanceof ScriptJobHandler
-                            && ((ScriptJobHandler) jobThread.getHandler()).getGlueUpdatetime() == triggerModel.getGlueUpdatetime())) {
+                            && ((ScriptJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
                 // change script or gluesource updated, need kill old thread
                 removeOldReason = "change job source or glue type, and terminate the old job thread.";
 
@@ -113,7 +113,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
             // valid handler
             if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdatetime(), triggerModel.getGlueSource(), GlueTypeEnum.match(triggerModel.getGlueType()));
+                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), GlueTypeEnum.match(triggerModel.getGlueType()));
             }
         } else {
             return new Result<String>(Result.FAIL_CODE, "glueType[" + triggerModel.getGlueType() + "] is not valid.");

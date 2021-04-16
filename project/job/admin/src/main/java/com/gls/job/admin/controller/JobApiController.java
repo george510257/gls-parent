@@ -5,7 +5,7 @@ import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.rpc.AdminBiz;
+import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.util.GsonTool;
 import com.gls.job.core.util.XxlJobRemotingUtil;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ import java.util.List;
 public class JobApiController {
 
     @Resource
-    private AdminBiz adminBiz;
+    private AdminApi adminApi;
 
     /**
      * api
@@ -56,13 +56,13 @@ public class JobApiController {
         // services mapping
         if ("callback".equals(uri)) {
             List<CallbackModel> callbackModelList = GsonTool.fromJson(data, List.class, CallbackModel.class);
-            return adminBiz.callback(callbackModelList);
+            return adminApi.callback(callbackModelList);
         } else if ("registry".equals(uri)) {
-            RegistryModel registryParam = GsonTool.fromJson(data, RegistryModel.class);
-            return adminBiz.registry(registryParam);
+            RegistryModel registryModel = GsonTool.fromJson(data, RegistryModel.class);
+            return adminApi.registry(registryModel);
         } else if ("registryRemove".equals(uri)) {
-            RegistryModel registryParam = GsonTool.fromJson(data, RegistryModel.class);
-            return adminBiz.registryRemove(registryParam);
+            RegistryModel registryModel = GsonTool.fromJson(data, RegistryModel.class);
+            return adminApi.registryRemove(registryModel);
         } else {
             return new Result<String>(Result.FAIL_CODE, "invalid request, uri-mapping(" + uri + ") not found.");
         }

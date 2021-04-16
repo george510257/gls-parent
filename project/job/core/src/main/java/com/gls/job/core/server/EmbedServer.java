@@ -1,12 +1,12 @@
 package com.gls.job.core.server;
 
 import com.gls.job.core.api.model.*;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.thread.ExecutorRegistryThread;
 import com.gls.job.core.util.GsonTool;
 import com.gls.job.core.util.ThrowableUtil;
 import com.gls.job.core.util.XxlJobRemotingUtil;
-import com.gls.job.core.web.rpc.ExecutorBizImpl;
+import com.gls.job.core.web.rpc.ExecutorRpcService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -30,11 +30,11 @@ import java.util.concurrent.*;
 public class EmbedServer {
     private static final Logger logger = LoggerFactory.getLogger(EmbedServer.class);
 
-    private ExecutorBiz executorBiz;
+    private ExecutorApi executorApi;
     private Thread thread;
 
     public void start(final String address, final int port, final String appname, final String accessToken) {
-        executorBiz = new ExecutorBizImpl();
+        executorApi = new ExecutorRpcService();
         thread = new Thread(new Runnable() {
 
             @Override
@@ -74,7 +74,7 @@ public class EmbedServer {
                                             .addLast(new IdleStateHandler(0, 0, 30 * 3, TimeUnit.SECONDS))  // beat 3N, close if idle
                                             .addLast(new HttpServerCodec())
                                             .addLast(new HttpObjectAggregator(5 * 1024 * 1024))  // merge request & reponse to FULL
-                                            .addLast(new EmbedHttpServerHandler(executorBiz, accessToken, bizThreadPool));
+                                            .addLast(new EmbedHttpServerHandler(executorApi, accessToken, bizThreadPool));
                                 }
                             })
                             .childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -148,12 +148,12 @@ public class EmbedServer {
     public static class EmbedHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         private static final Logger logger = LoggerFactory.getLogger(EmbedHttpServerHandler.class);
 
-        private ExecutorBiz executorBiz;
+        private ExecutorApi executorApi;
         private String accessToken;
         private ThreadPoolExecutor bizThreadPool;
 
-        public EmbedHttpServerHandler(ExecutorBiz executorBiz, String accessToken, ThreadPoolExecutor bizThreadPool) {
-            this.executorBiz = executorBiz;
+        public EmbedHttpServerHandler(ExecutorApi executorApi, String accessToken, ThreadPoolExecutor bizThreadPool) {
+            this.executorApi = executorApi;
             this.accessToken = accessToken;
             this.bizThreadPool = bizThreadPool;
         }
@@ -203,19 +203,19 @@ public class EmbedServer {
             // services mapping
             try {
                 if ("/beat".equals(uri)) {
-                    return executorBiz.beat();
+                    return executorApi.beat();
                 } else if ("/idleBeat".equals(uri)) {
                     IdleBeatModel idleBeatModel = GsonTool.fromJson(requestData, IdleBeatModel.class);
-                    return executorBiz.idleBeat(idleBeatModel);
+                    return executorApi.idleBeat(idleBeatModel);
                 } else if ("/run".equals(uri)) {
                     TriggerModel triggerModel = GsonTool.fromJson(requestData, TriggerModel.class);
-                    return executorBiz.run(triggerModel);
+                    return executorApi.run(triggerModel);
                 } else if ("/kill".equals(uri)) {
                     KillModel killModel = GsonTool.fromJson(requestData, KillModel.class);
-                    return executorBiz.kill(killModel);
+                    return executorApi.kill(killModel);
                 } else if ("/log".equals(uri)) {
                     LogModel logModel = GsonTool.fromJson(requestData, LogModel.class);
-                    return executorBiz.log(logModel);
+                    return executorApi.log(logModel);
                 } else {
                     return new Result<String>(Result.FAIL_CODE, "invalid request, uri-mapping(" + uri + ") not found.");
                 }

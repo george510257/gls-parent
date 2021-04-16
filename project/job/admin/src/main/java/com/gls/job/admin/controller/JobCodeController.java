@@ -72,7 +72,7 @@ public class JobCodeController {
         // update new code
         exists_jobInfo.setGlueSource(glueSource);
         exists_jobInfo.setGlueRemark(glueRemark);
-        exists_jobInfo.setGlueUpdatetime(new Date());
+        exists_jobInfo.setGlueUpdateTime(new Date());
 
         exists_jobInfo.setUpdateTime(new Date());
         glsJobInfoDao.update(exists_jobInfo);

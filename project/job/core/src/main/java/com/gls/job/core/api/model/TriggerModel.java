@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Created by george on 16/7/22.
+ * @author george
  */
 @Data
 @NoArgsConstructor
@@ -26,7 +26,7 @@ public class TriggerModel implements Serializable {
 
     private String glueType;
     private String glueSource;
-    private long glueUpdatetime;
+    private long glueUpdateTime;
 
     private int broadcastIndex;
     private int broadcastTotal;

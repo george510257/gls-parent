@@ -14,7 +14,7 @@ import com.gls.job.core.api.model.KillModel;
 import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,8 +139,8 @@ public class JobLogController {
     @ResponseBody
     public Result<LogResultModel> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum) {
         try {
-            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(executorAddress);
-            Result<LogResultModel> logResult = executorBiz.log(new LogModel(triggerTime, logId, fromLineNum));
+            ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(executorAddress);
+            Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNum));
 
             // is end
             if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
@@ -173,8 +173,8 @@ public class JobLogController {
         // request of kill
         Result<String> runResult = null;
         try {
-            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
-            runResult = executorBiz.kill(new KillModel(jobInfo.getId()));
+            ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(log.getExecutorAddress());
+            runResult = executorApi.kill(new KillModel(jobInfo.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             runResult = new Result<String>(500, e.getMessage());

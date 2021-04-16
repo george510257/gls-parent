@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @author george 2020-04-11 22:27
+ * @author george
  */
 @Data
 @NoArgsConstructor

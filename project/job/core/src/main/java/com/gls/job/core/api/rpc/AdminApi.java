@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author george 2017-07-27 21:52:49
  */
-public interface AdminBiz {
+public interface AdminApi {
 
     // ---------------------- callback ----------------------
 
@@ -26,18 +26,18 @@ public interface AdminBiz {
     /**
      * registry
      *
-     * @param registryParam
+     * @param registryModel
      * @return
      */
-    public Result<String> registry(RegistryModel registryParam);
+    public Result<String> registry(RegistryModel registryModel);
 
     /**
      * registry remove
      *
-     * @param registryParam
+     * @param registryModel
      * @return
      */
-    public Result<String> registryRemove(RegistryModel registryParam);
+    public Result<String> registryRemove(RegistryModel registryModel);
 
     // ---------------------- biz (custome) ----------------------
     // group、job ... manage

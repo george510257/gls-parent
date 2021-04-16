@@ -6,7 +6,7 @@ import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.IdleBeatModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 
 import java.util.List;
 
@@ -22,8 +22,8 @@ public class ExecutorRouteBusyover extends ExecutorRouter {
             // beat
             Result<String> idleBeatResult = null;
             try {
-                ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
-                idleBeatResult = executorBiz.idleBeat(new IdleBeatModel(triggerModel.getJobId()));
+                ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(address);
+                idleBeatResult = executorApi.idleBeat(new IdleBeatModel(triggerModel.getJobId()));
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 idleBeatResult = new Result<String>(Result.FAIL_CODE, "" + e);

@@ -5,7 +5,7 @@ import com.gls.job.admin.core.scheduler.XxlJobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 
 import java.util.List;
 
@@ -22,8 +22,8 @@ public class ExecutorRouteFailover extends ExecutorRouter {
             // beat
             Result<String> beatResult = null;
             try {
-                ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
-                beatResult = executorBiz.beat();
+                ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(address);
+                beatResult = executorApi.beat();
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
                 beatResult = new Result<String>(Result.FAIL_CODE, "" + e);

@@ -5,7 +5,7 @@ import com.gls.job.core.api.model.*;
 /**
  * Created by george on 17/3/1.
  */
-public interface ExecutorBiz {
+public interface ExecutorApi {
 
     /**
      * beat

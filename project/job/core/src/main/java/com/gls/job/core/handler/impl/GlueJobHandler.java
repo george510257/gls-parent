@@ -10,21 +10,21 @@ import com.gls.job.core.handler.IJobHandler;
  */
 public class GlueJobHandler extends IJobHandler {
 
-    private long glueUpdatetime;
+    private long glueUpdateTime;
     private IJobHandler jobHandler;
 
-    public GlueJobHandler(IJobHandler jobHandler, long glueUpdatetime) {
+    public GlueJobHandler(IJobHandler jobHandler, long glueUpdateTime) {
         this.jobHandler = jobHandler;
-        this.glueUpdatetime = glueUpdatetime;
+        this.glueUpdateTime = glueUpdateTime;
     }
 
-    public long getGlueUpdatetime() {
-        return glueUpdatetime;
+    public long getGlueUpdateTime() {
+        return glueUpdateTime;
     }
 
     @Override
     public void execute() throws Exception {
-        XxlJobHelper.log("----------- glue.version:" + glueUpdatetime + " -----------");
+        XxlJobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
     }
 

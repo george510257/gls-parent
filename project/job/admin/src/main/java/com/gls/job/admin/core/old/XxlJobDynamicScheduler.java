@@ -7,8 +7,8 @@ package com.gls.job.admin.core.old;//package com.gls.job.admin.core.schedule;
 //import com.gls.job.admin.core.thread.JobRegistryMonitorHelper;
 //import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
 //import com.gls.job.admin.core.util.I18nUtil;
-//import com.gls.job.core.api.rpc.AdminBiz;
-//import com.gls.job.core.api.rpc.ExecutorBiz;
+//import com.gls.job.core.api.rpc.AdminApi;
+//import com.gls.job.core.api.rpc.ExecutorApi;
 //import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 //import com.gls.rpc.remoting.invoker.XxlRpcInvokerFactory;
 //import com.gls.rpc.remoting.invoker.call.CallType;
@@ -108,7 +108,7 @@ package com.gls.job.admin.core.old;//package com.gls.job.admin.core.schedule;
 //                null);
 //
 //        // add services
-//        glsRpcProviderFactory.addService(AdminBiz.class.getName(), null, XxlJobAdminConfig.getAdminConfig().getAdminBiz());
+//        glsRpcProviderFactory.addService(AdminApi.class.getName(), null, XxlJobAdminConfig.getAdminConfig().getAdminApi());
 //
 //        // servlet handler
 //        servletServerHandler = new ServletServerHandler(glsRpcProviderFactory);
@@ -122,8 +122,8 @@ package com.gls.job.admin.core.old;//package com.gls.job.admin.core.schedule;
 //
 //
 //    // ---------------------- executor-client ----------------------
-//    private static ConcurrentHashMap<String, ExecutorBiz> executorBizRepository = new ConcurrentHashMap<String, ExecutorBiz>();
-//    public static ExecutorBiz getExecutorBiz(String address) throws Exception {
+//    private static ConcurrentHashMap<String, ExecutorApi> executorApiRepository = new ConcurrentHashMap<String, ExecutorApi>();
+//    public static ExecutorApi getExecutorApi(String address) throws Exception {
 //        // valid
 //        if (address==null || address.trim().length()==0) {
 //            return null;
@@ -131,18 +131,18 @@ package com.gls.job.admin.core.old;//package com.gls.job.admin.core.schedule;
 //
 //        // load-cache
 //        address = address.trim();
-//        ExecutorBiz executorBiz = executorBizRepository.get(address);
-//        if (executorBiz != null) {
-//            return executorBiz;
+//        ExecutorApi executorApi = executorApiRepository.get(address);
+//        if (executorApi != null) {
+//            return executorApi;
 //        }
 //
 //        // set-cache
-//        executorBiz = (ExecutorBiz) new XxlRpcReferenceBean(
+//        executorApi = (ExecutorApi) new XxlRpcReferenceBean(
 //                NetEnum.NETTY_HTTP,
 //                Serializer.SerializeEnum.HESSIAN.getSerializer(),
 //                CallType.SYNC,
 //                LoadBalance.ROUND,
-//                ExecutorBiz.class,
+//                ExecutorApi.class,
 //                null,
 //                5000,
 //                address,
@@ -150,8 +150,8 @@ package com.gls.job.admin.core.old;//package com.gls.job.admin.core.schedule;
 //                null,
 //                null).getObject();
 //
-//        executorBizRepository.put(address, executorBiz);
-//        return executorBiz;
+//        executorApiRepository.put(address, executorApi);
+//        return executorApi;
 //    }
 //
 //

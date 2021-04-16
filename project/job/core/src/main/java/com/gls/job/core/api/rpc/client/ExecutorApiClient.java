@@ -1,7 +1,7 @@
 package com.gls.job.core.api.rpc.client;
 
 import com.gls.job.core.api.model.*;
-import com.gls.job.core.api.rpc.ExecutorBiz;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.XxlJobRemotingUtil;
 
 /**
@@ -9,16 +9,16 @@ import com.gls.job.core.util.XxlJobRemotingUtil;
  *
  * @author george 2017-07-28 22:14:52
  */
-public class ExecutorBizClient implements ExecutorBiz {
+public class ExecutorApiClient implements ExecutorApi {
 
     private String addressUrl;
     private String accessToken;
     private int timeout = 3;
 
-    public ExecutorBizClient() {
+    public ExecutorApiClient() {
     }
 
-    public ExecutorBizClient(String addressUrl, String accessToken) {
+    public ExecutorApiClient(String addressUrl, String accessToken) {
         this.addressUrl = addressUrl;
         this.accessToken = accessToken;
 
