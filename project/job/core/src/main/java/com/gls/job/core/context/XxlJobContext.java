@@ -8,12 +8,13 @@ package com.gls.job.core.context;
  */
 public class XxlJobContext {
 
-    public static final int HANDLE_COCE_SUCCESS = 200;
-    public static final int HANDLE_COCE_FAIL = 500;
-    public static final int HANDLE_COCE_TIMEOUT = 502;
+    public static final int HANDLE_CODE_SUCCESS = 200;
+    public static final int HANDLE_CODE_FAIL = 500;
+    public static final int HANDLE_CODE_TIMEOUT = 502;
 
     // ---------------------- base info ----------------------
-    private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>(); // support for child thread of job handler)
+    private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>();
+    // support for child thread of job handler)
     /**
      * job id
      */
@@ -59,8 +60,8 @@ public class XxlJobContext {
         this.jobLogFileName = jobLogFileName;
         this.shardIndex = shardIndex;
         this.shardTotal = shardTotal;
-
-        this.handleCode = HANDLE_COCE_SUCCESS;  // default success
+        // default success
+        this.handleCode = HANDLE_CODE_SUCCESS;
     }
 
     public static XxlJobContext getXxlJobContext() {

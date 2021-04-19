@@ -3,7 +3,7 @@ package com.gls.job.core.api.rpc;
 import com.gls.job.core.api.model.*;
 
 /**
- * Created by george on 17/3/1.
+ * @author george
  */
 public interface ExecutorApi {
 
@@ -12,7 +12,7 @@ public interface ExecutorApi {
      *
      * @return
      */
-    public Result<String> beat();
+    Result<String> beat();
 
     /**
      * idle beat
@@ -20,7 +20,7 @@ public interface ExecutorApi {
      * @param idleBeatModel
      * @return
      */
-    public Result<String> idleBeat(IdleBeatModel idleBeatModel);
+    Result<String> idleBeat(IdleBeatModel idleBeatModel);
 
     /**
      * run
@@ -28,7 +28,7 @@ public interface ExecutorApi {
      * @param triggerModel
      * @return
      */
-    public Result<String> run(TriggerModel triggerModel);
+    Result<String> run(TriggerModel triggerModel);
 
     /**
      * kill
@@ -36,7 +36,7 @@ public interface ExecutorApi {
      * @param killModel
      * @return
      */
-    public Result<String> kill(KillModel killModel);
+    Result<String> kill(KillModel killModel);
 
     /**
      * log
@@ -44,6 +44,6 @@ public interface ExecutorApi {
      * @param logModel
      * @return
      */
-    public Result<LogResultModel> log(LogModel logModel);
+    Result<LogResultModel> log(LogModel logModel);
 
 }

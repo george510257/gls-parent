@@ -16,7 +16,7 @@ import com.gls.job.admin.service.LoginService;
 import com.gls.job.admin.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
-import com.gls.job.core.glue.GlueTypeEnum;
+import com.gls.job.core.enums.GlueTypeEnum;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

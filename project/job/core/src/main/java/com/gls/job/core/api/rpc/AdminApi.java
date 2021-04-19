@@ -7,11 +7,9 @@ import com.gls.job.core.api.model.Result;
 import java.util.List;
 
 /**
- * @author george 2017-07-27 21:52:49
+ * @author george
  */
 public interface AdminApi {
-
-    // ---------------------- callback ----------------------
 
     /**
      * callback
@@ -19,9 +17,7 @@ public interface AdminApi {
      * @param callbackModelList
      * @return
      */
-    public Result<String> callback(List<CallbackModel> callbackModelList);
-
-    // ---------------------- registry ----------------------
+    Result<String> callback(List<CallbackModel> callbackModelList);
 
     /**
      * registry
@@ -29,7 +25,7 @@ public interface AdminApi {
      * @param registryModel
      * @return
      */
-    public Result<String> registry(RegistryModel registryModel);
+    Result<String> registry(RegistryModel registryModel);
 
     /**
      * registry remove
@@ -37,9 +33,6 @@ public interface AdminApi {
      * @param registryModel
      * @return
      */
-    public Result<String> registryRemove(RegistryModel registryModel);
-
-    // ---------------------- biz (custome) ----------------------
-    // group、job ... manage
+    Result<String> registryRemove(RegistryModel registryModel);
 
 }

@@ -3,19 +3,20 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>gls-project</artifactId>
-        <groupId>com.gls</groupId>
+        <artifactId>gls-job</artifactId>
+        <groupId>com.gls.job</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gls.job</groupId>
-    <artifactId>gls-job</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>core</module>
-        <module>admin</module>
-        <module>executor</module>
-    </modules>
+    <groupId>com.gls.job.executor</groupId>
+    <artifactId>gls-job-executor</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gls.job.core</groupId>
+            <artifactId>gls-job-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

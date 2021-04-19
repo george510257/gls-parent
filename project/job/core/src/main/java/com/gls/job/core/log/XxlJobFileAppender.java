@@ -21,15 +21,15 @@ public class XxlJobFileAppender {
      * <p>
      * strut like:
      * ---/
-     * ---/gluesource/
-     * ---/gluesource/10_1514171108000.js
-     * ---/gluesource/10_1514171108000.js
+     * ---/glueSource/
+     * ---/glueSource/10_1514171108000.js
+     * ---/glueSource/10_1514171108000.js
      * ---/2017-12-25/
      * ---/2017-12-25/639.log
      * ---/2017-12-25/821.log
      */
-    private static String logBasePath = "/data/applogs/gls-job/jobhandler";
-    private static String glueSrcPath = logBasePath.concat("/gluesource");
+    private static String logBasePath = "/data/applogs/gls-job/jobHandler";
+    private static String glueSrcPath = logBasePath.concat("/glueSource");
 
     public static void initLogPath(String logPath) {
         // init
@@ -44,7 +44,7 @@ public class XxlJobFileAppender {
         logBasePath = logPathDir.getPath();
 
         // mk glue dir
-        File glueBaseDir = new File(logPathDir, "gluesource");
+        File glueBaseDir = new File(logPathDir, "glueSource");
         if (!glueBaseDir.exists()) {
             glueBaseDir.mkdirs();
         }

@@ -6,7 +6,7 @@ import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.dao.XxlJobInfoDao;
 import com.gls.job.admin.dao.XxlJobLogGlueDao;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.glue.GlueTypeEnum;
+import com.gls.job.core.enums.GlueTypeEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

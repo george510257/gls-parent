@@ -46,7 +46,7 @@ public class XxlJobCompleter {
 
         // 1、handle success, to trigger child job
         String triggerChildMsg = null;
-        if (XxlJobContext.HANDLE_COCE_SUCCESS == glsJobLog.getHandleCode()) {
+        if (XxlJobContext.HANDLE_CODE_SUCCESS == glsJobLog.getHandleCode()) {
             XxlJobInfo glsJobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(glsJobLog.getJobId());
             if (glsJobInfo != null && glsJobInfo.getChildJobId() != null && glsJobInfo.getChildJobId().trim().length() > 0) {
                 triggerChildMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
