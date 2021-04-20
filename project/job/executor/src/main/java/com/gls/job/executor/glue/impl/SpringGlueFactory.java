@@ -2,8 +2,7 @@ package com.gls.job.executor.glue.impl;
 
 import com.gls.job.executor.config.impl.XxlJobSpringExecutor;
 import com.gls.job.executor.glue.GlueFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -15,8 +14,8 @@ import java.lang.reflect.Modifier;
 /**
  * @author george 2018-11-01
  */
+@Slf4j
 public class SpringGlueFactory extends GlueFactory {
-    private static Logger logger = LoggerFactory.getLogger(SpringGlueFactory.class);
 
     /**
      * inject action of spring
@@ -45,7 +44,7 @@ public class SpringGlueFactory extends GlueFactory {
             if (AnnotationUtils.getAnnotation(field, Resource.class) != null) {
                 try {
                     Resource resource = AnnotationUtils.getAnnotation(field, Resource.class);
-                    if (resource.name() != null && resource.name().length() > 0) {
+                    if (resource.name().length() > 0) {
                         fieldBean = XxlJobSpringExecutor.getApplicationContext().getBean(resource.name());
                     } else {
                         fieldBean = XxlJobSpringExecutor.getApplicationContext().getBean(field.getName());
@@ -57,7 +56,7 @@ public class SpringGlueFactory extends GlueFactory {
                 }
             } else if (AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
                 Qualifier qualifier = AnnotationUtils.getAnnotation(field, Qualifier.class);
-                if (qualifier != null && qualifier.value() != null && qualifier.value().length() > 0) {
+                if (qualifier != null && qualifier.value().length() > 0) {
                     fieldBean = XxlJobSpringExecutor.getApplicationContext().getBean(qualifier.value());
                 } else {
                     fieldBean = XxlJobSpringExecutor.getApplicationContext().getBean(field.getType());
@@ -68,10 +67,8 @@ public class SpringGlueFactory extends GlueFactory {
                 field.setAccessible(true);
                 try {
                     field.set(instance, fieldBean);
-                } catch (IllegalArgumentException e) {
-                    logger.error(e.getMessage(), e);
-                } catch (IllegalAccessException e) {
-                    logger.error(e.getMessage(), e);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    log.error(e.getMessage(), e);
                 }
             }
         }

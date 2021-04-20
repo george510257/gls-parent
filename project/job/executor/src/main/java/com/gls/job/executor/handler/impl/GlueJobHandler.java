@@ -1,7 +1,7 @@
 package com.gls.job.executor.handler.impl;
 
-import com.gls.job.core.context.XxlJobHelper;
 import com.gls.job.executor.handler.IJobHandler;
+import com.gls.job.executor.helper.XxlJobHelper;
 
 /**
  * glue job handler
@@ -10,8 +10,8 @@ import com.gls.job.executor.handler.IJobHandler;
  */
 public class GlueJobHandler extends IJobHandler {
 
-    private long glueUpdateTime;
-    private IJobHandler jobHandler;
+    private final long glueUpdateTime;
+    private final IJobHandler jobHandler;
 
     public GlueJobHandler(IJobHandler jobHandler, long glueUpdateTime) {
         this.jobHandler = jobHandler;

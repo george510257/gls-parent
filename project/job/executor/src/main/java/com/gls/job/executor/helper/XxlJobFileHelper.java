@@ -1,4 +1,4 @@
-package com.gls.job.core.log;
+package com.gls.job.executor.helper;
 
 import com.gls.job.core.api.model.LogResultModel;
 import org.slf4j.Logger;
@@ -13,8 +13,8 @@ import java.util.Date;
  *
  * @author george 2016-3-12 19:25:12
  */
-public class XxlJobFileAppender {
-    private static Logger logger = LoggerFactory.getLogger(XxlJobFileAppender.class);
+public class XxlJobFileHelper {
+    private static Logger logger = LoggerFactory.getLogger(XxlJobFileHelper.class);
 
     /**
      * log base path

@@ -1,23 +1,23 @@
 package com.gls.job.executor.handler.impl;
 
 import com.gls.job.core.context.XxlJobContext;
-import com.gls.job.core.context.XxlJobHelper;
 import com.gls.job.core.enums.GlueTypeEnum;
-import com.gls.job.core.log.XxlJobFileAppender;
-import com.gls.job.core.util.ScriptUtil;
 import com.gls.job.executor.handler.IJobHandler;
+import com.gls.job.executor.helper.ScriptHelper;
+import com.gls.job.executor.helper.XxlJobFileHelper;
+import com.gls.job.executor.helper.XxlJobHelper;
 
 import java.io.File;
 
 /**
- * Created by george on 17/4/27.
+ * @author george
  */
 public class ScriptJobHandler extends IJobHandler {
 
-    private int jobId;
-    private long glueUpdateTime;
-    private String glueSource;
-    private GlueTypeEnum glueType;
+    private final int jobId;
+    private final long glueUpdateTime;
+    private final String glueSource;
+    private final GlueTypeEnum glueType;
 
     public ScriptJobHandler(int jobId, long glueUpdateTime, String glueSource, GlueTypeEnum glueType) {
         this.jobId = jobId;
@@ -26,12 +26,12 @@ public class ScriptJobHandler extends IJobHandler {
         this.glueType = glueType;
 
         // clean old script file
-        File glueSrcPath = new File(XxlJobFileAppender.getGlueSrcPath());
+        File glueSrcPath = new File(XxlJobFileHelper.getGlueSrcPath());
         if (glueSrcPath.exists()) {
             File[] glueSrcFileList = glueSrcPath.listFiles();
             if (glueSrcFileList != null && glueSrcFileList.length > 0) {
                 for (File glueSrcFileItem : glueSrcFileList) {
-                    if (glueSrcFileItem.getName().startsWith(String.valueOf(jobId) + "_")) {
+                    if (glueSrcFileItem.getName().startsWith(jobId + "_")) {
                         glueSrcFileItem.delete();
                     }
                 }
@@ -56,7 +56,7 @@ public class ScriptJobHandler extends IJobHandler {
         String cmd = glueType.getCmd();
 
         // make script file
-        String scriptFileName = XxlJobFileAppender.getGlueSrcPath()
+        String scriptFileName = XxlJobFileHelper.getGlueSrcPath()
                 .concat(File.separator)
                 .concat(String.valueOf(jobId))
                 .concat("_")
@@ -64,7 +64,7 @@ public class ScriptJobHandler extends IJobHandler {
                 .concat(glueType.getSuffix());
         File scriptFile = new File(scriptFileName);
         if (!scriptFile.exists()) {
-            ScriptUtil.markScriptFile(scriptFileName, glueSource);
+            ScriptHelper.markScriptFile(scriptFileName, glueSource);
         }
 
         // log file
@@ -78,7 +78,7 @@ public class ScriptJobHandler extends IJobHandler {
 
         // invoke
         XxlJobHelper.log("----------- script file:" + scriptFileName + " -----------");
-        int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName, scriptParams);
+        int exitValue = ScriptHelper.execToFile(cmd, scriptFileName, logFileName, scriptParams);
 
         if (exitValue == 0) {
             XxlJobHelper.handleSuccess();

@@ -1,13 +1,13 @@
-package com.gls.job.executor.server;
+package com.gls.job.executor.thread;
 
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.context.XxlJobContext;
-import com.gls.job.core.context.XxlJobHelper;
-import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.executor.config.XxlJobExecutor;
 import com.gls.job.executor.handler.IJobHandler;
+import com.gls.job.executor.helper.XxlJobFileHelper;
+import com.gls.job.executor.helper.XxlJobHelper;
 import com.gls.job.executor.holder.CallbackQueueHolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -122,7 +122,7 @@ public class JobThread extends Thread {
                     triggerLogIdSet.remove(triggerModel.getLogId());
 
                     // log filename, like "logPath/yyyy-MM-dd/9999.log"
-                    String logFileName = XxlJobFileAppender.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
+                    String logFileName = XxlJobFileHelper.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
                     XxlJobContext glsJobContext = new XxlJobContext(
                             triggerModel.getJobId(),
                             triggerModel.getExecutorParams(),

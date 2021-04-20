@@ -1,7 +1,7 @@
 package com.gls.job.executor.thread;
 
-import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.core.util.FileUtil;
+import com.gls.job.executor.helper.XxlJobFileHelper;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ public class LogFileCleanThread extends Thread {
         while (!toStop) {
             try {
                 // clean log dir, over logRetentionDays
-                File[] childDirs = new File(XxlJobFileAppender.getLogPath()).listFiles();
+                File[] childDirs = new File(XxlJobFileHelper.getLogPath()).listFiles();
                 if (childDirs != null && childDirs.length > 0) {
 
                     // today

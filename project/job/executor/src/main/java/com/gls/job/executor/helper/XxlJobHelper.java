@@ -1,6 +1,6 @@
-package com.gls.job.core.context;
+package com.gls.job.executor.helper;
 
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.context.XxlJobContext;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,7 +161,7 @@ public class XxlJobHelper {
         String logFileName = glsJobContext.getJobLogFileName();
 
         if (logFileName != null && logFileName.trim().length() > 0) {
-            XxlJobFileAppender.appendLog(logFileName, formatAppendLog);
+            XxlJobFileHelper.appendLog(logFileName, formatAppendLog);
             return true;
         } else {
             logger.info(">>>>>>>>>>> {}", formatAppendLog);

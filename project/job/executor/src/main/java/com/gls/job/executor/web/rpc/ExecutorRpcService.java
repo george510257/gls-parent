@@ -4,13 +4,13 @@ import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import com.gls.job.core.enums.GlueTypeEnum;
-import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.executor.config.XxlJobExecutor;
 import com.gls.job.executor.glue.GlueFactory;
 import com.gls.job.executor.handler.IJobHandler;
 import com.gls.job.executor.handler.impl.GlueJobHandler;
 import com.gls.job.executor.handler.impl.ScriptJobHandler;
-import com.gls.job.executor.server.JobThread;
+import com.gls.job.executor.helper.XxlJobFileHelper;
+import com.gls.job.executor.thread.JobThread;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -161,9 +161,9 @@ public class ExecutorRpcService implements ExecutorApi {
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
+        String logFileName = XxlJobFileHelper.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
 
-        LogResultModel logResult = XxlJobFileAppender.readLog(logFileName, logModel.getFromLineNumber());
+        LogResultModel logResult = XxlJobFileHelper.readLog(logFileName, logModel.getFromLineNumber());
         return new Result<>(logResult);
     }
 

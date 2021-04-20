@@ -1,7 +1,8 @@
 package com.gls.job.core.enums;
 
 /**
- * Created by george on 17/5/9.
+ * @author george
+ * @date 17/5/9
  */
 public enum ExecutorBlockStrategyEnum {
 
@@ -12,7 +13,7 @@ public enum ExecutorBlockStrategyEnum {
 
     private String title;
 
-    private ExecutorBlockStrategyEnum(String title) {
+    ExecutorBlockStrategyEnum(String title) {
         this.title = title;
     }
 

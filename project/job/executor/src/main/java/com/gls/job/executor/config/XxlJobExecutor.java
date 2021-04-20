@@ -2,14 +2,14 @@ package com.gls.job.executor.config;
 
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.api.rpc.client.AdminApiClient;
-import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.NetUtil;
 import com.gls.job.executor.handler.IJobHandler;
+import com.gls.job.executor.helper.XxlJobFileHelper;
 import com.gls.job.executor.server.CallbackServer;
 import com.gls.job.executor.server.EmbedServer;
-import com.gls.job.executor.server.JobThread;
 import com.gls.job.executor.server.LogFileCleanServer;
+import com.gls.job.executor.thread.JobThread;
 import com.gls.job.executor.web.service.impl.CallbackServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +122,7 @@ public class XxlJobExecutor {
     public void start() throws Exception {
 
         // init logpath
-        XxlJobFileAppender.initLogPath(logPath);
+        XxlJobFileHelper.initLogPath(logPath);
 
         // init invoker, admin-client
         initAdminApiList(adminAddresses, accessToken);

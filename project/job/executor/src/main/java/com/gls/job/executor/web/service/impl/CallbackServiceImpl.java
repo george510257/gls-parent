@@ -4,11 +4,11 @@ import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.context.XxlJobContext;
-import com.gls.job.core.context.XxlJobHelper;
-import com.gls.job.core.log.XxlJobFileAppender;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.core.util.JdkSerializeTool;
 import com.gls.job.executor.config.XxlJobExecutor;
+import com.gls.job.executor.helper.XxlJobFileHelper;
+import com.gls.job.executor.helper.XxlJobHelper;
 import com.gls.job.executor.web.service.CallbackService;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class CallbackServiceImpl implements CallbackService {
 
-    private static final String FAIL_CALLBACK_FILE_PATH = XxlJobFileAppender.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
+    private static final String FAIL_CALLBACK_FILE_PATH = XxlJobFileHelper.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
     private static final String FAIL_CALLBACK_FILE_NAME = FAIL_CALLBACK_FILE_PATH.concat("gls-job-callback-{x}").concat(".log");
 
     @Override
@@ -71,7 +71,7 @@ public class CallbackServiceImpl implements CallbackService {
 
     private void callbackLog(List<CallbackModel> callbackModelList, String logContent) {
         for (CallbackModel callbackModel : callbackModelList) {
-            String logFileName = XxlJobFileAppender.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
+            String logFileName = XxlJobFileHelper.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
             XxlJobContext.setXxlJobContext(new XxlJobContext(
                     -1,
                     null,
