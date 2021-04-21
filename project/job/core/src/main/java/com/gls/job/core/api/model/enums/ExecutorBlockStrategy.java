@@ -1,9 +1,14 @@
 package com.gls.job.core.api.model.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author george
  * @date 17/5/9
  */
+@Getter
+@AllArgsConstructor
 public enum ExecutorBlockStrategy {
 
     /**
@@ -14,28 +19,6 @@ public enum ExecutorBlockStrategy {
     DISCARD_LATER("Discard Later"),
     COVER_EARLY("Cover Early");
 
-    private String title;
+    private final String title;
 
-    ExecutorBlockStrategy(String title) {
-        this.title = title;
-    }
-
-    public static ExecutorBlockStrategy match(String name, ExecutorBlockStrategy defaultItem) {
-        if (name != null) {
-            for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
-                if (item.name().equals(name)) {
-                    return item;
-                }
-            }
-        }
-        return defaultItem;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

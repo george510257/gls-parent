@@ -2,7 +2,6 @@ package com.gls.job.admin.core.scheduler;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.thread.*;
-import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.client.ExecutorApiClient;
@@ -92,7 +91,7 @@ public class XxlJobScheduler {
 
     private void initI18n() {
         for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
-            item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
+//            item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
         }
     }
 

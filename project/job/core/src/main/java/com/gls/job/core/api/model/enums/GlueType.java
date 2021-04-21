@@ -1,8 +1,13 @@
 package com.gls.job.core.api.model.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author george
  */
+@Getter
+@AllArgsConstructor
 public enum GlueType {
 
     /**
@@ -20,37 +25,4 @@ public enum GlueType {
     private final boolean isScript;
     private final String cmd;
     private final String suffix;
-
-    GlueType(String desc, boolean isScript, String cmd, String suffix) {
-        this.desc = desc;
-        this.isScript = isScript;
-        this.cmd = cmd;
-        this.suffix = suffix;
-    }
-
-    public static GlueType match(String name) {
-        for (GlueType item : GlueType.values()) {
-            if (item.name().equals(name)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public boolean isScript() {
-        return isScript;
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
-
-    public String getSuffix() {
-        return suffix;
-    }
-
 }
