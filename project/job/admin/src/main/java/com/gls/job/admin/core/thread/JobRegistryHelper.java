@@ -5,8 +5,8 @@ import com.gls.job.admin.web.entity.XxlJobGroup;
 import com.gls.job.admin.web.entity.XxlJobRegistry;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -75,7 +75,7 @@ public class JobRegistryHelper {
                             List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(JobConstants.DEAD_TIMEOUT, new Date());
                             if (list != null) {
                                 for (XxlJobRegistry item : list) {
-                                    if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
+                                    if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
                                         String appname = item.getRegistryKey();
                                         List<String> registryList = appAddressMap.get(appname);
                                         if (registryList == null) {
@@ -150,7 +150,7 @@ public class JobRegistryHelper {
     public Result<String> registry(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+        if (registryModel.getRegistryType() == null
                 || !StringUtils.hasText(registryModel.getRegistryKey())
                 || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
@@ -160,9 +160,9 @@ public class JobRegistryHelper {
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
                 if (ret < 1) {
-                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
 
                     // fresh
                     freshGroupRegistryInfo(registryModel);
@@ -176,7 +176,7 @@ public class JobRegistryHelper {
     public Result<String> registryRemove(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+        if (registryModel.getRegistryType() == null
                 || !StringUtils.hasText(registryModel.getRegistryKey())
                 || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
@@ -186,7 +186,7 @@ public class JobRegistryHelper {
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
                 if (ret > 0) {
                     // fresh
                     freshGroupRegistryInfo(registryModel);

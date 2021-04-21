@@ -1,6 +1,6 @@
 package com.gls.job.executor.handler.impl;
 
-import com.gls.job.core.enums.GlueTypeEnum;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.executor.context.XxlJobContext;
 import com.gls.job.executor.handler.IJobHandler;
 import com.gls.job.executor.helper.ScriptHelper;
@@ -17,9 +17,9 @@ public class ScriptJobHandler extends IJobHandler {
     private final int jobId;
     private final long glueUpdateTime;
     private final String glueSource;
-    private final GlueTypeEnum glueType;
+    private final GlueType glueType;
 
-    public ScriptJobHandler(int jobId, long glueUpdateTime, String glueSource, GlueTypeEnum glueType) {
+    public ScriptJobHandler(int jobId, long glueUpdateTime, String glueSource, GlueType glueType) {
         this.jobId = jobId;
         this.glueUpdateTime = glueUpdateTime;
         this.glueSource = glueSource;

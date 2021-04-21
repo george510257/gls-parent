@@ -15,8 +15,8 @@ import com.gls.job.admin.web.entity.XxlJobUser;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
-import com.gls.job.core.enums.GlueTypeEnum;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +78,8 @@ public class JobInfoController {
 
         // 枚举-字典
         model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());        // 路由策略-列表
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());                                // Glue类型-字典
-        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values());        // 阻塞处理策略-字典
+        model.addAttribute("GlueTypeEnum", GlueType.values());                                // Glue类型-字典
+        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
         model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());                        // 调度类型
         model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
 

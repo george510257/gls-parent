@@ -6,7 +6,7 @@ import com.gls.job.admin.web.dao.XxlJobLogGlueDao;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLogGlue;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.enums.GlueTypeEnum;
+import com.gls.job.core.api.model.enums.GlueType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +39,7 @@ public class JobCodeController {
         if (jobInfo == null) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+        if (GlueType.BEAN == jobInfo.getGlueType()) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
         }
 
@@ -47,7 +47,7 @@ public class JobCodeController {
         JobInfoController.validPermission(request, jobInfo.getJobGroup());
 
         // Glue类型-字典
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
+        model.addAttribute("GlueTypeEnum", GlueType.values());
 
         model.addAttribute("jobInfo", jobInfo);
         model.addAttribute("jobLogGlues", jobLogGlues);

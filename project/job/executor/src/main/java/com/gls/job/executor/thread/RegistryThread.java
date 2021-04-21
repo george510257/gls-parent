@@ -2,9 +2,9 @@ package com.gls.job.executor.thread;
 
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.enums.RegistryConfig;
 import com.gls.job.executor.config.XxlJobExecutor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class RegistryThread extends Thread {
         // registry
         while (!toStop) {
             try {
-                RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
                 for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
                     try {
                         Result<String> registryResult = adminApi.registry(registryModel);
@@ -68,7 +68,7 @@ public class RegistryThread extends Thread {
 
         // registry remove
         try {
-            RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+            RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
             for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
                 try {
                     Result<String> registryResult = adminApi.registryRemove(registryModel);

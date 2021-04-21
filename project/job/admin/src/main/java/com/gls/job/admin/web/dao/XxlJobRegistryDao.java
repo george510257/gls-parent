@@ -1,6 +1,7 @@
 package com.gls.job.admin.web.dao;
 
 import com.gls.job.admin.web.entity.XxlJobRegistry;
+import com.gls.job.core.api.model.enums.RegistryType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,17 +22,17 @@ public interface XxlJobRegistryDao {
     List<XxlJobRegistry> findAll(@Param("timeout") int timeout,
                                  @Param("nowTime") Date nowTime);
 
-    int registryUpdate(@Param("registryGroup") String registryGroup,
+    int registryUpdate(@Param("registryGroup") RegistryType registryGroup,
                        @Param("registryKey") String registryKey,
                        @Param("registryValue") String registryValue,
                        @Param("updateTime") Date updateTime);
 
-    int registrySave(@Param("registryGroup") String registryGroup,
+    int registrySave(@Param("registryGroup") RegistryType registryGroup,
                      @Param("registryKey") String registryKey,
                      @Param("registryValue") String registryValue,
                      @Param("updateTime") Date updateTime);
 
-    int registryDelete(@Param("registryGroup") String registryGroup,
+    int registryDelete(@Param("registryGroup") RegistryType registryGroup,
                        @Param("registryKey") String registryKey,
                        @Param("registryValue") String registryValue);
 

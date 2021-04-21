@@ -1,9 +1,9 @@
 package com.gls.job.executor.web.rpc;
 
 import com.gls.job.core.api.model.*;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
-import com.gls.job.core.enums.GlueTypeEnum;
 import com.gls.job.executor.config.XxlJobExecutor;
 import com.gls.job.executor.glue.GlueFactory;
 import com.gls.job.executor.handler.IJobHandler;
@@ -50,8 +50,8 @@ public class ExecutorRpcService implements ExecutorApi {
         String removeOldReason = null;
 
         // valid：jobHandler + jobThread
-        GlueTypeEnum glueTypeEnum = GlueTypeEnum.match(triggerModel.getGlueType());
-        if (GlueTypeEnum.BEAN == glueTypeEnum) {
+        GlueType glueTypeEnum = triggerModel.getGlueType();
+        if (GlueType.BEAN == glueTypeEnum) {
 
             // new jobHandler
             IJobHandler newJobHandler = XxlJobExecutor.loadJobHandler(triggerModel.getExecutorHandler());
@@ -73,7 +73,7 @@ public class ExecutorRpcService implements ExecutorApi {
                 }
             }
 
-        } else if (GlueTypeEnum.GLUE_GROOVY == glueTypeEnum) {
+        } else if (GlueType.GLUE_GROOVY == glueTypeEnum) {
 
             // valid old jobThread
             if (jobThread != null
@@ -112,7 +112,7 @@ public class ExecutorRpcService implements ExecutorApi {
 
             // valid handler
             if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), GlueTypeEnum.match(triggerModel.getGlueType()));
+                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), triggerModel.getGlueType());
             }
         } else {
             return new Result<>(Result.FAIL_CODE, "glueType[" + triggerModel.getGlueType() + "] is not valid.");
@@ -120,16 +120,16 @@ public class ExecutorRpcService implements ExecutorApi {
 
         // executor block strategy
         if (jobThread != null) {
-            ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(triggerModel.getExecutorBlockStrategy(), null);
-            if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
+            ExecutorBlockStrategy blockStrategy = triggerModel.getExecutorBlockStrategy();
+            if (ExecutorBlockStrategy.DISCARD_LATER == blockStrategy) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
-                    return new Result<>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
+                    return new Result<>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
                 }
-            } else if (ExecutorBlockStrategyEnum.COVER_EARLY == blockStrategy) {
+            } else if (ExecutorBlockStrategy.COVER_EARLY == blockStrategy) {
                 // kill running jobThread
                 if (jobThread.isRunningOrHasQueue()) {
-                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategyEnum.COVER_EARLY.getTitle();
+                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategy.COVER_EARLY.getTitle();
 
                     jobThread = null;
                 }

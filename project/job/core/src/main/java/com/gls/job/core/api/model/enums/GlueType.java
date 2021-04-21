@@ -1,9 +1,9 @@
-package com.gls.job.core.enums;
+package com.gls.job.core.api.model.enums;
 
 /**
  * @author george
  */
-public enum GlueTypeEnum {
+public enum GlueType {
 
     /**
      *
@@ -21,15 +21,15 @@ public enum GlueTypeEnum {
     private final String cmd;
     private final String suffix;
 
-    GlueTypeEnum(String desc, boolean isScript, String cmd, String suffix) {
+    GlueType(String desc, boolean isScript, String cmd, String suffix) {
         this.desc = desc;
         this.isScript = isScript;
         this.cmd = cmd;
         this.suffix = suffix;
     }
 
-    public static GlueTypeEnum match(String name) {
-        for (GlueTypeEnum item : GlueTypeEnum.values()) {
+    public static GlueType match(String name) {
+        for (GlueType item : GlueType.values()) {
             if (item.name().equals(name)) {
                 return item;
             }

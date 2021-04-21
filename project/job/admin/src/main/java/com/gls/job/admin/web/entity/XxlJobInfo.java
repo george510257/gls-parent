@@ -1,5 +1,7 @@
 package com.gls.job.admin.web.entity;
 
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
+import com.gls.job.core.api.model.enums.GlueType;
 import lombok.Data;
 
 import java.util.Date;
@@ -30,11 +32,11 @@ public class XxlJobInfo {
     private String executorRouteStrategy;    // 执行器路由策略
     private String executorHandler;            // 执行器，任务Handler名称
     private String executorParam;            // 执行器，任务参数
-    private String executorBlockStrategy;    // 阻塞处理策略
+    private ExecutorBlockStrategy executorBlockStrategy;    // 阻塞处理策略
     private int executorTimeout;            // 任务执行超时时间，单位秒
     private int executorFailRetryCount;        // 失败重试次数
 
-    private String glueType;        // GLUE类型	#com.gls.job.core.glue.GlueTypeEnum
+    private GlueType glueType;        // GLUE类型	#com.gls.job.core.glue.GlueTypeEnum
     private String glueSource;        // GLUE源代码
     private String glueRemark;        // GLUE备注
     private Date glueUpdateTime;    // GLUE更新时间

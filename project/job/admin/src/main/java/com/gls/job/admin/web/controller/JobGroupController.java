@@ -7,8 +7,8 @@ import com.gls.job.admin.web.dao.XxlJobRegistryDao;
 import com.gls.job.admin.web.entity.XxlJobGroup;
 import com.gls.job.admin.web.entity.XxlJobRegistry;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.enums.RegistryConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -153,7 +153,7 @@ public class JobGroupController {
         List<XxlJobRegistry> list = glsJobRegistryDao.findAll(JobConstants.DEAD_TIMEOUT, new Date());
         if (list != null) {
             for (XxlJobRegistry item : list) {
-                if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
+                if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
                     String appname = item.getRegistryKey();
                     List<String> registryList = appAddressMap.get(appname);
                     if (registryList == null) {

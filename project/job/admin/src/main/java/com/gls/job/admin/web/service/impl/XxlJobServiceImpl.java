@@ -12,8 +12,7 @@ import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLogReport;
 import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
-import com.gls.job.core.enums.GlueTypeEnum;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,14 +95,14 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid job
-        if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
+        if (jobInfo.getGlueType() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_unvalid")));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
+        if (GlueType.BEAN == jobInfo.getGlueType() && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
         // 》fix "\r" in shell
-        if (GlueTypeEnum.GLUE_SHELL == GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource() != null) {
+        if (GlueType.GLUE_SHELL == jobInfo.getGlueType() && jobInfo.getGlueSource() != null) {
             jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
         }
 
@@ -114,7 +113,7 @@ public class XxlJobServiceImpl implements XxlJobService {
         if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (jobInfo.getExecutorBlockStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
 
@@ -206,7 +205,7 @@ public class XxlJobServiceImpl implements XxlJobService {
         if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (jobInfo.getExecutorBlockStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
 
