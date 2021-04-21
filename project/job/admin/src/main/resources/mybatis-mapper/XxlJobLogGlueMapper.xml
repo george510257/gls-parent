@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gls.job.admin.web.dao.XxlJobLogGlueDao">
 
-    <resultMap id="XxlJobLogGlue" type="com.gls.job.admin.web.model.XxlJobLogGlue">
+    <resultMap id="XxlJobLogGlue" type="com.gls.job.admin.web.entity.XxlJobLogGlue">
         <result column="id" property="id"/>
         <result column="job_id" property="jobId"/>
         <result column="glue_type" property="glueType"/>
@@ -23,7 +23,7 @@
 		t.update_time
     </sql>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.model.XxlJobLogGlue" useGeneratedKeys="true"
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.XxlJobLogGlue" useGeneratedKeys="true"
             keyProperty="id">
         INSERT INTO gls_job_logglue (
         `job_id`,

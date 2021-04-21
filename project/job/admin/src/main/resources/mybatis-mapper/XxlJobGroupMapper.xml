@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gls.job.admin.web.dao.XxlJobGroupDao">
 
-    <resultMap id="XxlJobGroup" type="com.gls.job.admin.web.model.XxlJobGroup">
+    <resultMap id="XxlJobGroup" type="com.gls.job.admin.web.entity.XxlJobGroup">
         <result column="id" property="id"/>
         <result column="app_name" property="appname"/>
         <result column="title" property="title"/>
@@ -36,12 +36,12 @@
         ORDER BY t.app_name, t.title, t.id ASC
     </select>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.model.XxlJobGroup" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.XxlJobGroup" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO gls_job_group (`app_name`, `title`, `address_type`, `address_list`, `update_time`)
         values (#{appname}, #{title}, #{addressType}, #{addressList}, #{updateTime});
     </insert>
 
-    <update id="update" parameterType="com.gls.job.admin.web.model.XxlJobGroup">
+    <update id="update" parameterType="com.gls.job.admin.web.entity.XxlJobGroup">
         UPDATE gls_job_group
         SET `app_name`     = #{appname},
             `title`        = #{title},

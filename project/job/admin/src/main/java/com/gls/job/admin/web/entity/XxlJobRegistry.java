@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import lombok.Data;
 

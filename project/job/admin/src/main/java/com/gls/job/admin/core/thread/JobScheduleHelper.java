@@ -5,7 +5,7 @@ import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.scheduler.MisfireStrategyEnum;
 import com.gls.job.admin.core.scheduler.ScheduleTypeEnum;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
-import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.entity.XxlJobInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.core.api.model.Result;
 
 import java.util.Date;

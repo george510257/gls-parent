@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.web.model.XxlJobLogReport;
+import com.gls.job.admin.web.entity.XxlJobLogReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

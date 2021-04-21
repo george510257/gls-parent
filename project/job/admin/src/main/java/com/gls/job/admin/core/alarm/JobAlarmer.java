@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.entity.XxlJobInfo;
+import com.gls.job.admin.web.entity.XxlJobLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;

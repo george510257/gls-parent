@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.dao;
 
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.entity.XxlJobLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

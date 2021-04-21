@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller.interceptor;
 
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
-import com.gls.job.admin.web.model.XxlJobUser;
+import com.gls.job.admin.web.entity.XxlJobUser;
 import com.gls.job.admin.web.service.LoginService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
