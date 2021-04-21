@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.scheduler;
+package com.gls.job.admin.web.entity.enums;
 
 import com.gls.job.admin.core.util.I18nUtil;
 

@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.trigger.XxlJobTrigger;
+import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

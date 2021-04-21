@@ -2,10 +2,10 @@ package com.gls.job.admin.core.complete;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
-import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import lombok.extern.slf4j.Slf4j;

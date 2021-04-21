@@ -1,5 +1,6 @@
-package com.gls.job.admin.core.route;
+package com.gls.job.admin.web.entity.enums;
 
+import com.gls.job.admin.core.route.ExecutorRouter;
 import com.gls.job.admin.core.route.strategy.*;
 import com.gls.job.admin.core.util.I18nUtil;
 
