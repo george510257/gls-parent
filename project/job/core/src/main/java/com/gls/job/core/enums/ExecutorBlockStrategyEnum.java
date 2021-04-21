@@ -6,6 +6,9 @@ package com.gls.job.core.enums;
  */
 public enum ExecutorBlockStrategyEnum {
 
+    /**
+     *
+     */
     SERIAL_EXECUTION("Serial execution"),
     /*CONCURRENT_EXECUTION("并行"),*/
     DISCARD_LATER("Discard Later"),
