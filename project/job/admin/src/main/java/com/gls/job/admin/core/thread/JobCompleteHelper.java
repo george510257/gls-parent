@@ -2,8 +2,8 @@ package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.complete.XxlJobCompleter;
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobLog;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.util.DateUtil;

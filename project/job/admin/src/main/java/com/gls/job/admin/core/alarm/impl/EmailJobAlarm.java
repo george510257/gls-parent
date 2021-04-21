@@ -2,13 +2,12 @@ package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobGroup;
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.XxlJobGroup;
+import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -23,17 +22,18 @@ import java.util.Set;
  *
  * @author george 2020-01-19
  */
+@Slf4j
 @Component
 public class EmailJobAlarm implements JobAlarm {
-    private static Logger logger = LoggerFactory.getLogger(EmailJobAlarm.class);
 
     /**
      * load email job alarm template
      *
      * @return
      */
-    private static final String loadEmailJobAlarmTemplate() {
-        String mailBodyTemplate = "<h5>" + I18nUtil.getString("jobconf_monitor_detail") + "：</span>" +
+    private static String loadEmailJobAlarmTemplate() {
+
+        return "<h5>" + I18nUtil.getString("jobconf_monitor_detail") + "：</span>" +
                 "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
                 "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
                 "      <tr>\n" +
@@ -54,8 +54,6 @@ public class EmailJobAlarm implements JobAlarm {
                 "      </tr>\n" +
                 "   </tbody>\n" +
                 "</table>";
-
-        return mailBodyTemplate;
     }
 
     /**
@@ -63,6 +61,7 @@ public class EmailJobAlarm implements JobAlarm {
      *
      * @param jobLog
      */
+    @Override
     public boolean doAlarm(XxlJobInfo info, XxlJobLog jobLog) {
         boolean alarmResult = true;
 
@@ -79,7 +78,7 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
+            XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(info.getJobGroup());
             String personal = I18nUtil.getString("admin_name_full");
             String title = I18nUtil.getString("jobconf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
@@ -103,7 +102,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
                 } catch (Exception e) {
-                    logger.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    log.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 
                     alarmResult = false;
                 }

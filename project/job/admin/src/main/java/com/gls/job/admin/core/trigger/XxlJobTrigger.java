@@ -1,12 +1,12 @@
 package com.gls.job.admin.core.trigger;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobGroup;
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
 import com.gls.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.gls.job.admin.core.scheduler.XxlJobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.XxlJobGroup;
+import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;

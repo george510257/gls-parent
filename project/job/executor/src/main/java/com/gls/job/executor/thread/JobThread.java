@@ -3,8 +3,9 @@ package com.gls.job.executor.thread;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.context.XxlJobContext;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.executor.config.XxlJobExecutor;
+import com.gls.job.executor.context.XxlJobContext;
 import com.gls.job.executor.handler.IJobHandler;
 import com.gls.job.executor.helper.XxlJobFileHelper;
 import com.gls.job.executor.helper.XxlJobHelper;
@@ -223,7 +224,7 @@ public class JobThread extends Thread {
                         CallbackQueueHolder.getInstance().pushCallback(new CallbackModel(
                                 triggerModel.getLogId(),
                                 triggerModel.getLogDateTime(),
-                                XxlJobContext.HANDLE_CODE_FAIL,
+                                JobConstants.HANDLE_CODE_FAIL,
                                 stopReason + " [job running, killed]")
                         );
                     }
@@ -239,7 +240,7 @@ public class JobThread extends Thread {
                 CallbackQueueHolder.getInstance().pushCallback(new CallbackModel(
                         triggerModel.getLogId(),
                         triggerModel.getLogDateTime(),
-                        XxlJobContext.HANDLE_CODE_FAIL,
+                        JobConstants.HANDLE_CODE_FAIL,
                         stopReason + " [job not executed, in the job queue, killed.]")
                 );
             }

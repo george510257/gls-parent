@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
+import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.XxlJobLog;
 
 /**
  * @author george 2020-01-19

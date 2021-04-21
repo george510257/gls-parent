@@ -2,7 +2,7 @@ package com.gls.job.admin.core.conf;
 
 import com.gls.job.admin.core.alarm.JobAlarmer;
 import com.gls.job.admin.core.scheduler.XxlJobScheduler;
-import com.gls.job.admin.dao.*;
+import com.gls.job.admin.web.dao.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

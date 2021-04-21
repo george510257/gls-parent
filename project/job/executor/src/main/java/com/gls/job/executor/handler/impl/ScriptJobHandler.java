@@ -1,7 +1,7 @@
 package com.gls.job.executor.handler.impl;
 
-import com.gls.job.core.context.XxlJobContext;
 import com.gls.job.core.enums.GlueTypeEnum;
+import com.gls.job.executor.context.XxlJobContext;
 import com.gls.job.executor.handler.IJobHandler;
 import com.gls.job.executor.helper.ScriptHelper;
 import com.gls.job.executor.helper.XxlJobFileHelper;

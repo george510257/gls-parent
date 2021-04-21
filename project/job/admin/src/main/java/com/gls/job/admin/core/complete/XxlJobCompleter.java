@@ -1,13 +1,13 @@
 package com.gls.job.admin.core.complete;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
 import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.context.XxlJobContext;
+import com.gls.job.core.constants.JobConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class XxlJobCompleter {
 
         // 1、handle success, to trigger child job
         String triggerChildMsg = null;
-        if (XxlJobContext.HANDLE_CODE_SUCCESS == glsJobLog.getHandleCode()) {
+        if (JobConstants.HANDLE_CODE_SUCCESS == glsJobLog.getHandleCode()) {
             XxlJobInfo glsJobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(glsJobLog.getJobId());
             if (glsJobInfo != null && glsJobInfo.getChildJobId() != null && glsJobInfo.getChildJobId().trim().length() > 0) {
                 triggerChildMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";

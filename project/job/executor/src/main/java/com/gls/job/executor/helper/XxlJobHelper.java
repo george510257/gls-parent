@@ -1,7 +1,8 @@
 package com.gls.job.executor.helper;
 
-import com.gls.job.core.context.XxlJobContext;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.util.DateUtil;
+import com.gls.job.executor.context.XxlJobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
@@ -177,7 +178,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleSuccess() {
-        return handleResult(XxlJobContext.HANDLE_CODE_SUCCESS, null);
+        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, null);
     }
 
     /**
@@ -187,7 +188,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleSuccess(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_CODE_SUCCESS, handleMsg);
+        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, handleMsg);
     }
 
     /**
@@ -196,7 +197,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleFail() {
-        return handleResult(XxlJobContext.HANDLE_CODE_FAIL, null);
+        return handleResult(JobConstants.HANDLE_CODE_FAIL, null);
     }
 
     /**
@@ -206,7 +207,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleFail(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_CODE_FAIL, handleMsg);
+        return handleResult(JobConstants.HANDLE_CODE_FAIL, handleMsg);
     }
 
     /**
@@ -215,7 +216,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleTimeout() {
-        return handleResult(XxlJobContext.HANDLE_CODE_TIMEOUT, null);
+        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, null);
     }
 
     /**
@@ -225,7 +226,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleTimeout(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_CODE_TIMEOUT, handleMsg);
+        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, handleMsg);
     }
 
     /**

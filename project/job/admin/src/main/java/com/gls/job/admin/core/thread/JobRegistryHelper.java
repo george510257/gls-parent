@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobGroup;
-import com.gls.job.admin.core.model.XxlJobRegistry;
+import com.gls.job.admin.web.model.XxlJobGroup;
+import com.gls.job.admin.web.model.XxlJobRegistry;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.enums.RegistryConfig;

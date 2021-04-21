@@ -2,10 +2,10 @@ package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.cron.CronExpression;
-import com.gls.job.admin.core.model.XxlJobInfo;
 import com.gls.job.admin.core.scheduler.MisfireStrategyEnum;
 import com.gls.job.admin.core.scheduler.ScheduleTypeEnum;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
+import com.gls.job.admin.web.model.XxlJobInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
