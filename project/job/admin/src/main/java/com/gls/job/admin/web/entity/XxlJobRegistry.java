@@ -1,17 +1,19 @@
 package com.gls.job.admin.web.entity;
 
+import com.gls.job.core.api.model.enums.RegistryType;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * Created by george on 16/9/30.
+ * @author george
+ * @date 16/9/30
  */
 @Data
 public class XxlJobRegistry {
 
     private int id;
-    private String registryGroup;
+    private RegistryType registryType;
     private String registryKey;
     private String registryValue;
     private Date updateTime;

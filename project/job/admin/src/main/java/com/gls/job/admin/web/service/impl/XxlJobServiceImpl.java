@@ -7,9 +7,7 @@ import com.gls.job.admin.web.dao.*;
 import com.gls.job.admin.web.entity.XxlJobGroup;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLogReport;
-import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategyEnum;
-import com.gls.job.admin.web.entity.enums.MisfireStrategyEnum;
-import com.gls.job.admin.web.entity.enums.ScheduleTypeEnum;
+import com.gls.job.admin.web.entity.enums.ScheduleType;
 import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
@@ -72,15 +70,15 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid trigger
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
+        ScheduleType scheduleTypeEnum = jobInfo.getScheduleType();
         if (scheduleTypeEnum == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")));
         }
-        if (scheduleTypeEnum == ScheduleTypeEnum.CRON) {
+        if (scheduleTypeEnum == ScheduleType.CRON) {
             if (jobInfo.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfo.getScheduleConf())) {
                 return new Result<String>(Result.FAIL_CODE, "Cron" + I18nUtil.getString("system_unvalid"));
             }
-        } else if (scheduleTypeEnum == ScheduleTypeEnum.FIX_RATE/* || scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
+        } else if (scheduleTypeEnum == ScheduleType.FIX_RATE/* || scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
             if (jobInfo.getScheduleConf() == null) {
                 return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type")));
             }
@@ -107,10 +105,10 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid advanced
-        if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
+        if (jobInfo.getExecutorRouteStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
+        if (jobInfo.getMisfireStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
         if (jobInfo.getExecutorBlockStrategy() == null) {
@@ -176,15 +174,15 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid trigger
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
+        ScheduleType scheduleTypeEnum = jobInfo.getScheduleType();
         if (scheduleTypeEnum == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")));
         }
-        if (scheduleTypeEnum == ScheduleTypeEnum.CRON) {
+        if (scheduleTypeEnum == ScheduleType.CRON) {
             if (jobInfo.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfo.getScheduleConf())) {
                 return new Result<String>(Result.FAIL_CODE, "Cron" + I18nUtil.getString("system_unvalid"));
             }
-        } else if (scheduleTypeEnum == ScheduleTypeEnum.FIX_RATE /*|| scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
+        } else if (scheduleTypeEnum == ScheduleType.FIX_RATE /*|| scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
             if (jobInfo.getScheduleConf() == null) {
                 return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")));
             }
@@ -199,10 +197,10 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid advanced
-        if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
+        if (jobInfo.getExecutorRouteStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorRouteStrategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
+        if (jobInfo.getMisfireStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
         if (jobInfo.getExecutorBlockStrategy() == null) {
@@ -303,8 +301,8 @@ public class XxlJobServiceImpl implements XxlJobService {
         XxlJobInfo glsJobInfo = glsJobInfoDao.loadById(id);
 
         // valid
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(glsJobInfo.getScheduleType(), ScheduleTypeEnum.NONE);
-        if (ScheduleTypeEnum.NONE == scheduleTypeEnum) {
+        ScheduleType scheduleTypeEnum = glsJobInfo.getScheduleType();
+        if (ScheduleType.NONE == scheduleTypeEnum) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type_none_limit_start")));
         }
 

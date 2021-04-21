@@ -3,9 +3,9 @@ package com.gls.job.admin.core.thread;
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.web.entity.XxlJobInfo;
-import com.gls.job.admin.web.entity.enums.MisfireStrategyEnum;
-import com.gls.job.admin.web.entity.enums.ScheduleTypeEnum;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.MisfireStrategy;
+import com.gls.job.admin.web.entity.enums.ScheduleType;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,11 +35,11 @@ public class JobScheduleHelper {
 
     // ---------------------- tools ----------------------
     public static Date generateNextValidTime(XxlJobInfo jobInfo, Date fromTime) throws Exception {
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
-        if (ScheduleTypeEnum.CRON == scheduleTypeEnum) {
+        ScheduleType scheduleTypeEnum = jobInfo.getScheduleType();
+        if (ScheduleType.CRON == scheduleTypeEnum) {
             Date nextValidTime = new CronExpression(jobInfo.getScheduleConf()).getNextValidTimeAfter(fromTime);
             return nextValidTime;
-        } else if (ScheduleTypeEnum.FIX_RATE == scheduleTypeEnum /*|| ScheduleTypeEnum.FIX_DELAY == scheduleTypeEnum*/) {
+        } else if (ScheduleType.FIX_RATE == scheduleTypeEnum /*|| ScheduleTypeEnum.FIX_DELAY == scheduleTypeEnum*/) {
             return new Date(fromTime.getTime() + Integer.valueOf(jobInfo.getScheduleConf()) * 1000);
         }
         return null;
@@ -98,10 +98,10 @@ public class JobScheduleHelper {
                                     logger.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfo.getId());
 
                                     // 1、misfire match
-                                    MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
-                                    if (MisfireStrategyEnum.FIRE_ONCE_NOW == misfireStrategyEnum) {
+                                    MisfireStrategy misfireStrategyEnum = jobInfo.getMisfireStrategy();
+                                    if (MisfireStrategy.FIRE_ONCE_NOW == misfireStrategyEnum) {
                                         // FIRE_ONCE_NOW 》 trigger
-                                        JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.MISFIRE, -1, null, null, null);
+                                        JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerType.MISFIRE, -1, null, null, null);
                                         logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
                                     }
 
@@ -112,7 +112,7 @@ public class JobScheduleHelper {
                                     // 2.2、trigger-expire < 5s：direct-trigger && make next-trigger-time
 
                                     // 1、trigger
-                                    JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null, null);
+                                    JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerType.CRON, -1, null, null, null);
                                     logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
 
                                     // 2、fresh next
@@ -257,7 +257,7 @@ public class JobScheduleHelper {
                             // do trigger
                             for (int jobId : ringItemData) {
                                 // do trigger
-                                JobTriggerPoolHelper.trigger(jobId, TriggerTypeEnum.CRON, -1, null, null, null);
+                                JobTriggerPoolHelper.trigger(jobId, TriggerType.CRON, -1, null, null, null);
                             }
                             // clear
                             ringItemData.clear();

@@ -75,7 +75,7 @@ public class JobRegistryHelper {
                             List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(JobConstants.DEAD_TIMEOUT, new Date());
                             if (list != null) {
                                 for (XxlJobRegistry item : list) {
-                                    if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
+                                    if (RegistryType.EXECUTOR == item.getRegistryType()) {
                                         String appname = item.getRegistryKey();
                                         List<String> registryList = appAddressMap.get(appname);
                                         if (registryList == null) {

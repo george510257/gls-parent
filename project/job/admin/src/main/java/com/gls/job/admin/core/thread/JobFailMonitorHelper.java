@@ -4,7 +4,7 @@ import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLog;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +53,7 @@ public class JobFailMonitorHelper {
 
                                 // 1、fail retry monitor
                                 if (log.getExecutorFailRetryCount() > 0) {
-                                    JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
+                                    JobTriggerPoolHelper.trigger(log.getJobId(), TriggerType.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
                                     String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
                                     log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
                                     XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(log);

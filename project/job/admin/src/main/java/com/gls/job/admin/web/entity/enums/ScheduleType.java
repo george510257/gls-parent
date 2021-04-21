@@ -1,12 +1,19 @@
 package com.gls.job.admin.web.entity.enums;
 
 import com.gls.job.admin.core.util.I18nUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author george 2020-10-29 21:11:23
  */
-public enum ScheduleTypeEnum {
+@Getter
+@AllArgsConstructor
+public enum ScheduleType {
 
+    /**
+     *
+     */
     NONE(I18nUtil.getString("schedule_type_none")),
 
     /**
@@ -24,23 +31,6 @@ public enum ScheduleTypeEnum {
      */
     /*FIX_DELAY(I18nUtil.getString("schedule_type_fix_delay"))*/;
 
-    private String title;
-
-    ScheduleTypeEnum(String title) {
-        this.title = title;
-    }
-
-    public static ScheduleTypeEnum match(String name, ScheduleTypeEnum defaultItem) {
-        for (ScheduleTypeEnum item : ScheduleTypeEnum.values()) {
-            if (item.name().equals(name)) {
-                return item;
-            }
-        }
-        return defaultItem;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+    private final String title;
 
 }

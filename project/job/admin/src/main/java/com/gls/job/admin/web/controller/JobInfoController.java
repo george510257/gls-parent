@@ -8,10 +8,10 @@ import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.entity.XxlJobGroup;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobUser;
-import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategyEnum;
-import com.gls.job.admin.web.entity.enums.MisfireStrategyEnum;
-import com.gls.job.admin.web.entity.enums.ScheduleTypeEnum;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategy;
+import com.gls.job.admin.web.entity.enums.MisfireStrategy;
+import com.gls.job.admin.web.entity.enums.ScheduleType;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
@@ -77,11 +77,11 @@ public class JobInfoController {
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
 
         // 枚举-字典
-        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());        // 路由策略-列表
+        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategy.values());        // 路由策略-列表
         model.addAttribute("GlueTypeEnum", GlueType.values());                                // Glue类型-字典
         model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
-        model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());                        // 调度类型
-        model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
+        model.addAttribute("ScheduleTypeEnum", ScheduleType.values());                        // 调度类型
+        model.addAttribute("MisfireStrategyEnum", MisfireStrategy.values());                    // 调度过期策略
 
         // 执行器列表
         List<XxlJobGroup> jobGroupList_all = glsJobGroupDao.findAll();
@@ -146,7 +146,7 @@ public class JobInfoController {
             executorParam = "";
         }
 
-        JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
+        JobTriggerPoolHelper.trigger(id, TriggerType.MANUAL, -1, null, executorParam, addressList);
         return Result.SUCCESS;
     }
 
@@ -155,7 +155,7 @@ public class JobInfoController {
     public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
 
         XxlJobInfo paramXxlJobInfo = new XxlJobInfo();
-        paramXxlJobInfo.setScheduleType(scheduleType);
+        paramXxlJobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
         paramXxlJobInfo.setScheduleConf(scheduleConf);
 
         List<String> result = new ArrayList<>();

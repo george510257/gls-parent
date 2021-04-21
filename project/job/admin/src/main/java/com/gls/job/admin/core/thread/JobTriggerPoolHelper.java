@@ -2,7 +2,7 @@ package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.trigger.XxlJobTrigger;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class JobTriggerPoolHelper {
      * @param executorParam         null: use job param
      *                              not null: cover job param
      */
-    public static void trigger(int jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
+    public static void trigger(int jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
         helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
     }
 
@@ -88,7 +88,7 @@ public class JobTriggerPoolHelper {
      * add trigger
      */
     public void addTrigger(final int jobId,
-                           final TriggerTypeEnum triggerType,
+                           final TriggerType triggerType,
                            final int failRetryCount,
                            final String executorShardingParam,
                            final String executorParam,

@@ -6,10 +6,11 @@ import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.entity.XxlJobGroup;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLog;
-import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategyEnum;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategy;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
@@ -39,7 +40,7 @@ public class XxlJobTrigger {
      *                              not null: cover
      */
     public static void trigger(int jobId,
-                               TriggerTypeEnum triggerType,
+                               TriggerType triggerType,
                                int failRetryCount,
                                String executorShardingParam,
                                String executorParam,
@@ -73,7 +74,7 @@ public class XxlJobTrigger {
                 shardingParam[1] = Integer.valueOf(shardingArr[1]);
             }
         }
-        if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null)
+        if (ExecutorRouteStrategy.SHARDING_BROADCAST == jobInfo.getExecutorRouteStrategy()
                 && group.getRegistryList() != null && !group.getRegistryList().isEmpty()
                 && shardingParam == null) {
             for (int i = 0; i < group.getRegistryList().size(); i++) {
@@ -105,12 +106,12 @@ public class XxlJobTrigger {
      * @param index               sharding index
      * @param total               sharding index
      */
-    private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
+    private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
 
         // param
-//        ExecutorBlockStrategy blockStrategy = ExecutorBlockStrategy.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategy.SERIAL_EXECUTION);  // block strategy
-        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
-        String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
+        ExecutorBlockStrategy blockStrategy = jobInfo.getExecutorBlockStrategy();  // block strategy
+        ExecutorRouteStrategy executorRouteStrategyEnum = jobInfo.getExecutorRouteStrategy();    // route strategy
+        String shardingParam = (ExecutorRouteStrategy.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
         XxlJobLog jobLog = new XxlJobLog();
@@ -139,7 +140,7 @@ public class XxlJobTrigger {
         String address = null;
         Result<String> routeAddressResult = null;
         if (group.getRegistryList() != null && !group.getRegistryList().isEmpty()) {
-            if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) {
+            if (ExecutorRouteStrategy.SHARDING_BROADCAST == executorRouteStrategyEnum) {
                 if (index < group.getRegistryList().size()) {
                     address = group.getRegistryList().get(index);
                 } else {
@@ -174,7 +175,7 @@ public class XxlJobTrigger {
         if (shardingParam != null) {
             triggerMsgSb.append("(" + shardingParam + ")");
         }
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorBlockStrategy")).append("：").append(jobInfo.getExecutorBlockStrategy().getTitle());
+        triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorBlockStrategy")).append("：").append(blockStrategy.getTitle());
         triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_timeout")).append("：").append(jobInfo.getExecutorTimeout());
         triggerMsgSb.append("<br>").append(I18nUtil.getString("jobinfo_field_executorFailRetryCount")).append("：").append(finalFailRetryCount);
 

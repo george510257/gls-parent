@@ -3,12 +3,20 @@ package com.gls.job.admin.web.entity.enums;
 import com.gls.job.admin.core.route.ExecutorRouter;
 import com.gls.job.admin.core.route.strategy.*;
 import com.gls.job.admin.core.util.I18nUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * Created by george on 17/3/10.
+ * @author george
+ * @date 17/3/10
  */
-public enum ExecutorRouteStrategyEnum {
+@Getter
+@AllArgsConstructor
+public enum ExecutorRouteStrategy {
 
+    /**
+     *
+     */
     FIRST(I18nUtil.getString("jobconf_route_first"), new ExecutorRouteFirst()),
     LAST(I18nUtil.getString("jobconf_route_last"), new ExecutorRouteLast()),
     ROUND(I18nUtil.getString("jobconf_route_round"), new ExecutorRouteRound()),
@@ -20,31 +28,7 @@ public enum ExecutorRouteStrategyEnum {
     BUSYOVER(I18nUtil.getString("jobconf_route_busyover"), new ExecutorRouteBusyover()),
     SHARDING_BROADCAST(I18nUtil.getString("jobconf_route_shard"), null);
 
-    private String title;
-    private ExecutorRouter router;
-
-    ExecutorRouteStrategyEnum(String title, ExecutorRouter router) {
-        this.title = title;
-        this.router = router;
-    }
-
-    public static ExecutorRouteStrategyEnum match(String name, ExecutorRouteStrategyEnum defaultItem) {
-        if (name != null) {
-            for (ExecutorRouteStrategyEnum item : ExecutorRouteStrategyEnum.values()) {
-                if (item.name().equals(name)) {
-                    return item;
-                }
-            }
-        }
-        return defaultItem;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public ExecutorRouter getRouter() {
-        return router;
-    }
+    private final String title;
+    private final ExecutorRouter router;
 
 }

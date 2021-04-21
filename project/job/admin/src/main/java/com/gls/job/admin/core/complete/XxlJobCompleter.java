@@ -5,7 +5,7 @@ import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLog;
-import com.gls.job.admin.web.entity.enums.TriggerTypeEnum;
+import com.gls.job.admin.web.entity.enums.TriggerType;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class XxlJobCompleter {
                     int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.parseInt(childJobIds[i]) : -1;
                     if (childJobId > 0) {
 
-                        JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null, null);
+                        JobTriggerPoolHelper.trigger(childJobId, TriggerType.PARENT, -1, null, null, null);
                         Result<String> triggerChildResult = Result.SUCCESS;
 
                         // add msg
