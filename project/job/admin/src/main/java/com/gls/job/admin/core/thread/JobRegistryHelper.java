@@ -5,6 +5,7 @@ import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobRegistry;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +65,14 @@ public class JobRegistryHelper {
                         if (groupList != null && !groupList.isEmpty()) {
 
                             // remove dead address (admin/executor)
-                            List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
+                            List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(JobConstants.DEAD_TIMEOUT, new Date());
                             if (ids != null && ids.size() > 0) {
                                 XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().removeDead(ids);
                             }
 
                             // fresh online address (admin/executor)
                             HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-                            List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+                            List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(JobConstants.DEAD_TIMEOUT, new Date());
                             if (list != null) {
                                 for (XxlJobRegistry item : list) {
                                     if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
@@ -114,7 +115,7 @@ public class JobRegistryHelper {
                         }
                     }
                     try {
-                        TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
                     } catch (InterruptedException e) {
                         if (!toStop) {
                             logger.error(">>>>>>>>>>> gls-job, job registry monitor thread error:{}", e);

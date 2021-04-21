@@ -1,6 +1,6 @@
 package com.gls.job.executor.thread;
 
-import com.gls.job.core.enums.RegistryConfig;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.executor.web.service.CallbackService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class RetryCallbackThread extends Thread {
 
             }
             try {
-                TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
             } catch (InterruptedException e) {
                 if (!toStop) {
                     log.error(e.getMessage(), e);

@@ -8,16 +8,15 @@ import com.gls.job.admin.web.model.XxlJobInfo;
 import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.MessageFormat;
 
 /**
  * @author george 2020-10-30 20:43:10
  */
+@Slf4j
 public class XxlJobCompleter {
-    private static Logger logger = LoggerFactory.getLogger(XxlJobCompleter.class);
 
     /**
      * common fresh handle entrance (limit only once)
@@ -53,7 +52,7 @@ public class XxlJobCompleter {
 
                 String[] childJobIds = glsJobInfo.getChildJobId().split(",");
                 for (int i = 0; i < childJobIds.length; i++) {
-                    int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
+                    int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.parseInt(childJobIds[i]) : -1;
                     if (childJobId > 0) {
 
                         JobTriggerPoolHelper.trigger(childJobId, TriggerTypeEnum.PARENT, -1, null, null, null);
@@ -88,7 +87,7 @@ public class XxlJobCompleter {
 
     private static boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            int result = Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
             return false;

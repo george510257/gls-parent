@@ -27,6 +27,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
 
     // ---------------------- XxlJobScheduler ----------------------
     // conf
+
     @Value("${gls.job.i18n}")
     private String i18n;
     @Value("${gls.job.accessToken}")
@@ -35,6 +36,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     private String emailFrom;
 
     // ---------------------- XxlJobScheduler ----------------------
+
     @Value("${gls.job.triggerpool.fast.max}")
     private int triggerPoolFastMax;
     @Value("${gls.job.triggerpool.slow.max}")
@@ -49,6 +51,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     private XxlJobRegistryDao glsJobRegistryDao;
 
     // dao, service
+
     @Resource
     private XxlJobGroupDao glsJobGroupDao;
     @Resource

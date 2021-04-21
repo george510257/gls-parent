@@ -3,6 +3,7 @@ package com.gls.job.executor.thread;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.enums.RegistryConfig;
 import com.gls.job.executor.config.XxlJobExecutor;
 import lombok.Setter;
@@ -56,7 +57,7 @@ public class RegistryThread extends Thread {
 
             try {
                 if (!toStop) {
-                    TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                    TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
                 }
             } catch (InterruptedException e) {
                 if (!toStop) {
