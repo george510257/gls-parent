@@ -1,8 +1,8 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.exception.XxlJobException;
-import com.gls.job.admin.core.thread.JobScheduleHelper;
-import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
+import com.gls.job.admin.core.server.JobScheduleHelper;
+import com.gls.job.admin.core.server.JobTriggerPoolHelper;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.entity.XxlJobGroup;

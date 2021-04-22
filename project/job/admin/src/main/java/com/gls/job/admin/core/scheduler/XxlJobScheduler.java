@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.scheduler;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.thread.*;
+import com.gls.job.admin.core.server.*;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.client.ExecutorApiClient;
@@ -53,10 +53,10 @@ public class XxlJobScheduler {
         JobRegistryHelper.getInstance().start();
 
         // admin fail-monitor run
-        JobFailMonitorHelper.getInstance().start();
+        JobFailMonitorServer.getInstance().start();
 
         // admin lose-monitor run ( depend on JobTriggerPoolHelper )
-        JobCompleteHelper.getInstance().start();
+        JobCompleteServer.getInstance().start();
 
         // admin log report start
         JobLogReportHelper.getInstance().start();
@@ -76,10 +76,10 @@ public class XxlJobScheduler {
         JobLogReportHelper.getInstance().toStop();
 
         // admin lose-monitor stop
-        JobCompleteHelper.getInstance().toStop();
+        JobCompleteServer.getInstance().toStop();
 
         // admin fail-monitor stop
-        JobFailMonitorHelper.getInstance().toStop();
+        JobFailMonitorServer.getInstance().toStop();
 
         // admin registry stop
         JobRegistryHelper.getInstance().toStop();

@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.thread;
+package com.gls.job.admin.core.server;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
 import com.gls.job.admin.core.cron.CronExpression;

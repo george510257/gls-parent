@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.complete;
 
 import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
+import com.gls.job.admin.core.server.JobTriggerPoolHelper;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.entity.XxlJobInfo;
 import com.gls.job.admin.web.entity.XxlJobLog;

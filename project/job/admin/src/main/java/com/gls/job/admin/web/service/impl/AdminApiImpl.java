@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.service.impl;
 
-import com.gls.job.admin.core.thread.JobCompleteHelper;
-import com.gls.job.admin.core.thread.JobRegistryHelper;
+import com.gls.job.admin.core.server.JobCompleteServer;
+import com.gls.job.admin.core.server.JobRegistryHelper;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
@@ -18,7 +18,7 @@ public class AdminApiImpl implements AdminApi {
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackModelList) {
-        return JobCompleteHelper.getInstance().callback(callbackModelList);
+        return JobCompleteServer.getInstance().callback(callbackModelList);
     }
 
     @Override
