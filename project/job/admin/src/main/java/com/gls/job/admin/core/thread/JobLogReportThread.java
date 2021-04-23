@@ -116,8 +116,6 @@ public class JobLogReportThread extends Thread {
             }
 
         }
-
         log.info(">>>>>>>>>>> gls-job, job log report thread stop");
-
     }
 }

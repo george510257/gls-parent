@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.exception.XxlJobException;
-import com.gls.job.admin.core.server.JobScheduleHelper;
+import com.gls.job.admin.core.server.JobScheduleServer;
 import com.gls.job.admin.core.server.JobTriggerPoolHelper;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
@@ -162,7 +162,7 @@ public class JobInfoController {
         try {
             Date lastTime = new Date();
             for (int i = 0; i < 5; i++) {
-                lastTime = JobScheduleHelper.generateNextValidTime(paramXxlJobInfo, lastTime);
+                lastTime = JobScheduleServer.generateNextValidTime(paramXxlJobInfo, lastTime);
                 if (lastTime != null) {
                     result.add(DateUtil.formatDateTime(lastTime));
                 } else {

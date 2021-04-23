@@ -62,7 +62,7 @@ public class XxlJobScheduler {
         JobLogReportServer.getInstance().start();
 
         // start-schedule  ( depend on JobTriggerPoolHelper )
-        JobScheduleHelper.getInstance().start();
+        JobScheduleServer.getInstance().start();
 
         logger.info(">>>>>>>>> init gls-job admin success.");
     }
@@ -70,7 +70,7 @@ public class XxlJobScheduler {
     public void destroy() throws Exception {
 
         // stop-schedule
-        JobScheduleHelper.getInstance().toStop();
+        JobScheduleServer.getInstance().toStop();
 
         // admin log report stop
         JobLogReportServer.getInstance().toStop();
