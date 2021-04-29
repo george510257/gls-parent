@@ -1,10 +1,10 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.XxlJobInfoDao;
-import com.gls.job.admin.web.dao.XxlJobLogGlueDao;
-import com.gls.job.admin.web.entity.XxlJobInfo;
-import com.gls.job.admin.web.entity.XxlJobLogGlue;
+import com.gls.job.admin.web.dao.JobInfoDao;
+import com.gls.job.admin.web.dao.JobLogGlueDao;
+import com.gls.job.admin.web.entity.JobInfo;
+import com.gls.job.admin.web.entity.JobLogGlue;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
 import org.springframework.stereotype.Controller;
@@ -27,14 +27,14 @@ import java.util.List;
 public class JobCodeController {
 
     @Resource
-    private XxlJobInfoDao glsJobInfoDao;
+    private JobInfoDao jobInfoDao;
     @Resource
-    private XxlJobLogGlueDao glsJobLogGlueDao;
+    private JobLogGlueDao jobLogGlueDao;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, int jobId) {
-        XxlJobInfo jobInfo = glsJobInfoDao.loadById(jobId);
-        List<XxlJobLogGlue> jobLogGlues = glsJobLogGlueDao.findByJobId(jobId);
+        JobInfo jobInfo = jobInfoDao.loadById(jobId);
+        List<JobLogGlue> jobLogGlues = jobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
@@ -59,37 +59,37 @@ public class JobCodeController {
     public Result<String> save(Model model, int id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
-            return new Result<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
+            return new Result<>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
         }
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_remark_limit"));
+            return new Result<>(500, I18nUtil.getString("jobinfo_glue_remark_limit"));
         }
-        XxlJobInfo exists_jobInfo = glsJobInfoDao.loadById(id);
-        if (exists_jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+        JobInfo existsJobInfo = jobInfoDao.loadById(id);
+        if (existsJobInfo == null) {
+            return new Result<>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
         }
 
         // update new code
-        exists_jobInfo.setGlueSource(glueSource);
-        exists_jobInfo.setGlueRemark(glueRemark);
-        exists_jobInfo.setGlueUpdateTime(new Date());
+        existsJobInfo.setGlueSource(glueSource);
+        existsJobInfo.setGlueRemark(glueRemark);
+        existsJobInfo.setGlueUpdateTime(new Date());
 
-        exists_jobInfo.setUpdateTime(new Date());
-        glsJobInfoDao.update(exists_jobInfo);
+        existsJobInfo.setUpdateTime(new Date());
+        jobInfoDao.update(existsJobInfo);
 
         // log old code
-        XxlJobLogGlue glsJobLogGlue = new XxlJobLogGlue();
-        glsJobLogGlue.setJobId(exists_jobInfo.getId());
-        glsJobLogGlue.setGlueType(exists_jobInfo.getGlueType());
-        glsJobLogGlue.setGlueSource(glueSource);
-        glsJobLogGlue.setGlueRemark(glueRemark);
+        JobLogGlue jobLogGlue = new JobLogGlue();
+        jobLogGlue.setJobId(existsJobInfo.getId());
+        jobLogGlue.setGlueType(existsJobInfo.getGlueType());
+        jobLogGlue.setGlueSource(glueSource);
+        jobLogGlue.setGlueRemark(glueRemark);
 
-        glsJobLogGlue.setAddTime(new Date());
-        glsJobLogGlue.setUpdateTime(new Date());
-        glsJobLogGlueDao.save(glsJobLogGlue);
+        jobLogGlue.setAddTime(new Date());
+        jobLogGlue.setUpdateTime(new Date());
+        jobLogGlueDao.save(jobLogGlue);
 
         // remove code backup more than 30
-        glsJobLogGlueDao.removeOld(exists_jobInfo.getId(), 30);
+        jobLogGlueDao.removeOld(existsJobInfo.getId(), 30);
 
         return Result.SUCCESS;
     }

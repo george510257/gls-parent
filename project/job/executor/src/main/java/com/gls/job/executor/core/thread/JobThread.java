@@ -5,9 +5,9 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.base.thread.BaseThread;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.executor.core.handler.IJobHandler;
-import com.gls.job.executor.core.helper.XxlJobFileHelper;
-import com.gls.job.executor.core.helper.XxlJobHelper;
+import com.gls.job.executor.core.handler.JobHandler;
+import com.gls.job.executor.core.helper.JobFileHelper;
+import com.gls.job.executor.core.helper.JobHelper;
 import com.gls.job.executor.core.holder.CallbackQueueHolder;
 import com.gls.job.executor.core.holder.JobContextHolder;
 import com.gls.job.executor.core.holder.JobThreadHolder;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeoutException;
 public class JobThread extends BaseThread {
 
     private final int jobId;
-    private final IJobHandler handler;
+    private final JobHandler handler;
     private final TriggerQueueHolder triggerQueueHolder = new TriggerQueueHolder();
 
     // if running job
@@ -40,12 +40,12 @@ public class JobThread extends BaseThread {
 
     private int idleTimes = 0;
 
-    public JobThread(int jobId, IJobHandler handler) {
+    public JobThread(int jobId, JobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
     }
 
-    public IJobHandler getHandler() {
+    public JobHandler getHandler() {
         return handler;
     }
 
@@ -88,14 +88,14 @@ public class JobThread extends BaseThread {
                 idleTimes = 0;
 
                 // log filename, like "logPath/yyyy-MM-dd/9999.log"
-                String logFileName = XxlJobFileHelper.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
-                JobContextModel glsJobContext = new JobContextModel(triggerModel.getJobId(), triggerModel.getExecutorParams(), logFileName, triggerModel.getBroadcastIndex(), triggerModel.getBroadcastTotal());
+                String logFileName = JobFileHelper.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
+                JobContextModel jobContext = new JobContextModel(triggerModel.getJobId(), triggerModel.getExecutorParams(), logFileName, triggerModel.getBroadcastIndex(), triggerModel.getBroadcastTotal());
 
                 // init job context
-                JobContextHolder.getInstance().set(glsJobContext);
+                JobContextHolder.getInstance().set(jobContext);
 
                 // execute
-                XxlJobHelper.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + glsJobContext.getJobParam());
+                JobHelper.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
 
                 if (triggerModel.getExecutorTimeout() > 0) {
                     // limit timeout
@@ -104,7 +104,7 @@ public class JobThread extends BaseThread {
                         FutureTask<Boolean> futureTask = new FutureTask<>(() -> {
 
                             // init job context
-                            JobContextHolder.getInstance().set(glsJobContext);
+                            JobContextHolder.getInstance().set(jobContext);
 
                             handler.execute();
                             return true;
@@ -115,11 +115,11 @@ public class JobThread extends BaseThread {
                         Boolean tempResult = futureTask.get(triggerModel.getExecutorTimeout(), TimeUnit.SECONDS);
                     } catch (TimeoutException e) {
 
-                        XxlJobHelper.log("<br>----------- gls-job job execute timeout");
-                        XxlJobHelper.log(e);
+                        JobHelper.log("<br>----------- gls-job job execute timeout");
+                        JobHelper.log(e);
 
                         // handle result
-                        XxlJobHelper.handleTimeout("job execute timeout ");
+                        JobHelper.handleTimeout("job execute timeout ");
                     } finally {
                         futureThread.interrupt();
                     }
@@ -130,7 +130,7 @@ public class JobThread extends BaseThread {
 
                 // valid execute handle data
                 if (JobContextHolder.getInstance().get().getHandleCode() <= 0) {
-                    XxlJobHelper.handleFail("job handle result lost.");
+                    JobHelper.handleFail("job handle result lost.");
                 } else {
                     String tempHandleMsg = JobContextHolder.getInstance().get().getHandleMsg();
                     tempHandleMsg = (tempHandleMsg != null && tempHandleMsg.length() > 50000)
@@ -138,7 +138,7 @@ public class JobThread extends BaseThread {
                             : tempHandleMsg;
                     JobContextHolder.getInstance().get().setHandleMsg(tempHandleMsg);
                 }
-                XxlJobHelper.log("<br>----------- gls-job job execute end(finish) -----------<br>----------- Result: handleCode="
+                JobHelper.log("<br>----------- gls-job job execute end(finish) -----------<br>----------- Result: handleCode="
                         + JobContextHolder.getInstance().get().getHandleCode()
                         + ", handleMsg = "
                         + JobContextHolder.getInstance().get().getHandleMsg()
@@ -154,7 +154,7 @@ public class JobThread extends BaseThread {
             }
         } catch (Throwable e) {
             if (this.isStop()) {
-                XxlJobHelper.log("<br>----------- JobThread toStop, stopReason:" + this.getStopReason());
+                JobHelper.log("<br>----------- JobThread toStop, stopReason:" + this.getStopReason());
             }
 
             // handle result
@@ -162,9 +162,9 @@ public class JobThread extends BaseThread {
             e.printStackTrace(new PrintWriter(stringWriter));
             String errorMsg = stringWriter.toString();
 
-            XxlJobHelper.handleFail(errorMsg);
+            JobHelper.handleFail(errorMsg);
 
-            XxlJobHelper.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
+            JobHelper.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
         } finally {
             if (triggerModel != null) {
                 // callback handler info

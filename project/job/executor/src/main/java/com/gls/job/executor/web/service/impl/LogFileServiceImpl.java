@@ -2,7 +2,7 @@ package com.gls.job.executor.web.service.impl;
 
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.executor.core.constants.ExecutorProperties;
-import com.gls.job.executor.core.helper.XxlJobFileHelper;
+import com.gls.job.executor.core.helper.JobFileHelper;
 import com.gls.job.executor.web.service.LogFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class LogFileServiceImpl implements LogFileService {
     @Override
     public void cleanLogFile() {
         // clean log dir, over logRetentionDays
-        File[] childDirs = new File(XxlJobFileHelper.getLogPath()).listFiles();
+        File[] childDirs = new File(JobFileHelper.getLogPath()).listFiles();
         if (childDirs != null && childDirs.length > 0) {
 
             // today

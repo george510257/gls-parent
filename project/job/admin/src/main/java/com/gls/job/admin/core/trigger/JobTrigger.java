@@ -1,11 +1,11 @@
 package com.gls.job.admin.core.trigger;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.scheduler.XxlJobScheduler;
+import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.entity.XxlJobGroup;
-import com.gls.job.admin.web.entity.XxlJobInfo;
-import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.JobGroup;
+import com.gls.job.admin.web.entity.JobInfo;
+import com.gls.job.admin.web.entity.JobLog;
 import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategy;
 import com.gls.job.admin.web.entity.enums.TriggerType;
 import com.gls.job.core.api.model.Result;
@@ -23,8 +23,8 @@ import java.util.Date;
  * gls-job trigger
  * Created by george on 17/7/13.
  */
-public class XxlJobTrigger {
-    private static Logger logger = LoggerFactory.getLogger(XxlJobTrigger.class);
+public class JobTrigger {
+    private static Logger logger = LoggerFactory.getLogger(JobTrigger.class);
 
     /**
      * trigger job
@@ -47,7 +47,7 @@ public class XxlJobTrigger {
                                String addressList) {
 
         // load data
-        XxlJobInfo jobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(jobId);
+        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -56,7 +56,7 @@ public class XxlJobTrigger {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
-        XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(jobInfo.getJobGroup());
+        JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(jobInfo.getJobGroup());
 
         // cover addressList
         if (addressList != null && addressList.trim().length() > 0) {
@@ -106,7 +106,7 @@ public class XxlJobTrigger {
      * @param index               sharding index
      * @param total               sharding index
      */
-    private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
+    private static void processTrigger(JobGroup group, JobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
 
         // param
         ExecutorBlockStrategy blockStrategy = jobInfo.getExecutorBlockStrategy();  // block strategy
@@ -114,11 +114,11 @@ public class XxlJobTrigger {
         String shardingParam = (ExecutorRouteStrategy.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
-        XxlJobLog jobLog = new XxlJobLog();
+        JobLog jobLog = new JobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
-        XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().save(jobLog);
+        JobAdminConfig.getAdminConfig().getJobLogDao().save(jobLog);
         logger.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
@@ -191,7 +191,7 @@ public class XxlJobTrigger {
         //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
-        XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
+        JobAdminConfig.getAdminConfig().getJobLogDao().updateTriggerInfo(jobLog);
 
         logger.debug(">>>>>>>>>>> gls-job trigger end, jobId:{}", jobLog.getId());
     }
@@ -206,7 +206,7 @@ public class XxlJobTrigger {
     public static Result<String> runExecutor(TriggerModel triggerModel, String address) {
         Result<String> runResult = null;
         try {
-            ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(address);
+            ExecutorApi executorApi = JobScheduler.getExecutorApi(address);
             runResult = executorApi.run(triggerModel);
         } catch (Exception e) {
             logger.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);

@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.controller.resolver;
 
-import com.gls.job.admin.core.exception.XxlJobException;
+import com.gls.job.admin.core.exception.JobException;
 import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.core.api.model.Result;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response, Object handler, Exception ex) {
 
-        if (!(ex instanceof XxlJobException)) {
+        if (!(ex instanceof JobException)) {
             logger.error("WebExceptionResolver:{}", ex);
         }
 

@@ -15,7 +15,7 @@ import java.util.Date;
  * @author george  2016-1-12 18:25:49
  */
 @Data
-public class XxlJobInfo {
+public class JobInfo {
 
     private int id;                // 主键ID
 

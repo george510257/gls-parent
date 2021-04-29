@@ -10,7 +10,7 @@ import java.util.Date;
  * @date 16/9/30
  */
 @Data
-public class XxlJobRegistry {
+public class JobRegistry {
 
     private int id;
     private RegistryType registryType;

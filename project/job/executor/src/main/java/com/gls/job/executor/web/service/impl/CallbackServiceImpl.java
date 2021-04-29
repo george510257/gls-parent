@@ -5,8 +5,8 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.core.util.JdkSerializeTool;
-import com.gls.job.executor.core.helper.XxlJobFileHelper;
-import com.gls.job.executor.core.helper.XxlJobHelper;
+import com.gls.job.executor.core.helper.JobFileHelper;
+import com.gls.job.executor.core.helper.JobHelper;
 import com.gls.job.executor.core.holder.JobContextHolder;
 import com.gls.job.executor.web.model.JobContextModel;
 import com.gls.job.executor.web.service.CallbackService;
@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class CallbackServiceImpl implements CallbackService {
 
-    private static final String FAIL_CALLBACK_FILE_PATH = XxlJobFileHelper.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
+    private static final String FAIL_CALLBACK_FILE_PATH = JobFileHelper.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
     private static final String FAIL_CALLBACK_FILE_NAME = FAIL_CALLBACK_FILE_PATH.concat("gls-job-callback-{x}").concat(".log");
     @DubboReference
     private AdminApi adminApi;
@@ -56,7 +56,7 @@ public class CallbackServiceImpl implements CallbackService {
         }
 
         // append file
-        byte[] callbackModelList_bytes = JdkSerializeTool.serialize(callbackModelList);
+        byte[] callbackModelListBytes = JdkSerializeTool.serialize(callbackModelList);
 
         File callbackLogFile = new File(FAIL_CALLBACK_FILE_NAME.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
@@ -67,14 +67,14 @@ public class CallbackServiceImpl implements CallbackService {
                 }
             }
         }
-        FileUtil.writeFileContent(callbackLogFile, callbackModelList_bytes);
+        FileUtil.writeFileContent(callbackLogFile, callbackModelListBytes);
     }
 
     private void callbackLog(List<CallbackModel> callbackModelList, String logContent) {
         for (CallbackModel callbackModel : callbackModelList) {
-            String logFileName = XxlJobFileHelper.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
+            String logFileName = JobFileHelper.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
             JobContextHolder.getInstance().set(new JobContextModel(-1, null, logFileName, -1, -1));
-            XxlJobHelper.log(logContent);
+            JobHelper.log(logContent);
         }
     }
 

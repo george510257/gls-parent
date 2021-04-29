@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.thread.RegistryMonitorThread;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
@@ -78,9 +78,9 @@ public class JobRegistryServer {
 
         // async execute
         registryOrRemoveThreadPool.execute(() -> {
-            int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+            int ret = JobAdminConfig.getAdminConfig().getJobRegistryDao().registryUpdate(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
             if (ret < 1) {
-                XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+                JobAdminConfig.getAdminConfig().getJobRegistryDao().registrySave(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
 
                 // fresh
                 freshGroupRegistryInfo(registryModel);
@@ -101,7 +101,7 @@ public class JobRegistryServer {
 
         // async execute
         registryOrRemoveThreadPool.execute(() -> {
-            int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
+            int ret = JobAdminConfig.getAdminConfig().getJobRegistryDao().registryDelete(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
             if (ret > 0) {
                 // fresh
                 freshGroupRegistryInfo(registryModel);

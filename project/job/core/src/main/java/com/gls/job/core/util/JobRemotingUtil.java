@@ -16,8 +16,8 @@ import java.security.cert.X509Certificate;
  * @author george 2018-11-25 00:55:31
  */
 @Slf4j
-public class XxlJobRemotingUtil {
-    public static final String XXL_JOB_ACCESS_TOKEN = "XXL-JOB-ACCESS-TOKEN";
+public class JobRemotingUtil {
+    public static final String GLS_JOB_ACCESS_TOKEN = "GLS-JOB-ACCESS-TOKEN";
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{new X509TrustManager() {
         @Override
         public X509Certificate[] getAcceptedIssuers() {
@@ -89,7 +89,7 @@ public class XxlJobRemotingUtil {
             connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
 
             if (accessToken != null && accessToken.trim().length() > 0) {
-                connection.setRequestProperty(XXL_JOB_ACCESS_TOKEN, accessToken);
+                connection.setRequestProperty(GLS_JOB_ACCESS_TOKEN, accessToken);
             }
 
             // do connection

@@ -1,10 +1,10 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.server.JobScheduleServer;
 import com.gls.job.admin.core.server.JobTriggerPoolHelper;
-import com.gls.job.admin.web.entity.XxlJobInfo;
+import com.gls.job.admin.web.entity.JobInfo;
 import com.gls.job.admin.web.entity.enums.MisfireStrategy;
 import com.gls.job.admin.web.entity.enums.ScheduleType;
 import com.gls.job.admin.web.entity.enums.TriggerType;
@@ -31,7 +31,7 @@ public class JobScheduleThread extends Thread {
         this.ringData = ringData;
     }
 
-    public static Date generateNextValidTime(XxlJobInfo jobInfo, Date fromTime) throws Exception {
+    public static Date generateNextValidTime(JobInfo jobInfo, Date fromTime) throws Exception {
         ScheduleType scheduleTypeEnum = jobInfo.getScheduleType();
         if (ScheduleType.CRON == scheduleTypeEnum) {
             return new CronExpression(jobInfo.getScheduleConf()).getNextValidTimeAfter(fromTime);
@@ -53,7 +53,7 @@ public class JobScheduleThread extends Thread {
         log.info(">>>>>>>>> init gls-job admin scheduler success.");
 
         // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
-        int preReadCount = (XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
+        int preReadCount = (JobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
 
         while (!toStop) {
 
@@ -67,7 +67,7 @@ public class JobScheduleThread extends Thread {
             boolean preReadSuc = true;
             try {
 
-                conn = XxlJobAdminConfig.getAdminConfig().getDataSource().getConnection();
+                conn = JobAdminConfig.getAdminConfig().getDataSource().getConnection();
                 connAutoCommit = conn.getAutoCommit();
                 conn.setAutoCommit(false);
 
@@ -78,10 +78,10 @@ public class JobScheduleThread extends Thread {
 
                 // 1、pre read
                 long nowTime = System.currentTimeMillis();
-                List<XxlJobInfo> scheduleList = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().scheduleJobQuery(nowTime + JobScheduleServer.PRE_READ_MS, preReadCount);
+                List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleJobQuery(nowTime + JobScheduleServer.PRE_READ_MS, preReadCount);
                 if (scheduleList != null && scheduleList.size() > 0) {
                     // 2、push time-ring
-                    for (XxlJobInfo jobInfo : scheduleList) {
+                    for (JobInfo jobInfo : scheduleList) {
 
                         // time-ring jump
                         if (nowTime > jobInfo.getTriggerNextTime() + JobScheduleServer.PRE_READ_MS) {
@@ -140,8 +140,8 @@ public class JobScheduleThread extends Thread {
                     }
 
                     // 3、update trigger info
-                    for (XxlJobInfo jobInfo : scheduleList) {
-                        XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().scheduleUpdate(jobInfo);
+                    for (JobInfo jobInfo : scheduleList) {
+                        JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleUpdate(jobInfo);
                     }
 
                 } else {
@@ -219,7 +219,7 @@ public class JobScheduleThread extends Thread {
         log.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
     }
 
-    private void refreshNextValidTime(XxlJobInfo jobInfo, Date fromTime) throws Exception {
+    private void refreshNextValidTime(JobInfo jobInfo, Date fromTime) throws Exception {
         Date nextValidTime = generateNextValidTime(jobInfo, fromTime);
         if (nextValidTime != null) {
             jobInfo.setTriggerLastTime(jobInfo.getTriggerNextTime());

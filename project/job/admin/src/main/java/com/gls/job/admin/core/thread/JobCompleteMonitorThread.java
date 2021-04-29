@@ -1,9 +1,9 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.complete.XxlJobCompleter;
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.complete.JobCompleter;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.JobLog;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.util.DateUtil;
 import lombok.Setter;
@@ -38,19 +38,19 @@ public class JobCompleteMonitorThread extends Thread {
             try {
                 // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
                 Date losedTime = DateUtil.addMinutes(new Date(), -10);
-                List<Long> losedJobIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findLostJobIds(losedTime);
+                List<Long> losedJobIds = JobAdminConfig.getAdminConfig().getJobLogDao().findLostJobIds(losedTime);
 
                 if (losedJobIds != null && losedJobIds.size() > 0) {
                     for (Long logId : losedJobIds) {
 
-                        XxlJobLog jobLog = new XxlJobLog();
+                        JobLog jobLog = new JobLog();
                         jobLog.setId(logId);
 
                         jobLog.setHandleTime(new Date());
                         jobLog.setHandleCode(Result.FAIL_CODE);
                         jobLog.setHandleMsg(I18nUtil.getString("joblog_lost_fail"));
 
-                        XxlJobCompleter.updateHandleInfoAndFinish(jobLog);
+                        JobCompleter.updateHandleInfoAndFinish(jobLog);
                     }
 
                 }

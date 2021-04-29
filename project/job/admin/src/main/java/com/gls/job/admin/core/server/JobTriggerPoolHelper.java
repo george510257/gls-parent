@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.trigger.XxlJobTrigger;
+import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.core.trigger.JobTrigger;
 import com.gls.job.admin.web.entity.enums.TriggerType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +52,7 @@ public class JobTriggerPoolHelper {
     public void start() {
         fastTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
+                JobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(1000),
@@ -65,7 +65,7 @@ public class JobTriggerPoolHelper {
 
         slowTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
+                JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(2000),
@@ -110,7 +110,7 @@ public class JobTriggerPoolHelper {
 
                 try {
                     // do trigger
-                    XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                    JobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 } finally {

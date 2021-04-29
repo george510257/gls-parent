@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.web.entity.XxlJobLogReport;
+import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.web.entity.JobLogReport;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,28 +50,28 @@ public class JobLogReportThread extends Thread {
                     Date todayTo = itemDay.getTime();
 
                     // refresh log-report every minute
-                    XxlJobLogReport glsJobLogReport = new XxlJobLogReport();
-                    glsJobLogReport.setTriggerDay(todayFrom);
-                    glsJobLogReport.setRunningCount(0);
-                    glsJobLogReport.setSucCount(0);
-                    glsJobLogReport.setFailCount(0);
+                    JobLogReport jobLogReport = new JobLogReport();
+                    jobLogReport.setTriggerDay(todayFrom);
+                    jobLogReport.setRunningCount(0);
+                    jobLogReport.setSucCount(0);
+                    jobLogReport.setFailCount(0);
 
-                    Map<String, Object> triggerCountMap = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findLogReport(todayFrom, todayTo);
+                    Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogDao().findLogReport(todayFrom, todayTo);
                     if (triggerCountMap != null && triggerCountMap.size() > 0) {
                         int triggerDayCount = triggerCountMap.containsKey("triggerDayCount") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCount"))) : 0;
                         int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))) : 0;
                         int triggerDayCountSuc = triggerCountMap.containsKey("triggerDayCountSuc") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCountSuc"))) : 0;
                         int triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc;
 
-                        glsJobLogReport.setRunningCount(triggerDayCountRunning);
-                        glsJobLogReport.setSucCount(triggerDayCountSuc);
-                        glsJobLogReport.setFailCount(triggerDayCountFail);
+                        jobLogReport.setRunningCount(triggerDayCountRunning);
+                        jobLogReport.setSucCount(triggerDayCountSuc);
+                        jobLogReport.setFailCount(triggerDayCountFail);
                     }
 
                     // do refresh
-                    int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobLogReportDao().update(glsJobLogReport);
+                    int ret = JobAdminConfig.getAdminConfig().getJobLogReportDao().update(jobLogReport);
                     if (ret < 1) {
-                        XxlJobAdminConfig.getAdminConfig().getXxlJobLogReportDao().save(glsJobLogReport);
+                        JobAdminConfig.getAdminConfig().getJobLogReportDao().save(jobLogReport);
                     }
                 }
 
@@ -82,12 +82,12 @@ public class JobLogReportThread extends Thread {
             }
 
             // 2、log-clean: switch open & once each day
-            if (XxlJobAdminConfig.getAdminConfig().getLogretentiondays() > 0
+            if (JobAdminConfig.getAdminConfig().getLogretentiondays() > 0
                     && System.currentTimeMillis() - lastCleanLogTime > 24 * 60 * 60 * 1000) {
 
                 // expire-time
                 Calendar expiredDay = Calendar.getInstance();
-                expiredDay.add(Calendar.DAY_OF_MONTH, -1 * XxlJobAdminConfig.getAdminConfig().getLogretentiondays());
+                expiredDay.add(Calendar.DAY_OF_MONTH, -1 * JobAdminConfig.getAdminConfig().getLogretentiondays());
                 expiredDay.set(Calendar.HOUR_OF_DAY, 0);
                 expiredDay.set(Calendar.MINUTE, 0);
                 expiredDay.set(Calendar.SECOND, 0);
@@ -97,9 +97,9 @@ public class JobLogReportThread extends Thread {
                 // clean expired log
                 List<Long> logIds = null;
                 do {
-                    logIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
+                    logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
                     if (logIds != null && logIds.size() > 0) {
-                        XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().clearLog(logIds);
+                        JobAdminConfig.getAdminConfig().getJobLogDao().clearLog(logIds);
                     }
                 } while (logIds != null && logIds.size() > 0);
 

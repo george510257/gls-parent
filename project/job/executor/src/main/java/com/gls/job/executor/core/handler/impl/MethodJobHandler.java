@@ -1,13 +1,13 @@
 package com.gls.job.executor.core.handler.impl;
 
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 
 import java.lang.reflect.Method;
 
 /**
  * @author george 2019-12-11 21:12:18
  */
-public class MethodJobHandler implements IJobHandler {
+public class MethodJobHandler implements JobHandler {
 
     private final Object target;
     private final Method method;

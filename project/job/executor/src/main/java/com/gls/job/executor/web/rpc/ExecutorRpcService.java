@@ -5,10 +5,10 @@ import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.executor.core.glue.GlueFactory;
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.impl.GlueJobHandler;
 import com.gls.job.executor.core.handler.impl.ScriptJobHandler;
-import com.gls.job.executor.core.helper.XxlJobFileHelper;
+import com.gls.job.executor.core.helper.JobFileHelper;
 import com.gls.job.executor.core.holder.JobThreadHolder;
 import com.gls.job.executor.core.thread.JobThread;
 import com.gls.job.executor.web.repository.JobHandlerRepository;
@@ -49,7 +49,7 @@ public class ExecutorRpcService implements ExecutorApi {
     public Result<String> run(TriggerModel triggerModel) {
         // load old：jobHandler + jobThread
         JobThread jobThread = jobThreadRepository.load(triggerModel.getJobId());
-        IJobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
+        JobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
         String removeOldReason = null;
 
         // valid：jobHandler + jobThread
@@ -57,7 +57,7 @@ public class ExecutorRpcService implements ExecutorApi {
         if (GlueType.BEAN == glueTypeEnum) {
 
             // new jobHandler
-            IJobHandler newJobHandler = jobHandlerRepository.loadJobHandler(triggerModel.getExecutorHandler());
+            JobHandler newJobHandler = jobHandlerRepository.loadJobHandler(triggerModel.getExecutorHandler());
 
             // valid old jobThread
             if (jobThread != null && jobHandler != newJobHandler) {
@@ -92,7 +92,7 @@ public class ExecutorRpcService implements ExecutorApi {
             // valid handler
             if (jobHandler == null) {
                 try {
-                    IJobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
+                    JobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
                     jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdateTime());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
@@ -165,9 +165,9 @@ public class ExecutorRpcService implements ExecutorApi {
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileHelper.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
+        String logFileName = JobFileHelper.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
 
-        LogResultModel logResult = XxlJobFileHelper.readLog(logFileName, logModel.getFromLineNumber());
+        LogResultModel logResult = JobFileHelper.readLog(logFileName, logModel.getFromLineNumber());
         return new Result<>(logResult);
     }
 

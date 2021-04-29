@@ -1,7 +1,7 @@
 package com.gls.job.executor.core.glue;
 
 import com.gls.job.executor.core.glue.impl.SpringGlueFactory;
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 import groovy.lang.GroovyClassLoader;
 
 import java.math.BigInteger;
@@ -42,14 +42,14 @@ public class GlueFactory {
      * @return
      * @throws Exception
      */
-    public IJobHandler loadNewInstance(String codeSource) throws Exception {
+    public JobHandler loadNewInstance(String codeSource) throws Exception {
         if (codeSource != null && codeSource.trim().length() > 0) {
             Class<?> clazz = getCodeSourceClass(codeSource);
             if (clazz != null) {
                 Object instance = clazz.newInstance();
-                if (instance instanceof IJobHandler) {
+                if (instance instanceof JobHandler) {
                     this.injectService(instance);
-                    return (IJobHandler) instance;
+                    return (JobHandler) instance;
                 } else {
                     throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, "
                             + "cannot convert from instance[" + instance.getClass() + "] to IJobHandler");

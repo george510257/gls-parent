@@ -1,8 +1,7 @@
 package com.gls.job.executor.core.helper;
 
 import com.gls.job.core.api.model.LogResultModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,8 +13,8 @@ import java.util.Date;
  *
  * @author george 2016-3-12 19:25:12
  */
-public class XxlJobFileHelper {
-    private static Logger logger = LoggerFactory.getLogger(XxlJobFileHelper.class);
+@Slf4j
+public class JobFileHelper {
 
     /**
      * log base path
@@ -70,18 +69,18 @@ public class XxlJobFileHelper {
     public static String makeLogFileName(Date triggerDate, long logId) {
 
         // filePath/yyyy-MM-dd
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");    // avoid concurrent problem, can not be static
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        // avoid concurrent problem, can not be static
         File logFilePath = new File(getLogPath(), sdf.format(triggerDate));
         if (!logFilePath.exists()) {
             logFilePath.mkdir();
         }
 
         // filePath/yyyy-MM-dd/9999.log
-        String logFileName = logFilePath.getPath()
+        return logFilePath.getPath()
                 .concat(File.separator)
                 .concat(String.valueOf(logId))
                 .concat(".log");
-        return logFileName;
     }
 
     /**
@@ -102,7 +101,7 @@ public class XxlJobFileHelper {
             try {
                 logFile.createNewFile();
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
                 return;
             }
         }
@@ -120,13 +119,13 @@ public class XxlJobFileHelper {
             fos.write(appendLog.getBytes(StandardCharsets.UTF_8));
             fos.flush();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             if (fos != null) {
                 try {
                     fos.close();
                 } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -157,30 +156,30 @@ public class XxlJobFileHelper {
         LineNumberReader reader = null;
         try {
             //reader = new LineNumberReader(new FileReader(logFile));
-            reader = new LineNumberReader(new InputStreamReader(new FileInputStream(logFile), "utf-8"));
-            String line = null;
+            reader = new LineNumberReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8));
+            String line;
 
             while ((line = reader.readLine()) != null) {
-                toLineNumber = reader.getLineNumber();        // [from, to], start as 1
+                toLineNumber = reader.getLineNumber();
+                // [from, to], start as 1
                 if (toLineNumber >= fromLineNumber) {
                     logContentBuffer.append(line).append("\n");
                 }
             }
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
+                    log.error(e.getMessage(), e);
                 }
             }
         }
 
         // result
-        LogResultModel logResult = new LogResultModel(fromLineNumber, toLineNumber, logContentBuffer.toString(), false);
-        return logResult;
+        return new LogResultModel(fromLineNumber, toLineNumber, logContentBuffer.toString(), false);
 
 		/*
         // it will return the number of characters actually skipped
@@ -199,23 +198,21 @@ public class XxlJobFileHelper {
     public static String readLines(File logFile) {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), "utf-8"));
-            if (reader != null) {
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line).append("\n");
-                }
-                return sb.toString();
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile), StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
             }
+            return sb.toString();
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    logger.error(e.getMessage(), e);
+                    log.error(e.getMessage(), e);
                 }
             }
         }

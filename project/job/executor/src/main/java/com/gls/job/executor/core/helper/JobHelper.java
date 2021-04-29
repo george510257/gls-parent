@@ -4,8 +4,7 @@ import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.util.DateUtil;
 import com.gls.job.executor.core.holder.JobContextHolder;
 import com.gls.job.executor.web.model.JobContextModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -18,11 +17,10 @@ import java.util.Date;
  *
  * @author george 2020-11-05
  */
-public class XxlJobHelper {
+@Slf4j
+public class JobHelper {
 
     // ---------------------- base info ----------------------
-
-    private static Logger logger = LoggerFactory.getLogger("gls-job logger");
 
     /**
      * current JobId
@@ -30,12 +28,12 @@ public class XxlJobHelper {
      * @return
      */
     public static long getJobId() {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return -1;
         }
 
-        return glsJobContext.getJobId();
+        return jobContext.getJobId();
     }
 
     // ---------------------- for log ----------------------
@@ -46,12 +44,12 @@ public class XxlJobHelper {
      * @return
      */
     public static String getJobParam() {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return null;
         }
 
-        return glsJobContext.getJobParam();
+        return jobContext.getJobParam();
     }
 
     // ---------------------- for shard ----------------------
@@ -62,12 +60,12 @@ public class XxlJobHelper {
      * @return
      */
     public static String getJobLogFileName() {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return null;
         }
 
-        return glsJobContext.getJobLogFileName();
+        return jobContext.getJobLogFileName();
     }
 
     /**
@@ -76,12 +74,12 @@ public class XxlJobHelper {
      * @return
      */
     public static int getShardIndex() {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return -1;
         }
 
-        return glsJobContext.getShardIndex();
+        return jobContext.getShardIndex();
     }
 
     // ---------------------- tool for log ----------------------
@@ -92,12 +90,12 @@ public class XxlJobHelper {
      * @return
      */
     public static int getShardTotal() {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return -1;
         }
 
-        return glsJobContext.getShardTotal();
+        return jobContext.getShardTotal();
     }
 
     /**
@@ -110,11 +108,6 @@ public class XxlJobHelper {
 
         FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
         String appendLog = ft.getMessage();
-
-        /*appendLog = appendLogPattern;
-        if (appendLogArguments!=null && appendLogArguments.length>0) {
-            appendLog = MessageFormat.format(appendLogPattern, appendLogArguments);
-        }*/
 
         StackTraceElement callInfo = new Throwable().getStackTrace()[1];
         return logDetail(callInfo, appendLog);
@@ -142,31 +135,25 @@ public class XxlJobHelper {
      * @param appendLog
      */
     private static boolean logDetail(StackTraceElement callInfo, String appendLog) {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return false;
         }
 
-        /*// "yyyy-MM-dd HH:mm:ss [ClassName]-[MethodName]-[LineNumber]-[ThreadName] log";
-        StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
-        StackTraceElement callInfo = stackTraceElements[1];*/
-
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(DateUtil.formatDateTime(new Date())).append(" ")
-                .append("[" + callInfo.getClassName() + "#" + callInfo.getMethodName() + "]").append("-")
-                .append("[" + callInfo.getLineNumber() + "]").append("-")
-                .append("[" + Thread.currentThread().getName() + "]").append(" ")
-                .append(appendLog != null ? appendLog : "");
-        String formatAppendLog = stringBuffer.toString();
+        String formatAppendLog = DateUtil.formatDateTime(new Date()) + " " +
+                "[" + callInfo.getClassName() + "#" + callInfo.getMethodName() + "]" + "-" +
+                "[" + callInfo.getLineNumber() + "]" + "-" +
+                "[" + Thread.currentThread().getName() + "]" + " " +
+                (appendLog != null ? appendLog : "");
 
         // appendlog
-        String logFileName = glsJobContext.getJobLogFileName();
+        String logFileName = jobContext.getJobLogFileName();
 
         if (logFileName != null && logFileName.trim().length() > 0) {
-            XxlJobFileHelper.appendLog(logFileName, formatAppendLog);
+            JobFileHelper.appendLog(logFileName, formatAppendLog);
             return true;
         } else {
-            logger.info(">>>>>>>>>>> {}", formatAppendLog);
+            log.info(">>>>>>>>>>> {}", formatAppendLog);
             return false;
         }
     }
@@ -238,14 +225,14 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleResult(int handleCode, String handleMsg) {
-        JobContextModel glsJobContext = JobContextHolder.getInstance().get();
-        if (glsJobContext == null) {
+        JobContextModel jobContext = JobContextHolder.getInstance().get();
+        if (jobContext == null) {
             return false;
         }
 
-        glsJobContext.setHandleCode(handleCode);
+        jobContext.setHandleCode(handleCode);
         if (handleMsg != null) {
-            glsJobContext.setHandleMsg(handleMsg);
+            jobContext.setHandleMsg(handleMsg);
         }
         return true;
     }

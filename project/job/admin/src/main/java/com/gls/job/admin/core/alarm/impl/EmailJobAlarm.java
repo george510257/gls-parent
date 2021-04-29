@@ -1,11 +1,11 @@
 package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.job.admin.core.alarm.JobAlarm;
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.entity.XxlJobGroup;
-import com.gls.job.admin.web.entity.XxlJobInfo;
-import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.JobGroup;
+import com.gls.job.admin.web.entity.JobInfo;
+import com.gls.job.admin.web.entity.JobLog;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -62,7 +62,7 @@ public class EmailJobAlarm implements JobAlarm {
      * @param jobLog
      */
     @Override
-    public boolean doAlarm(XxlJobInfo info, XxlJobLog jobLog) {
+    public boolean doAlarm(JobInfo info, JobLog jobLog) {
         boolean alarmResult = true;
 
         // send monitor email
@@ -78,7 +78,7 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(info.getJobGroup());
+            JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(info.getJobGroup());
             String personal = I18nUtil.getString("admin_name_full");
             String title = I18nUtil.getString("jobconf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
@@ -92,15 +92,15 @@ public class EmailJobAlarm implements JobAlarm {
 
                 // make mail
                 try {
-                    MimeMessage mimeMessage = XxlJobAdminConfig.getAdminConfig().getMailSender().createMimeMessage();
+                    MimeMessage mimeMessage = JobAdminConfig.getAdminConfig().getMailSender().createMimeMessage();
 
                     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-                    helper.setFrom(XxlJobAdminConfig.getAdminConfig().getEmailFrom(), personal);
+                    helper.setFrom(JobAdminConfig.getAdminConfig().getEmailFrom(), personal);
                     helper.setTo(email);
                     helper.setSubject(title);
                     helper.setText(content, true);
 
-                    XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
+                    JobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
                 } catch (Exception e) {
                     log.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 

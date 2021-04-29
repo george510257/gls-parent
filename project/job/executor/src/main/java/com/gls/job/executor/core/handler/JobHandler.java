@@ -5,7 +5,7 @@ package com.gls.job.executor.core.handler;
  *
  * @author george
  */
-public interface IJobHandler {
+public interface JobHandler {
 
     /**
      * init handler, invoked when JobThread init

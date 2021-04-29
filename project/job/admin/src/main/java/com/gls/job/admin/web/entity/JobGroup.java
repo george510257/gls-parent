@@ -9,7 +9,7 @@ import java.util.List;
  * Created by george on 16/9/30.
  */
 @Data
-public class XxlJobGroup {
+public class JobGroup {
 
     private int id;
     private String appname;

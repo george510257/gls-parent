@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.dao;
 
-import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.JobLog;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,16 +14,16 @@ import java.util.Map;
  * @author george 2016-1-12 18:03:06
  */
 @Mapper
-public interface XxlJobLogDao {
+public interface JobLogDao {
 
     // exist jobId not use jobGroup, not exist use jobGroup
-    List<XxlJobLog> pageList(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("jobGroup") int jobGroup,
-                             @Param("jobId") int jobId,
-                             @Param("triggerTimeStart") Date triggerTimeStart,
-                             @Param("triggerTimeEnd") Date triggerTimeEnd,
-                             @Param("logStatus") int logStatus);
+    List<JobLog> pageList(@Param("offset") int offset,
+                          @Param("pagesize") int pagesize,
+                          @Param("jobGroup") int jobGroup,
+                          @Param("jobId") int jobId,
+                          @Param("triggerTimeStart") Date triggerTimeStart,
+                          @Param("triggerTimeEnd") Date triggerTimeEnd,
+                          @Param("logStatus") int logStatus);
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
@@ -33,13 +33,13 @@ public interface XxlJobLogDao {
                       @Param("triggerTimeEnd") Date triggerTimeEnd,
                       @Param("logStatus") int logStatus);
 
-    XxlJobLog load(@Param("id") long id);
+    JobLog load(@Param("id") long id);
 
-    long save(XxlJobLog glsJobLog);
+    long save(JobLog jobLog);
 
-    int updateTriggerInfo(XxlJobLog glsJobLog);
+    int updateTriggerInfo(JobLog jobLog);
 
-    int updateHandleInfo(XxlJobLog glsJobLog);
+    int updateHandleInfo(JobLog jobLog);
 
     int delete(@Param("jobId") int jobId);
 

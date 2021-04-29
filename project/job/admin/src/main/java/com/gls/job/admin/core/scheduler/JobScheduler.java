@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.scheduler;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.server.*;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentMap;
  * @author george 2018-10-28 00:18:17
  */
 
-public class XxlJobScheduler {
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobScheduler.class);
+public class JobScheduler {
+    private static final Logger logger = LoggerFactory.getLogger(JobScheduler.class);
     // ---------------------- executor-client ----------------------
     private static ConcurrentMap<String, ExecutorApi> executorApiRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
@@ -34,7 +34,7 @@ public class XxlJobScheduler {
         }
 
         // set-cache
-        executorApi = new ExecutorApiClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
+        executorApi = new ExecutorApiClient(address, JobAdminConfig.getAdminConfig().getAccessToken());
 
         executorApiRepository.put(address, executorApi);
         return executorApi;

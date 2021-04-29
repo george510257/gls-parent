@@ -1,19 +1,19 @@
 package com.gls.job.executor.core.handler.impl;
 
-import com.gls.job.executor.core.handler.IJobHandler;
-import com.gls.job.executor.core.helper.XxlJobHelper;
+import com.gls.job.executor.core.handler.JobHandler;
+import com.gls.job.executor.core.helper.JobHelper;
 
 /**
  * glue job handler
  *
  * @author george
  */
-public class GlueJobHandler implements IJobHandler {
+public class GlueJobHandler implements JobHandler {
 
-    private final IJobHandler jobHandler;
+    private final JobHandler jobHandler;
     private final long glueUpdateTime;
 
-    public GlueJobHandler(IJobHandler jobHandler, long glueUpdateTime) {
+    public GlueJobHandler(JobHandler jobHandler, long glueUpdateTime) {
         this.jobHandler = jobHandler;
         this.glueUpdateTime = glueUpdateTime;
     }
@@ -24,7 +24,7 @@ public class GlueJobHandler implements IJobHandler {
 
     @Override
     public void execute() throws Exception {
-        XxlJobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
+        JobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
     }
 

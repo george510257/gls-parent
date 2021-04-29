@@ -1,9 +1,9 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.complete.XxlJobCompleter;
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.complete.JobCompleter;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.thread.JobCompleteMonitorThread;
-import com.gls.job.admin.web.entity.XxlJobLog;
+import com.gls.job.admin.web.entity.JobLog;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +84,7 @@ public class JobCompleteServer {
 
     private Result<String> callback(CallbackModel callbackModel) {
         // valid log item
-        XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(callbackModel.getLogId());
+        JobLog log = JobAdminConfig.getAdminConfig().getJobLogDao().load(callbackModel.getLogId());
         if (log == null) {
             return new Result<>(Result.FAIL_CODE, "log item not found.");
         }
@@ -106,7 +106,7 @@ public class JobCompleteServer {
         log.setHandleTime(new Date());
         log.setHandleCode(callbackModel.getHandleCode());
         log.setHandleMsg(handleMsg.toString());
-        XxlJobCompleter.updateHandleInfoAndFinish(log);
+        JobCompleter.updateHandleInfoAndFinish(log);
 
         return Result.SUCCESS;
     }

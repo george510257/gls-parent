@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.admin.core.scheduler.XxlJobScheduler;
+import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
@@ -22,7 +22,7 @@ public class ExecutorRouteFailover extends ExecutorRouter {
             // beat
             Result<String> beatResult = null;
             try {
-                ExecutorApi executorApi = XxlJobScheduler.getExecutorApi(address);
+                ExecutorApi executorApi = JobScheduler.getExecutorApi(address);
                 beatResult = executorApi.beat();
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);

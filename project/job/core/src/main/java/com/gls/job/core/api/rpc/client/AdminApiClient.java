@@ -4,7 +4,7 @@ import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.gls.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.JobRemotingUtil;
 
 import java.util.List;
 
@@ -34,17 +34,17 @@ public class AdminApiClient implements AdminApi {
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackModelList) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "api/callback", accessToken, timeout, callbackModelList, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "api/callback", accessToken, timeout, callbackModelList, String.class);
     }
 
     @Override
     public Result<String> registry(RegistryModel registryModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "api/registry", accessToken, timeout, registryModel, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "api/registry", accessToken, timeout, registryModel, String.class);
     }
 
     @Override
     public Result<String> registryRemove(RegistryModel registryModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "api/registryRemove", accessToken, timeout, registryModel, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "api/registryRemove", accessToken, timeout, registryModel, String.class);
     }
 
 }

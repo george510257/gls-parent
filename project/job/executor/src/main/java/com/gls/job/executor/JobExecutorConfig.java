@@ -3,7 +3,7 @@ package com.gls.job.executor;
 import com.gls.job.core.base.daemon.DaemonFactory;
 import com.gls.job.core.base.thread.BaseThread;
 import com.gls.job.executor.core.constants.ExecutorProperties;
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.web.repository.JobHandlerRepository;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -26,7 +26,7 @@ public class JobExecutorConfig {
     private ApplicationContext applicationContext;
 
     @Resource
-    private Map<String, IJobHandler> jobHandlers;
+    private Map<String, JobHandler> jobHandlers;
 
     @Bean
     public JobHandlerRepository jobHandlerRepository() {

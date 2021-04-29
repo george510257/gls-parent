@@ -10,7 +10,7 @@ import java.util.Date;
  * @author george  2015-12-19 23:19:09
  */
 @Data
-public class XxlJobLog {
+public class JobLog {
 
     private long id;
 

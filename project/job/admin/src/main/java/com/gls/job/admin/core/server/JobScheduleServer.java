@@ -2,7 +2,7 @@ package com.gls.job.admin.core.server;
 
 import com.gls.job.admin.core.thread.JobScheduleRingThread;
 import com.gls.job.admin.core.thread.JobScheduleThread;
-import com.gls.job.admin.web.entity.XxlJobInfo;
+import com.gls.job.admin.web.entity.JobInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -26,7 +26,7 @@ public class JobScheduleServer {
         return INSTANCE;
     }
 
-    public static Date generateNextValidTime(XxlJobInfo jobInfo, Date date) throws Exception {
+    public static Date generateNextValidTime(JobInfo jobInfo, Date date) throws Exception {
         return JobScheduleThread.generateNextValidTime(jobInfo, date);
     }
 

@@ -1,6 +1,6 @@
 package com.gls.job.executor.web.repository;
 
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.annotation.Job;
 import com.gls.job.executor.core.handler.impl.MethodJobHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -20,18 +20,18 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 public class JobHandlerRepository {
 
-    private static final ConcurrentMap<String, IJobHandler> JOB_HANDLER_CONCURRENT_MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, JobHandler> JOB_HANDLER_CONCURRENT_MAP = new ConcurrentHashMap<>();
 
-    public IJobHandler loadJobHandler(String name) {
+    public JobHandler loadJobHandler(String name) {
         return JOB_HANDLER_CONCURRENT_MAP.get(name);
     }
 
-    public void registJobHandler(Map<String, IJobHandler> jobHandlerMap) {
+    public void registJobHandler(Map<String, JobHandler> jobHandlerMap) {
         jobHandlerMap.forEach((key, value) -> log.info(">>>>>>>>>>> job register jobHandler success, name:{}, jobHandler:{}", key, value));
         JOB_HANDLER_CONCURRENT_MAP.putAll(jobHandlerMap);
     }
 
-    public IJobHandler registJobHandler(String name, IJobHandler jobHandler) {
+    public JobHandler registJobHandler(String name, JobHandler jobHandler) {
         log.info(">>>>>>>>>>> gls-job register jobHandler success, name:{}, jobHandler:{}", name, jobHandler);
         return JOB_HANDLER_CONCURRENT_MAP.put(name, jobHandler);
     }

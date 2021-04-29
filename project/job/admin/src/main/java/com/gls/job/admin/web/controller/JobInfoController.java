@@ -1,19 +1,19 @@
 package com.gls.job.admin.web.controller;
 
-import com.gls.job.admin.core.exception.XxlJobException;
+import com.gls.job.admin.core.exception.JobException;
 import com.gls.job.admin.core.server.JobScheduleServer;
 import com.gls.job.admin.core.server.JobTriggerPoolHelper;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.XxlJobGroupDao;
-import com.gls.job.admin.web.entity.XxlJobGroup;
-import com.gls.job.admin.web.entity.XxlJobInfo;
-import com.gls.job.admin.web.entity.XxlJobUser;
+import com.gls.job.admin.web.dao.JobGroupDao;
+import com.gls.job.admin.web.entity.JobGroup;
+import com.gls.job.admin.web.entity.JobInfo;
+import com.gls.job.admin.web.entity.JobUser;
 import com.gls.job.admin.web.entity.enums.ExecutorRouteStrategy;
 import com.gls.job.admin.web.entity.enums.MisfireStrategy;
 import com.gls.job.admin.web.entity.enums.ScheduleType;
 import com.gls.job.admin.web.entity.enums.TriggerType;
+import com.gls.job.admin.web.service.JobService;
 import com.gls.job.admin.web.service.LoginService;
-import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
@@ -41,14 +41,14 @@ public class JobInfoController {
     private static Logger logger = LoggerFactory.getLogger(JobInfoController.class);
 
     @Resource
-    private XxlJobGroupDao glsJobGroupDao;
+    private JobGroupDao jobGroupDao;
     @Resource
-    private XxlJobService glsJobService;
+    private JobService jobService;
 
-    public static List<XxlJobGroup> filterJobGroupByRole(HttpServletRequest request, List<XxlJobGroup> jobGroupList_all) {
-        List<XxlJobGroup> jobGroupList = new ArrayList<>();
+    public static List<JobGroup> filterJobGroupByRole(HttpServletRequest request, List<JobGroup> jobGroupList_all) {
+        List<JobGroup> jobGroupList = new ArrayList<>();
         if (jobGroupList_all != null && jobGroupList_all.size() > 0) {
-            XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+            JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
             if (loginUser.getRole() == 1) {
                 jobGroupList = jobGroupList_all;
             } else {
@@ -56,7 +56,7 @@ public class JobInfoController {
                 if (loginUser.getPermission() != null && loginUser.getPermission().trim().length() > 0) {
                     groupIdStrs = Arrays.asList(loginUser.getPermission().trim().split(","));
                 }
-                for (XxlJobGroup groupItem : jobGroupList_all) {
+                for (JobGroup groupItem : jobGroupList_all) {
                     if (groupIdStrs.contains(String.valueOf(groupItem.getId()))) {
                         jobGroupList.add(groupItem);
                     }
@@ -67,7 +67,7 @@ public class JobInfoController {
     }
 
     public static void validPermission(HttpServletRequest request, int jobGroup) {
-        XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
         }
@@ -84,12 +84,12 @@ public class JobInfoController {
         model.addAttribute("MisfireStrategyEnum", MisfireStrategy.values());                    // 调度过期策略
 
         // 执行器列表
-        List<XxlJobGroup> jobGroupList_all = glsJobGroupDao.findAll();
+        List<JobGroup> jobGroupList_all = jobGroupDao.findAll();
 
         // filter group
-        List<XxlJobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
+        List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
+            throw new JobException(I18nUtil.getString("jobgroup_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -104,37 +104,37 @@ public class JobInfoController {
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
-        return glsJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+        return jobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
     }
 
     @RequestMapping("/add")
     @ResponseBody
-    public Result<String> add(XxlJobInfo jobInfo) {
-        return glsJobService.add(jobInfo);
+    public Result<String> add(JobInfo jobInfo) {
+        return jobService.add(jobInfo);
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    public Result<String> update(XxlJobInfo jobInfo) {
-        return glsJobService.update(jobInfo);
+    public Result<String> update(JobInfo jobInfo) {
+        return jobService.update(jobInfo);
     }
 
     @RequestMapping("/remove")
     @ResponseBody
     public Result<String> remove(int id) {
-        return glsJobService.remove(id);
+        return jobService.remove(id);
     }
 
     @RequestMapping("/stop")
     @ResponseBody
     public Result<String> pause(int id) {
-        return glsJobService.stop(id);
+        return jobService.stop(id);
     }
 
     @RequestMapping("/start")
     @ResponseBody
     public Result<String> start(int id) {
-        return glsJobService.start(id);
+        return jobService.start(id);
     }
 
     @RequestMapping("/trigger")
@@ -154,15 +154,15 @@ public class JobInfoController {
     @ResponseBody
     public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
 
-        XxlJobInfo paramXxlJobInfo = new XxlJobInfo();
-        paramXxlJobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
-        paramXxlJobInfo.setScheduleConf(scheduleConf);
+        JobInfo paramJobInfo = new JobInfo();
+        paramJobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
+        paramJobInfo.setScheduleConf(scheduleConf);
 
         List<String> result = new ArrayList<>();
         try {
             Date lastTime = new Date();
             for (int i = 0; i < 5; i++) {
-                lastTime = JobScheduleServer.generateNextValidTime(paramXxlJobInfo, lastTime);
+                lastTime = JobScheduleServer.generateNextValidTime(paramJobInfo, lastTime);
                 if (lastTime != null) {
                     result.add(DateUtil.formatDateTime(lastTime));
                 } else {

@@ -1,6 +1,6 @@
 package com.gls.demo.job.executor;
 
-import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.JobHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class DemoJob1 implements IJobHandler {
+public class DemoJob1 implements JobHandler {
 
     @Override
     public void execute() throws Exception {

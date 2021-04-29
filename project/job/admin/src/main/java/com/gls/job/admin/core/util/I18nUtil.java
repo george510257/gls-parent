@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.util;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -30,7 +30,7 @@ public class I18nUtil {
         }
         try {
             // build i18n prop
-            String i18n = XxlJobAdminConfig.getAdminConfig().getI18n();
+            String i18n = JobAdminConfig.getAdminConfig().getI18n();
             String i18nFile = MessageFormat.format("i18n/message_{0}.properties", i18n);
 
             // load prop
