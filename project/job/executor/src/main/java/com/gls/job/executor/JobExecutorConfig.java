@@ -1,5 +1,7 @@
 package com.gls.job.executor;
 
+import com.gls.job.core.base.daemon.DaemonFactory;
+import com.gls.job.core.base.thread.BaseThread;
 import com.gls.job.executor.core.constants.ExecutorProperties;
 import com.gls.job.executor.core.handler.IJobHandler;
 import com.gls.job.executor.web.repository.JobHandlerRepository;
@@ -32,5 +34,12 @@ public class JobExecutorConfig {
         jobHandlerRepository.init(applicationContext);
         jobHandlerRepository.registJobHandler(jobHandlers);
         return jobHandlerRepository;
+    }
+
+    @Bean
+    public DaemonFactory daemonFactory(Map<String, BaseThread> threads) {
+        DaemonFactory daemonFactory = new DaemonFactory();
+        daemonFactory.regist(threads);
+        return daemonFactory;
     }
 }

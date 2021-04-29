@@ -23,7 +23,7 @@ spring:
             client-id: 6eaed4a111193a7a93ee
             client-secret: a1b6c083ff10a4a83520697c2e3e13cdaaeb5846
 server:
-  port: 8804
+  port: 8805
 gls:
   security:
     captcha:

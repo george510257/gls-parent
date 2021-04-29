@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: gls-demo-job
+server:
+  port: 8802

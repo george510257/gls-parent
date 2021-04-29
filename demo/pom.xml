@@ -18,6 +18,7 @@
         <module>provider-b</module>
         <module>consumer</module>
         <module>security</module>
+        <module>job</module>
     </modules>
 
     <dependencyManagement>

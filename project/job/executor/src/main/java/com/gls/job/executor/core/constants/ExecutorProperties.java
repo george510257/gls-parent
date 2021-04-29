@@ -11,4 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ExecutorProperties {
 
     private Long logRetentionDays;
+
+    private String appname;
+
+    private String address;
 }

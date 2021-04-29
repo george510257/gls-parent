@@ -49,8 +49,18 @@
 
             <!-- 调度模块 -->
             <dependency>
+                <groupId>com.gls.job.admin</groupId>
+                <artifactId>gls-job-admin</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.gls.job.core</groupId>
                 <artifactId>gls-job-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gls.job.executor</groupId>
+                <artifactId>gls-job-executor</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
 
