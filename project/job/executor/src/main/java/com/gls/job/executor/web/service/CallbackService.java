@@ -5,7 +5,7 @@ import com.gls.job.core.api.model.CallbackModel;
 import java.util.List;
 
 /**
- * @author georg
+ * @author george
  */
 public interface CallbackService {
 

@@ -5,11 +5,12 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.core.util.JdkSerializeTool;
-import com.gls.job.executor.config.XxlJobExecutor;
-import com.gls.job.executor.context.XxlJobContext;
-import com.gls.job.executor.helper.XxlJobFileHelper;
-import com.gls.job.executor.helper.XxlJobHelper;
+import com.gls.job.executor.core.helper.XxlJobFileHelper;
+import com.gls.job.executor.core.helper.XxlJobHelper;
+import com.gls.job.executor.core.holder.JobContextHolder;
+import com.gls.job.executor.web.model.JobContextModel;
 import com.gls.job.executor.web.service.CallbackService;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,25 +25,25 @@ public class CallbackServiceImpl implements CallbackService {
 
     private static final String FAIL_CALLBACK_FILE_PATH = XxlJobFileHelper.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
     private static final String FAIL_CALLBACK_FILE_NAME = FAIL_CALLBACK_FILE_PATH.concat("gls-job-callback-{x}").concat(".log");
+    @DubboReference
+    private AdminApi adminApi;
 
     @Override
     public void doCallback(List<CallbackModel> callbackModelList) {
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminApi adminApi : XxlJobExecutor.getAdminApiList()) {
-            try {
-                Result<String> callbackResult = adminApi.callback(callbackModelList);
-                if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
-                    callbackLog(callbackModelList, "<br>----------- gls-job job callback finish.");
-                    callbackRet = true;
-                    break;
-                } else {
-                    callbackLog(callbackModelList, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
-                }
-            } catch (Exception e) {
-                callbackLog(callbackModelList, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
+        try {
+            Result<String> callbackResult = adminApi.callback(callbackModelList);
+            if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
+                callbackLog(callbackModelList, "<br>----------- gls-job job callback finish.");
+                callbackRet = true;
+            } else {
+                callbackLog(callbackModelList, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
             }
+        } catch (Exception e) {
+            callbackLog(callbackModelList, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
         }
+
         if (!callbackRet) {
             appendFailCallbackFile(callbackModelList);
         }
@@ -72,19 +73,14 @@ public class CallbackServiceImpl implements CallbackService {
     private void callbackLog(List<CallbackModel> callbackModelList, String logContent) {
         for (CallbackModel callbackModel : callbackModelList) {
             String logFileName = XxlJobFileHelper.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
-            XxlJobContext.setXxlJobContext(new XxlJobContext(
-                    -1,
-                    null,
-                    logFileName,
-                    -1,
-                    -1));
+            JobContextHolder.getInstance().set(new JobContextModel(-1, null, logFileName, -1, -1));
             XxlJobHelper.log(logContent);
         }
     }
 
     @Override
     public void retryFailCallbackFile() {
-// valid
+        // valid
         File callbackLogPath = new File(FAIL_CALLBACK_FILE_PATH);
         if (!callbackLogPath.exists()) {
             return;
@@ -97,18 +93,18 @@ public class CallbackServiceImpl implements CallbackService {
         }
 
         // load and clear file, retry
-        for (File callbaclLogFile : callbackLogPath.listFiles()) {
-            byte[] callbackModelList_bytes = FileUtil.readFileContent(callbaclLogFile);
+        for (File callbackLogFile : callbackLogPath.listFiles()) {
+            byte[] callbackModelListBytes = FileUtil.readFileContent(callbackLogFile);
 
             // avoid empty file
-            if (callbackModelList_bytes == null || callbackModelList_bytes.length < 1) {
-                callbaclLogFile.delete();
+            if (callbackModelListBytes == null || callbackModelListBytes.length < 1) {
+                callbackLogFile.delete();
                 continue;
             }
 
-            List<CallbackModel> callbackModelList = (List<CallbackModel>) JdkSerializeTool.deserialize(callbackModelList_bytes, List.class);
+            List<CallbackModel> callbackModelList = (List<CallbackModel>) JdkSerializeTool.deserialize(callbackModelListBytes, List.class);
 
-            callbaclLogFile.delete();
+            callbackLogFile.delete();
             doCallback(callbackModelList);
         }
     }

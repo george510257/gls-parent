@@ -4,22 +4,32 @@ import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.gls.job.executor.config.XxlJobExecutor;
-import com.gls.job.executor.glue.GlueFactory;
-import com.gls.job.executor.handler.IJobHandler;
-import com.gls.job.executor.handler.impl.GlueJobHandler;
-import com.gls.job.executor.handler.impl.ScriptJobHandler;
-import com.gls.job.executor.helper.XxlJobFileHelper;
-import com.gls.job.executor.thread.JobThread;
+import com.gls.job.executor.core.glue.GlueFactory;
+import com.gls.job.executor.core.handler.IJobHandler;
+import com.gls.job.executor.core.handler.impl.GlueJobHandler;
+import com.gls.job.executor.core.handler.impl.ScriptJobHandler;
+import com.gls.job.executor.core.helper.XxlJobFileHelper;
+import com.gls.job.executor.core.holder.JobThreadHolder;
+import com.gls.job.executor.core.thread.JobThread;
+import com.gls.job.executor.web.repository.JobHandlerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
 /**
  * @author george
  */
 @Slf4j
+@DubboService
 public class ExecutorRpcService implements ExecutorApi {
+
+    @Resource
+    private JobThreadHolder jobThreadRepository;
+
+    @Resource
+    private JobHandlerRepository jobHandlerRepository;
 
     @Override
     public Result<String> beat() {
@@ -28,24 +38,17 @@ public class ExecutorRpcService implements ExecutorApi {
 
     @Override
     public Result<String> idleBeat(IdleBeatModel idleBeatModel) {
-
-        // isRunningOrHasQueue
-        boolean isRunningOrHasQueue = false;
-        JobThread jobThread = XxlJobExecutor.loadJobThread(idleBeatModel.getJobId());
+        JobThread jobThread = jobThreadRepository.load(idleBeatModel.getJobId());
         if (jobThread != null && jobThread.isRunningOrHasQueue()) {
-            isRunningOrHasQueue = true;
+            return Result.SUCCESS;
         }
-
-        if (isRunningOrHasQueue) {
-            return new Result<>(Result.FAIL_CODE, "job thread is running or has trigger queue.");
-        }
-        return Result.SUCCESS;
+        return new Result<>(Result.FAIL_CODE, "job thread is running or has trigger queue.");
     }
 
     @Override
     public Result<String> run(TriggerModel triggerModel) {
         // load old：jobHandler + jobThread
-        JobThread jobThread = XxlJobExecutor.loadJobThread(triggerModel.getJobId());
+        JobThread jobThread = jobThreadRepository.load(triggerModel.getJobId());
         IJobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
         String removeOldReason = null;
 
@@ -54,7 +57,7 @@ public class ExecutorRpcService implements ExecutorApi {
         if (GlueType.BEAN == glueTypeEnum) {
 
             // new jobHandler
-            IJobHandler newJobHandler = XxlJobExecutor.loadJobHandler(triggerModel.getExecutorHandler());
+            IJobHandler newJobHandler = jobHandlerRepository.loadJobHandler(triggerModel.getExecutorHandler());
 
             // valid old jobThread
             if (jobThread != null && jobHandler != newJobHandler) {
@@ -139,7 +142,8 @@ public class ExecutorRpcService implements ExecutorApi {
 
         // replace thread (new or exists invalid)
         if (jobThread == null) {
-            jobThread = XxlJobExecutor.registJobThread(triggerModel.getJobId(), jobHandler, removeOldReason);
+            jobThread = new JobThread(triggerModel.getJobId(), jobHandler);
+            jobThreadRepository.regist(triggerModel.getJobId(), jobThread, removeOldReason);
         }
 
         // push data to queue
@@ -149,9 +153,9 @@ public class ExecutorRpcService implements ExecutorApi {
     @Override
     public Result<String> kill(KillModel killModel) {
         // kill handlerThread, and create new one
-        JobThread jobThread = XxlJobExecutor.loadJobThread(killModel.getJobId());
+        JobThread jobThread = jobThreadRepository.load(killModel.getJobId());
         if (jobThread != null) {
-            XxlJobExecutor.removeJobThread(killModel.getJobId(), "scheduling center kill job.");
+            jobThreadRepository.remove(killModel.getJobId(), "scheduling center kill job.");
             return Result.SUCCESS;
         }
 
