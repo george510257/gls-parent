@@ -1,5 +1,7 @@
 package com.gls.job.executor.web.service.impl;
 
+import com.gls.job.core.api.model.LogModel;
+import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.executor.core.constants.ExecutorProperties;
 import com.gls.job.executor.core.helper.JobFileHelper;
@@ -64,5 +66,12 @@ public class LogFileServiceImpl implements LogFileService {
                 }
             }
         }
+    }
+
+    @Override
+    public LogResultModel readLogFile(LogModel logModel) {
+        // log filename: logPath/yyyy-MM-dd/9999.log
+        String logFileName = JobFileHelper.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
+        return JobFileHelper.readLog(logFileName, logModel.getFromLineNumber());
     }
 }

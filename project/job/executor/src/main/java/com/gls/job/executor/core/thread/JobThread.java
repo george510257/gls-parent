@@ -1,7 +1,6 @@
 package com.gls.job.executor.core.thread;
 
 import com.gls.job.core.api.model.CallbackModel;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.base.thread.BaseThread;
 import com.gls.job.core.constants.JobConstants;
@@ -55,9 +54,8 @@ public class JobThread extends BaseThread {
      * @param triggerModel
      * @return
      */
-    public Result<String> pushTriggerQueue(TriggerModel triggerModel) {
-        triggerQueueHolder.push(triggerModel);
-        return Result.SUCCESS;
+    public boolean pushTriggerQueue(TriggerModel triggerModel) {
+        return triggerQueueHolder.push(triggerModel);
     }
 
     /**
