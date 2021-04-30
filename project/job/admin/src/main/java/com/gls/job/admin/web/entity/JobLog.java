@@ -12,11 +12,11 @@ import java.util.Date;
 @Data
 public class JobLog {
 
-    private long id;
+    private Long id;
 
     // job info
-    private int jobGroup;
-    private int jobId;
+    private Long jobGroup;
+    private Long jobId;
 
     // execute info
     private String executorAddress;

@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Date;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeoutException;
 @Slf4j
 public class JobThread extends BaseThread {
 
-    private final int jobId;
+    private final Long jobId;
     private final JobHandler handler;
     private final TriggerQueueHolder triggerQueueHolder = new TriggerQueueHolder();
 
@@ -39,7 +38,7 @@ public class JobThread extends BaseThread {
 
     private int idleTimes = 0;
 
-    public JobThread(int jobId, JobHandler handler) {
+    public JobThread(Long jobId, JobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
     }
@@ -86,8 +85,13 @@ public class JobThread extends BaseThread {
                 idleTimes = 0;
 
                 // log filename, like "logPath/yyyy-MM-dd/9999.log"
-                String logFileName = JobFileHelper.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
-                JobContextModel jobContext = new JobContextModel(triggerModel.getJobId(), triggerModel.getExecutorParams(), logFileName, triggerModel.getBroadcastIndex(), triggerModel.getBroadcastTotal());
+                String logFileName = JobFileHelper.makeLogFileName(triggerModel.getLogDateTime(), triggerModel.getLogId());
+                JobContextModel jobContext = new JobContextModel(
+                        triggerModel.getJobId(),
+                        triggerModel.getExecutorParams(),
+                        logFileName,
+                        triggerModel.getBroadcastIndex(),
+                        triggerModel.getBroadcastTotal());
 
                 // init job context
                 JobContextHolder.getInstance().set(jobContext);
@@ -168,12 +172,19 @@ public class JobThread extends BaseThread {
                 // callback handler info
                 if (!this.isStop()) {
                     // commonm
-                    CallbackQueueHolder.getInstance().push(new CallbackModel(triggerModel.getLogId(), triggerModel.getLogDateTime(), JobContextHolder.getInstance().get().getHandleCode(),
+                    CallbackQueueHolder.getInstance().push(new CallbackModel(
+                            triggerModel.getLogId(),
+                            triggerModel.getLogDateTime(),
+                            JobContextHolder.getInstance().get().getHandleCode(),
                             JobContextHolder.getInstance().get().getHandleMsg())
                     );
                 } else {
                     // is killed
-                    CallbackQueueHolder.getInstance().push(new CallbackModel(triggerModel.getLogId(), triggerModel.getLogDateTime(), JobConstants.HANDLE_CODE_FAIL, this.getStopReason() + " [job running, killed]"));
+                    CallbackQueueHolder.getInstance().push(new CallbackModel(
+                            triggerModel.getLogId(),
+                            triggerModel.getLogDateTime(),
+                            JobConstants.HANDLE_CODE_FAIL,
+                            this.getStopReason() + " [job running, killed]"));
                 }
             }
         }
@@ -191,7 +202,11 @@ public class JobThread extends BaseThread {
             TriggerModel triggerModel = triggerQueueHolder.pop();
             if (triggerModel != null) {
                 // is killed
-                CallbackQueueHolder.getInstance().push(new CallbackModel(triggerModel.getLogId(), triggerModel.getLogDateTime(), JobConstants.HANDLE_CODE_FAIL, this.getStopReason() + " [job not executed, in the job queue, killed.]"));
+                CallbackQueueHolder.getInstance().push(new CallbackModel(
+                        triggerModel.getLogId(),
+                        triggerModel.getLogDateTime(),
+                        JobConstants.HANDLE_CODE_FAIL,
+                        this.getStopReason() + " [job not executed, in the job queue, killed.]"));
             }
         }
 

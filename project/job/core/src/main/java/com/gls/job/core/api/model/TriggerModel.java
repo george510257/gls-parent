@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author george
@@ -16,21 +17,21 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class TriggerModel implements Serializable {
 
-    private int jobId;
+    private Long jobId;
 
     private String executorHandler;
     private String executorParams;
     private ExecutorBlockStrategy executorBlockStrategy;
-    private int executorTimeout;
+    private Integer executorTimeout;
 
-    private long logId;
-    private long logDateTime;
+    private Long logId;
+    private Date logDateTime;
 
     private GlueType glueType;
     private String glueSource;
-    private long glueUpdateTime;
+    private Date glueUpdateTime;
 
-    private int broadcastIndex;
-    private int broadcastTotal;
+    private Integer broadcastIndex;
+    private Integer broadcastTotal;
 
 }

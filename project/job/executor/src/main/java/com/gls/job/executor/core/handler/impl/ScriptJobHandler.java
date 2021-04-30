@@ -8,18 +8,19 @@ import com.gls.job.executor.core.helper.ScriptHelper;
 import com.gls.job.executor.core.holder.JobContextHolder;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * @author george
  */
 public class ScriptJobHandler implements JobHandler {
 
-    private final int jobId;
-    private final long glueUpdateTime;
+    private final Long jobId;
+    private final Date glueUpdateTime;
     private final String glueSource;
     private final GlueType glueType;
 
-    public ScriptJobHandler(int jobId, long glueUpdateTime, String glueSource, GlueType glueType) {
+    public ScriptJobHandler(Long jobId, Date glueUpdateTime, String glueSource, GlueType glueType) {
         this.jobId = jobId;
         this.glueUpdateTime = glueUpdateTime;
         this.glueSource = glueSource;
@@ -40,7 +41,7 @@ public class ScriptJobHandler implements JobHandler {
 
     }
 
-    public long getGlueUpdateTime() {
+    public Date getGlueUpdateTime() {
         return glueUpdateTime;
     }
 

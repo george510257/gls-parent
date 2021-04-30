@@ -66,7 +66,7 @@ public class JobInfoController {
         return jobGroupList;
     }
 
-    public static void validPermission(HttpServletRequest request, int jobGroup) {
+    public static void validPermission(HttpServletRequest request, Long jobGroup) {
         JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
@@ -74,7 +74,7 @@ public class JobInfoController {
     }
 
     @RequestMapping
-    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
+    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") Long jobGroup) {
 
         // 枚举-字典
         model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategy.values());        // 路由策略-列表
@@ -102,7 +102,7 @@ public class JobInfoController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+                                        Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
         return jobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
     }
@@ -121,26 +121,26 @@ public class JobInfoController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
         return jobService.remove(id);
     }
 
     @RequestMapping("/stop")
     @ResponseBody
-    public Result<String> pause(int id) {
+    public Result<String> pause(Long id) {
         return jobService.stop(id);
     }
 
     @RequestMapping("/start")
     @ResponseBody
-    public Result<String> start(int id) {
+    public Result<String> start(Long id) {
         return jobService.start(id);
     }
 
     @RequestMapping("/trigger")
     @ResponseBody
     //@PermissionLimit(limit = false)
-    public Result<String> triggerJob(int id, String executorParam, String addressList) {
+    public Result<String> triggerJob(Long id, String executorParam, String addressList) {
         // force cover job param
         if (executorParam == null) {
             executorParam = "";

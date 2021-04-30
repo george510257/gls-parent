@@ -6,7 +6,7 @@ import com.gls.job.executor.core.thread.JobThread;
 /**
  * @author george
  */
-public class JobThreadHolder extends BaseHolder<Integer, JobThread> {
+public class JobThreadHolder extends BaseHolder<Long, JobThread> {
 
     private static final JobThreadHolder INSTANCE = new JobThreadHolder();
 

@@ -17,9 +17,9 @@ import java.util.Date;
 @Data
 public class JobInfo {
 
-    private int id;                // 主键ID
+    private Long id;                // 主键ID
 
-    private int jobGroup;        // 执行器主键ID
+    private Long jobGroup;        // 执行器主键ID
     private String jobDesc;
 
     private Date addTime;

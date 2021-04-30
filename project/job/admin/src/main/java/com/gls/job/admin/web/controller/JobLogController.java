@@ -48,7 +48,7 @@ public class JobLogController {
     private JobGroupDao jobGroupDao;
 
     @RequestMapping
-    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
+    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Long jobId) {
 
         // 执行器列表
         List<JobGroup> jobGroupList_all = jobGroupDao.findAll();
@@ -79,7 +79,7 @@ public class JobLogController {
 
     @RequestMapping("/getJobsByGroup")
     @ResponseBody
-    public Result<List<JobInfo>> getJobsByGroup(int jobGroup) {
+    public Result<List<JobInfo>> getJobsByGroup(Long jobGroup) {
         List<JobInfo> list = jobInfoDao.getJobsByGroup(jobGroup);
         return new Result<List<JobInfo>>(list);
     }
@@ -89,7 +89,7 @@ public class JobLogController {
     public Map<String, Object> pageList(HttpServletRequest request,
                                         @RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        int jobGroup, int jobId, int logStatus, String filterTime) {
+                                        Long jobGroup, Long jobId, int logStatus, String filterTime) {
 
         // valid permission
         JobInfoController.validPermission(request, jobGroup);    // 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
@@ -118,7 +118,7 @@ public class JobLogController {
     }
 
     @RequestMapping("/logDetailPage")
-    public String logDetailPage(int id, Model model) {
+    public String logDetailPage(Long id, Model model) {
 
         // base check
         Result<String> logStatue = Result.SUCCESS;
@@ -137,16 +137,16 @@ public class JobLogController {
 
     @RequestMapping("/logDetailCat")
     @ResponseBody
-    public Result<LogResultModel> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNumber) {
+    public Result<LogResultModel> logDetailCat(String executorAddress, Date triggerTime, Long logId, int fromLineNumber) {
         try {
             ExecutorApi executorApi = JobScheduler.getExecutorApi(executorAddress);
-            Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNumber));
+            Result<LogResultModel> logResult = executorApi.log(new LogModel(logId, triggerTime, fromLineNumber));
 
             // is end
             if (logResult.getContent() != null && logResult.getContent().getFromLineNumber() > logResult.getContent().getToLineNumber()) {
                 JobLog jobLog = jobLogDao.load(logId);
                 if (jobLog.getHandleCode() > 0) {
-                    logResult.getContent().setEnd(true);
+                    logResult.getContent().setEndFlag(true);
                 }
             }
 
@@ -159,7 +159,7 @@ public class JobLogController {
 
     @RequestMapping("/logKill")
     @ResponseBody
-    public Result<String> logKill(int id) {
+    public Result<String> logKill(Long id) {
         // base check
         JobLog log = jobLogDao.load(id);
         JobInfo jobInfo = jobInfoDao.loadById(log.getJobId());
@@ -193,7 +193,7 @@ public class JobLogController {
 
     @RequestMapping("/clearLog")
     @ResponseBody
-    public Result<String> clearLog(int jobGroup, int jobId, int type) {
+    public Result<String> clearLog(Long jobGroup, Long jobId, int type) {
 
         Date clearBeforeTime = null;
         int clearBeforeNum = 0;

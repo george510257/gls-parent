@@ -71,7 +71,7 @@ public class LogFileServiceImpl implements LogFileService {
     @Override
     public LogResultModel readLogFile(LogModel logModel) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = JobFileHelper.makeLogFileName(new Date(logModel.getLogDateTime()), logModel.getLogId());
+        String logFileName = JobFileHelper.makeLogFileName(logModel.getLogDateTime(), logModel.getLogId());
         return JobFileHelper.readLog(logFileName, logModel.getFromLineNumber());
     }
 }

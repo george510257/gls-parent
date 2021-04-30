@@ -28,6 +28,6 @@ public interface JobUserDao {
 
     int update(JobUser jobUser);
 
-    int delete(@Param("id") int id);
+    int delete(@Param("id") Long id);
 
 }

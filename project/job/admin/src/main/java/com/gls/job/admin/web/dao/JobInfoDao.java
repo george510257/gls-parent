@@ -16,7 +16,7 @@ public interface JobInfoDao {
 
     List<JobInfo> pageList(@Param("offset") int offset,
                            @Param("pagesize") int pagesize,
-                           @Param("jobGroup") int jobGroup,
+                           @Param("jobGroup") Long jobGroup,
                            @Param("triggerStatus") int triggerStatus,
                            @Param("jobDesc") String jobDesc,
                            @Param("executorHandler") String executorHandler,
@@ -24,7 +24,7 @@ public interface JobInfoDao {
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
-                      @Param("jobGroup") int jobGroup,
+                      @Param("jobGroup") Long jobGroup,
                       @Param("triggerStatus") int triggerStatus,
                       @Param("jobDesc") String jobDesc,
                       @Param("executorHandler") String executorHandler,
@@ -32,13 +32,13 @@ public interface JobInfoDao {
 
     int save(JobInfo info);
 
-    JobInfo loadById(@Param("id") int id);
+    JobInfo loadById(@Param("id") Long id);
 
     int update(JobInfo jobInfo);
 
     int delete(@Param("id") long id);
 
-    List<JobInfo> getJobsByGroup(@Param("jobGroup") int jobGroup);
+    List<JobInfo> getJobsByGroup(@Param("jobGroup") Long jobGroup);
 
     int findAllCount();
 

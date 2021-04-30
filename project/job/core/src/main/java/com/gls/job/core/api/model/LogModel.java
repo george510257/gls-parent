@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author george
@@ -14,8 +15,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LogModel implements Serializable {
 
-    private long logDateTime;
-    private long logId;
-    private int fromLineNumber;
+    private Long logId;
+    private Date logDateTime;
+    private Integer fromLineNumber;
 
 }

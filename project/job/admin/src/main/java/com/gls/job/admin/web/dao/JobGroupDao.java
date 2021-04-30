@@ -20,9 +20,9 @@ public interface JobGroupDao {
 
     int update(JobGroup jobGroup);
 
-    int remove(@Param("id") int id);
+    int remove(@Param("id") Long id);
 
-    JobGroup load(@Param("id") int id);
+    JobGroup load(@Param("id") Long id);
 
     List<JobGroup> pageList(@Param("offset") int offset,
                             @Param("pagesize") int pagesize,

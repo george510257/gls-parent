@@ -97,7 +97,7 @@ public class JobLogReportThread extends Thread {
                 // clean expired log
                 List<Long> logIds = null;
                 do {
-                    logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
+                    logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0L, 0L, clearBeforeTime, 0, 1000);
                     if (logIds != null && logIds.size() > 0) {
                         JobAdminConfig.getAdminConfig().getJobLogDao().clearLog(logIds);
                     }

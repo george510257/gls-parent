@@ -14,6 +14,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class KillModel implements Serializable {
 
-    private int jobId;
+    private Long jobId;
 
 }

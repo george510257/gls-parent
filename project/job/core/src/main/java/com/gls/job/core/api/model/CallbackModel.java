@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author george
@@ -14,10 +15,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CallbackModel implements Serializable {
 
-    private long logId;
-    private long logDateTime;
+    private Long logId;
+    private Date logDateTime;
 
-    private int handleCode;
+    private Integer handleCode;
     private String handleMsg;
 
 }

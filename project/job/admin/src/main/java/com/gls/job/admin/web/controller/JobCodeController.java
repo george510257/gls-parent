@@ -32,7 +32,7 @@ public class JobCodeController {
     private JobLogGlueDao jobLogGlueDao;
 
     @RequestMapping
-    public String index(HttpServletRequest request, Model model, int jobId) {
+    public String index(HttpServletRequest request, Model model, Long jobId) {
         JobInfo jobInfo = jobInfoDao.loadById(jobId);
         List<JobLogGlue> jobLogGlues = jobLogGlueDao.findByJobId(jobId);
 
@@ -56,7 +56,7 @@ public class JobCodeController {
 
     @RequestMapping("/save")
     @ResponseBody
-    public Result<String> save(Model model, int id, String glueSource, String glueRemark) {
+    public Result<String> save(Model model, Long id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
             return new Result<>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));

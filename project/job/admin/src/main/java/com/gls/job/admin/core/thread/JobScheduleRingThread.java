@@ -14,11 +14,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JobScheduleRingThread extends Thread {
 
-    private final Map<Integer, List<Integer>> ringData;
+    private final Map<Integer, List<Long>> ringData;
     @Setter
     private volatile boolean toStop = false;
 
-    public JobScheduleRingThread(Map<Integer, List<Integer>> ringData) {
+    public JobScheduleRingThread(Map<Integer, List<Long>> ringData) {
         this.ringData = ringData;
     }
 
@@ -37,11 +37,11 @@ public class JobScheduleRingThread extends Thread {
 
             try {
                 // second data
-                List<Integer> ringItemData = new ArrayList<>();
+                List<Long> ringItemData = new ArrayList<>();
                 int nowSecond = Calendar.getInstance().get(Calendar.SECOND);
                 // 避免处理耗时太长，跨过刻度，向前校验一个刻度；
                 for (int i = 0; i < 2; i++) {
-                    List<Integer> tmpData = ringData.remove((nowSecond + 60 - i) % 60);
+                    List<Long> tmpData = ringData.remove((nowSecond + 60 - i) % 60);
                     if (tmpData != null) {
                         ringItemData.addAll(tmpData);
                     }
@@ -51,7 +51,7 @@ public class JobScheduleRingThread extends Thread {
                 log.debug(">>>>>>>>>>> gls-job, time-ring beat : " + nowSecond + " = " + Collections.singletonList(ringItemData));
                 if (ringItemData.size() > 0) {
                     // do trigger
-                    for (int jobId : ringItemData) {
+                    for (Long jobId : ringItemData) {
                         // do trigger
                         JobTriggerPoolHelper.trigger(jobId, TriggerType.CRON, -1, null, null, null);
                     }

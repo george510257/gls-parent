@@ -19,16 +19,16 @@ public interface JobLogDao {
     // exist jobId not use jobGroup, not exist use jobGroup
     List<JobLog> pageList(@Param("offset") int offset,
                           @Param("pagesize") int pagesize,
-                          @Param("jobGroup") int jobGroup,
-                          @Param("jobId") int jobId,
+                          @Param("jobGroup") Long jobGroup,
+                          @Param("jobId") Long jobId,
                           @Param("triggerTimeStart") Date triggerTimeStart,
                           @Param("triggerTimeEnd") Date triggerTimeEnd,
                           @Param("logStatus") int logStatus);
 
     int pageListCount(@Param("offset") int offset,
                       @Param("pagesize") int pagesize,
-                      @Param("jobGroup") int jobGroup,
-                      @Param("jobId") int jobId,
+                      @Param("jobGroup") Long jobGroup,
+                      @Param("jobId") Long jobId,
                       @Param("triggerTimeStart") Date triggerTimeStart,
                       @Param("triggerTimeEnd") Date triggerTimeEnd,
                       @Param("logStatus") int logStatus);
@@ -41,13 +41,13 @@ public interface JobLogDao {
 
     int updateHandleInfo(JobLog jobLog);
 
-    int delete(@Param("jobId") int jobId);
+    int delete(@Param("jobId") Long jobId);
 
     Map<String, Object> findLogReport(@Param("from") Date from,
                                       @Param("to") Date to);
 
-    List<Long> findClearLogIds(@Param("jobGroup") int jobGroup,
-                               @Param("jobId") int jobId,
+    List<Long> findClearLogIds(@Param("jobGroup") Long jobGroup,
+                               @Param("jobId") Long jobId,
                                @Param("clearBeforeTime") Date clearBeforeTime,
                                @Param("clearBeforeNum") int clearBeforeNum,
                                @Param("pagesize") int pagesize);

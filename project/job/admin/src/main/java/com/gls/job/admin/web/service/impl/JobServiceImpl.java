@@ -40,7 +40,7 @@ public class JobServiceImpl implements JobService {
     private JobLogReportDao jobLogReportDao;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+    public Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
         // page list
         List<JobInfo> list = jobInfoDao.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
@@ -120,13 +120,13 @@ public class JobServiceImpl implements JobService {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    JobInfo childJobInfo = jobInfoDao.loadById(Integer.parseInt(childJobIdItem));
+                    JobInfo childJobInfo = jobInfoDao.loadById(Long.parseLong(childJobIdItem));
                     if (childJobInfo == null) {
-                        return new Result<String>(Result.FAIL_CODE,
+                        return new Result<>(Result.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }
                 } else {
-                    return new Result<String>(Result.FAIL_CODE,
+                    return new Result<>(Result.FAIL_CODE,
                             MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_unvalid")), childJobIdItem));
                 }
             }
@@ -212,13 +212,13 @@ public class JobServiceImpl implements JobService {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    JobInfo childJobInfo = jobInfoDao.loadById(Integer.parseInt(childJobIdItem));
+                    JobInfo childJobInfo = jobInfoDao.loadById(Long.parseLong(childJobIdItem));
                     if (childJobInfo == null) {
-                        return new Result<String>(Result.FAIL_CODE,
+                        return new Result<>(Result.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }
                 } else {
-                    return new Result<String>(Result.FAIL_CODE,
+                    return new Result<>(Result.FAIL_CODE,
                             MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_unvalid")), childJobIdItem));
                 }
             }
@@ -284,7 +284,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
         JobInfo jobInfo = jobInfoDao.loadById(id);
         if (jobInfo == null) {
             return Result.SUCCESS;
@@ -297,7 +297,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Result<String> start(int id) {
+    public Result<String> start(Long id) {
         JobInfo jobInfo = jobInfoDao.loadById(id);
 
         // valid
@@ -329,7 +329,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Result<String> stop(int id) {
+    public Result<String> stop(Long id) {
         JobInfo jobInfo = jobInfoDao.loadById(id);
 
         jobInfo.setTriggerStatus(0);

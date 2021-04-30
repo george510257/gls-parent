@@ -30,7 +30,7 @@ public class TriggerServiceImpl implements TriggerService {
     private JobHandlerRepository jobHandlerRepository;
 
     @Override
-    public boolean idleBeat(int jobId) {
+    public boolean idleBeat(Long jobId) {
         JobThread jobThread = jobThreadRepository.load(jobId);
         return jobThread != null && jobThread.isRunningOrHasQueue();
     }
@@ -136,7 +136,7 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
-    public boolean kill(int jobId) {
+    public boolean kill(Long jobId) {
         JobThread jobThread = jobThreadRepository.remove(jobId, "scheduling center kill job.");
         return jobThread != null;
     }

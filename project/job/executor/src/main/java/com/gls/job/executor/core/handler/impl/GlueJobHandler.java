@@ -3,6 +3,8 @@ package com.gls.job.executor.core.handler.impl;
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.helper.JobHelper;
 
+import java.util.Date;
+
 /**
  * glue job handler
  *
@@ -11,14 +13,14 @@ import com.gls.job.executor.core.helper.JobHelper;
 public class GlueJobHandler implements JobHandler {
 
     private final JobHandler jobHandler;
-    private final long glueUpdateTime;
+    private final Date glueUpdateTime;
 
-    public GlueJobHandler(JobHandler jobHandler, long glueUpdateTime) {
+    public GlueJobHandler(JobHandler jobHandler, Date glueUpdateTime) {
         this.jobHandler = jobHandler;
         this.glueUpdateTime = glueUpdateTime;
     }
 
-    public long getGlueUpdateTime() {
+    public Date getGlueUpdateTime() {
         return glueUpdateTime;
     }
 

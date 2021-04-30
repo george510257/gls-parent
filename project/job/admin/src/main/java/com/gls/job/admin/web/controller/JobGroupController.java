@@ -172,7 +172,7 @@ public class JobGroupController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
 
         // valid
         int count = jobInfoDao.pageListCount(0, 10, id, -1, null, null, null);
@@ -191,7 +191,7 @@ public class JobGroupController {
 
     @RequestMapping("/loadById")
     @ResponseBody
-    public Result<JobGroup> loadById(int id) {
+    public Result<JobGroup> loadById(Long id) {
         JobGroup jobGroup = jobGroupDao.load(id);
         return jobGroup != null ? new Result<JobGroup>(jobGroup) : new Result<JobGroup>(Result.FAIL_CODE, null);
     }

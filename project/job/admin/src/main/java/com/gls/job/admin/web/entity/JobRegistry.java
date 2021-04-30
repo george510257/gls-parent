@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 public class JobRegistry {
 
-    private int id;
+    private Long id;
     private RegistryType registryType;
     private String registryKey;
     private String registryValue;

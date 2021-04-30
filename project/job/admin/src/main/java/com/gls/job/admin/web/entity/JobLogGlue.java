@@ -13,8 +13,8 @@ import java.util.Date;
 @Data
 public class JobLogGlue {
 
-    private int id;
-    private int jobId;                // 任务主键ID
+    private Long id;
+    private Long jobId;                // 任务主键ID
     private GlueType glueType;        // GLUE类型	#com.gls.job.core.glue.GlueTypeEnum
     private String glueSource;
     private String glueRemark;

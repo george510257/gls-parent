@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JobScheduleServer {
     public static final long PRE_READ_MS = 5000;
-    private static final Map<Integer, List<Integer>> RING_DATA = new ConcurrentHashMap<>();
+    private static final Map<Integer, List<Long>> RING_DATA = new ConcurrentHashMap<>();
     private static final JobScheduleServer INSTANCE = new JobScheduleServer();
     private JobScheduleThread scheduleThread;
     private JobScheduleRingThread ringThread;
@@ -69,7 +69,7 @@ public class JobScheduleServer {
         boolean hasRingData = false;
         if (!RING_DATA.isEmpty()) {
             for (int second : RING_DATA.keySet()) {
-                List<Integer> tmpData = RING_DATA.get(second);
+                List<Long> tmpData = RING_DATA.get(second);
                 if (tmpData != null && tmpData.size() > 0) {
                     hasRingData = true;
                     break;

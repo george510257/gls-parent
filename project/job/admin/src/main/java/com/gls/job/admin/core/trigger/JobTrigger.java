@@ -39,7 +39,7 @@ public class JobTrigger {
      * @param addressList           null: use executor addressList
      *                              not null: cover
      */
-    public static void trigger(int jobId,
+    public static void trigger(Long jobId,
                                TriggerType triggerType,
                                int failRetryCount,
                                String executorShardingParam,
@@ -129,10 +129,10 @@ public class JobTrigger {
         triggerModel.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
         triggerModel.setExecutorTimeout(jobInfo.getExecutorTimeout());
         triggerModel.setLogId(jobLog.getId());
-        triggerModel.setLogDateTime(jobLog.getTriggerTime().getTime());
+        triggerModel.setLogDateTime(jobLog.getTriggerTime());
         triggerModel.setGlueType(jobInfo.getGlueType());
         triggerModel.setGlueSource(jobInfo.getGlueSource());
-        triggerModel.setGlueUpdateTime(jobInfo.getGlueUpdateTime().getTime());
+        triggerModel.setGlueUpdateTime(jobInfo.getGlueUpdateTime());
         triggerModel.setBroadcastIndex(index);
         triggerModel.setBroadcastTotal(total);
 

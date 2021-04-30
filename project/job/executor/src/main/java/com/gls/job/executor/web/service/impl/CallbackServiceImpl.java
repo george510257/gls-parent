@@ -14,7 +14,6 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,7 +71,7 @@ public class CallbackServiceImpl implements CallbackService {
 
     private void callbackLog(List<CallbackModel> callbackModelList, String logContent) {
         for (CallbackModel callbackModel : callbackModelList) {
-            String logFileName = JobFileHelper.makeLogFileName(new Date(callbackModel.getLogDateTime()), callbackModel.getLogId());
+            String logFileName = JobFileHelper.makeLogFileName(callbackModel.getLogDateTime(), callbackModel.getLogId());
             JobContextHolder.getInstance().set(new JobContextModel(-1, null, logFileName, -1, -1));
             JobHelper.log(logContent);
         }

@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class JobLogReport {
 
-    private int id;
+    private Long id;
 
     private Date triggerDay;
 

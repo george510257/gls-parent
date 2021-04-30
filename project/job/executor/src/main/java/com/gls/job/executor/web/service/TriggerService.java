@@ -13,7 +13,7 @@ public interface TriggerService {
      * @param jobId
      * @return
      */
-    boolean idleBeat(int jobId);
+    boolean idleBeat(Long jobId);
 
     /**
      * run
@@ -29,6 +29,6 @@ public interface TriggerService {
      * @param jobId
      * @return
      */
-    boolean kill(int jobId);
+    boolean kill(Long jobId);
 
 }

@@ -23,11 +23,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JobScheduleThread extends Thread {
 
-    private final Map<Integer, List<Integer>> ringData;
+    private final Map<Integer, List<Long>> ringData;
     @Setter
     private volatile boolean toStop = false;
 
-    public JobScheduleThread(Map<Integer, List<Integer>> ringData) {
+    public JobScheduleThread(Map<Integer, List<Long>> ringData) {
         this.ringData = ringData;
     }
 
@@ -211,9 +211,9 @@ public class JobScheduleThread extends Thread {
         log.info(">>>>>>>>>>> gls-job, JobScheduleHelper#scheduleThread stop");
     }
 
-    private void pushTimeRing(int ringSecond, int jobId) {
+    private void pushTimeRing(int ringSecond, Long jobId) {
         // push async ring
-        List<Integer> ringItemData = ringData.computeIfAbsent(ringSecond, k -> new ArrayList<>());
+        List<Long> ringItemData = ringData.computeIfAbsent(ringSecond, k -> new ArrayList<>());
         ringItemData.add(jobId);
 
         log.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
