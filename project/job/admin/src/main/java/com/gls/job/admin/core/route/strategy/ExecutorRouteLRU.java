@@ -15,9 +15,11 @@ import java.util.concurrent.ConcurrentMap;
  * a、LFU(Least Frequently Used)：最不经常使用，频率/次数
  * b(*)、LRU(Least Recently Used)：最近最久未使用，时间
  * <p>
- * Created by george on 17/3/10.
+ *
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteLRU extends ExecutorRouter {
+public class ExecutorRouteLRU implements ExecutorRouter {
 
     private static final ConcurrentMap<Long, LinkedHashMap<String, String>> JOB_LRU_MAP = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;

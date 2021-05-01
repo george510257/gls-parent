@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author george
  * @date 17/3/10
  */
-public class ExecutorRouteRound extends ExecutorRouter {
+public class ExecutorRouteRound implements ExecutorRouter {
 
     private static final ConcurrentMap<Long, AtomicInteger> ROUTE_COUNT_EACH_JOB = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
@@ -41,7 +41,7 @@ public class ExecutorRouteRound extends ExecutorRouter {
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
         String address = addressList.get(count(triggerModel.getJobId()) % addressList.size());
-        return new Result<String>(address);
+        return new Result<>(address);
     }
 
 }

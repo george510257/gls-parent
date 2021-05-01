@@ -19,7 +19,7 @@ import java.util.TreeMap;
  * @author george
  * @date 17/3/10
  */
-public class ExecutorRouteConsistentHash extends ExecutorRouter {
+public class ExecutorRouteConsistentHash implements ExecutorRouter {
 
     private static final int VIRTUAL_NODE_NUM = 100;
 

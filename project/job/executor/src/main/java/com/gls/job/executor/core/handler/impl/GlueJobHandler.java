@@ -2,6 +2,7 @@ package com.gls.job.executor.core.handler.impl;
 
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.helper.JobHelper;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  *
  * @author george
  */
+@EqualsAndHashCode
 public class GlueJobHandler implements JobHandler {
 
     private final JobHandler jobHandler;
@@ -18,10 +20,6 @@ public class GlueJobHandler implements JobHandler {
     public GlueJobHandler(JobHandler jobHandler, Date glueUpdateTime) {
         this.jobHandler = jobHandler;
         this.glueUpdateTime = glueUpdateTime;
-    }
-
-    public Date getGlueUpdateTime() {
-        return glueUpdateTime;
     }
 
     @Override

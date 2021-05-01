@@ -13,9 +13,11 @@ import java.util.concurrent.ConcurrentMap;
  * a(*)、LFU(Least Frequently Used)：最不经常使用，频率/次数
  * b、LRU(Least Recently Used)：最近最久未使用，时间
  * <p>
- * Created by george on 17/3/10.
+ *
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteLFU extends ExecutorRouter {
+public class ExecutorRouteLFU implements ExecutorRouter {
 
     private static final ConcurrentMap<Long, HashMap<String, Integer>> JOB_LFU_MAP = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
@@ -29,16 +31,19 @@ public class ExecutorRouteLFU extends ExecutorRouter {
         }
 
         // lfu item init
-        HashMap<String, Integer> lfuItemMap = JOB_LFU_MAP.get(jobId);     // Key排序可以用TreeMap+构造入参Compare；Value排序暂时只能通过ArrayList；
+        HashMap<String, Integer> lfuItemMap = JOB_LFU_MAP.get(jobId);
+        // Key排序可以用TreeMap+构造入参Compare；Value排序暂时只能通过ArrayList；
         if (lfuItemMap == null) {
             lfuItemMap = new HashMap<>();
-            JOB_LFU_MAP.putIfAbsent(jobId, lfuItemMap);   // 避免重复覆盖
+            JOB_LFU_MAP.putIfAbsent(jobId, lfuItemMap);
+            // 避免重复覆盖
         }
 
         // put new
         for (String address : addressList) {
             if (!lfuItemMap.containsKey(address) || lfuItemMap.get(address) > 1000000) {
-                lfuItemMap.put(address, new Random().nextInt(addressList.size()));  // 初始化时主动Random一次，缓解首次压力
+                lfuItemMap.put(address, new Random().nextInt(addressList.size()));
+                // 初始化时主动Random一次，缓解首次压力
             }
         }
         // remove old
@@ -59,7 +64,6 @@ public class ExecutorRouteLFU extends ExecutorRouter {
         lfuItemList.sort(Map.Entry.comparingByValue());
 
         Map.Entry<String, Integer> addressItem = lfuItemList.get(0);
-        String minAddress = addressItem.getKey();
         addressItem.setValue(addressItem.getValue() + 1);
 
         return addressItem.getKey();

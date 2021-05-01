@@ -6,6 +6,7 @@ import com.gls.job.executor.core.helper.JobFileHelper;
 import com.gls.job.executor.core.helper.JobHelper;
 import com.gls.job.executor.core.helper.ScriptHelper;
 import com.gls.job.executor.core.holder.JobContextHolder;
+import lombok.EqualsAndHashCode;
 
 import java.io.File;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
 /**
  * @author george
  */
+@EqualsAndHashCode
 public class ScriptJobHandler implements JobHandler {
 
     private final Long jobId;
@@ -39,10 +41,6 @@ public class ScriptJobHandler implements JobHandler {
             }
         }
 
-    }
-
-    public Date getGlueUpdateTime() {
-        return glueUpdateTime;
     }
 
     @Override

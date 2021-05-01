@@ -3,8 +3,8 @@ package com.gls.job.admin.web.controller.interceptor;
 import com.gls.job.admin.core.util.FtlUtil;
 import com.gls.job.admin.core.util.I18nUtil;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +17,15 @@ import java.util.HashMap;
  * @author george 2015-12-12 18:09:04
  */
 @Component
-public class CookieInterceptor extends HandlerInterceptorAdapter {
+public class CookieInterceptor implements AsyncHandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+                           ModelAndView modelAndView) {
 
         // cookie
         if (modelAndView != null && request.getCookies() != null && request.getCookies().length > 0) {
-            HashMap<String, Cookie> cookieMap = new HashMap<String, Cookie>();
+            HashMap<String, Cookie> cookieMap = new HashMap<>(request.getCookies().length);
             for (Cookie ck : request.getCookies()) {
                 cookieMap.put(ck.getName(), ck);
             }
@@ -36,8 +36,5 @@ public class CookieInterceptor extends HandlerInterceptorAdapter {
         if (modelAndView != null) {
             modelAndView.addObject("I18nUtil", FtlUtil.generateStaticModel(I18nUtil.class.getName()));
         }
-
-        super.postHandle(request, response, handler, modelAndView);
     }
-
 }

@@ -6,30 +6,35 @@ import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 /**
- * Created by george on 17/3/10.
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteFailover extends ExecutorRouter {
+@Slf4j
+public class ExecutorRouteFailover implements ExecutorRouter {
 
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
 
-        StringBuffer beatResultSB = new StringBuffer();
+        StringBuilder beatResultSB = new StringBuilder();
         for (String address : addressList) {
             // beat
-            Result<String> beatResult = null;
+            Result<String> beatResult;
             try {
                 ExecutorApi executorApi = JobScheduler.getExecutorApi(address);
                 beatResult = executorApi.beat();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                beatResult = new Result<String>(Result.FAIL_CODE, "" + e);
+                log.error(e.getMessage(), e);
+                beatResult = new Result<>(Result.FAIL_CODE, "" + e);
             }
-            beatResultSB.append((beatResultSB.length() > 0) ? "<br><br>" : "")
-                    .append(I18nUtil.getString("jobconf_beat") + "：")
+            beatResultSB
+                    .append((beatResultSB.length() > 0) ? "<br><br>" : "")
+                    .append(I18nUtil.getString("jobconf_beat"))
+                    .append("：")
                     .append("<br>address：").append(address)
                     .append("<br>code：").append(beatResult.getCode())
                     .append("<br>msg：").append(beatResult.getMsg());
@@ -42,7 +47,7 @@ public class ExecutorRouteFailover extends ExecutorRouter {
                 return beatResult;
             }
         }
-        return new Result<String>(Result.FAIL_CODE, beatResultSB.toString());
+        return new Result<>(Result.FAIL_CODE, beatResultSB.toString());
 
     }
 }

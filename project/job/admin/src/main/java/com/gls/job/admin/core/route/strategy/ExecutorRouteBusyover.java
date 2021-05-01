@@ -7,29 +7,31 @@ import com.gls.job.core.api.model.IdleBeatModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 /**
- * Created by george on 17/3/10.
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteBusyover extends ExecutorRouter {
+@Slf4j
+public class ExecutorRouteBusyover implements ExecutorRouter {
 
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        StringBuffer idleBeatResultSB = new StringBuffer();
+        StringBuilder idleBeatResultSB = new StringBuilder();
         for (String address : addressList) {
             // beat
-            Result<String> idleBeatResult = null;
+            Result<String> idleBeatResult;
             try {
                 ExecutorApi executorApi = JobScheduler.getExecutorApi(address);
                 idleBeatResult = executorApi.idleBeat(new IdleBeatModel(triggerModel.getJobId()));
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                idleBeatResult = new Result<String>(Result.FAIL_CODE, "" + e);
+                log.error(e.getMessage(), e);
+                idleBeatResult = new Result<>(Result.FAIL_CODE, "" + e);
             }
-            idleBeatResultSB.append((idleBeatResultSB.length() > 0) ? "<br><br>" : "")
-                    .append(I18nUtil.getString("jobconf_idleBeat") + "：")
+            idleBeatResultSB.append((idleBeatResultSB.length() > 0) ? "<br><br>" : "").append(I18nUtil.getString("jobconf_idleBeat")).append("：")
                     .append("<br>address：").append(address)
                     .append("<br>code：").append(idleBeatResult.getCode())
                     .append("<br>msg：").append(idleBeatResult.getMsg());
@@ -42,7 +44,7 @@ public class ExecutorRouteBusyover extends ExecutorRouter {
             }
         }
 
-        return new Result<String>(Result.FAIL_CODE, idleBeatResultSB.toString());
+        return new Result<>(Result.FAIL_CODE, idleBeatResultSB.toString());
     }
 
 }

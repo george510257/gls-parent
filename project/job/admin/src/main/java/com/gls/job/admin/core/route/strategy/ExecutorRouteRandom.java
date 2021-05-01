@@ -8,16 +8,17 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by george on 17/3/10.
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteRandom extends ExecutorRouter {
+public class ExecutorRouteRandom implements ExecutorRouter {
 
-    private static Random localRandom = new Random();
+    private static final Random LOCAL_RANDOM = new Random();
 
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        String address = addressList.get(localRandom.nextInt(addressList.size()));
-        return new Result<String>(address);
+        String address = addressList.get(LOCAL_RANDOM.nextInt(addressList.size()));
+        return new Result<>(address);
     }
 
 }

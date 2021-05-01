@@ -20,6 +20,7 @@ public interface TriggerService {
      *
      * @param triggerModel
      * @return
+     * @throws Exception
      */
     boolean run(TriggerModel triggerModel) throws Exception;
 

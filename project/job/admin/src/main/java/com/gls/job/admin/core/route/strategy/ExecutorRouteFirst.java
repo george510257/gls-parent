@@ -7,13 +7,14 @@ import com.gls.job.core.api.model.TriggerModel;
 import java.util.List;
 
 /**
- * Created by george on 17/3/10.
+ * @author george
+ * @date 17/3/10
  */
-public class ExecutorRouteFirst extends ExecutorRouter {
+public class ExecutorRouteFirst implements ExecutorRouter {
 
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        return new Result<String>(addressList.get(0));
+        return new Result<>(addressList.get(0));
     }
 
 }

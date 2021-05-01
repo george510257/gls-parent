@@ -39,96 +39,36 @@ public class TriggerServiceImpl implements TriggerService {
     public boolean run(TriggerModel triggerModel) throws Exception {
         // load old：jobHandler + jobThread
         JobThread jobThread = jobThreadRepository.load(triggerModel.getJobId());
-        JobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
+        JobHandler jobHandler = loadJobHandler(triggerModel);
         String removeOldReason = null;
 
-        // valid：jobHandler + jobThread
-        GlueType glueTypeEnum = triggerModel.getGlueType();
-        if (GlueType.BEAN == glueTypeEnum) {
-
-            // new jobHandler
-            JobHandler newJobHandler = jobHandlerRepository.loadJobHandler(triggerModel.getExecutorHandler());
-
-            // valid old jobThread
-            if (jobThread != null && jobHandler != newJobHandler) {
-                // change handler, need kill old thread
+        if (jobThread != null) {
+            if (!jobHandler.equals(jobThread.getHandler())) {
+                jobThread = null;
                 removeOldReason = "change jobHandler or glue type, and terminate the old job thread.";
-
-                jobThread = null;
-                jobHandler = null;
             }
-
-            // valid handler
-            if (jobHandler == null) {
-                jobHandler = newJobHandler;
-                if (jobHandler == null) {
-                    throw new Exception("job handler [" + triggerModel.getExecutorHandler() + "] not found.");
-                }
-            }
-
-        } else if (GlueType.GLUE_GROOVY == glueTypeEnum) {
-
-            // valid old jobThread
-            if (jobThread != null
-                    && !(jobThread.getHandler() instanceof GlueJobHandler
-                    && ((GlueJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
-                // change handler or glueSource updated, need kill old thread
-                removeOldReason = "change job source or glue type, and terminate the old job thread.";
-
-                jobThread = null;
-                jobHandler = null;
-            }
-
-            // valid handler
-            if (jobHandler == null) {
-                JobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
-                jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdateTime());
-            }
-        } else if (glueTypeEnum != null && glueTypeEnum.isScript()) {
-
-            // valid old jobThread
-
-            if (jobThread != null
-                    && !(jobThread.getHandler() instanceof ScriptJobHandler
-                    && ((ScriptJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
-                // change script or glueSource updated, need kill old thread
-                removeOldReason = "change job source or glue type, and terminate the old job thread.";
-
-                jobThread = null;
-                jobHandler = null;
-            }
-
-            // valid handler
-            if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), triggerModel.getGlueType());
-            }
-        } else {
-            throw new Exception("glueType[" + triggerModel.getGlueType() + "] is not valid.");
         }
 
         // executor block strategy
         if (jobThread != null) {
             ExecutorBlockStrategy blockStrategy = triggerModel.getExecutorBlockStrategy();
-            if (ExecutorBlockStrategy.DISCARD_LATER == blockStrategy) {
+            if (ExecutorBlockStrategy.DISCARD_LATER.equals(blockStrategy)) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
                     throw new Exception("block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
                 }
-            } else if (ExecutorBlockStrategy.COVER_EARLY == blockStrategy) {
+            } else if (ExecutorBlockStrategy.COVER_EARLY.equals(blockStrategy)) {
                 // kill running jobThread
                 if (jobThread.isRunningOrHasQueue()) {
-                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategy.COVER_EARLY.getTitle();
-
                     jobThread = null;
+                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategy.COVER_EARLY.getTitle();
                 }
             }  // just queue trigger
-
         }
 
         // replace thread (new or exists invalid)
         if (jobThread == null) {
-            jobThread = new JobThread(triggerModel.getJobId(), jobHandler);
-            jobThreadRepository.regist(triggerModel.getJobId(), jobThread, removeOldReason);
+            jobThread = loadJobThread(triggerModel.getJobId(), jobHandler, removeOldReason);
         }
 
         // push data to queue
@@ -139,5 +79,34 @@ public class TriggerServiceImpl implements TriggerService {
     public boolean kill(Long jobId) {
         JobThread jobThread = jobThreadRepository.remove(jobId, "scheduling center kill job.");
         return jobThread != null;
+    }
+
+    private JobThread loadJobThread(Long jobId, JobHandler jobHandler, String removeOldReason) {
+        JobThread jobThread = new JobThread(jobId, jobHandler);
+        jobThreadRepository.regist(jobId, jobThread, removeOldReason);
+        return jobThread;
+    }
+
+    private JobHandler loadJobHandler(TriggerModel triggerModel) throws Exception {
+        GlueType glueType = triggerModel.getGlueType();
+        if (glueType == null) {
+            throw new Exception("glueType[" + triggerModel.getGlueType() + "] is not valid.");
+        }
+        switch (glueType) {
+            case BEAN: {
+                JobHandler jobHandler = jobHandlerRepository.loadJobHandler(triggerModel.getExecutorHandler());
+                if (jobHandler == null) {
+                    throw new Exception("job handler [" + triggerModel.getExecutorHandler() + "] not found.");
+                }
+                return jobHandler;
+            }
+            case GLUE_GROOVY: {
+                JobHandler jobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
+                return new GlueJobHandler(jobHandler, triggerModel.getGlueUpdateTime());
+            }
+            default: {
+                return new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), triggerModel.getGlueType());
+            }
+        }
     }
 }

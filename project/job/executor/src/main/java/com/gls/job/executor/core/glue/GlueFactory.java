@@ -20,7 +20,7 @@ public class GlueFactory {
     /**
      * groovy class loader
      */
-    private GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
+    private final GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
     private ConcurrentMap<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
 
     public static GlueFactory getInstance() {
@@ -52,7 +52,7 @@ public class GlueFactory {
                     return (JobHandler) instance;
                 } else {
                     throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, "
-                            + "cannot convert from instance[" + instance.getClass() + "] to IJobHandler");
+                            + "cannot convert from instance[" + instance.getClass() + "] to JobHandler");
                 }
             }
         }

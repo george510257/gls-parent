@@ -141,7 +141,7 @@ public class UserController {
 
         // avoid opt login seft
         JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getId() == id) {
+        if (loginUser.getId().equals(id)) {
             return new Result<String>(Result.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
         }
 
