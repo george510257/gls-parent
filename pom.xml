@@ -31,7 +31,7 @@
         <spring-geode.version>1.4.3</spring-geode.version>
         <spring-native.version>0.9.1</spring-native.version>
         <testcontainers.version>1.15.2</testcontainers.version>
-        <vaadin.version>14.5.1</vaadin.version>
+        <vaadin.version>14.5.3</vaadin.version>
         <wavefront.version>2.1.0</wavefront.version>
 
         <aliyun-spring-boot.version>1.0.0</aliyun-spring-boot.version>
