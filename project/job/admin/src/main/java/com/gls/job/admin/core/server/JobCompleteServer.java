@@ -53,18 +53,9 @@ public class JobCompleteServer {
     }
 
     public void toStop() {
-        monitorThread.setToStop(true);
-
+        monitorThread.toStop("");
         // stop registryOrRemoveThreadPool
         callbackThreadPool.shutdownNow();
-
-        // stop monitorThread (interrupt and wait)
-        monitorThread.interrupt();
-        try {
-            monitorThread.join();
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     // ---------------------- helper ----------------------

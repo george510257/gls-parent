@@ -2,6 +2,7 @@ package com.gls.job.core.base.holder;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * @author george
@@ -26,5 +27,9 @@ public abstract class BaseHolder<K, V> {
     }
 
     protected void delete(V oldValue, String reason) {
+    }
+
+    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+        return map.computeIfAbsent(key, mappingFunction);
     }
 }

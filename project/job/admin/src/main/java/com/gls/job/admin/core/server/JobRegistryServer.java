@@ -51,18 +51,10 @@ public class JobRegistryServer {
     }
 
     public void toStop() {
-        registryMonitorThread.setToStop(true);
+        registryMonitorThread.toStop("");
 
         // stop registryOrRemoveThreadPool
         registryOrRemoveThreadPool.shutdownNow();
-
-        // stop monitir (interrupt and wait)
-        registryMonitorThread.interrupt();
-        try {
-            registryMonitorThread.join();
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     // ---------------------- helper ----------------------

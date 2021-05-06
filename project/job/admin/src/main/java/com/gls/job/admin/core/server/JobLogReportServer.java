@@ -26,14 +26,7 @@ public class JobLogReportServer {
     }
 
     public void toStop() {
-        jobLogReportThread.setToStop(true);
-        // interrupt and wait
-        jobLogReportThread.interrupt();
-        try {
-            jobLogReportThread.join();
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+        jobLogReportThread.toStop("");
     }
 
 }

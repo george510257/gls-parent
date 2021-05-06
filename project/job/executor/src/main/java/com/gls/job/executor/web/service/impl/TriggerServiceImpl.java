@@ -24,21 +24,18 @@ import javax.annotation.Resource;
 public class TriggerServiceImpl implements TriggerService {
 
     @Resource
-    private JobThreadHolder jobThreadRepository;
-
-    @Resource
     private JobHandlerRepository jobHandlerRepository;
 
     @Override
     public boolean idleBeat(Long jobId) {
-        JobThread jobThread = jobThreadRepository.load(jobId);
+        JobThread jobThread = JobThreadHolder.getInstance().load(jobId);
         return jobThread != null && jobThread.isRunningOrHasQueue();
     }
 
     @Override
     public boolean run(TriggerModel triggerModel) throws Exception {
         // load old：jobHandler + jobThread
-        JobThread jobThread = jobThreadRepository.load(triggerModel.getJobId());
+        JobThread jobThread = JobThreadHolder.getInstance().load(triggerModel.getJobId());
         JobHandler jobHandler = loadJobHandler(triggerModel);
         String removeOldReason = null;
 
@@ -77,13 +74,14 @@ public class TriggerServiceImpl implements TriggerService {
 
     @Override
     public boolean kill(Long jobId) {
-        JobThread jobThread = jobThreadRepository.remove(jobId, "scheduling center kill job.");
+        JobThread jobThread = JobThreadHolder.getInstance().remove(jobId, "scheduling center kill job.");
         return jobThread != null;
     }
 
     private JobThread loadJobThread(Long jobId, JobHandler jobHandler, String removeOldReason) {
         JobThread jobThread = new JobThread(jobId, jobHandler);
-        jobThreadRepository.regist(jobId, jobThread, removeOldReason);
+        jobThread.start();
+        JobThreadHolder.getInstance().regist(jobId, jobThread, removeOldReason);
         return jobThread;
     }
 

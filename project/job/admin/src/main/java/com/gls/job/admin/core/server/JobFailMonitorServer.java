@@ -28,14 +28,7 @@ public class JobFailMonitorServer {
     }
 
     public void toStop() {
-        monitorThread.setToStop(true);
-        // interrupt and wait
-        monitorThread.interrupt();
-        try {
-            monitorThread.join();
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+        monitorThread.toStop("");
     }
 
 }

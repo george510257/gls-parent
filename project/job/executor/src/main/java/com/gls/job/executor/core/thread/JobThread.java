@@ -28,7 +28,7 @@ public class JobThread extends BaseThread {
 
     private final Long jobId;
     private final JobHandler handler;
-    private final TriggerQueueHolder triggerQueueHolder = new TriggerQueueHolder();
+    private final TriggerQueueHolder triggerQueueHolder;
 
     // if running job
 
@@ -41,6 +41,7 @@ public class JobThread extends BaseThread {
     public JobThread(Long jobId, JobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
+        this.triggerQueueHolder = new TriggerQueueHolder();
     }
 
     public JobHandler getHandler() {
@@ -171,7 +172,7 @@ public class JobThread extends BaseThread {
             if (triggerModel != null) {
                 // callback handler info
                 if (!this.isStop()) {
-                    // commonm
+                    // common
                     CallbackQueueHolder.getInstance().push(new CallbackModel(
                             triggerModel.getLogId(),
                             triggerModel.getLogDateTime(),

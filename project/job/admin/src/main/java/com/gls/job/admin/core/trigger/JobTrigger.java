@@ -21,7 +21,9 @@ import java.util.Date;
 
 /**
  * gls-job trigger
- * Created by george on 17/7/13.
+ *
+ * @author george
+ * @date 17/7/13
  */
 public class JobTrigger {
     private static Logger logger = LoggerFactory.getLogger(JobTrigger.class);

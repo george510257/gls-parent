@@ -13,5 +13,11 @@ public interface LogFileService {
      */
     void cleanLogFile();
 
+    /**
+     * read Log File
+     *
+     * @param logModel
+     * @return
+     */
     LogResultModel readLogFile(LogModel logModel);
 }
