@@ -25,7 +25,7 @@ public class QuartzServiceImpl implements QuartzService {
     }
 
     @Override
-    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime, int jobTimes, Map jobData) throws SchedulerException {
+    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime, int jobTimes, Map<String, Object> jobData) throws SchedulerException {
 
         // 任务名称和组构成任务key
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName).build();
@@ -34,7 +34,7 @@ public class QuartzServiceImpl implements QuartzService {
             jobDetail.getJobDataMap().putAll(jobData);
         }
         // 使用simpleTrigger规则
-        Trigger trigger = null;
+        Trigger trigger;
         if (jobTimes < 0) {
             trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
                     .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime))
@@ -50,7 +50,7 @@ public class QuartzServiceImpl implements QuartzService {
     }
 
     @Override
-    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Map jobData) throws SchedulerException {
+    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Map<String, Object> jobData) throws SchedulerException {
         // 创建jobDetail实例，绑定Job实现类
         // 指明job的名称，所在组的名称，以及绑定job类
         // 任务名称和组构成任务key

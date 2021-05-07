@@ -1,6 +1,5 @@
 package com.gls.job.admin.core.util;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -19,11 +18,11 @@ import java.io.IOException;
  * @author george 2015-9-25 18:02:56
  */
 public class JacksonUtil {
-    private final static ObjectMapper objectMapper = new ObjectMapper();
+    private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static Logger logger = LoggerFactory.getLogger(JacksonUtil.class);
 
     public static ObjectMapper getInstance() {
-        return objectMapper;
+        return OBJECT_MAPPER;
     }
 
     /**
@@ -36,10 +35,6 @@ public class JacksonUtil {
     public static String writeValueAsString(Object obj) {
         try {
             return getInstance().writeValueAsString(obj);
-        } catch (JsonGenerationException e) {
-            logger.error(e.getMessage(), e);
-        } catch (JsonMappingException e) {
-            logger.error(e.getMessage(), e);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }

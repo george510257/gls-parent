@@ -19,7 +19,7 @@ public class JobInitRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>(1);
         map.put("name", 1);
         quartzService.deleteJob("job", "test");
         quartzService.addJob(BaseJob.class, "job", "test", "0 * * * * ?", map);

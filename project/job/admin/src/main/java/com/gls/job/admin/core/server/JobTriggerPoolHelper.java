@@ -18,7 +18,7 @@ public class JobTriggerPoolHelper {
     private static final Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
 
     // ---------------------- trigger pool ----------------------
-    private static final JobTriggerPoolHelper helper = new JobTriggerPoolHelper();
+    private static final JobTriggerPoolHelper HELPER = new JobTriggerPoolHelper();
     private final ConcurrentMap<Long, AtomicInteger> jobTimeoutCountMap = new ConcurrentHashMap<>();
     // fast/slow thread pool
     private ThreadPoolExecutor fastTriggerPool = null;
@@ -27,11 +27,11 @@ public class JobTriggerPoolHelper {
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
 
     public static void toStart() {
-        helper.start();
+        HELPER.start();
     }
 
     public static void toStop() {
-        helper.stop();
+        HELPER.stop();
     }
 
     // ---------------------- helper ----------------------
@@ -46,7 +46,7 @@ public class JobTriggerPoolHelper {
      *                              not null: cover job param
      */
     public static void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
-        helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+        HELPER.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
     }
 
     public void start() {
