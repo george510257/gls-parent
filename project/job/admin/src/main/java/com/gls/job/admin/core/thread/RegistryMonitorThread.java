@@ -1,6 +1,7 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.web.dao.JobGroupDao;
+import com.gls.job.admin.web.dao.JobRegistryDao;
 import com.gls.job.admin.web.entity.JobGroup;
 import com.gls.job.admin.web.entity.JobRegistry;
 import com.gls.job.core.api.model.enums.RegistryType;
@@ -8,6 +9,7 @@ import com.gls.job.core.base.thread.BaseThread;
 import com.gls.job.core.constants.JobConstants;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -17,6 +19,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RegistryMonitorThread extends BaseThread {
 
+    @Resource
+    private JobGroupDao jobGroupDao;
+
+    @Resource
+    private JobRegistryDao jobRegistryDao;
+
     @Override
     protected void initExecute() throws Exception {
 
@@ -25,18 +33,18 @@ public class RegistryMonitorThread extends BaseThread {
     @Override
     protected void doExecute() throws Exception {
         // auto registry group
-        List<JobGroup> groupList = JobAdminConfig.getAdminConfig().getJobGroupDao().findByAddressType(0);
+        List<JobGroup> groupList = jobGroupDao.findByAddressType(0);
         if (groupList != null && !groupList.isEmpty()) {
 
             // remove dead address (admin/executor)
-            List<Integer> ids = JobAdminConfig.getAdminConfig().getJobRegistryDao().findDead(JobConstants.DEAD_TIMEOUT, new Date());
+            List<Integer> ids = jobRegistryDao.findDead(JobConstants.DEAD_TIMEOUT, new Date());
             if (ids != null && ids.size() > 0) {
-                JobAdminConfig.getAdminConfig().getJobRegistryDao().removeDead(ids);
+                jobRegistryDao.removeDead(ids);
             }
 
             // fresh online address (admin/executor)
-            HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-            List<JobRegistry> list = JobAdminConfig.getAdminConfig().getJobRegistryDao().findAll(JobConstants.DEAD_TIMEOUT, new Date());
+            HashMap<String, List<String>> appAddressMap = new HashMap<>();
+            List<JobRegistry> list = jobRegistryDao.findAll(JobConstants.DEAD_TIMEOUT, new Date());
             if (list != null) {
                 for (JobRegistry item : list) {
                     if (RegistryType.EXECUTOR == item.getRegistryType()) {
@@ -70,7 +78,7 @@ public class RegistryMonitorThread extends BaseThread {
                 group.setAddressList(addressListStr);
                 group.setUpdateTime(new Date());
 
-                JobAdminConfig.getAdminConfig().getJobGroupDao().update(group);
+                jobGroupDao.update(group);
             }
         }
     }

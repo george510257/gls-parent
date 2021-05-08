@@ -1,10 +1,13 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.dao.JobLogReportDao;
 import com.gls.job.admin.web.entity.JobLogReport;
 import com.gls.job.core.base.thread.BaseThread;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,15 @@ import java.util.concurrent.TimeUnit;
 public class JobLogReportThread extends BaseThread {
 
     private long lastCleanLogTime;
+
+    @Resource
+    private JobLogReportDao jobLogReportDao;
+
+    @Resource
+    private JobLogDao jobLogDao;
+
+    @Value("${gls.job.logretentiondays}")
+    private int logretentiondays;
 
     @Override
     protected void initExecute() throws Exception {
@@ -53,7 +65,7 @@ public class JobLogReportThread extends BaseThread {
             jobLogReport.setSucCount(0);
             jobLogReport.setFailCount(0);
 
-            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogDao().findLogReport(todayFrom, todayTo);
+            Map<String, Object> triggerCountMap = jobLogDao.findLogReport(todayFrom, todayTo);
             if (triggerCountMap != null && triggerCountMap.size() > 0) {
                 int triggerDayCount = triggerCountMap.containsKey("triggerDayCount") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCount"))) : 0;
                 int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))) : 0;
@@ -66,18 +78,18 @@ public class JobLogReportThread extends BaseThread {
             }
 
             // do refresh
-            int ret = JobAdminConfig.getAdminConfig().getJobLogReportDao().update(jobLogReport);
+            int ret = jobLogReportDao.update(jobLogReport);
             if (ret < 1) {
-                JobAdminConfig.getAdminConfig().getJobLogReportDao().save(jobLogReport);
+                jobLogReportDao.save(jobLogReport);
             }
         }
         // 2、log-clean: switch open & once each day
-        if (JobAdminConfig.getAdminConfig().getLogretentiondays() > 0
+        if (logretentiondays > 0
                 && System.currentTimeMillis() - lastCleanLogTime > 24 * 60 * 60 * 1000) {
 
             // expire-time
             Calendar expiredDay = Calendar.getInstance();
-            expiredDay.add(Calendar.DAY_OF_MONTH, -1 * JobAdminConfig.getAdminConfig().getLogretentiondays());
+            expiredDay.add(Calendar.DAY_OF_MONTH, -1 * logretentiondays);
             expiredDay.set(Calendar.HOUR_OF_DAY, 0);
             expiredDay.set(Calendar.MINUTE, 0);
             expiredDay.set(Calendar.SECOND, 0);
@@ -87,9 +99,9 @@ public class JobLogReportThread extends BaseThread {
             // clean expired log
             List<Long> logIds = null;
             do {
-                logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0L, 0L, clearBeforeTime, 0, 1000);
+                logIds = jobLogDao.findClearLogIds(0L, 0L, clearBeforeTime, 0, 1000);
                 if (logIds != null && logIds.size() > 0) {
-                    JobAdminConfig.getAdminConfig().getJobLogDao().clearLog(logIds);
+                    jobLogDao.clearLog(logIds);
                 }
             } while (logIds != null && logIds.size() > 0);
 

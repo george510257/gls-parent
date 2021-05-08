@@ -1,11 +1,12 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.core.trigger.JobTrigger;
 import com.gls.job.admin.web.entity.enums.TriggerType;
+import com.gls.job.admin.web.service.JobTriggerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.Resource;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,10 +17,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class JobTriggerPoolHelper {
     private static final Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
-
     // ---------------------- trigger pool ----------------------
     private static final JobTriggerPoolHelper HELPER = new JobTriggerPoolHelper();
     private final ConcurrentMap<Long, AtomicInteger> jobTimeoutCountMap = new ConcurrentHashMap<>();
+    @Value("${gls.job.triggerpool.fast.max}")
+    private int triggerPoolFastMax;
+    @Value("${gls.job.triggerpool.slow.max}")
+    private int triggerPoolSlowMax;
+    @Resource
+    private JobTriggerService jobTriggerService;
     // fast/slow thread pool
     private ThreadPoolExecutor fastTriggerPool = null;
     private ThreadPoolExecutor slowTriggerPool = null;
@@ -52,7 +58,7 @@ public class JobTriggerPoolHelper {
     public void start() {
         fastTriggerPool = new ThreadPoolExecutor(
                 10,
-                JobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
+                triggerPoolFastMax,
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(1000),
@@ -60,7 +66,7 @@ public class JobTriggerPoolHelper {
 
         slowTriggerPool = new ThreadPoolExecutor(
                 10,
-                JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
+                triggerPoolSlowMax,
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(2000),
@@ -98,7 +104,7 @@ public class JobTriggerPoolHelper {
 
             try {
                 // do trigger
-                JobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                jobTriggerService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             } finally {

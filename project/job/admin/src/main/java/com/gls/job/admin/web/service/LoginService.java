@@ -6,7 +6,7 @@ import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.entity.JobUser;
 import com.gls.job.core.api.model.Result;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import java.math.BigInteger;
 /**
  * @author george 2019-05-04 22:13:264
  */
-@Configuration
+@Service
 public class LoginService {
 
     public static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
@@ -27,8 +27,7 @@ public class LoginService {
 
     private String makeToken(JobUser jobUser) {
         String tokenJson = JacksonUtil.writeValueAsString(jobUser);
-        String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
-        return tokenHex;
+        return new BigInteger(tokenJson.getBytes()).toString(16);
     }
 
     private JobUser parseToken(String tokenHex) {
@@ -50,11 +49,11 @@ public class LoginService {
         // valid passowrd
         JobUser jobUser = jobUserDao.loadByUserName(username);
         if (jobUser == null) {
-            return new Result<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!passwordMd5.equals(jobUser.getPassword())) {
-            return new Result<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
 
         String loginToken = makeToken(jobUser);

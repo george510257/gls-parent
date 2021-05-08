@@ -7,7 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * Created by george on 16/9/30.
+ * @author george
+ * @date 16/9/30
  */
 @Mapper
 public interface JobGroupDao {

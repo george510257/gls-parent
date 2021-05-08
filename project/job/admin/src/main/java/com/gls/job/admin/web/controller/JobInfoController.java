@@ -89,7 +89,7 @@ public class JobInfoController {
         // filter group
         List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new JobException(I18nUtil.getString("jobgroup_empty"));
+            throw new JobException(I18nUtil.getString("job_group_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -171,7 +171,7 @@ public class JobInfoController {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new Result<List<String>>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")) + e.getMessage());
+            return new Result<List<String>>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")) + e.getMessage());
         }
         return new Result<List<String>>(result);
 

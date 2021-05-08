@@ -1,12 +1,12 @@
-package com.gls.job.admin.core.scheduler;
+package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.server.*;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.client.ExecutorApiClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,13 +14,18 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * @author george 2018-10-28 00:18:17
  */
+@Slf4j
+@Service
+public class JobSchedulerService {
 
-public class JobScheduler {
-    private static final Logger logger = LoggerFactory.getLogger(JobScheduler.class);
     // ---------------------- executor-client ----------------------
-    private static ConcurrentMap<String, ExecutorApi> executorApiRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
-    public static ExecutorApi getExecutorApi(String address) throws Exception {
+    private ConcurrentMap<String, ExecutorApi> executorApiRepository = new ConcurrentHashMap<>();
+
+    @Value("${gls.job.accessToken}")
+    private String accessToken;
+
+    public ExecutorApi getExecutorApi(String address) throws Exception {
         // valid
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -34,7 +39,7 @@ public class JobScheduler {
         }
 
         // set-cache
-        executorApi = new ExecutorApiClient(address, JobAdminConfig.getAdminConfig().getAccessToken());
+        executorApi = new ExecutorApiClient(address, accessToken);
 
         executorApiRepository.put(address, executorApi);
         return executorApi;
@@ -64,7 +69,7 @@ public class JobScheduler {
         // start-schedule  ( depend on JobTriggerPoolHelper )
         JobScheduleServer.getInstance().start();
 
-        logger.info(">>>>>>>>> init gls-job admin success.");
+        log.info(">>>>>>>>> init gls-job admin success.");
     }
 
     public void destroy() throws Exception {
@@ -91,7 +96,7 @@ public class JobScheduler {
 
     private void initI18n() {
         for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
-//            item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
+//            item.setTitle(I18nUtil.getString("job_conf_block_".concat(item.name())));
         }
     }
 

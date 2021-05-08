@@ -26,7 +26,6 @@ public class QuartzServiceImpl implements QuartzService {
 
     @Override
     public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime, int jobTimes, Map<String, Object> jobData) throws SchedulerException {
-
         // 任务名称和组构成任务key
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName).build();
         // 设置job参数
@@ -34,40 +33,30 @@ public class QuartzServiceImpl implements QuartzService {
             jobDetail.getJobDataMap().putAll(jobData);
         }
         // 使用simpleTrigger规则
-        Trigger trigger;
-        if (jobTimes < 0) {
-            trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
-                    .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime))
-                    .startNow().build();
-        } else {
-            trigger = TriggerBuilder
-                    .newTrigger().withIdentity(jobName, jobGroupName).withSchedule(SimpleScheduleBuilder
-                            .repeatSecondlyForever(1).withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
-                    .startNow().build();
+        if (jobTimes <= SimpleTrigger.REPEAT_INDEFINITELY) {
+            jobTimes = SimpleTrigger.REPEAT_INDEFINITELY;
         }
+        Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+                .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever().withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
+                .startNow().build();
         scheduler.scheduleJob(jobDetail, trigger);
-
     }
 
     @Override
     public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Map<String, Object> jobData) throws SchedulerException {
-        // 创建jobDetail实例，绑定Job实现类
-        // 指明job的名称，所在组的名称，以及绑定job类
         // 任务名称和组构成任务key
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName).build();
         // 设置job参数
         if (jobData != null && jobData.size() > 0) {
             jobDetail.getJobDataMap().putAll(jobData);
         }
-        // 定义调度触发规则
         // 使用cornTrigger规则
-        // 触发器key
         Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+                .withSchedule(CronScheduleBuilder.cronSchedule(jobTime))
                 .startAt(DateBuilder.futureDate(1, DateBuilder.IntervalUnit.SECOND))
-                .withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).startNow().build();
+                .startNow().build();
         // 把作业和触发器注册到任务调度中
         scheduler.scheduleJob(jobDetail, trigger);
-
     }
 
     @Override

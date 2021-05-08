@@ -1,12 +1,13 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.thread.RegistryMonitorThread;
+import com.gls.job.admin.web.dao.JobRegistryDao;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -21,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class JobRegistryServer {
 
     private static final JobRegistryServer INSTANCE = new JobRegistryServer();
+    @Resource
+    private JobRegistryDao jobRegistryDao;
     private ThreadPoolExecutor registryOrRemoveThreadPool = null;
     private RegistryMonitorThread registryMonitorThread;
 
@@ -70,9 +73,9 @@ public class JobRegistryServer {
 
         // async execute
         registryOrRemoveThreadPool.execute(() -> {
-            int ret = JobAdminConfig.getAdminConfig().getJobRegistryDao().registryUpdate(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+            int ret = jobRegistryDao.registryUpdate(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
             if (ret < 1) {
-                JobAdminConfig.getAdminConfig().getJobRegistryDao().registrySave(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
+                jobRegistryDao.registrySave(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
 
                 // fresh
                 freshGroupRegistryInfo(registryModel);
@@ -93,7 +96,7 @@ public class JobRegistryServer {
 
         // async execute
         registryOrRemoveThreadPool.execute(() -> {
-            int ret = JobAdminConfig.getAdminConfig().getJobRegistryDao().registryDelete(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
+            int ret = jobRegistryDao.registryDelete(registryModel.getRegistryType(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
             if (ret > 0) {
                 // fresh
                 freshGroupRegistryInfo(registryModel);

@@ -1,13 +1,15 @@
 package com.gls.job.admin.core.server;
 
-import com.gls.job.admin.core.complete.JobCompleter;
-import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.thread.JobCompleteMonitorThread;
+import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.entity.JobLog;
+import com.gls.job.admin.web.service.JobCompleterService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,9 +22,14 @@ import java.util.concurrent.TimeUnit;
  * @author george 2015-9-1 18:05:56
  */
 @Slf4j
+@Component
 public class JobCompleteServer {
 
     private static final JobCompleteServer INSTANCE = new JobCompleteServer();
+    @Resource
+    private JobLogDao jobLogDao;
+    @Resource
+    private JobCompleterService jobCompleterService;
 
     private ThreadPoolExecutor callbackThreadPool = null;
 
@@ -75,7 +82,7 @@ public class JobCompleteServer {
 
     private Result<String> callback(CallbackModel callbackModel) {
         // valid log item
-        JobLog log = JobAdminConfig.getAdminConfig().getJobLogDao().load(callbackModel.getLogId());
+        JobLog log = jobLogDao.load(callbackModel.getLogId());
         if (log == null) {
             return new Result<>(Result.FAIL_CODE, "log item not found.");
         }
@@ -97,7 +104,7 @@ public class JobCompleteServer {
         log.setHandleTime(new Date());
         log.setHandleCode(callbackModel.getHandleCode());
         log.setHandleMsg(handleMsg.toString());
-        JobCompleter.updateHandleInfoAndFinish(log);
+        jobCompleterService.updateHandleInfoAndFinish(log);
 
         return Result.SUCCESS;
     }

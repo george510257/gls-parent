@@ -1,8 +1,6 @@
 package com.gls.job.admin.core.util;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
@@ -19,8 +17,8 @@ import java.util.Properties;
  *
  * @author george 2018-01-17 20:39:06
  */
+@Slf4j
 public class I18nUtil {
-    private static Logger logger = LoggerFactory.getLogger(I18nUtil.class);
 
     private static Properties prop = null;
 
@@ -30,15 +28,14 @@ public class I18nUtil {
         }
         try {
             // build i18n prop
-            String i18n = JobAdminConfig.getAdminConfig().getI18n();
-            String i18nFile = MessageFormat.format("i18n/message_{0}.properties", i18n);
+            String i18nFile = MessageFormat.format("i18n/message_{0}.properties", "");
 
             // load prop
             Resource resource = new ClassPathResource(i18nFile);
             EncodedResource encodedResource = new EncodedResource(resource, "UTF-8");
             prop = PropertiesLoaderUtils.loadProperties(encodedResource);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return prop;
     }
@@ -73,8 +70,7 @@ public class I18nUtil {
             }
         }
 
-        String json = JacksonUtil.writeValueAsString(map);
-        return json;
+        return JacksonUtil.writeValueAsString(map);
     }
 
 }

@@ -82,7 +82,7 @@ public class UserController {
         }
         jobUser.setUsername(jobUser.getUsername().trim());
         if (!(jobUser.getUsername().length() >= 4 && jobUser.getUsername().length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         // valid password
         if (!StringUtils.hasText(jobUser.getPassword())) {
@@ -90,7 +90,7 @@ public class UserController {
         }
         jobUser.setPassword(jobUser.getPassword().trim());
         if (!(jobUser.getPassword().length() >= 4 && jobUser.getPassword().length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         // md5 password
         jobUser.setPassword(DigestUtils.md5DigestAsHex(jobUser.getPassword().getBytes()));
@@ -121,7 +121,7 @@ public class UserController {
         if (StringUtils.hasText(jobUser.getPassword())) {
             jobUser.setPassword(jobUser.getPassword().trim());
             if (!(jobUser.getPassword().length() >= 4 && jobUser.getPassword().length() <= 20)) {
-                return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+                return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
             }
             // md5 password
             jobUser.setPassword(DigestUtils.md5DigestAsHex(jobUser.getPassword().getBytes()));
@@ -159,7 +159,7 @@ public class UserController {
         }
         password = password.trim();
         if (!(password.length() >= 4 && password.length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
 
         // md5 password

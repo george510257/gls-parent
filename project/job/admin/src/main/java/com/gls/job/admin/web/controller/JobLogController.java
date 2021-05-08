@@ -1,8 +1,6 @@
 package com.gls.job.admin.web.controller;
 
-import com.gls.job.admin.core.complete.JobCompleter;
 import com.gls.job.admin.core.exception.JobException;
-import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.dao.JobGroupDao;
 import com.gls.job.admin.web.dao.JobInfoDao;
@@ -10,6 +8,8 @@ import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.entity.JobGroup;
 import com.gls.job.admin.web.entity.JobInfo;
 import com.gls.job.admin.web.entity.JobLog;
+import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.KillModel;
 import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
@@ -47,6 +47,12 @@ public class JobLogController {
     @Resource
     private JobGroupDao jobGroupDao;
 
+    @Resource
+    private JobCompleterService jobCompleterService;
+
+    @Resource
+    private JobSchedulerService jobSchedulerService;
+
     @RequestMapping
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Long jobId) {
 
@@ -56,7 +62,7 @@ public class JobLogController {
         // filter group
         List<JobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new JobException(I18nUtil.getString("jobgroup_empty"));
+            throw new JobException(I18nUtil.getString("job_group_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -65,7 +71,7 @@ public class JobLogController {
         if (jobId > 0) {
             JobInfo jobInfo = jobInfoDao.loadById(jobId);
             if (jobInfo == null) {
-                throw new RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
+                throw new RuntimeException(I18nUtil.getString("job_info_field_id") + I18nUtil.getString("system_un_valid"));
             }
 
             model.addAttribute("jobInfo", jobInfo);
@@ -124,7 +130,7 @@ public class JobLogController {
         Result<String> logStatue = Result.SUCCESS;
         JobLog jobLog = jobLogDao.load(id);
         if (jobLog == null) {
-            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
+            throw new RuntimeException(I18nUtil.getString("job_log_logid_un_valid"));
         }
 
         model.addAttribute("triggerCode", jobLog.getTriggerCode());
@@ -139,7 +145,7 @@ public class JobLogController {
     @ResponseBody
     public Result<LogResultModel> logDetailCat(String executorAddress, Date triggerTime, Long logId, int fromLineNumber) {
         try {
-            ExecutorApi executorApi = JobScheduler.getExecutorApi(executorAddress);
+            ExecutorApi executorApi = jobSchedulerService.getExecutorApi(executorAddress);
             Result<LogResultModel> logResult = executorApi.log(new LogModel(logId, triggerTime, fromLineNumber));
 
             // is end
@@ -153,7 +159,7 @@ public class JobLogController {
             return logResult;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new Result<LogResultModel>(Result.FAIL_CODE, e.getMessage());
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
 
@@ -164,16 +170,16 @@ public class JobLogController {
         JobLog log = jobLogDao.load(id);
         JobInfo jobInfo = jobInfoDao.loadById(log.getJobId());
         if (jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
         if (Result.SUCCESS_CODE != log.getTriggerCode()) {
-            return new Result<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+            return new Result<String>(500, I18nUtil.getString("job_log_kill_log_limit"));
         }
 
         // request of kill
         Result<String> runResult = null;
         try {
-            ExecutorApi executorApi = JobScheduler.getExecutorApi(log.getExecutorAddress());
+            ExecutorApi executorApi = jobSchedulerService.getExecutorApi(log.getExecutorAddress());
             runResult = executorApi.kill(new KillModel(jobInfo.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -182,9 +188,9 @@ public class JobLogController {
 
         if (Result.SUCCESS_CODE == runResult.getCode()) {
             log.setHandleCode(Result.FAIL_CODE);
-            log.setHandleMsg(I18nUtil.getString("joblog_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
+            log.setHandleMsg(I18nUtil.getString("job_log_kill_log_by_man") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
-            JobCompleter.updateHandleInfoAndFinish(log);
+            jobCompleterService.updateHandleInfoAndFinish(log);
             return new Result<String>(runResult.getMsg());
         } else {
             return new Result<String>(500, runResult.getMsg());
@@ -216,7 +222,7 @@ public class JobLogController {
         } else if (type == 9) {
             clearBeforeNum = 0;            // 清理所有日志数据
         } else {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("job_log_clean_type_un_valid"));
         }
 
         List<Long> logIds = null;

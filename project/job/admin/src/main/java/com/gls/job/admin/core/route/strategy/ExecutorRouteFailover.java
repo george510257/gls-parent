@@ -1,13 +1,14 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,6 +18,9 @@ import java.util.List;
 @Slf4j
 public class ExecutorRouteFailover implements ExecutorRouter {
 
+    @Resource
+    private JobSchedulerService jobSchedulerService;
+
     @Override
     public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
 
@@ -25,7 +29,7 @@ public class ExecutorRouteFailover implements ExecutorRouter {
             // beat
             Result<String> beatResult;
             try {
-                ExecutorApi executorApi = JobScheduler.getExecutorApi(address);
+                ExecutorApi executorApi = jobSchedulerService.getExecutorApi(address);
                 beatResult = executorApi.beat();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -33,7 +37,7 @@ public class ExecutorRouteFailover implements ExecutorRouter {
             }
             beatResultSB
                     .append((beatResultSB.length() > 0) ? "<br><br>" : "")
-                    .append(I18nUtil.getString("jobconf_beat"))
+                    .append(I18nUtil.getString("job_conf_beat"))
                     .append("：")
                     .append("<br>address：").append(address)
                     .append("<br>code：").append(beatResult.getCode())

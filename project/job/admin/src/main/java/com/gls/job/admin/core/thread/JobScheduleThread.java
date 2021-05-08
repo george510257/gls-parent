@@ -1,17 +1,20 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.holder.RingDataHolder;
 import com.gls.job.admin.core.server.JobScheduleServer;
 import com.gls.job.admin.core.server.JobTriggerPoolHelper;
+import com.gls.job.admin.web.dao.JobInfoDao;
 import com.gls.job.admin.web.entity.JobInfo;
 import com.gls.job.admin.web.entity.enums.MisfireStrategy;
 import com.gls.job.admin.web.entity.enums.ScheduleType;
 import com.gls.job.admin.web.entity.enums.TriggerType;
 import com.gls.job.core.base.thread.BaseThread;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,6 +36,17 @@ public class JobScheduleThread extends BaseThread {
 
     private boolean preReadSuc = true;
 
+    @Value("${gls.job.triggerpool.fast.max}")
+    private int triggerPoolFastMax;
+    @Value("${gls.job.triggerpool.slow.max}")
+    private int triggerPoolSlowMax;
+
+    @Resource
+    private DataSource dataSource;
+
+    @Resource
+    private JobInfoDao jobInfoDao;
+
     public static Date generateNextValidTime(JobInfo jobInfo, Date fromTime) throws Exception {
         ScheduleType scheduleTypeEnum = jobInfo.getScheduleType();
         if (ScheduleType.CRON == scheduleTypeEnum) {
@@ -48,7 +62,7 @@ public class JobScheduleThread extends BaseThread {
         TimeUnit.MILLISECONDS.sleep(5000 - System.currentTimeMillis() % 1000);
         log.info(">>>>>>>>> init gls-job admin scheduler success.");
         // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
-        preReadCount = (JobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
+        preReadCount = (triggerPoolFastMax + triggerPoolSlowMax) * 20;
     }
 
     @Override
@@ -64,7 +78,7 @@ public class JobScheduleThread extends BaseThread {
         preReadSuc = true;
         try {
 
-            conn = JobAdminConfig.getAdminConfig().getDataSource().getConnection();
+            conn = dataSource.getConnection();
             connAutoCommit = conn.getAutoCommit();
             conn.setAutoCommit(false);
 
@@ -75,7 +89,7 @@ public class JobScheduleThread extends BaseThread {
 
             // 1、pre read
             long nowTime = System.currentTimeMillis();
-            List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleJobQuery(nowTime + JobScheduleServer.PRE_READ_MS, preReadCount);
+            List<JobInfo> scheduleList = jobInfoDao.scheduleJobQuery(nowTime + JobScheduleServer.PRE_READ_MS, preReadCount);
             if (scheduleList != null && scheduleList.size() > 0) {
                 // 2、push time-ring
                 for (JobInfo jobInfo : scheduleList) {
@@ -138,7 +152,7 @@ public class JobScheduleThread extends BaseThread {
 
                 // 3、update trigger info
                 for (JobInfo jobInfo : scheduleList) {
-                    JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleUpdate(jobInfo);
+                    jobInfoDao.scheduleUpdate(jobInfo);
                 }
 
             } else {
