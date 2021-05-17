@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import java.util.Map;
 
 /**
  * @author george
@@ -19,23 +21,21 @@ import javax.persistence.Entity;
 public class JobDetailEntity extends BaseEntity {
 
     @Comment("任务组")
-    private String group;
+    private String group = "DEFAULT";
 
     @Comment("描述")
     private String description;
 
     @Comment("任务类名")
-    private String className;
+    private String jobClassName;
+
+    @Comment("任务参数")
+    @ElementCollection
+    private Map<String, Object> jobDataMap;
 
     @Comment("是否应保持存储状态")
-    private Boolean durable;
-
-    @Comment("是否非并发")
-    private Boolean nonConcurrent;
-
-    @Comment("是否支持更新初始参数")
-    private Boolean updateData;
+    private Boolean durability = false;
 
     @Comment("是否支持重试")
-    private Boolean requestsRecovery;
+    private Boolean shouldRecover = false;
 }
