@@ -6,8 +6,8 @@ import com.gls.job.dashboard.web.entity.TriggerEntity;
 import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
-import org.quartz.TriggerKey;
-import org.quartz.spi.OperableTrigger;
+import org.quartz.ScheduleBuilder;
+import org.quartz.TriggerBuilder;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -50,26 +50,17 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
 
     @Override
     protected Trigger copyTargetToSource(Entity entity) {
-        Trigger trigger = loadTrigger(entity);
-        if (trigger instanceof OperableTrigger) {
-            OperableTrigger trigger1 = (OperableTrigger) trigger;
-
-            trigger1.setCalendarName(entity.getCalendarName());
-            trigger1.setDescription(entity.getDescription());
-            trigger1.setStartTime(entity.getStartTime());
-            trigger1.setEndTime(entity.getEndTime());
-            trigger1.setKey(TriggerKey.triggerKey(entity.getName(), entity.getGroup()));
-            if (entity.getJobDetail() != null) {
-                trigger1.setJobKey(JobKey.jobKey(entity.getName(), entity.getGroup()));
-                if (!entity.getJobDetail().getJobDataMap().isEmpty()) {
-                    trigger1.setJobDataMap(new JobDataMap(entity.getJobDetail().getJobDataMap()));
-                }
-            }
-            trigger1.setPriority(entity.getPriority());
-
-            return (Trigger) trigger1;
-        }
-        return trigger;
+        return TriggerBuilder.newTrigger()
+                .withIdentity(entity.getName(), entity.getGroup())
+                .withDescription(entity.getDescription())
+                .withPriority(entity.getPriority())
+                .withSchedule(loadScheduleBuilder(entity))
+                .modifiedByCalendar(entity.getCalendarName())
+                .startAt(entity.getStartTime())
+                .endAt(entity.getEndTime())
+                .forJob(entity.getJobDetail().getName(), entity.getJobDetail().getGroup())
+                .usingJobData(new JobDataMap(entity.getJobDetail().getJobDataMap()))
+                .build();
     }
 
     /**
@@ -78,5 +69,6 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
      * @param entity
      * @return
      */
-    protected abstract Trigger loadTrigger(Entity entity);
+    protected abstract ScheduleBuilder<Trigger> loadScheduleBuilder(Entity entity);
+
 }

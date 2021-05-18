@@ -2,8 +2,8 @@ package com.gls.job.dashboard.web.converter;
 
 import com.gls.job.dashboard.core.constants.QuartzConstants;
 import com.gls.job.dashboard.web.entity.CalendarIntervalTriggerEntity;
+import org.quartz.CalendarIntervalScheduleBuilder;
 import org.quartz.CalendarIntervalTrigger;
-import org.quartz.impl.triggers.CalendarIntervalTriggerImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.TimeZone;
@@ -27,14 +27,25 @@ public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarI
     }
 
     @Override
-    protected CalendarIntervalTrigger loadTrigger(CalendarIntervalTriggerEntity entity) {
-        CalendarIntervalTriggerImpl trigger = new CalendarIntervalTriggerImpl();
-        trigger.setRepeatInterval(entity.getInterval());
-        trigger.setRepeatIntervalUnit(entity.getIntervalUnit());
-        trigger.setMisfireInstruction(entity.getMisfireInstruction().getCode());
-        trigger.setTimeZone(TimeZone.getTimeZone(entity.getTimeZone()));
-        trigger.setPreserveHourOfDayAcrossDaylightSavings(entity.getPreserveHourOfDayAcrossDaylightSavings());
-        trigger.setSkipDayIfHourDoesNotExist(entity.getSkipDayIfHourDoesNotExist());
-        return trigger;
+    protected CalendarIntervalScheduleBuilder loadScheduleBuilder(CalendarIntervalTriggerEntity entity) {
+        CalendarIntervalScheduleBuilder scheduleBuilder = CalendarIntervalScheduleBuilder.calendarIntervalSchedule()
+                .withInterval(entity.getInterval(), entity.getIntervalUnit())
+                .inTimeZone(TimeZone.getTimeZone(entity.getTimeZone()))
+                .preserveHourOfDayAcrossDaylightSavings(entity.getPreserveHourOfDayAcrossDaylightSavings())
+                .skipDayIfHourDoesNotExist(entity.getSkipDayIfHourDoesNotExist());
+        switch (entity.getMisfireInstruction()) {
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_DO_NOTHING:
+                scheduleBuilder.withMisfireHandlingInstructionDoNothing();
+                break;
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+                scheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
+                break;
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                scheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            default:
+                break;
+        }
+        return scheduleBuilder;
     }
 }

@@ -2,12 +2,10 @@ package com.gls.job.dashboard.web.converter;
 
 import com.gls.job.dashboard.core.constants.QuartzConstants;
 import com.gls.job.dashboard.web.entity.CronTriggerEntity;
-import org.quartz.CronExpression;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
-import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.TimeZone;
 
 /**
@@ -25,18 +23,22 @@ public class CronTriggerConverter extends TriggerConverter<CronTrigger, CronTrig
     }
 
     @Override
-    protected CronTrigger loadTrigger(CronTriggerEntity entity) {
-        CronTriggerImpl trigger = new CronTriggerImpl();
-        CronExpression cronExpression = null;
-        try {
-            cronExpression = new CronExpression(entity.getCronExpression());
-            cronExpression.setTimeZone(TimeZone.getTimeZone(entity.getTimeZone()));
-        } catch (ParseException e) {
-            e.printStackTrace();
+    protected CronScheduleBuilder loadScheduleBuilder(CronTriggerEntity entity) {
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(entity.getCronExpression())
+                .inTimeZone(TimeZone.getTimeZone(entity.getTimeZone()));
+        switch (entity.getMisfireInstruction()) {
+            case CRON_MISFIRE_INSTRUCTION_DO_NOTHING:
+                scheduleBuilder.withMisfireHandlingInstructionDoNothing();
+                break;
+            case CRON_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+                scheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
+                break;
+            case CRON_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                scheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            default:
+                break;
         }
-        trigger.setCronExpression(cronExpression);
-        trigger.setTimeZone(cronExpression.getTimeZone());
-        trigger.setMisfireInstruction(entity.getMisfireInstruction().getCode());
-        return trigger;
+        return scheduleBuilder;
     }
 }
