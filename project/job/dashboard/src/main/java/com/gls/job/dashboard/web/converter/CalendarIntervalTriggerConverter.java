@@ -33,19 +33,7 @@ public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarI
                 .inTimeZone(TimeZone.getTimeZone(entity.getTimeZone()))
                 .preserveHourOfDayAcrossDaylightSavings(entity.getPreserveHourOfDayAcrossDaylightSavings())
                 .skipDayIfHourDoesNotExist(entity.getSkipDayIfHourDoesNotExist());
-        switch (entity.getMisfireInstruction()) {
-            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_DO_NOTHING:
-                scheduleBuilder.withMisfireHandlingInstructionDoNothing();
-                break;
-            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
-                scheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
-                break;
-            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-                scheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
-                break;
-            default:
-                break;
-        }
+        loadMisfireInstruction(scheduleBuilder, entity.getMisfireInstruction());
         return scheduleBuilder;
     }
 }

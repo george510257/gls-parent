@@ -37,19 +37,7 @@ public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTim
                 .onDaysOfTheWeek(entity.getDaysOfWeek())
                 .startingDailyAt(getTimeOfDay(entity.getStartTimeOfDay()))
                 .endingDailyAt(getTimeOfDay(entity.getEndTimeOfDay()));
-        switch (entity.getMisfireInstruction()) {
-            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_DO_NOTHING:
-                scheduleBuilder.withMisfireHandlingInstructionDoNothing();
-                break;
-            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
-                scheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
-                break;
-            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-                scheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
-                break;
-            default:
-                break;
-        }
+        loadMisfireInstruction(scheduleBuilder, entity.getMisfireInstruction());
         return scheduleBuilder;
     }
 
@@ -58,6 +46,6 @@ public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTim
     }
 
     private TimeOfDay getTimeOfDay(Time time) {
-        return new TimeOfDay(time.toLocalTime().getHour(), time.toLocalTime().getMinute(), time.toLocalTime().getSecond());
+        return TimeOfDay.hourAndMinuteAndSecondFromDate(time);
     }
 }

@@ -13,6 +13,7 @@ import java.util.TimeZone;
  */
 @Component
 public class CronTriggerConverter extends TriggerConverter<CronTrigger, CronTriggerEntity> {
+
     @Override
     protected CronTriggerEntity loadEntity(CronTrigger trigger) {
         CronTriggerEntity entity = new CronTriggerEntity();
@@ -26,19 +27,7 @@ public class CronTriggerConverter extends TriggerConverter<CronTrigger, CronTrig
     protected CronScheduleBuilder loadScheduleBuilder(CronTriggerEntity entity) {
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(entity.getCronExpression())
                 .inTimeZone(TimeZone.getTimeZone(entity.getTimeZone()));
-        switch (entity.getMisfireInstruction()) {
-            case CRON_MISFIRE_INSTRUCTION_DO_NOTHING:
-                scheduleBuilder.withMisfireHandlingInstructionDoNothing();
-                break;
-            case CRON_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
-                scheduleBuilder.withMisfireHandlingInstructionFireAndProceed();
-                break;
-            case CRON_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-                scheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
-                break;
-            default:
-                break;
-        }
+        loadMisfireInstruction(scheduleBuilder, entity.getMisfireInstruction());
         return scheduleBuilder;
     }
 }

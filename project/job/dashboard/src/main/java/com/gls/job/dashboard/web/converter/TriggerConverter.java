@@ -4,10 +4,7 @@ import com.gls.framework.core.base.BaseConverter;
 import com.gls.job.dashboard.web.entity.JobDetailEntity;
 import com.gls.job.dashboard.web.entity.TriggerEntity;
 import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
-import org.quartz.JobDataMap;
-import org.quartz.JobKey;
-import org.quartz.ScheduleBuilder;
-import org.quartz.TriggerBuilder;
+import org.quartz.*;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -16,6 +13,7 @@ import java.util.stream.Collectors;
  * @author george
  */
 public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entity extends TriggerEntity> extends BaseConverter<Trigger, Entity> {
+
     @Override
     protected Entity copySourceToTarget(Trigger trigger) {
         Entity entity = loadEntity(trigger);
@@ -38,6 +36,58 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
         return Arrays.stream(MisfireInstruction.values()).filter(misfireInstruction ->
                 type.equals(misfireInstruction.getType()) && misfireInstruction.getCode() == code
         ).collect(Collectors.toList()).get(0);
+    }
+
+    protected void loadMisfireInstruction(ScheduleBuilder<Trigger> scheduleBuilder, MisfireInstruction misfireInstruction) {
+        switch (misfireInstruction) {
+            case SIMPLE_MISFIRE_INSTRUCTION_FIRE_NOW:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionFireNow();
+                break;
+            case SIMPLE_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionNextWithExistingCount();
+                break;
+            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionNextWithRemainingCount();
+                break;
+            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionNowWithExistingCount();
+                break;
+            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT:
+                ((SimpleScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionNowWithRemainingCount();
+                break;
+            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_DO_NOTHING:
+                ((DailyTimeIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionDoNothing();
+                break;
+            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+                ((DailyTimeIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionFireAndProceed();
+                break;
+            case DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                ((DailyTimeIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            case CRON_MISFIRE_INSTRUCTION_DO_NOTHING:
+                ((CronScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionDoNothing();
+                break;
+            case CRON_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+                ((CronScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionFireAndProceed();
+                break;
+            case CRON_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                ((CronScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_DO_NOTHING:
+                ((CalendarIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionDoNothing();
+                break;
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_FIRE_ONCE_NOW:
+                ((CalendarIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionFireAndProceed();
+                break;
+            case CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
+                ((CalendarIntervalScheduleBuilder) scheduleBuilder).withMisfireHandlingInstructionIgnoreMisfires();
+                break;
+            default:
+                break;
+        }
     }
 
     /**

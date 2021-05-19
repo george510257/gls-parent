@@ -26,28 +26,7 @@ public class SimpleTriggerConverter extends TriggerConverter<SimpleTrigger, Simp
         SimpleScheduleBuilder simpleScheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
                 .withIntervalInMilliseconds(entity.getInterval())
                 .withRepeatCount(entity.getRepeatCount());
-        switch (entity.getMisfireInstruction()) {
-            case SIMPLE_MISFIRE_INSTRUCTION_FIRE_NOW:
-                simpleScheduleBuilder.withMisfireHandlingInstructionFireNow();
-                break;
-            case SIMPLE_MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-                simpleScheduleBuilder.withMisfireHandlingInstructionIgnoreMisfires();
-                break;
-            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT:
-                simpleScheduleBuilder.withMisfireHandlingInstructionNextWithExistingCount();
-                break;
-            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT:
-                simpleScheduleBuilder.withMisfireHandlingInstructionNextWithRemainingCount();
-                break;
-            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_EXISTING_REPEAT_COUNT:
-                simpleScheduleBuilder.withMisfireHandlingInstructionNowWithExistingCount();
-                break;
-            case SIMPLE_MISFIRE_INSTRUCTION_RESCHEDULE_NOW_WITH_REMAINING_REPEAT_COUNT:
-                simpleScheduleBuilder.withMisfireHandlingInstructionNowWithRemainingCount();
-                break;
-            default:
-                break;
-        }
+        loadMisfireInstruction(simpleScheduleBuilder, entity.getMisfireInstruction());
         return simpleScheduleBuilder;
     }
 
