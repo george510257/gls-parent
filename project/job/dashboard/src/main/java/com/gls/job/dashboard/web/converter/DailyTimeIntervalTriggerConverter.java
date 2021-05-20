@@ -19,7 +19,7 @@ public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTim
     @Override
     protected DailyTimeIntervalTriggerEntity loadEntity(DailyTimeIntervalTrigger trigger) {
         DailyTimeIntervalTriggerEntity entity = new DailyTimeIntervalTriggerEntity();
-        entity.setInterval(trigger.getRepeatInterval());
+        entity.setIntervalTime(trigger.getRepeatInterval());
         entity.setIntervalUnit(trigger.getRepeatIntervalUnit());
         entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_DAILY_TIME_INTERVAL, trigger.getMisfireInstruction()));
         entity.setRepeatCount(trigger.getRepeatCount());
@@ -32,7 +32,7 @@ public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTim
     @Override
     protected DailyTimeIntervalScheduleBuilder loadScheduleBuilder(DailyTimeIntervalTriggerEntity entity) {
         DailyTimeIntervalScheduleBuilder scheduleBuilder = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule()
-                .withInterval(entity.getInterval(), entity.getIntervalUnit())
+                .withInterval(entity.getIntervalTime(), entity.getIntervalUnit())
                 .withRepeatCount(entity.getRepeatCount())
                 .onDaysOfTheWeek(entity.getDaysOfWeek())
                 .startingDailyAt(getTimeOfDay(entity.getStartTimeOfDay()))

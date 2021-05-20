@@ -18,7 +18,7 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
     protected Entity copySourceToTarget(Trigger trigger) {
         Entity entity = loadEntity(trigger);
         entity.setName(trigger.getKey().getName());
-        entity.setGroup(trigger.getKey().getGroup());
+        entity.setGroupName(trigger.getKey().getGroup());
         entity.setDescription(trigger.getDescription());
         entity.setStartTime(trigger.getStartTime());
         entity.setEndTime(trigger.getEndTime());
@@ -101,14 +101,14 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
     @Override
     protected Trigger copyTargetToSource(Entity entity) {
         return TriggerBuilder.newTrigger()
-                .withIdentity(entity.getName(), entity.getGroup())
+                .withIdentity(entity.getName(), entity.getGroupName())
                 .withDescription(entity.getDescription())
                 .withPriority(entity.getPriority())
                 .withSchedule(loadScheduleBuilder(entity))
                 .modifiedByCalendar(entity.getCalendarName())
                 .startAt(entity.getStartTime())
                 .endAt(entity.getEndTime())
-                .forJob(entity.getJobDetail().getName(), entity.getJobDetail().getGroup())
+                .forJob(entity.getJobDetail().getName(), entity.getJobDetail().getGroupName())
                 .usingJobData(new JobDataMap(entity.getJobDetail().getJobDataMap()))
                 .build();
     }

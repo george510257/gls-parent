@@ -15,7 +15,7 @@ public class SimpleTriggerConverter extends TriggerConverter<SimpleTrigger, Simp
     @Override
     protected SimpleTriggerEntity loadEntity(SimpleTrigger trigger) {
         SimpleTriggerEntity entity = new SimpleTriggerEntity();
-        entity.setInterval(trigger.getRepeatInterval());
+        entity.setIntervalTime(trigger.getRepeatInterval());
         entity.setRepeatCount(trigger.getRepeatCount());
         entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_SIMPLE, trigger.getMisfireInstruction()));
         return entity;
@@ -24,7 +24,7 @@ public class SimpleTriggerConverter extends TriggerConverter<SimpleTrigger, Simp
     @Override
     protected SimpleScheduleBuilder loadScheduleBuilder(SimpleTriggerEntity entity) {
         SimpleScheduleBuilder simpleScheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInMilliseconds(entity.getInterval())
+                .withIntervalInMilliseconds(entity.getIntervalTime())
                 .withRepeatCount(entity.getRepeatCount());
         loadMisfireInstruction(simpleScheduleBuilder, entity.getMisfireInstruction());
         return simpleScheduleBuilder;

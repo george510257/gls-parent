@@ -6,10 +6,13 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
   quartz:
     job-store-type: jdbc #数据库方式
     jdbc:
-      initialize-schema: never  #不初始化表结构
+      initialize-schema: always  #不初始化表结构
     properties:
       org:
         quartz:

@@ -17,22 +17,22 @@ public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarI
     @Override
     protected CalendarIntervalTriggerEntity loadEntity(CalendarIntervalTrigger trigger) {
         CalendarIntervalTriggerEntity entity = new CalendarIntervalTriggerEntity();
-        entity.setInterval(trigger.getRepeatInterval());
+        entity.setIntervalTime(trigger.getRepeatInterval());
         entity.setIntervalUnit(trigger.getRepeatIntervalUnit());
         entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_CALENDAR_INTERVAL, trigger.getMisfireInstruction()));
         entity.setTimeZone(trigger.getTimeZone().getID());
-        entity.setPreserveHourOfDayAcrossDaylightSavings(trigger.isPreserveHourOfDayAcrossDaylightSavings());
-        entity.setSkipDayIfHourDoesNotExist(trigger.isSkipDayIfHourDoesNotExist());
+        entity.setPreserveHourOfDay(trigger.isPreserveHourOfDayAcrossDaylightSavings());
+        entity.setSkipDay(trigger.isSkipDayIfHourDoesNotExist());
         return entity;
     }
 
     @Override
     protected CalendarIntervalScheduleBuilder loadScheduleBuilder(CalendarIntervalTriggerEntity entity) {
         CalendarIntervalScheduleBuilder scheduleBuilder = CalendarIntervalScheduleBuilder.calendarIntervalSchedule()
-                .withInterval(entity.getInterval(), entity.getIntervalUnit())
+                .withInterval(entity.getIntervalTime(), entity.getIntervalUnit())
                 .inTimeZone(TimeZone.getTimeZone(entity.getTimeZone()))
-                .preserveHourOfDayAcrossDaylightSavings(entity.getPreserveHourOfDayAcrossDaylightSavings())
-                .skipDayIfHourDoesNotExist(entity.getSkipDayIfHourDoesNotExist());
+                .preserveHourOfDayAcrossDaylightSavings(entity.getPreserveHourOfDay())
+                .skipDayIfHourDoesNotExist(entity.getSkipDay());
         loadMisfireInstruction(scheduleBuilder, entity.getMisfireInstruction());
         return scheduleBuilder;
     }

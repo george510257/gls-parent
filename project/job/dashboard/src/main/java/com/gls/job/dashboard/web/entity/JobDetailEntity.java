@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Map;
 
 /**
@@ -17,11 +18,12 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Table(name = "JOB_DETAIL")
 @Comment("任务信息表")
 public class JobDetailEntity extends BaseEntity {
 
     @Comment("任务组")
-    private String group = "DEFAULT";
+    private String groupName = "DEFAULT";
 
     @Comment("描述")
     private String description;
@@ -31,7 +33,7 @@ public class JobDetailEntity extends BaseEntity {
 
     @Comment("任务参数")
     @ElementCollection
-    private Map<String, Object> jobDataMap;
+    private Map<String, String> jobDataMap;
 
     @Comment("是否应保持存储状态")
     private Boolean durability = false;

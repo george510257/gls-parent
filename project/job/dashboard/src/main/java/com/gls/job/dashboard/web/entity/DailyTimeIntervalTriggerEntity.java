@@ -7,10 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.quartz.DateBuilder;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.sql.Time;
 import java.util.Set;
 
@@ -21,11 +18,12 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@Table(name = "DAILY_TIME_INTERVAL_TRIGGER")
 @Comment("每日时间间隔触发器信息表")
 public class DailyTimeIntervalTriggerEntity extends TriggerEntity {
 
     @Comment("间隔时间")
-    private Integer interval = 1;
+    private Integer intervalTime = 1;
 
     @Comment("间隔单位")
     @Enumerated(EnumType.STRING)

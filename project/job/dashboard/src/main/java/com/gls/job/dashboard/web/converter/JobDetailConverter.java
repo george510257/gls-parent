@@ -8,6 +8,9 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author george
  */
@@ -18,19 +21,25 @@ public class JobDetailConverter extends BaseConverter<JobDetail, JobDetailEntity
     protected JobDetailEntity copySourceToTarget(JobDetail jobDetail) {
         JobDetailEntity entity = new JobDetailEntity();
         entity.setName(jobDetail.getKey().getName());
-        entity.setGroup(jobDetail.getKey().getGroup());
+        entity.setGroupName(jobDetail.getKey().getGroup());
         entity.setDescription(jobDetail.getDescription());
         entity.setDurability(jobDetail.isDurable());
         entity.setShouldRecover(jobDetail.requestsRecovery());
         entity.setJobClassName(jobDetail.getJobClass().getName());
-        entity.setJobDataMap(jobDetail.getJobDataMap());
+        entity.setJobDataMap(formatString(jobDetail.getJobDataMap()));
         return entity;
+    }
+
+    private Map<String, String> formatString(Map<String, Object> map) {
+        Map<String, String> result = new HashMap<>(map.size());
+        map.forEach((key, value) -> result.put(key, value.toString()));
+        return result;
     }
 
     @Override
     protected JobDetail copyTargetToSource(JobDetailEntity jobDetailEntity) {
         return JobBuilder.newJob(loadClassName(jobDetailEntity.getJobClassName()))
-                .withIdentity(jobDetailEntity.getName(), jobDetailEntity.getGroup())
+                .withIdentity(jobDetailEntity.getName(), jobDetailEntity.getGroupName())
                 .withDescription(jobDetailEntity.getDescription())
                 .storeDurably(jobDetailEntity.getDurability())
                 .requestRecovery(jobDetailEntity.getShouldRecover())

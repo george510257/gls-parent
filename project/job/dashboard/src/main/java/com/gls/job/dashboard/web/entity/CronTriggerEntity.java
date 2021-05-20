@@ -9,6 +9,7 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 /**
  * @author george
@@ -17,6 +18,7 @@ import javax.persistence.Enumerated;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
+@Table(name = "CRON_TRIGGER")
 @Comment("Cron触发器信息表")
 public class CronTriggerEntity extends TriggerEntity {
 

@@ -20,7 +20,7 @@ import java.util.Date;
 public abstract class TriggerEntity extends BaseEntity {
 
     @Comment("触发器组")
-    private String group = "DEFAULT";
+    private String groupName = "DEFAULT";
 
     @Comment("描述")
     private String description;
