@@ -1,12 +1,12 @@
 package com.gls.common.user.web.repository;
 
 import com.gls.common.user.web.entity.UserEntity;
-import com.gls.starter.data.jpa.base.BaseRepository;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
 /**
  * @author george
  */
-public interface UserRepository extends BaseRepository<UserEntity, Long> {
+public interface UserRepository extends BaseEntityRepository<UserEntity> {
 
     /**
      * 通过用户名获取用户信息

@@ -2,12 +2,14 @@ package com.gls.job.dashboard.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
 import com.gls.job.dashboard.web.entity.JobDetailEntity;
+import com.gls.job.dashboard.web.repository.JobDetailRepository;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,9 +19,12 @@ import java.util.Map;
 @Component
 public class JobDetailConverter extends BaseConverter<JobDetail, JobDetailEntity> {
 
+    @Resource
+    private JobDetailRepository jobDetailRepository;
+
     @Override
     protected JobDetailEntity copySourceToTarget(JobDetail jobDetail) {
-        JobDetailEntity entity = new JobDetailEntity();
+        JobDetailEntity entity = jobDetailRepository.findByNameAndGroupName(jobDetail.getKey().getName(), jobDetail.getKey().getGroup());
         entity.setName(jobDetail.getKey().getName());
         entity.setGroupName(jobDetail.getKey().getGroup());
         entity.setDescription(jobDetail.getDescription());

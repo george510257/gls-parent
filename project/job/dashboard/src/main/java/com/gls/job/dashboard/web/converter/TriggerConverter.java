@@ -4,8 +4,10 @@ import com.gls.framework.core.base.BaseConverter;
 import com.gls.job.dashboard.web.entity.JobDetailEntity;
 import com.gls.job.dashboard.web.entity.TriggerEntity;
 import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
+import com.gls.job.dashboard.web.repository.JobDetailRepository;
 import org.quartz.*;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,9 @@ import java.util.stream.Collectors;
  * @author george
  */
 public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entity extends TriggerEntity> extends BaseConverter<Trigger, Entity> {
+
+    @Resource
+    private JobDetailRepository jobDetailRepository;
 
     @Override
     protected Entity copySourceToTarget(Trigger trigger) {
@@ -29,7 +34,7 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
     }
 
     private JobDetailEntity loadJobDetailEntity(JobKey jobKey) {
-        return null;
+        return jobDetailRepository.findByNameAndGroupName(jobKey.getName(), jobKey.getGroup());
     }
 
     protected MisfireInstruction loadMisfireInstruction(String type, int code) {

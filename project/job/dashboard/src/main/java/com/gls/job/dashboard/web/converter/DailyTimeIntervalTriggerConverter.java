@@ -2,11 +2,13 @@ package com.gls.job.dashboard.web.converter;
 
 import com.gls.job.dashboard.core.constants.QuartzConstants;
 import com.gls.job.dashboard.web.entity.DailyTimeIntervalTriggerEntity;
+import com.gls.job.dashboard.web.repository.DailyTimeIntervalTriggerRepository;
 import org.quartz.DailyTimeIntervalScheduleBuilder;
 import org.quartz.DailyTimeIntervalTrigger;
 import org.quartz.TimeOfDay;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.sql.Time;
 import java.time.LocalTime;
 
@@ -16,9 +18,12 @@ import java.time.LocalTime;
 @Component
 public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTrigger, DailyTimeIntervalTriggerEntity> {
 
+    @Resource
+    private DailyTimeIntervalTriggerRepository dailyTimeIntervalTriggerRepository;
+
     @Override
     protected DailyTimeIntervalTriggerEntity loadEntity(DailyTimeIntervalTrigger trigger) {
-        DailyTimeIntervalTriggerEntity entity = new DailyTimeIntervalTriggerEntity();
+        DailyTimeIntervalTriggerEntity entity = dailyTimeIntervalTriggerRepository.findByNameAndGroupName(trigger.getKey().getName(), trigger.getKey().getGroup());
         entity.setIntervalTime(trigger.getRepeatInterval());
         entity.setIntervalUnit(trigger.getRepeatIntervalUnit());
         entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_DAILY_TIME_INTERVAL, trigger.getMisfireInstruction()));
