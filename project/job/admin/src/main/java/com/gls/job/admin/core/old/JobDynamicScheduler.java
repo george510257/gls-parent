@@ -2,7 +2,7 @@
 //
 //import XxlJobAdminConfig;
 //import com.xxl.job.admin.core.jobbean.RemoteHttpJobBean;
-//import XxlJobInfo;
+//import JobInfo;
 //import JobFailMonitorHelper;
 //import com.xxl.job.admin.core.thread.JobRegistryMonitorHelper;
 //import JobTriggerPoolHelper;
@@ -162,7 +162,7 @@
 //     *
 //     * @param jobInfo
 //     */
-//	public static void fillJobInfo(XxlJobInfo jobInfo) {
+//	public static void fillJobInfo(JobInfo jobInfo) {
 //
 //        String name = String.valueOf(jobInfo.getId());
 //

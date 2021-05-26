@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author xuxueli  2015-12-19 23:19:09
  */
-public class XxlJobLog {
+public class JobLog {
 
     private long id;
 

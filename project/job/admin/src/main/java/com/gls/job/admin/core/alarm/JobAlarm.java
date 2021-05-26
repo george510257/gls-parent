@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
+import com.gls.job.admin.core.model.JobInfo;
+import com.gls.job.admin.core.model.JobLog;
 
 /**
  * @author xuxueli 2020-01-19
@@ -15,6 +15,6 @@ public interface JobAlarm {
      * @param jobLog
      * @return
      */
-    public boolean doAlarm(XxlJobInfo info, XxlJobLog jobLog);
+    public boolean doAlarm(JobInfo info, JobLog jobLog);
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by xuxueli on 16/9/30.
  */
-public class XxlJobGroup {
+public class JobGroup {
 
     private int id;
     private String appname;

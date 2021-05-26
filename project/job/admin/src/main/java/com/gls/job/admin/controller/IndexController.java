@@ -1,8 +1,8 @@
 package com.gls.job.admin.controller;
 
 import com.gls.job.admin.controller.annotation.PermissionLimit;
+import com.gls.job.admin.service.JobService;
 import com.gls.job.admin.service.LoginService;
-import com.gls.job.admin.service.XxlJobService;
 import com.gls.job.core.biz.model.ReturnT;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -31,14 +31,14 @@ import java.util.Map;
 public class IndexController {
 
     @Resource
-    private XxlJobService xxlJobService;
+    private JobService jobService;
     @Resource
     private LoginService loginService;
 
     @RequestMapping("/")
     public String index(Model model) {
 
-        Map<String, Object> dashboardMap = xxlJobService.dashboardInfo();
+        Map<String, Object> dashboardMap = jobService.dashboardInfo();
         model.addAllAttributes(dashboardMap);
 
         return "index";
@@ -47,7 +47,7 @@ public class IndexController {
     @RequestMapping("/chartInfo")
     @ResponseBody
     public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = xxlJobService.chartInfo(startDate, endDate);
+        ReturnT<Map<String, Object>> chartInfo = jobService.chartInfo(startDate, endDate);
         return chartInfo;
     }
 

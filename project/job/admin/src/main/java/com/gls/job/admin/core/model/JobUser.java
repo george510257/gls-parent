@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 /**
  * @author xuxueli 2019-05-04 16:43:12
  */
-public class XxlJobUser {
+public class JobUser {
 
     private int id;
     private String username;        // 账号

@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
+import com.gls.job.admin.core.model.JobInfo;
+import com.gls.job.admin.core.model.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -41,7 +41,7 @@ public class JobAlarmer implements ApplicationContextAware, InitializingBean {
      * @param jobLog
      * @return
      */
-    public boolean alarm(XxlJobInfo info, XxlJobLog jobLog) {
+    public boolean alarm(JobInfo info, JobLog jobLog) {
 
         boolean result = false;
         if (jobAlarmList != null && jobAlarmList.size() > 0) {

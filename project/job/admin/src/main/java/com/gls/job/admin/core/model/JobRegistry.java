@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by xuxueli on 16/9/30.
  */
-public class XxlJobRegistry {
+public class JobRegistry {
 
     private int id;
     private String registryGroup;

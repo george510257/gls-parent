@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author xuxueli 2016-5-19 17:57:46
  */
-public class XxlJobLogGlue {
+public class JobLogGlue {
 
     private int id;
     private int jobId;                // 任务主键ID

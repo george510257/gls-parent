@@ -1,7 +1,7 @@
 package com.gls.job.admin.controller;
 
 import com.gls.job.admin.controller.annotation.PermissionLimit;
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
+import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.core.biz.AdminBiz;
 import com.gls.job.core.biz.model.HandleCallbackParam;
 import com.gls.job.core.biz.model.RegistryParam;
@@ -47,9 +47,9 @@ public class JobApiController {
         if (uri == null || uri.trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping empty.");
         }
-        if (XxlJobAdminConfig.getAdminConfig().getAccessToken() != null
-                && XxlJobAdminConfig.getAdminConfig().getAccessToken().trim().length() > 0
-                && !XxlJobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+        if (JobAdminConfig.getAdminConfig().getAccessToken() != null
+                && JobAdminConfig.getAdminConfig().getAccessToken().trim().length() > 0
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 

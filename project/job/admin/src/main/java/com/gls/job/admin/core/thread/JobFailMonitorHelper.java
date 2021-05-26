@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.core.conf.XxlJobAdminConfig;
-import com.gls.job.admin.core.model.XxlJobInfo;
-import com.gls.job.admin.core.model.XxlJobLog;
+import com.gls.job.admin.core.conf.JobAdminConfig;
+import com.gls.job.admin.core.model.JobInfo;
+import com.gls.job.admin.core.model.JobLog;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
 import org.slf4j.Logger;
@@ -39,36 +39,36 @@ public class JobFailMonitorHelper {
                 while (!toStop) {
                     try {
 
-                        List<Long> failLogIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findFailJobLogIds(1000);
+                        List<Long> failLogIds = JobAdminConfig.getAdminConfig().getXxlJobLogDao().findFailJobLogIds(1000);
                         if (failLogIds != null && !failLogIds.isEmpty()) {
                             for (long failLogId : failLogIds) {
 
                                 // lock log
-                                int lockRet = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, 0, -1);
+                                int lockRet = JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, 0, -1);
                                 if (lockRet < 1) {
                                     continue;
                                 }
-                                XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(failLogId);
-                                XxlJobInfo info = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(log.getJobId());
+                                JobLog log = JobAdminConfig.getAdminConfig().getXxlJobLogDao().load(failLogId);
+                                JobInfo info = JobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(log.getJobId());
 
                                 // 1、fail retry monitor
                                 if (log.getExecutorFailRetryCount() > 0) {
                                     JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
                                     String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
                                     log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-                                    XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(log);
+                                    JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(log);
                                 }
 
                                 // 2、fail alarm monitor
                                 int newAlarmStatus = 0;        // 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
                                 if (info != null && info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0) {
-                                    boolean alarmResult = XxlJobAdminConfig.getAdminConfig().getJobAlarmer().alarm(info, log);
+                                    boolean alarmResult = JobAdminConfig.getAdminConfig().getJobAlarmer().alarm(info, log);
                                     newAlarmStatus = alarmResult ? 2 : 3;
                                 } else {
                                     newAlarmStatus = 1;
                                 }
 
-                                XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, -1, newAlarmStatus);
+                                JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, -1, newAlarmStatus);
                             }
                         }
 

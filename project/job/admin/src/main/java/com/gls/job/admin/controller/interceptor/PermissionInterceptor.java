@@ -1,7 +1,7 @@
 package com.gls.job.admin.controller.interceptor;
 
 import com.gls.job.admin.controller.annotation.PermissionLimit;
-import com.gls.job.admin.core.model.XxlJobUser;
+import com.gls.job.admin.core.model.JobUser;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.service.LoginService;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (needLogin) {
-            XxlJobUser loginUser = loginService.ifLogin(request, response);
+            JobUser loginUser = loginService.ifLogin(request, response);
             if (loginUser == null) {
                 response.setStatus(302);
                 response.setHeader("location", request.getContextPath() + "/toLogin");

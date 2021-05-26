@@ -2,7 +2,7 @@ package com.gls.job.admin.core.model;
 
 import java.util.Date;
 
-public class XxlJobLogReport {
+public class JobLogReport {
 
     private int id;
 
