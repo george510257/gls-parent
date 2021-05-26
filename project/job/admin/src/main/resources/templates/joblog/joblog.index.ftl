@@ -22,7 +22,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>${I18n.joblog_name}</h1>
+            <h1>${I18n.job_log_name}</h1>
         </section>
 
         <!-- Main content -->
@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
+                        <span class="input-group-addon">${I18n.job_info_field_jobgroup}</span>
                         <select class="form-control" id="jobGroup"
                                 paramVal="<#if jobInfo?exists>${jobInfo.jobGroup}</#if>">
                             <#if Request["GLS_JOB_LOGIN_IDENTITY"].role == 1>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobinfo_job}</span>
+                        <span class="input-group-addon">${I18n.job_info_job}</span>
                         <select class="form-control" id="jobId" paramVal="<#if jobInfo?exists>${jobInfo.id}</#if>">
                             <option value="0">${I18n.system_all}</option>
                         </select>
@@ -53,12 +53,12 @@
 
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.joblog_status}</span>
+                        <span class="input-group-addon">${I18n.job_log_status}</span>
                         <select class="form-control" id="logStatus">
-                            <option value="-1">${I18n.joblog_status_all}</option>
-                            <option value="1">${I18n.joblog_status_suc}</option>
-                            <option value="2">${I18n.joblog_status_fail}</option>
-                            <option value="3">${I18n.joblog_status_running}</option>
+                            <option value="-1">${I18n.job_log_status_all}</option>
+                            <option value="1">${I18n.job_log_status_suc}</option>
+                            <option value="2">${I18n.job_log_status_fail}</option>
+                            <option value="3">${I18n.job_log_status_running}</option>
                         </select>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="col-xs-4">
                     <div class="input-group">
                 		<span class="input-group-addon">
-	                  		${I18n.joblog_field_triggerTime}
+	                  		${I18n.job_log_field_triggerTime}
 	                	</span>
                         <input type="text" class="form-control" id="filterTime" readonly>
                     </div>
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="col-xs-1">
-                    <button class="btn btn-block btn-default" id="clearLog">${I18n.joblog_clean}</button>
+                    <button class="btn btn-block btn-default" id="clearLog">${I18n.job_log_clean}</button>
                 </div>
             </div>
 
@@ -86,20 +86,20 @@
                     <div class="box">
                         <#--<div class="box-header hide"><h3 class="box-title">调度日志</h3></div>-->
                         <div class="box-body">
-                            <table id="joblog_list" class="table table-bordered table-striped display" width="100%">
+                            <table id="job_log_list" class="table table-bordered table-striped display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th name="jobId">${I18n.jobinfo_field_id}</th>
+                                    <th name="jobId">${I18n.job_info_field_id}</th>
                                     <th name="jobGroup">jobGroup</th>
                                     <#--<th name="executorAddress" >执行器地址</th>
                                     <th name="glueType" >运行模式</th>
                                       <th name="executorParam" >任务参数</th>-->
-                                    <th name="triggerTime">${I18n.joblog_field_triggerTime}</th>
-                                    <th name="triggerCode">${I18n.joblog_field_triggerCode}</th>
-                                    <th name="triggerMsg">${I18n.joblog_field_triggerMsg}</th>
-                                    <th name="handleTime">${I18n.joblog_field_handleTime}</th>
-                                    <th name="handleCode">${I18n.joblog_field_handleCode}</th>
-                                    <th name="handleMsg">${I18n.joblog_field_handleMsg}</th>
+                                    <th name="triggerTime">${I18n.job_log_field_triggerTime}</th>
+                                    <th name="triggerCode">${I18n.job_log_field_triggerCode}</th>
+                                    <th name="triggerMsg">${I18n.job_log_field_triggerMsg}</th>
+                                    <th name="handleTime">${I18n.job_log_field_handleTime}</th>
+                                    <th name="handleCode">${I18n.job_log_field_handleCode}</th>
+                                    <th name="handleMsg">${I18n.job_log_field_handleMsg}</th>
                                     <th name="handleMsg">${I18n.system_opt}</th>
                                 </tr>
                                 </thead>
@@ -121,12 +121,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">${I18n.joblog_clean_log}</h4>
+                <h4 class="modal-title">${I18n.job_log_clean_log}</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal form" role="form">
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">${I18n.jobinfo_field_jobgroup}：</label>
+                        <label class="col-sm-3 control-label">${I18n.job_info_field_jobgroup}：</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control jobGroupText" readonly>
                             <input type="hidden" name="jobGroup">
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">${I18n.jobinfo_job}：</label>
+                        <label class="col-sm-3 control-label">${I18n.job_info_job}：</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control jobIdText" readonly>
                             <input type="hidden" name="jobId">
@@ -142,18 +142,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">${I18n.joblog_clean_type}：</label>
+                        <label class="col-sm-3 control-label">${I18n.job_log_clean_type}：</label>
                         <div class="col-sm-9">
                             <select class="form-control" name="type">
-                                <option value="1">${I18n.joblog_clean_type_1}</option>
-                                <option value="2">${I18n.joblog_clean_type_2}</option>
-                                <option value="3">${I18n.joblog_clean_type_3}</option>
-                                <option value="4">${I18n.joblog_clean_type_4}</option>
-                                <option value="5">${I18n.joblog_clean_type_5}</option>
-                                <option value="6">${I18n.joblog_clean_type_6}</option>
-                                <option value="7">${I18n.joblog_clean_type_7}</option>
-                                <option value="8">${I18n.joblog_clean_type_8}</option>
-                                <option value="9">${I18n.joblog_clean_type_9}</option>
+                                <option value="1">${I18n.job_log_clean_type_1}</option>
+                                <option value="2">${I18n.job_log_clean_type_2}</option>
+                                <option value="3">${I18n.job_log_clean_type_3}</option>
+                                <option value="4">${I18n.job_log_clean_type_4}</option>
+                                <option value="5">${I18n.job_log_clean_type_5}</option>
+                                <option value="6">${I18n.job_log_clean_type_6}</option>
+                                <option value="7">${I18n.job_log_clean_type_7}</option>
+                                <option value="8">${I18n.job_log_clean_type_8}</option>
+                                <option value="9">${I18n.job_log_clean_type_9}</option>
                             </select>
                         </div>
                     </div>

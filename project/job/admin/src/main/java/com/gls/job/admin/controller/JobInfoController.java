@@ -18,8 +18,7 @@ import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
 import com.gls.job.core.glue.GlueTypeEnum;
 import com.gls.job.core.util.DateUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,29 +34,29 @@ import java.util.*;
  *
  * @author xuxueli 2015-12-19 16:13:16
  */
+@Slf4j
 @Controller
 @RequestMapping("/jobinfo")
 public class JobInfoController {
-    private static Logger logger = LoggerFactory.getLogger(JobInfoController.class);
 
     @Resource
     private JobGroupDao jobGroupDao;
     @Resource
     private JobService jobService;
 
-    public static List<JobGroup> filterJobGroupByRole(HttpServletRequest request, List<JobGroup> jobGroupList_all) {
+    public static List<JobGroup> filterJobGroupByRole(HttpServletRequest request, List<JobGroup> jobGroupListAll) {
         List<JobGroup> jobGroupList = new ArrayList<>();
-        if (jobGroupList_all != null && jobGroupList_all.size() > 0) {
+        if (jobGroupListAll != null && jobGroupListAll.size() > 0) {
             JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
             if (loginUser.getRole() == 1) {
-                jobGroupList = jobGroupList_all;
+                jobGroupList = jobGroupListAll;
             } else {
-                List<String> groupIdStrs = new ArrayList<>();
+                List<String> groupIds = new ArrayList<>();
                 if (loginUser.getPermission() != null && loginUser.getPermission().trim().length() > 0) {
-                    groupIdStrs = Arrays.asList(loginUser.getPermission().trim().split(","));
+                    groupIds = Arrays.asList(loginUser.getPermission().trim().split(","));
                 }
-                for (JobGroup groupItem : jobGroupList_all) {
-                    if (groupIdStrs.contains(String.valueOf(groupItem.getId()))) {
+                for (JobGroup groupItem : jobGroupListAll) {
+                    if (groupIds.contains(String.valueOf(groupItem.getId()))) {
                         jobGroupList.add(groupItem);
                     }
                 }
@@ -84,12 +83,12 @@ public class JobInfoController {
         model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
 
         // 执行器列表
-        List<JobGroup> jobGroupList_all = jobGroupDao.findAll();
+        List<JobGroup> jobGroupListAll = jobGroupDao.findAll();
 
         // filter group
-        List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
+        List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupListAll);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new JobException(I18nUtil.getString("jobgroup_empty"));
+            throw new JobException(I18nUtil.getString("job_group_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -139,7 +138,6 @@ public class JobInfoController {
 
     @RequestMapping("/trigger")
     @ResponseBody
-    //@PermissionLimit(limit = false)
     public ReturnT<String> triggerJob(int id, String executorParam, String addressList) {
         // force cover job param
         if (executorParam == null) {
@@ -170,10 +168,10 @@ public class JobInfoController {
                 }
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return new ReturnT<List<String>>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")) + e.getMessage());
+            log.error(e.getMessage(), e);
+            return new ReturnT<>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")) + e.getMessage());
         }
-        return new ReturnT<List<String>>(result);
+        return new ReturnT<>(result);
 
     }
 

@@ -86,7 +86,7 @@ public class JobCompleteHelper {
 
                                 jobLog.setHandleTime(new Date());
                                 jobLog.setHandleCode(ReturnT.FAIL_CODE);
-                                jobLog.setHandleMsg(I18nUtil.getString("joblog_lost_fail"));
+                                jobLog.setHandleMsg(I18nUtil.getString("job_log_lost_fail"));
 
                                 JobCompleter.updateHandleInfoAndFinish(jobLog);
                             }

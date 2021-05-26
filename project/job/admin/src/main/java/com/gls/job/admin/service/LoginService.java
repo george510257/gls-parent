@@ -50,11 +50,11 @@ public class LoginService {
         // valid passowrd
         JobUser jobUser = jobUserDao.loadByUserName(username);
         if (jobUser == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new ReturnT<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!passwordMd5.equals(jobUser.getPassword())) {
-            return new ReturnT<String>(500, I18nUtil.getString("login_param_unvalid"));
+            return new ReturnT<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
 
         String loginToken = makeToken(jobUser);

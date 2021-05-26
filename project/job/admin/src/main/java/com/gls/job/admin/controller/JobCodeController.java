@@ -37,10 +37,10 @@ public class JobCodeController {
         List<JobLogGlue> jobLogGlues = jobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            throw new RuntimeException(I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
         if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
+            throw new RuntimeException(I18nUtil.getString("job_info_glue_glue_type_un_valid"));
         }
 
         // valid permission
@@ -56,31 +56,31 @@ public class JobCodeController {
 
     @RequestMapping("/save")
     @ResponseBody
-    public ReturnT<String> save(Model model, int id, String glueSource, String glueRemark) {
+    public ReturnT<String> save(int id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
-            return new ReturnT<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
+            return new ReturnT<>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_glue_remark")));
         }
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_remark_limit"));
+            return new ReturnT<>(500, I18nUtil.getString("job_info_glue_remark_limit"));
         }
-        JobInfo exists_jobInfo = jobInfoDao.loadById(id);
-        if (exists_jobInfo == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+        JobInfo existsJobInfo = jobInfoDao.loadById(id);
+        if (existsJobInfo == null) {
+            return new ReturnT<>(500, I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
 
         // update new code
-        exists_jobInfo.setGlueSource(glueSource);
-        exists_jobInfo.setGlueRemark(glueRemark);
-        exists_jobInfo.setGlueUpdatetime(new Date());
+        existsJobInfo.setGlueSource(glueSource);
+        existsJobInfo.setGlueRemark(glueRemark);
+        existsJobInfo.setGlueUpdatetime(new Date());
 
-        exists_jobInfo.setUpdateTime(new Date());
-        jobInfoDao.update(exists_jobInfo);
+        existsJobInfo.setUpdateTime(new Date());
+        jobInfoDao.update(existsJobInfo);
 
         // log old code
         JobLogGlue jobLogGlue = new JobLogGlue();
-        jobLogGlue.setJobId(exists_jobInfo.getId());
-        jobLogGlue.setGlueType(exists_jobInfo.getGlueType());
+        jobLogGlue.setJobId(existsJobInfo.getId());
+        jobLogGlue.setGlueType(existsJobInfo.getGlueType());
         jobLogGlue.setGlueSource(glueSource);
         jobLogGlue.setGlueRemark(glueRemark);
 
@@ -89,7 +89,7 @@ public class JobCodeController {
         jobLogGlueDao.save(jobLogGlue);
 
         // remove code backup more than 30
-        jobLogGlueDao.removeOld(exists_jobInfo.getId(), 30);
+        jobLogGlueDao.removeOld(existsJobInfo.getId(), 30);
 
         return ReturnT.SUCCESS;
     }
