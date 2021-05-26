@@ -1,6 +1,6 @@
 package com.gls.demo.job.executor;
 
-import com.gls.job.executor.core.handler.annotation.Job;
+import com.gls.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoJob2 {
 
-    @Job(value = "demoJob2", init = "init", destroy = "destroy")
+    @XxlJob(value = "demoJob2", init = "init", destroy = "destroy")
     public void execute() throws Exception {
         log.info("DemoJob2 -- execute");
     }

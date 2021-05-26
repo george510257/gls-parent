@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * file tool
  *
- * @author george 2017-12-29 17:56:48
+ * @author xuxueli 2017-12-29 17:56:48
  */
 public class FileUtil {
     private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
@@ -149,7 +149,7 @@ public class FileUtil {
 
         // read file
         StringBuffer logContentBuffer = new StringBuffer();
-        int toLineNumber = 0;
+        int toLineNum = 0;
         LineNumberReader reader = null;
         try {
             //reader = new LineNumberReader(new FileReader(logFile));

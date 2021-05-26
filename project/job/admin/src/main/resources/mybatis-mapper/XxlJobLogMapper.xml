@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gls.job.admin.web.dao.JobLogDao">
+<mapper namespace="com.gls.job.admin.dao.XxlJobLogDao">
 
-    <resultMap id="JobLog" type="com.gls.job.admin.web.entity.JobLog">
+    <resultMap id="XxlJobLog" type="com.gls.job.admin.core.model.XxlJobLog">
         <result column="id" property="id"/>
 
         <result column="job_group" property="jobGroup"/>
@@ -44,10 +44,10 @@
 		t.alarm_status
     </sql>
 
-    <select id="pageList" resultMap="JobLog">
+    <select id="pageList" resultMap="XxlJobLog">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM gls_job_log AS t
+        FROM xxl_job_log AS t
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="jobId==0 and jobGroup gt 0">
                 AND t.job_group = #{jobGroup}
@@ -81,7 +81,7 @@
 
     <select id="pageListCount" resultType="int">
         SELECT count(1)
-        FROM gls_job_log AS t
+        FROM xxl_job_log AS t
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="jobId==0 and jobGroup gt 0">
                 AND t.job_group = #{jobGroup}
@@ -111,16 +111,16 @@
         </trim>
     </select>
 
-    <select id="load" parameterType="java.lang.Long" resultMap="JobLog">
+    <select id="load" parameterType="java.lang.Long" resultMap="XxlJobLog">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM gls_job_log AS t
+        FROM xxl_job_log AS t
         WHERE t.id = #{id}
     </select>
 
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobLog" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO gls_job_log (
+    <insert id="save" parameterType="com.gls.job.admin.core.model.XxlJobLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO xxl_job_log (
         `job_group`,
         `job_id`,
         `trigger_time`,
@@ -139,7 +139,7 @@
     </insert>
 
     <update id="updateTriggerInfo">
-        UPDATE gls_job_log
+        UPDATE xxl_job_log
         SET `trigger_time`= #{triggerTime},
             `trigger_code`= #{triggerCode},
             `trigger_msg`= #{triggerMsg},
@@ -152,7 +152,7 @@
     </update>
 
     <update id="updateHandleInfo">
-        UPDATE gls_job_log
+        UPDATE xxl_job_log
         SET `handle_time`= #{handleTime},
             `handle_code`= #{handleCode},
             `handle_msg`= #{handleMsg}
@@ -161,7 +161,7 @@
 
     <delete id="delete">
         delete
-        from gls_job_log
+        from xxl_job_log
         WHERE job_id = #{jobId}
     </delete>
 
@@ -171,7 +171,7 @@
 			COUNT(handle_code) triggerDayCount,
 			SUM(CASE WHEN (trigger_code in (0, 200) and handle_code = 0) then 1 else 0 end) as triggerDayCountRunning,
 			SUM(CASE WHEN handle_code = 200 then 1 else 0 end) as triggerDayCountSuc
-		FROM gls_job_log
+		FROM xxl_job_log
 		WHERE trigger_time BETWEEN #{from} and #{to}
 		GROUP BY triggerDay
 		ORDER BY triggerDay
@@ -182,12 +182,12 @@
                SUM(
                        CASE WHEN (trigger_code in (0, 200) and handle_code = 0) then 1 else 0 end) as triggerDayCountRunning,
                SUM(CASE WHEN handle_code = 200 then 1 else 0 end)                                  as triggerDayCountSuc
-        FROM gls_job_log
+        FROM xxl_job_log
         WHERE trigger_time BETWEEN #{from} and #{to}
     </select>
 
     <select id="findClearLogIds" resultType="long">
-        SELECT id FROM gls_job_log
+        SELECT id FROM xxl_job_log
         <trim prefix="WHERE" prefixOverrides="AND | OR">
             <if test="jobGroup gt 0">
                 AND job_group = #{jobGroup}
@@ -201,7 +201,7 @@
             <if test="clearBeforeNum gt 0">
                 AND id NOT in(
                 SELECT id FROM(
-                SELECT id FROM gls_job_log AS t
+                SELECT id FROM xxl_job_log AS t
                 <trim prefix="WHERE" prefixOverrides="AND | OR">
                     <if test="jobGroup gt 0">
                         AND t.job_group = #{jobGroup}
@@ -221,7 +221,7 @@
     </select>
 
     <delete id="clearLog">
-        delete from gls_job_log
+        delete from xxl_job_log
         WHERE id in
         <foreach collection="logIds" item="item" open="(" close=")" separator=",">
             #{item}
@@ -230,7 +230,7 @@
 
     <select id="findFailJobLogIds" resultType="long">
         SELECT id
-        FROM `gls_job_log`
+        FROM `xxl_job_log`
         WHERE !(
                 (trigger_code in (0, 200) and handle_code = 0)
                 OR
@@ -242,7 +242,7 @@
     </select>
 
     <update id="updateAlarmStatus">
-        UPDATE gls_job_log
+        UPDATE xxl_job_log
         SET `alarm_status` = #{newAlarmStatus}
         WHERE `id` = #{logId}
           AND `alarm_status` = #{oldAlarmStatus}
@@ -250,8 +250,8 @@
 
     <select id="findLostJobIds" resultType="long">
         SELECT t.id
-        FROM gls_job_log t
-                 LEFT JOIN gls_job_registry t2 ON t.executor_address = t2.registry_value
+        FROM xxl_job_log t
+                 LEFT JOIN xxl_job_registry t2 ON t.executor_address = t2.registry_value
         WHERE t.trigger_code = 200
           AND t.handle_code = 0
           AND t.trigger_time <![CDATA[ <= ]]> #{losedTime}
@@ -259,13 +259,13 @@
     </select>
     <!--
     SELECT t.id
-    FROM gls_job_log AS t
+    FROM xxl_job_log AS t
     WHERE t.trigger_code = 200
         and t.handle_code = 0
         and t.trigger_time <![CDATA[ <= ]]> #{losedTime}
         and t.executor_address not in (
             SELECT t2.registry_value
-            FROM gls_job_registry AS t2
+            FROM xxl_job_registry AS t2
         )
     -->
 

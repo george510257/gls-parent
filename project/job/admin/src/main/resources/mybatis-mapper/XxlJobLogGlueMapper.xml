@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gls.job.admin.web.dao.JobLogGlueDao">
+<mapper namespace="com.gls.job.admin.dao.XxlJobLogGlueDao">
 
-    <resultMap id="JobLogGlue" type="com.gls.job.admin.web.entity.JobLogGlue">
+    <resultMap id="XxlJobLogGlue" type="com.gls.job.admin.core.model.XxlJobLogGlue">
         <result column="id" property="id"/>
         <result column="job_id" property="jobId"/>
         <result column="glue_type" property="glueType"/>
@@ -23,9 +23,9 @@
 		t.update_time
     </sql>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobLogGlue" useGeneratedKeys="true"
+    <insert id="save" parameterType="com.gls.job.admin.core.model.XxlJobLogGlue" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO gls_job_logglue (
+        INSERT INTO xxl_job_logglue (
         `job_id`,
         `glue_type`,
         `glue_source`,
@@ -45,22 +45,22 @@
         </selectKey>-->
     </insert>
 
-    <select id="findByJobId" parameterType="java.lang.Integer" resultMap="JobLogGlue">
+    <select id="findByJobId" parameterType="java.lang.Integer" resultMap="XxlJobLogGlue">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM gls_job_logglue AS t
+        FROM xxl_job_logglue AS t
         WHERE t.job_id = #{jobId}
         ORDER BY id DESC
     </select>
 
     <delete id="removeOld">
         DELETE
-        FROM gls_job_logglue
+        FROM xxl_job_logglue
         WHERE id NOT in (
             SELECT id
             FROM (
                      SELECT id
-                     FROM gls_job_logglue
+                     FROM xxl_job_logglue
                      WHERE `job_id` = #{jobId}
                      ORDER BY update_time desc
                      LIMIT 0, #{limit}
@@ -71,7 +71,7 @@
 
     <delete id="deleteByJobId" parameterType="java.lang.Integer">
         DELETE
-        FROM gls_job_logglue
+        FROM xxl_job_logglue
         WHERE `job_id` = #{jobId}
     </delete>
 

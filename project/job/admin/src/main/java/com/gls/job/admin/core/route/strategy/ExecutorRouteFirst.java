@@ -1,20 +1,19 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
 import java.util.List;
 
 /**
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-public class ExecutorRouteFirst implements ExecutorRouter {
+public class ExecutorRouteFirst extends ExecutorRouter {
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        return new Result<>(addressList.get(0));
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
+        return new ReturnT<String>(addressList.get(0));
     }
 
 }

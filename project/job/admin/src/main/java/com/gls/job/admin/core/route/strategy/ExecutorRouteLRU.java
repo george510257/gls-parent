@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,33 +15,31 @@ import java.util.concurrent.ConcurrentMap;
  * a、LFU(Least Frequently Used)：最不经常使用，频率/次数
  * b(*)、LRU(Least Recently Used)：最近最久未使用，时间
  * <p>
- *
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-public class ExecutorRouteLRU implements ExecutorRouter {
+public class ExecutorRouteLRU extends ExecutorRouter {
 
-    private static final ConcurrentMap<Long, LinkedHashMap<String, String>> JOB_LRU_MAP = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Integer, LinkedHashMap<String, String>> jobLRUMap = new ConcurrentHashMap<Integer, LinkedHashMap<String, String>>();
     private static long CACHE_VALID_TIME = 0;
 
-    public String route(Long jobId, List<String> addressList) {
+    public String route(int jobId, List<String> addressList) {
 
         // cache clear
         if (System.currentTimeMillis() > CACHE_VALID_TIME) {
-            JOB_LRU_MAP.clear();
+            jobLRUMap.clear();
             CACHE_VALID_TIME = System.currentTimeMillis() + 1000 * 60 * 60 * 24;
         }
 
         // init lru
-        LinkedHashMap<String, String> lruItem = JOB_LRU_MAP.get(jobId);
+        LinkedHashMap<String, String> lruItem = jobLRUMap.get(jobId);
         if (lruItem == null) {
             /**
              * LinkedHashMap
              *      a、accessOrder：true=访问顺序排序（get/put时排序）；false=插入顺序排期；
              *      b、removeEldestEntry：新增元素时将会调用，返回true时会删除最老元素；可封装LinkedHashMap并重写该方法，比如定义最大容量，超出是返回true即可实现固定长度的LRU算法；
              */
-            lruItem = new LinkedHashMap<>(16, 0.75f, true);
-            JOB_LRU_MAP.putIfAbsent(jobId, lruItem);
+            lruItem = new LinkedHashMap<String, String>(16, 0.75f, true);
+            jobLRUMap.putIfAbsent(jobId, lruItem);
         }
 
         // put new
@@ -65,13 +63,14 @@ public class ExecutorRouteLRU implements ExecutorRouter {
 
         // load
         String eldestKey = lruItem.entrySet().iterator().next().getKey();
-        return lruItem.get(eldestKey);
+        String eldestValue = lruItem.get(eldestKey);
+        return eldestValue;
     }
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        String address = route(triggerModel.getJobId(), addressList);
-        return new Result<>(address);
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
+        String address = route(triggerParam.getJobId(), addressList);
+        return new ReturnT<String>(address);
     }
 
 }

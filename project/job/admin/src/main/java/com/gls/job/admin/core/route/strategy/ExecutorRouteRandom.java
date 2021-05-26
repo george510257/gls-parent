@@ -1,24 +1,23 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-public class ExecutorRouteRandom implements ExecutorRouter {
+public class ExecutorRouteRandom extends ExecutorRouter {
 
-    private static final Random LOCAL_RANDOM = new Random();
+    private static Random localRandom = new Random();
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        String address = addressList.get(LOCAL_RANDOM.nextInt(addressList.size()));
-        return new Result<>(address);
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
+        String address = addressList.get(localRandom.nextInt(addressList.size()));
+        return new ReturnT<String>(address);
     }
 
 }

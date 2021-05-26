@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 /**
  * net util
  *
- * @author george 2017-11-29 17:00:25
+ * @author xuxueli 2017-11-29 17:00:25
  */
 public class NetUtil {
     private static Logger logger = LoggerFactory.getLogger(NetUtil.class);
@@ -53,7 +53,7 @@ public class NetUtil {
             serverSocket = new ServerSocket(port);
             used = false;
         } catch (IOException e) {
-            logger.info(">>>>>>>>>>> gls-rpc, port[{}] is in use.", port);
+            logger.info(">>>>>>>>>>> xxl-rpc, port[{}] is in use.", port);
             used = true;
         } finally {
             if (serverSocket != null) {

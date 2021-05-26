@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
 import java.util.List;
 import java.util.Random;
@@ -11,22 +11,21 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-public class ExecutorRouteRound implements ExecutorRouter {
+public class ExecutorRouteRound extends ExecutorRouter {
 
-    private static final ConcurrentMap<Long, AtomicInteger> ROUTE_COUNT_EACH_JOB = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Integer, AtomicInteger> routeCountEachJob = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
 
-    private static int count(Long jobId) {
+    private static int count(int jobId) {
         // cache clear
         if (System.currentTimeMillis() > CACHE_VALID_TIME) {
-            ROUTE_COUNT_EACH_JOB.clear();
+            routeCountEachJob.clear();
             CACHE_VALID_TIME = System.currentTimeMillis() + 1000 * 60 * 60 * 24;
         }
 
-        AtomicInteger count = ROUTE_COUNT_EACH_JOB.get(jobId);
+        AtomicInteger count = routeCountEachJob.get(jobId);
         if (count == null || count.get() > 1000000) {
             // 初始化时主动Random一次，缓解首次压力
             count = new AtomicInteger(new Random().nextInt(100));
@@ -34,14 +33,14 @@ public class ExecutorRouteRound implements ExecutorRouter {
             // count++
             count.addAndGet(1);
         }
-        ROUTE_COUNT_EACH_JOB.put(jobId, count);
+        routeCountEachJob.put(jobId, count);
         return count.get();
     }
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        String address = addressList.get(count(triggerModel.getJobId()) % addressList.size());
-        return new Result<>(address);
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
+        String address = addressList.get(count(triggerParam.getJobId()) % addressList.size());
+        return new ReturnT<String>(address);
     }
 
 }

@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * @author george 2018-10-20 20:07:26
+ * @author xuxueli 2018-10-20 20:07:26
  */
 public class ThrowableUtil {
 
@@ -17,7 +17,8 @@ public class ThrowableUtil {
     public static String toString(Throwable e) {
         StringWriter stringWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(stringWriter));
-        return stringWriter.toString();
+        String errorMsg = stringWriter.toString();
+        return errorMsg;
     }
 
 }

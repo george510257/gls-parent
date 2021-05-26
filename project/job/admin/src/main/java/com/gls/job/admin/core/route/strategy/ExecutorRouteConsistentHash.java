@@ -1,10 +1,10 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -15,13 +15,11 @@ import java.util.TreeMap;
  * 分组下机器地址相同，不同JOB均匀散列在不同机器上，保证分组下机器分配JOB平均；且每个JOB固定调度其中一台机器；
  * a、virtual node：解决不均衡问题
  * b、hash method replace hashCode：String的hashCode可能重复，需要进一步扩大hashCode的取值范围
- *
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-public class ExecutorRouteConsistentHash implements ExecutorRouter {
+public class ExecutorRouteConsistentHash extends ExecutorRouter {
 
-    private static final int VIRTUAL_NODE_NUM = 100;
+    private static int VIRTUAL_NODE_NUM = 100;
 
     /**
      * get hash code on 2^32 ring (md5散列的方式计算hash值)
@@ -39,8 +37,12 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
             throw new RuntimeException("MD5 not supported", e);
         }
         md5.reset();
-        byte[] keyBytes;
-        keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = null;
+        try {
+            keyBytes = key.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Unknown string :" + key, e);
+        }
 
         md5.update(keyBytes);
         byte[] digest = md5.digest();
@@ -51,14 +53,15 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
                 | ((long) (digest[1] & 0xFF) << 8)
                 | (digest[0] & 0xFF);
 
-        return hashCode & 0xffffffffL;
+        long truncateHashCode = hashCode & 0xffffffffL;
+        return truncateHashCode;
     }
 
-    public String hashJob(Long jobId, List<String> addressList) {
+    public String hashJob(int jobId, List<String> addressList) {
 
         // ------A1------A2-------A3------
         // -----------J1------------------
-        TreeMap<Long, String> addressRing = new TreeMap<>();
+        TreeMap<Long, String> addressRing = new TreeMap<Long, String>();
         for (String address : addressList) {
             for (int i = 0; i < VIRTUAL_NODE_NUM; i++) {
                 long addressHash = hash("SHARD-" + address + "-NODE-" + i);
@@ -75,9 +78,9 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
     }
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
-        String address = hashJob(triggerModel.getJobId(), addressList);
-        return new Result<>(address);
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
+        String address = hashJob(triggerParam.getJobId(), addressList);
+        return new ReturnT<String>(address);
     }
 
 }

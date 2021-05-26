@@ -1,57 +1,48 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
+import com.gls.job.admin.core.scheduler.XxlJobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.service.JobSchedulerService;
-import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.rpc.ExecutorApi;
-import lombok.extern.slf4j.Slf4j;
+import com.gls.job.core.biz.ExecutorBiz;
+import com.gls.job.core.biz.model.ReturnT;
+import com.gls.job.core.biz.model.TriggerParam;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author george
- * @date 17/3/10
+ * Created by xuxueli on 17/3/10.
  */
-@Slf4j
-public class ExecutorRouteFailover implements ExecutorRouter {
-
-    @Resource
-    private JobSchedulerService jobSchedulerService;
+public class ExecutorRouteFailover extends ExecutorRouter {
 
     @Override
-    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
+    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
 
-        StringBuilder beatResultSB = new StringBuilder();
+        StringBuffer beatResultSB = new StringBuffer();
         for (String address : addressList) {
             // beat
-            Result<String> beatResult;
+            ReturnT<String> beatResult = null;
             try {
-                ExecutorApi executorApi = jobSchedulerService.getExecutorApi(address);
-                beatResult = executorApi.beat();
+                ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(address);
+                beatResult = executorBiz.beat();
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                beatResult = new Result<>(Result.FAIL_CODE, "" + e);
+                logger.error(e.getMessage(), e);
+                beatResult = new ReturnT<String>(ReturnT.FAIL_CODE, "" + e);
             }
-            beatResultSB
-                    .append((beatResultSB.length() > 0) ? "<br><br>" : "")
-                    .append(I18nUtil.getString("job_conf_beat"))
-                    .append("：")
+            beatResultSB.append((beatResultSB.length() > 0) ? "<br><br>" : "")
+                    .append(I18nUtil.getString("jobconf_beat") + "：")
                     .append("<br>address：").append(address)
                     .append("<br>code：").append(beatResult.getCode())
                     .append("<br>msg：").append(beatResult.getMsg());
 
             // beat success
-            if (beatResult.getCode() == Result.SUCCESS_CODE) {
+            if (beatResult.getCode() == ReturnT.SUCCESS_CODE) {
 
                 beatResult.setMsg(beatResultSB.toString());
                 beatResult.setContent(address);
                 return beatResult;
             }
         }
-        return new Result<>(Result.FAIL_CODE, beatResultSB.toString());
+        return new ReturnT<String>(ReturnT.FAIL_CODE, beatResultSB.toString());
 
     }
 }
