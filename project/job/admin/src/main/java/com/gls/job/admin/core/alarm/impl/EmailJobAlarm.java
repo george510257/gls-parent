@@ -2,10 +2,10 @@ package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.core.model.JobGroup;
-import com.gls.job.admin.core.model.JobInfo;
-import com.gls.job.admin.core.model.JobLog;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.biz.model.ReturnT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

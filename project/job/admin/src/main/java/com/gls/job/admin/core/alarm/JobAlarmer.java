@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.core.model.JobInfo;
-import com.gls.job.admin.core.model.JobLog;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;

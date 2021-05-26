@@ -1,12 +1,12 @@
 package com.gls.job.admin.core.trigger;
 
 import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.core.model.JobGroup;
-import com.gls.job.admin.core.model.JobInfo;
-import com.gls.job.admin.core.model.JobLog;
 import com.gls.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.biz.ExecutorBiz;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.biz.model.TriggerParam;

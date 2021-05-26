@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.core.model.JobGroup;
-import com.gls.job.admin.core.model.JobRegistry;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobRegistry;
 import com.gls.job.core.biz.model.RegistryParam;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.enums.RegistryConfig;

@@ -1,10 +1,10 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.core.model.JobInfo;
-import com.gls.job.admin.core.model.JobLog;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

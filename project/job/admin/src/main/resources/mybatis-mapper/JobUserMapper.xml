@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gls.job.admin.dao.JobUserDao">
+<mapper namespace="com.gls.job.admin.web.dao.JobUserDao">
 
-    <resultMap id="JobUser" type="com.gls.job.admin.core.model.JobUser">
+    <resultMap id="JobUser" type="com.gls.job.admin.web.model.JobUser">
         <result column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -55,7 +55,7 @@
         WHERE t.username = #{username}
     </select>
 
-    <insert id="save" parameterType="com.gls.job.admin.core.model.JobUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.model.JobUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO gls_job_user (username,
                                   password,
                                   role,
@@ -66,7 +66,7 @@
                 #{permission});
     </insert>
 
-    <update id="update" parameterType="com.gls.job.admin.core.model.JobUser">
+    <update id="update" parameterType="com.gls.job.admin.web.model.JobUser">
         UPDATE gls_job_user
         SET
         <if test="password != null and password != ''">
