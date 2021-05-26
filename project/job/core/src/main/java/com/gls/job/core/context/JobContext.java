@@ -1,7 +1,7 @@
 package com.gls.job.core.context;
 
 /**
- * xxl-job context
+ * gls-job context
  *
  * @author xuxueli 2020-05-21
  * [Dear hj]
@@ -63,11 +63,11 @@ public class JobContext {
         this.handleCode = HANDLE_COCE_SUCCESS;  // default success
     }
 
-    public static JobContext getXxlJobContext() {
+    public static JobContext getJobContext() {
         return contextHolder.get();
     }
 
-    public static void setXxlJobContext(JobContext jobContext) {
+    public static void setJobContext(JobContext jobContext) {
         contextHolder.set(jobContext);
     }
 

@@ -11,27 +11,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * xxl-job executor (for frameless)
+ * gls-job executor (for frameless)
  *
  * @author xuxueli 2020-11-05
  */
 public class JobSimpleExecutor extends JobExecutor {
     private static final Logger logger = LoggerFactory.getLogger(JobSimpleExecutor.class);
 
-    private List<Object> xxlJobBeanList = new ArrayList<>();
+    private List<Object> glsJobBeanList = new ArrayList<>();
 
-    public List<Object> getXxlJobBeanList() {
-        return xxlJobBeanList;
+    public List<Object> getJobBeanList() {
+        return glsJobBeanList;
     }
 
-    public void setXxlJobBeanList(List<Object> xxlJobBeanList) {
-        this.xxlJobBeanList = xxlJobBeanList;
+    public void setJobBeanList(List<Object> glsJobBeanList) {
+        this.glsJobBeanList = glsJobBeanList;
     }
 
     public void start() {
 
         // init JobHandler Repository (for method)
-        initJobHandlerMethodRepository(xxlJobBeanList);
+        initJobHandlerMethodRepository(glsJobBeanList);
 
         // super start
         try {
@@ -45,13 +45,13 @@ public class JobSimpleExecutor extends JobExecutor {
         super.destroy();
     }
 
-    private void initJobHandlerMethodRepository(List<Object> xxlJobBeanList) {
-        if (xxlJobBeanList == null || xxlJobBeanList.size() == 0) {
+    private void initJobHandlerMethodRepository(List<Object> glsJobBeanList) {
+        if (glsJobBeanList == null || glsJobBeanList.size() == 0) {
             return;
         }
 
         // init job handler from method
-        for (Object bean : xxlJobBeanList) {
+        for (Object bean : glsJobBeanList) {
             // method
             Method[] methods = bean.getClass().getDeclaredMethods();
             if (methods == null || methods.length == 0) {
@@ -67,19 +67,19 @@ public class JobSimpleExecutor extends JobExecutor {
 
                 String name = job.value();
                 if (name.trim().length() == 0) {
-                    throw new RuntimeException("xxl-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                    throw new RuntimeException("gls-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                 }
                 if (loadJobHandler(name) != null) {
-                    throw new RuntimeException("xxl-job jobhandler[" + name + "] naming conflicts.");
+                    throw new RuntimeException("gls-job jobhandler[" + name + "] naming conflicts.");
                 }
 
                 // execute method
                 /*if (!(method.getParameterTypes().length == 1 && method.getParameterTypes()[0].isAssignableFrom(String.class))) {
-                    throw new RuntimeException("xxl-job method-jobhandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
+                    throw new RuntimeException("gls-job method-jobhandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
                             "The correct method format like \" public ReturnT<String> execute(String param) \" .");
                 }
                 if (!method.getReturnType().isAssignableFrom(ReturnT.class)) {
-                    throw new RuntimeException("xxl-job method-jobhandler return-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
+                    throw new RuntimeException("gls-job method-jobhandler return-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
                             "The correct method format like \" public ReturnT<String> execute(String param) \" .");
                 }*/
 
@@ -94,7 +94,7 @@ public class JobSimpleExecutor extends JobExecutor {
                         initMethod = bean.getClass().getDeclaredMethod(job.init());
                         initMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                        throw new RuntimeException("gls-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
                 if (job.destroy().trim().length() > 0) {
@@ -102,7 +102,7 @@ public class JobSimpleExecutor extends JobExecutor {
                         destroyMethod = bean.getClass().getDeclaredMethod(job.destroy());
                         destroyMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("xxl-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                        throw new RuntimeException("gls-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
 

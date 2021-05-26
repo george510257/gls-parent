@@ -28,7 +28,7 @@ public class JobFileAppender {
      * ---/2017-12-25/639.log
      * ---/2017-12-25/821.log
      */
-    private static String logBasePath = "/data/applogs/xxl-job/jobhandler";
+    private static String logBasePath = "/data/applogs/gls-job/jobhandler";
     private static String glueSrcPath = logBasePath.concat("/gluesource");
 
     public static void initLogPath(String logPath) {

@@ -79,7 +79,7 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            JobGroup group = JobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
+            JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
             String personal = I18nUtil.getString("admin_name_full");
             String title = I18nUtil.getString("jobconf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
@@ -103,7 +103,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     JobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
                 } catch (Exception e) {
-                    logger.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    logger.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 
                     alarmResult = false;
                 }

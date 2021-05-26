@@ -125,10 +125,10 @@ public class JobThread extends Thread {
                             triggerParam.getBroadcastTotal());
 
                     // init job context
-                    JobContext.setXxlJobContext(jobContext);
+                    JobContext.setJobContext(jobContext);
 
                     // execute
-                    JobHelper.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
+                    JobHelper.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
 
                     if (triggerParam.getExecutorTimeout() > 0) {
                         // limit timeout
@@ -139,7 +139,7 @@ public class JobThread extends Thread {
                                 public Boolean call() throws Exception {
 
                                     // init job context
-                                    JobContext.setXxlJobContext(jobContext);
+                                    JobContext.setJobContext(jobContext);
 
                                     handler.execute();
                                     return true;
@@ -151,7 +151,7 @@ public class JobThread extends Thread {
                             Boolean tempResult = futureTask.get(triggerParam.getExecutorTimeout(), TimeUnit.SECONDS);
                         } catch (TimeoutException e) {
 
-                            JobHelper.log("<br>----------- xxl-job job execute timeout");
+                            JobHelper.log("<br>----------- gls-job job execute timeout");
                             JobHelper.log(e);
 
                             // handle result
@@ -165,19 +165,19 @@ public class JobThread extends Thread {
                     }
 
                     // valid execute handle data
-                    if (JobContext.getXxlJobContext().getHandleCode() <= 0) {
+                    if (JobContext.getJobContext().getHandleCode() <= 0) {
                         JobHelper.handleFail("job handle result lost.");
                     } else {
-                        String tempHandleMsg = JobContext.getXxlJobContext().getHandleMsg();
+                        String tempHandleMsg = JobContext.getJobContext().getHandleMsg();
                         tempHandleMsg = (tempHandleMsg != null && tempHandleMsg.length() > 50000)
                                 ? tempHandleMsg.substring(0, 50000).concat("...")
                                 : tempHandleMsg;
-                        JobContext.getXxlJobContext().setHandleMsg(tempHandleMsg);
+                        JobContext.getJobContext().setHandleMsg(tempHandleMsg);
                     }
-                    JobHelper.log("<br>----------- xxl-job job execute end(finish) -----------<br>----------- Result: handleCode="
-                            + JobContext.getXxlJobContext().getHandleCode()
+                    JobHelper.log("<br>----------- gls-job job execute end(finish) -----------<br>----------- Result: handleCode="
+                            + JobContext.getJobContext().getHandleCode()
                             + ", handleMsg = "
-                            + JobContext.getXxlJobContext().getHandleMsg()
+                            + JobContext.getJobContext().getHandleMsg()
                     );
 
                 } else {
@@ -199,7 +199,7 @@ public class JobThread extends Thread {
 
                 JobHelper.handleFail(errorMsg);
 
-                JobHelper.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- xxl-job job execute end(error) -----------");
+                JobHelper.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
             } finally {
                 if (triggerParam != null) {
                     // callback handler info
@@ -208,8 +208,8 @@ public class JobThread extends Thread {
                         TriggerCallbackThread.pushCallBack(new HandleCallbackParam(
                                 triggerParam.getLogId(),
                                 triggerParam.getLogDateTime(),
-                                JobContext.getXxlJobContext().getHandleCode(),
-                                JobContext.getXxlJobContext().getHandleMsg())
+                                JobContext.getJobContext().getHandleCode(),
+                                JobContext.getJobContext().getHandleMsg())
                         );
                     } else {
                         // is killed
@@ -245,6 +245,6 @@ public class JobThread extends Thread {
             logger.error(e.getMessage(), e);
         }
 
-        logger.info(">>>>>>>>>>> xxl-job JobThread stoped, hashCode:{}", Thread.currentThread());
+        logger.info(">>>>>>>>>>> gls-job JobThread stoped, hashCode:{}", Thread.currentThread());
     }
 }

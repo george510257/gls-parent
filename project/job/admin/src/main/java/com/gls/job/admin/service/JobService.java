@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * core job action for xxl-job
+ * core job action for gls-job
  *
  * @author xuxueli 2016-5-28 15:30:33
  */

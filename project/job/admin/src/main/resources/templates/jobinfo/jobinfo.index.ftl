@@ -8,7 +8,7 @@
           href="${request.contextPath}/static/adminlte/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
     <title>${I18n.admin_name}</title>
 </head>
-<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if>">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["glsjob_adminlte_settings"]?exists && "off" == cookieMap["glsjob_adminlte_settings"].value >sidebar-collapse</#if>">
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -298,23 +298,23 @@
                     <input type="hidden" name="glueRemark" value="GLUE代码初始化">
                     <textarea name="glueSource" style="display:none;"></textarea>
                     <textarea class="glueSource_java" style="display:none;">
-package com.xxl.job.service.handler;
+package com.gls.job.service.handler;
 
-import XxlJobHelper;
+import JobHelper;
 import IJobHandler;
 
 public class DemoGlueJobHandler extends IJobHandler {
 
 	@Override
 	public void execute() throws Exception {
-		XxlJobHelper.log("XXL-JOB, Hello World.");
+		JobHelper.log("XXL-JOB, Hello World.");
 	}
 
 }
 </textarea>
                     <textarea class="glueSource_shell" style="display:none;">
 #!/bin/bash
-echo "xxl-job: hello shell"
+echo "gls-job: hello shell"
 
 echo "${I18n.jobinfo_script_location}：$0"
 echo "${I18n.jobinfo_field_executorparam}：$1"
@@ -336,7 +336,7 @@ exit 0
 import time
 import sys
 
-print "xxl-job: hello python"
+print "gls-job: hello python"
 
 print "${I18n.jobinfo_script_location}：", sys.argv[0]
 print "${I18n.jobinfo_field_executorparam}：", sys.argv[1]
@@ -358,7 +358,7 @@ logging.info("脚本文件：" + sys.argv[0])
                     <textarea class="glueSource_php" style="display:none;">
 <?php
 
-    echo "xxl-job: hello php  \n";
+    echo "gls-job: hello php  \n";
 
     echo "${I18n.jobinfo_script_location}：$argv[0]  \n";
     echo "${I18n.jobinfo_field_executorparam}：$argv[1]  \n";
@@ -372,7 +372,7 @@ logging.info("脚本文件：" + sys.argv[0])
 </textarea>
                     <textarea class="glueSource_nodejs" style="display:none;">
 #!/usr/bin/env node
-console.log("xxl-job: hello nodejs")
+console.log("gls-job: hello nodejs")
 
 var arguments = process.argv
 
@@ -388,7 +388,7 @@ console.log("Good bye!")
 process.exit(0)
 </textarea>
                     <textarea class="glueSource_powershell" style="display:none;">
-Write-Host "xxl-job: hello powershell"
+Write-Host "gls-job: hello powershell"
 
 Write-Host "${I18n.jobinfo_script_location}: " $MyInvocation.MyCommand.Definition
 Write-Host "${I18n.jobinfo_field_executorparam}: "

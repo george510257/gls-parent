@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * xxl-job executor (for spring)
+ * gls-job executor (for spring)
  *
  * @author xuxueli 2018-11-01 09:24:52
  */
@@ -46,7 +46,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
                     String name = serviceBean.getClass().getAnnotation(JobHandler.class).value();
                     IJobHandler handler = (IJobHandler) serviceBean;
                     if (loadJobHandler(name) != null) {
-                        throw new RuntimeException("xxl-job jobhandler[" + name + "] naming conflicts.");
+                        throw new RuntimeException("gls-job jobhandler[" + name + "] naming conflicts.");
                     }
                     registJobHandler(name, handler);
                 }
@@ -105,34 +105,34 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
                             }
                         });
             } catch (Throwable ex) {
-                logger.error("xxl-job method-jobhandler resolve error for bean[" + beanDefinitionName + "].", ex);
+                logger.error("gls-job method-jobhandler resolve error for bean[" + beanDefinitionName + "].", ex);
             }
             if (annotatedMethods == null || annotatedMethods.isEmpty()) {
                 continue;
             }
 
-            for (Map.Entry<Method, Job> methodXxlJobEntry : annotatedMethods.entrySet()) {
-                Method executeMethod = methodXxlJobEntry.getKey();
-                Job job = methodXxlJobEntry.getValue();
+            for (Map.Entry<Method, Job> methodJobEntry : annotatedMethods.entrySet()) {
+                Method executeMethod = methodJobEntry.getKey();
+                Job job = methodJobEntry.getValue();
                 if (job == null) {
                     continue;
                 }
 
                 String name = job.value();
                 if (name.trim().length() == 0) {
-                    throw new RuntimeException("xxl-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                    throw new RuntimeException("gls-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                 }
                 if (loadJobHandler(name) != null) {
-                    throw new RuntimeException("xxl-job jobhandler[" + name + "] naming conflicts.");
+                    throw new RuntimeException("gls-job jobhandler[" + name + "] naming conflicts.");
                 }
 
                 // execute method
                 /*if (!(method.getParameterTypes().length == 1 && method.getParameterTypes()[0].isAssignableFrom(String.class))) {
-                    throw new RuntimeException("xxl-job method-jobhandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
+                    throw new RuntimeException("gls-job method-jobhandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
                             "The correct method format like \" public ReturnT<String> execute(String param) \" .");
                 }
                 if (!method.getReturnType().isAssignableFrom(ReturnT.class)) {
-                    throw new RuntimeException("xxl-job method-jobhandler return-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
+                    throw new RuntimeException("gls-job method-jobhandler return-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
                             "The correct method format like \" public ReturnT<String> execute(String param) \" .");
                 }*/
 
@@ -147,7 +147,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
                         initMethod = bean.getClass().getDeclaredMethod(job.init());
                         initMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                        throw new RuntimeException("gls-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
                 if (job.destroy().trim().length() > 0) {
@@ -155,7 +155,7 @@ public class JobSpringExecutor extends JobExecutor implements ApplicationContext
                         destroyMethod = bean.getClass().getDeclaredMethod(job.destroy());
                         destroyMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
-                        throw new RuntimeException("xxl-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
+                        throw new RuntimeException("gls-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
 

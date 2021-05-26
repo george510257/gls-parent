@@ -247,7 +247,7 @@
             <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
                 <a href="https://www.xuxueli.com/" target="_blank">xuxueli</a>
                 &nbsp;
-                <a href="https://github.com/xuxueli/xxl-job" target="_blank">github</a>
+                <a href="https://github.com/xuxueli/gls-job" target="_blank">github</a>
             </strong><!-- All rights reserved. -->
         </div>
     </footer>

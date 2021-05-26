@@ -59,7 +59,7 @@ public class JobScheduleHelper {
                         logger.error(e.getMessage(), e);
                     }
                 }
-                logger.info(">>>>>>>>> init xxl-job admin scheduler success.");
+                logger.info(">>>>>>>>> init gls-job admin scheduler success.");
 
                 // pre-read count: treadpool-size * trigger-qps (each trigger cost 50ms, qps = 1000/50 = 20)
                 int preReadCount = (JobAdminConfig.getAdminConfig().getTriggerPoolFastMax() + JobAdminConfig.getAdminConfig().getTriggerPoolSlowMax()) * 20;
@@ -80,14 +80,14 @@ public class JobScheduleHelper {
                         connAutoCommit = conn.getAutoCommit();
                         conn.setAutoCommit(false);
 
-                        preparedStatement = conn.prepareStatement("select * from xxl_job_lock where lock_name = 'schedule_lock' for update");
+                        preparedStatement = conn.prepareStatement("select * from gls_job_lock where lock_name = 'schedule_lock' for update");
                         preparedStatement.execute();
 
                         // tx start
 
                         // 1、pre read
                         long nowTime = System.currentTimeMillis();
-                        List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getXxlJobInfoDao().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
+                        List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
                         if (scheduleList != null && scheduleList.size() > 0) {
                             // 2、push time-ring
                             for (JobInfo jobInfo : scheduleList) {
@@ -95,14 +95,14 @@ public class JobScheduleHelper {
                                 // time-ring jump
                                 if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
                                     // 2.1、trigger-expire > 5s：pass && make next-trigger-time
-                                    logger.warn(">>>>>>>>>>> xxl-job, schedule misfire, jobId = " + jobInfo.getId());
+                                    logger.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfo.getId());
 
                                     // 1、misfire match
                                     MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
                                     if (MisfireStrategyEnum.FIRE_ONCE_NOW == misfireStrategyEnum) {
                                         // FIRE_ONCE_NOW 》 trigger
                                         JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.MISFIRE, -1, null, null, null);
-                                        logger.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfo.getId());
+                                        logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
                                     }
 
                                     // 2、fresh next
@@ -113,7 +113,7 @@ public class JobScheduleHelper {
 
                                     // 1、trigger
                                     JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null, null);
-                                    logger.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfo.getId());
+                                    logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
 
                                     // 2、fresh next
                                     refreshNextValidTime(jobInfo, new Date());
@@ -150,7 +150,7 @@ public class JobScheduleHelper {
 
                             // 3、update trigger info
                             for (JobInfo jobInfo : scheduleList) {
-                                JobAdminConfig.getAdminConfig().getXxlJobInfoDao().scheduleUpdate(jobInfo);
+                                JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleUpdate(jobInfo);
                             }
 
                         } else {
@@ -161,7 +161,7 @@ public class JobScheduleHelper {
 
                     } catch (Exception e) {
                         if (!scheduleThreadToStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, JobScheduleHelper#scheduleThread error:{}", e);
+                            logger.error(">>>>>>>>>>> gls-job, JobScheduleHelper#scheduleThread error:{}", e);
                         }
                     } finally {
 
@@ -217,11 +217,11 @@ public class JobScheduleHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper#scheduleThread stop");
+                logger.info(">>>>>>>>>>> gls-job, JobScheduleHelper#scheduleThread stop");
             }
         });
         scheduleThread.setDaemon(true);
-        scheduleThread.setName("xxl-job, admin JobScheduleHelper#scheduleThread");
+        scheduleThread.setName("gls-job, admin JobScheduleHelper#scheduleThread");
         scheduleThread.start();
 
         // ring thread
@@ -252,7 +252,7 @@ public class JobScheduleHelper {
                         }
 
                         // ring trigger
-                        logger.debug(">>>>>>>>>>> xxl-job, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData));
+                        logger.debug(">>>>>>>>>>> gls-job, time-ring beat : " + nowSecond + " = " + Arrays.asList(ringItemData));
                         if (ringItemData.size() > 0) {
                             // do trigger
                             for (int jobId : ringItemData) {
@@ -264,15 +264,15 @@ public class JobScheduleHelper {
                         }
                     } catch (Exception e) {
                         if (!ringThreadToStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, JobScheduleHelper#ringThread error:{}", e);
+                            logger.error(">>>>>>>>>>> gls-job, JobScheduleHelper#ringThread error:{}", e);
                         }
                     }
                 }
-                logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper#ringThread stop");
+                logger.info(">>>>>>>>>>> gls-job, JobScheduleHelper#ringThread stop");
             }
         });
         ringThread.setDaemon(true);
-        ringThread.setName("xxl-job, admin JobScheduleHelper#ringThread");
+        ringThread.setName("gls-job, admin JobScheduleHelper#ringThread");
         ringThread.start();
     }
 
@@ -285,7 +285,7 @@ public class JobScheduleHelper {
             jobInfo.setTriggerStatus(0);
             jobInfo.setTriggerLastTime(0);
             jobInfo.setTriggerNextTime(0);
-            logger.warn(">>>>>>>>>>> xxl-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
+            logger.warn(">>>>>>>>>>> gls-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
                     jobInfo.getId(), jobInfo.getScheduleType(), jobInfo.getScheduleConf());
         }
     }
@@ -299,7 +299,7 @@ public class JobScheduleHelper {
         }
         ringItemData.add(jobId);
 
-        logger.debug(">>>>>>>>>>> xxl-job, schedule push time-ring : " + ringSecond + " = " + Arrays.asList(ringItemData));
+        logger.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Arrays.asList(ringItemData));
     }
 
     public void toStop() {
@@ -357,7 +357,7 @@ public class JobScheduleHelper {
             }
         }
 
-        logger.info(">>>>>>>>>>> xxl-job, JobScheduleHelper stop");
+        logger.info(">>>>>>>>>>> gls-job, JobScheduleHelper stop");
     }
 
 }

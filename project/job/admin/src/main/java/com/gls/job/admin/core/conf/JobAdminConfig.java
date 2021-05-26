@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 
 /**
- * xxl-job config
+ * gls-job config
  *
  * @author xuxueli 2017-04-28
  */
@@ -27,19 +27,19 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
 
     // ---------------------- JobScheduler ----------------------
     // conf
-    @Value("${xxl.job.i18n}")
+    @Value("${gls.job.i18n}")
     private String i18n;
-    @Value("${xxl.job.accessToken}")
+    @Value("${gls.job.accessToken}")
     private String accessToken;
     @Value("${spring.mail.from}")
     private String emailFrom;
 
     // ---------------------- JobScheduler ----------------------
-    @Value("${xxl.job.triggerpool.fast.max}")
+    @Value("${gls.job.triggerpool.fast.max}")
     private int triggerPoolFastMax;
-    @Value("${xxl.job.triggerpool.slow.max}")
+    @Value("${gls.job.triggerpool.slow.max}")
     private int triggerPoolSlowMax;
-    @Value("${xxl.job.logretentiondays}")
+    @Value("${gls.job.logretentiondays}")
     private int logretentiondays;
     @Resource
     private JobLogDao jobLogDao;
@@ -113,23 +113,23 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
         return logretentiondays;
     }
 
-    public JobLogDao getXxlJobLogDao() {
+    public JobLogDao getJobLogDao() {
         return jobLogDao;
     }
 
-    public JobInfoDao getXxlJobInfoDao() {
+    public JobInfoDao getJobInfoDao() {
         return jobInfoDao;
     }
 
-    public JobRegistryDao getXxlJobRegistryDao() {
+    public JobRegistryDao getJobRegistryDao() {
         return jobRegistryDao;
     }
 
-    public JobGroupDao getXxlJobGroupDao() {
+    public JobGroupDao getJobGroupDao() {
         return jobGroupDao;
     }
 
-    public JobLogReportDao getXxlJobLogReportDao() {
+    public JobLogReportDao getJobLogReportDao() {
         return jobLogReportDao;
     }
 

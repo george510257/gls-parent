@@ -1,4 +1,4 @@
-//package com.xxl.job.admin.core.quartz;
+//package com.gls.job.admin.core.quartz;
 //
 //import org.quartz.SchedulerConfigException;
 //import org.quartz.spi.ThreadPool;
@@ -8,7 +8,7 @@
 // *
 // * @author xuxueli 2019-03-06
 // */
-//public class XxlJobThreadPool implements ThreadPool {
+//public class JobThreadPool implements ThreadPool {
 //
 //    @Override
 //    public boolean runInThread(Runnable runnable) {

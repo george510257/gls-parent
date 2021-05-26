@@ -1,4 +1,4 @@
-//package com.xxl.job.core.util;
+//package com.gls.job.core.util;
 //
 ///**
 // * sharding vo

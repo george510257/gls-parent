@@ -12,7 +12,7 @@ import java.io.StringWriter;
 import java.util.Date;
 
 /**
- * helper for xxl-job
+ * helper for gls-job
  *
  * @author xuxueli 2020-11-05
  */
@@ -20,7 +20,7 @@ public class JobHelper {
 
     // ---------------------- base info ----------------------
 
-    private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
+    private static Logger logger = LoggerFactory.getLogger("gls-job logger");
 
     /**
      * current JobId
@@ -28,7 +28,7 @@ public class JobHelper {
      * @return
      */
     public static long getJobId() {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return -1;
         }
@@ -44,7 +44,7 @@ public class JobHelper {
      * @return
      */
     public static String getJobParam() {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return null;
         }
@@ -60,7 +60,7 @@ public class JobHelper {
      * @return
      */
     public static String getJobLogFileName() {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return null;
         }
@@ -74,7 +74,7 @@ public class JobHelper {
      * @return
      */
     public static int getShardIndex() {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return -1;
         }
@@ -90,7 +90,7 @@ public class JobHelper {
      * @return
      */
     public static int getShardTotal() {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return -1;
         }
@@ -140,7 +140,7 @@ public class JobHelper {
      * @param appendLog
      */
     private static boolean logDetail(StackTraceElement callInfo, String appendLog) {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return false;
         }
@@ -236,7 +236,7 @@ public class JobHelper {
      * @return
      */
     public static boolean handleResult(int handleCode, String handleMsg) {
-        JobContext jobContext = JobContext.getXxlJobContext();
+        JobContext jobContext = JobContext.getJobContext();
         if (jobContext == null) {
             return false;
         }

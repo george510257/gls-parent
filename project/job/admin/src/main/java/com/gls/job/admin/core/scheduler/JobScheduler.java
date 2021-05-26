@@ -65,7 +65,7 @@ public class JobScheduler {
         // start-schedule  ( depend on JobTriggerPoolHelper )
         JobScheduleHelper.getInstance().start();
 
-        logger.info(">>>>>>>>> init xxl-job admin success.");
+        logger.info(">>>>>>>>> init gls-job admin success.");
     }
 
     public void destroy() throws Exception {

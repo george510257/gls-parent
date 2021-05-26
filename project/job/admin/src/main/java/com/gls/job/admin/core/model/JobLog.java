@@ -3,7 +3,7 @@ package com.gls.job.admin.core.model;
 import java.util.Date;
 
 /**
- * xxl-job log, used to track trigger process
+ * gls-job log, used to track trigger process
  *
  * @author xuxueli  2015-12-19 23:19:09
  */

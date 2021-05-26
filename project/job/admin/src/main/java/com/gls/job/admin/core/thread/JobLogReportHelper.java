@@ -67,7 +67,7 @@ public class JobLogReportHelper {
                             jobLogReport.setSucCount(0);
                             jobLogReport.setFailCount(0);
 
-                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getXxlJobLogDao().findLogReport(todayFrom, todayTo);
+                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogDao().findLogReport(todayFrom, todayTo);
                             if (triggerCountMap != null && triggerCountMap.size() > 0) {
                                 int triggerDayCount = triggerCountMap.containsKey("triggerDayCount") ? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCount"))) : 0;
                                 int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning") ? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))) : 0;
@@ -80,15 +80,15 @@ public class JobLogReportHelper {
                             }
 
                             // do refresh
-                            int ret = JobAdminConfig.getAdminConfig().getXxlJobLogReportDao().update(jobLogReport);
+                            int ret = JobAdminConfig.getAdminConfig().getJobLogReportDao().update(jobLogReport);
                             if (ret < 1) {
-                                JobAdminConfig.getAdminConfig().getXxlJobLogReportDao().save(jobLogReport);
+                                JobAdminConfig.getAdminConfig().getJobLogReportDao().save(jobLogReport);
                             }
                         }
 
                     } catch (Exception e) {
                         if (!toStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, job log report thread error:{}", e);
+                            logger.error(">>>>>>>>>>> gls-job, job log report thread error:{}", e);
                         }
                     }
 
@@ -108,9 +108,9 @@ public class JobLogReportHelper {
                         // clean expired log
                         List<Long> logIds = null;
                         do {
-                            logIds = JobAdminConfig.getAdminConfig().getXxlJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
+                            logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
                             if (logIds != null && logIds.size() > 0) {
-                                JobAdminConfig.getAdminConfig().getXxlJobLogDao().clearLog(logIds);
+                                JobAdminConfig.getAdminConfig().getJobLogDao().clearLog(logIds);
                             }
                         } while (logIds != null && logIds.size() > 0);
 
@@ -128,12 +128,12 @@ public class JobLogReportHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, job log report thread stop");
+                logger.info(">>>>>>>>>>> gls-job, job log report thread stop");
 
             }
         });
         logrThread.setDaemon(true);
-        logrThread.setName("xxl-job, admin JobLogReportHelper");
+        logrThread.setName("gls-job, admin JobLogReportHelper");
         logrThread.start();
     }
 

@@ -45,14 +45,14 @@ public class JobCompleteHelper {
                 new ThreadFactory() {
                     @Override
                     public Thread newThread(Runnable r) {
-                        return new Thread(r, "xxl-job, admin JobLosedMonitorHelper-callbackThreadPool-" + r.hashCode());
+                        return new Thread(r, "gls-job, admin JobLosedMonitorHelper-callbackThreadPool-" + r.hashCode());
                     }
                 },
                 new RejectedExecutionHandler() {
                     @Override
                     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
                         r.run();
-                        logger.warn(">>>>>>>>>>> xxl-job, callback too fast, match threadpool rejected handler(run now).");
+                        logger.warn(">>>>>>>>>>> gls-job, callback too fast, match threadpool rejected handler(run now).");
                     }
                 });
 
@@ -76,7 +76,7 @@ public class JobCompleteHelper {
                     try {
                         // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
                         Date losedTime = DateUtil.addMinutes(new Date(), -10);
-                        List<Long> losedJobIds = JobAdminConfig.getAdminConfig().getXxlJobLogDao().findLostJobIds(losedTime);
+                        List<Long> losedJobIds = JobAdminConfig.getAdminConfig().getJobLogDao().findLostJobIds(losedTime);
 
                         if (losedJobIds != null && losedJobIds.size() > 0) {
                             for (Long logId : losedJobIds) {
@@ -94,7 +94,7 @@ public class JobCompleteHelper {
                         }
                     } catch (Exception e) {
                         if (!toStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
+                            logger.error(">>>>>>>>>>> gls-job, job fail monitor thread error:{}", e);
                         }
                     }
 
@@ -108,12 +108,12 @@ public class JobCompleteHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, JobLosedMonitorHelper stop");
+                logger.info(">>>>>>>>>>> gls-job, JobLosedMonitorHelper stop");
 
             }
         });
         monitorThread.setDaemon(true);
-        monitorThread.setName("xxl-job, admin JobLosedMonitorHelper");
+        monitorThread.setName("gls-job, admin JobLosedMonitorHelper");
         monitorThread.start();
     }
 
@@ -152,7 +152,7 @@ public class JobCompleteHelper {
 
     private ReturnT<String> callback(HandleCallbackParam handleCallbackParam) {
         // valid log item
-        JobLog log = JobAdminConfig.getAdminConfig().getXxlJobLogDao().load(handleCallbackParam.getLogId());
+        JobLog log = JobAdminConfig.getAdminConfig().getJobLogDao().load(handleCallbackParam.getLogId());
         if (log == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "log item not found.");
         }

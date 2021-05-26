@@ -1,4 +1,4 @@
-//package com.xxl.job.admin.core.jobbean;
+//package com.gls.job.admin.core.jobbean;
 //
 //import JobTriggerPoolHelper;
 //import TriggerTypeEnum;

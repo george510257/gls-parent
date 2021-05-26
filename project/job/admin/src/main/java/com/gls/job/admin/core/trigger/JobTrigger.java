@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
- * xxl-job trigger
+ * gls-job trigger
  * Created by xuxueli on 17/7/13.
  */
 public class JobTrigger {
@@ -46,7 +46,7 @@ public class JobTrigger {
                                String addressList) {
 
         // load data
-        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(jobId);
+        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(jobId);
         if (jobInfo == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -55,7 +55,7 @@ public class JobTrigger {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
-        JobGroup group = JobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(jobInfo.getJobGroup());
+        JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(jobInfo.getJobGroup());
 
         // cover addressList
         if (addressList != null && addressList.trim().length() > 0) {
@@ -117,8 +117,8 @@ public class JobTrigger {
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
-        JobAdminConfig.getAdminConfig().getXxlJobLogDao().save(jobLog);
-        logger.debug(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());
+        JobAdminConfig.getAdminConfig().getJobLogDao().save(jobLog);
+        logger.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
         TriggerParam triggerParam = new TriggerParam();
@@ -190,9 +190,9 @@ public class JobTrigger {
         //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
-        JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
+        JobAdminConfig.getAdminConfig().getJobLogDao().updateTriggerInfo(jobLog);
 
-        logger.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());
+        logger.debug(">>>>>>>>>>> gls-job trigger end, jobId:{}", jobLog.getId());
     }
 
     /**
@@ -208,7 +208,7 @@ public class JobTrigger {
             ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(address);
             runResult = executorBiz.run(triggerParam);
         } catch (Exception e) {
-            logger.error(">>>>>>>>>>> xxl-job trigger error, please check if the executor[{}] is running.", address, e);
+            logger.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
             runResult = new ReturnT<String>(ReturnT.FAIL_CODE, ThrowableUtil.toString(e));
         }
 

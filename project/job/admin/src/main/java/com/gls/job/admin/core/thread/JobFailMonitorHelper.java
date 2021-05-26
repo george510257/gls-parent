@@ -39,24 +39,24 @@ public class JobFailMonitorHelper {
                 while (!toStop) {
                     try {
 
-                        List<Long> failLogIds = JobAdminConfig.getAdminConfig().getXxlJobLogDao().findFailJobLogIds(1000);
+                        List<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogDao().findFailJobLogIds(1000);
                         if (failLogIds != null && !failLogIds.isEmpty()) {
                             for (long failLogId : failLogIds) {
 
                                 // lock log
-                                int lockRet = JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, 0, -1);
+                                int lockRet = JobAdminConfig.getAdminConfig().getJobLogDao().updateAlarmStatus(failLogId, 0, -1);
                                 if (lockRet < 1) {
                                     continue;
                                 }
-                                JobLog log = JobAdminConfig.getAdminConfig().getXxlJobLogDao().load(failLogId);
-                                JobInfo info = JobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(log.getJobId());
+                                JobLog log = JobAdminConfig.getAdminConfig().getJobLogDao().load(failLogId);
+                                JobInfo info = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(log.getJobId());
 
                                 // 1、fail retry monitor
                                 if (log.getExecutorFailRetryCount() > 0) {
                                     JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
                                     String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
                                     log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-                                    JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(log);
+                                    JobAdminConfig.getAdminConfig().getJobLogDao().updateTriggerInfo(log);
                                 }
 
                                 // 2、fail alarm monitor
@@ -68,13 +68,13 @@ public class JobFailMonitorHelper {
                                     newAlarmStatus = 1;
                                 }
 
-                                JobAdminConfig.getAdminConfig().getXxlJobLogDao().updateAlarmStatus(failLogId, -1, newAlarmStatus);
+                                JobAdminConfig.getAdminConfig().getJobLogDao().updateAlarmStatus(failLogId, -1, newAlarmStatus);
                             }
                         }
 
                     } catch (Exception e) {
                         if (!toStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
+                            logger.error(">>>>>>>>>>> gls-job, job fail monitor thread error:{}", e);
                         }
                     }
 
@@ -88,12 +88,12 @@ public class JobFailMonitorHelper {
 
                 }
 
-                logger.info(">>>>>>>>>>> xxl-job, job fail monitor thread stop");
+                logger.info(">>>>>>>>>>> gls-job, job fail monitor thread stop");
 
             }
         });
         monitorThread.setDaemon(true);
-        monitorThread.setName("xxl-job, admin JobFailMonitorHelper");
+        monitorThread.setName("gls-job, admin JobFailMonitorHelper");
         monitorThread.start();
     }
 

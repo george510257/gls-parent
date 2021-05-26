@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gls.job.admin.dao.JobLogGlueDao">
 
-    <resultMap id="XxlJobLogGlue" type="com.gls.job.admin.core.model.JobLogGlue">
+    <resultMap id="JobLogGlue" type="com.gls.job.admin.core.model.JobLogGlue">
         <result column="id" property="id"/>
         <result column="job_id" property="jobId"/>
         <result column="glue_type" property="glueType"/>
@@ -25,7 +25,7 @@
 
     <insert id="save" parameterType="com.gls.job.admin.core.model.JobLogGlue" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO xxl_job_logglue (
+        INSERT INTO gls_job_logglue (
         `job_id`,
         `glue_type`,
         `glue_source`,
@@ -45,22 +45,22 @@
         </selectKey>-->
     </insert>
 
-    <select id="findByJobId" parameterType="java.lang.Integer" resultMap="XxlJobLogGlue">
+    <select id="findByJobId" parameterType="java.lang.Integer" resultMap="JobLogGlue">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM xxl_job_logglue AS t
+        FROM gls_job_logglue AS t
         WHERE t.job_id = #{jobId}
         ORDER BY id DESC
     </select>
 
     <delete id="removeOld">
         DELETE
-        FROM xxl_job_logglue
+        FROM gls_job_logglue
         WHERE id NOT in (
             SELECT id
             FROM (
                      SELECT id
-                     FROM xxl_job_logglue
+                     FROM gls_job_logglue
                      WHERE `job_id` = #{jobId}
                      ORDER BY update_time desc
                      LIMIT 0, #{limit}
@@ -71,7 +71,7 @@
 
     <delete id="deleteByJobId" parameterType="java.lang.Integer">
         DELETE
-        FROM xxl_job_logglue
+        FROM gls_job_logglue
         WHERE `job_id` = #{jobId}
     </delete>
 

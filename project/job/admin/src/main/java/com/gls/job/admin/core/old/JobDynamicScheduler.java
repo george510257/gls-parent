@@ -1,23 +1,23 @@
-//package com.xxl.job.admin.core.schedule;
+//package com.gls.job.admin.core.schedule;
 //
-//import XxlJobAdminConfig;
-//import com.xxl.job.admin.core.jobbean.RemoteHttpJobBean;
+//import JobAdminConfig;
+//import com.gls.job.admin.core.jobbean.RemoteHttpJobBean;
 //import JobInfo;
 //import JobFailMonitorHelper;
-//import com.xxl.job.admin.core.thread.JobRegistryMonitorHelper;
+//import com.gls.job.admin.core.thread.JobRegistryMonitorHelper;
 //import JobTriggerPoolHelper;
 //import I18nUtil;
 //import AdminBiz;
 //import ExecutorBiz;
 //import ExecutorBlockStrategyEnum;
-//import com.xxl.rpc.remoting.invoker.XxlRpcInvokerFactory;
-//import com.xxl.rpc.remoting.invoker.call.CallType;
-//import com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
-//import com.xxl.rpc.remoting.invoker.route.LoadBalance;
-//import com.xxl.rpc.remoting.net.NetEnum;
-//import com.xxl.rpc.remoting.net.impl.servlet.server.ServletServerHandler;
-//import com.xxl.rpc.remoting.provider.XxlRpcProviderFactory;
-//import com.xxl.rpc.serialize.Serializer;
+//import com.gls.rpc.remoting.invoker.RpcInvokerFactory;
+//import com.gls.rpc.remoting.invoker.call.CallType;
+//import com.gls.rpc.remoting.invoker.reference.RpcReferenceBean;
+//import com.gls.rpc.remoting.invoker.route.LoadBalance;
+//import com.gls.rpc.remoting.net.NetEnum;
+//import com.gls.rpc.remoting.net.impl.servlet.server.ServletServerHandler;
+//import com.gls.rpc.remoting.provider.RpcProviderFactory;
+//import com.gls.rpc.serialize.Serializer;
 //import org.quartz.*;
 //import org.quartz.Trigger.TriggerState;
 //import org.quartz.impl.triggers.CronTriggerImpl;
@@ -36,15 +36,15 @@
 // * base quartz scheduler util
 // * @author xuxueli 2015-12-19 16:13:53
 // */
-//public final class XxlJobDynamicScheduler {
-//    private static final Logger logger = LoggerFactory.getLogger(XxlJobDynamicScheduler_old.class);
+//public final class JobDynamicScheduler {
+//    private static final Logger logger = LoggerFactory.getLogger(JobDynamicScheduler_old.class);
 //
 //    // ---------------------- param ----------------------
 //
 //    // scheduler
 //    private static Scheduler scheduler;
 //    public void setScheduler(Scheduler scheduler) {
-//		XxlJobDynamicScheduler_old.scheduler = scheduler;
+//		JobDynamicScheduler_old.scheduler = scheduler;
 //	}
 //
 //
@@ -65,7 +65,7 @@
 //        // admin-server
 //        initRpcProvider();
 //
-//        logger.info(">>>>>>>>> init xxl-job admin success.");
+//        logger.info(">>>>>>>>> init gls-job admin success.");
 //    }
 //
 //
@@ -97,24 +97,24 @@
 //    private static ServletServerHandler servletServerHandler;
 //    private void initRpcProvider(){
 //        // init
-//        XxlRpcProviderFactory xxlRpcProviderFactory = new XxlRpcProviderFactory();
-//        xxlRpcProviderFactory.initConfig(
+//        RpcProviderFactory glsRpcProviderFactory = new RpcProviderFactory();
+//        glsRpcProviderFactory.initConfig(
 //                NetEnum.NETTY_HTTP,
 //                Serializer.SerializeEnum.HESSIAN.getSerializer(),
 //                null,
 //                0,
-//                XxlJobAdminConfig.getAdminConfig().getAccessToken(),
+//                JobAdminConfig.getAdminConfig().getAccessToken(),
 //                null,
 //                null);
 //
 //        // add services
-//        xxlRpcProviderFactory.addService(AdminBiz.class.getName(), null, XxlJobAdminConfig.getAdminConfig().getAdminBiz());
+//        glsRpcProviderFactory.addService(AdminBiz.class.getName(), null, JobAdminConfig.getAdminConfig().getAdminBiz());
 //
 //        // servlet handler
-//        servletServerHandler = new ServletServerHandler(xxlRpcProviderFactory);
+//        servletServerHandler = new ServletServerHandler(glsRpcProviderFactory);
 //    }
 //    private void stopRpcProvider() throws Exception {
-//        XxlRpcInvokerFactory.getInstance().stop();
+//        RpcInvokerFactory.getInstance().stop();
 //    }
 //    public static void invokeAdminService(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 //        servletServerHandler.handle(null, request, response);
@@ -137,7 +137,7 @@
 //        }
 //
 //        // set-cache
-//        executorBiz = (ExecutorBiz) new XxlRpcReferenceBean(
+//        executorBiz = (ExecutorBiz) new RpcReferenceBean(
 //                NetEnum.NETTY_HTTP,
 //                Serializer.SerializeEnum.HESSIAN.getSerializer(),
 //                CallType.SYNC,
@@ -146,7 +146,7 @@
 //                null,
 //                5000,
 //                address,
-//                XxlJobAdminConfig.getAdminConfig().getAccessToken(),
+//                JobAdminConfig.getAdminConfig().getAccessToken(),
 //                null,
 //                null).getObject();
 //
