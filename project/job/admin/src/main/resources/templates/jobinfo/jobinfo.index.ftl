@@ -307,7 +307,7 @@ public class DemoGlueJobHandler extends IJobHandler {
 
 	@Override
 	public void execute() throws Exception {
-		JobHelper.log("XXL-JOB, Hello World.");
+		JobHelper.log("GLS-JOB, Hello World.");
 	}
 
 }

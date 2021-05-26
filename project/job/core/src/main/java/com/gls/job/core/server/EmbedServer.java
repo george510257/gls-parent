@@ -167,7 +167,7 @@ public class EmbedServer {
             String uri = msg.uri();
             HttpMethod httpMethod = msg.method();
             boolean keepAlive = HttpUtil.isKeepAlive(msg);
-            String accessTokenReq = msg.headers().get(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN);
+            String accessTokenReq = msg.headers().get(JobRemotingUtil.GLS_JOB_ACCESS_TOKEN);
 
             // invoke
             bizThreadPool.execute(new Runnable() {

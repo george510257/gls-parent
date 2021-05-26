@@ -49,7 +49,7 @@ public class JobApiController {
         }
         if (JobAdminConfig.getAdminConfig().getAccessToken() != null
                 && JobAdminConfig.getAdminConfig().getAccessToken().trim().length() > 0
-                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+                && !JobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.GLS_JOB_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 
