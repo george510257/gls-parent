@@ -7,7 +7,7 @@ import com.gls.job.core.biz.model.HandleCallbackParam;
 import com.gls.job.core.biz.model.RegistryParam;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.util.GsonTool;
-import com.gls.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.JobRemotingUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +49,7 @@ public class JobApiController {
         }
         if (XxlJobAdminConfig.getAdminConfig().getAccessToken() != null
                 && XxlJobAdminConfig.getAdminConfig().getAccessToken().trim().length() > 0
-                && !XxlJobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+                && !XxlJobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
         }
 

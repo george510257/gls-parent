@@ -1,10 +1,10 @@
 package com.gls.job.core.handler.impl;
 
-import com.gls.job.core.context.XxlJobContext;
-import com.gls.job.core.context.XxlJobHelper;
+import com.gls.job.core.context.JobContext;
+import com.gls.job.core.context.JobHelper;
 import com.gls.job.core.glue.GlueTypeEnum;
 import com.gls.job.core.handler.IJobHandler;
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.util.ScriptUtil;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class ScriptJobHandler extends IJobHandler {
         this.glueType = glueType;
 
         // clean old script file
-        File glueSrcPath = new File(XxlJobFileAppender.getGlueSrcPath());
+        File glueSrcPath = new File(JobFileAppender.getGlueSrcPath());
         if (glueSrcPath.exists()) {
             File[] glueSrcFileList = glueSrcPath.listFiles();
             if (glueSrcFileList != null && glueSrcFileList.length > 0) {
@@ -48,7 +48,7 @@ public class ScriptJobHandler extends IJobHandler {
     public void execute() throws Exception {
 
         if (!glueType.isScript()) {
-            XxlJobHelper.handleFail("glueType[" + glueType + "] invalid.");
+            JobHelper.handleFail("glueType[" + glueType + "] invalid.");
             return;
         }
 
@@ -56,7 +56,7 @@ public class ScriptJobHandler extends IJobHandler {
         String cmd = glueType.getCmd();
 
         // make script file
-        String scriptFileName = XxlJobFileAppender.getGlueSrcPath()
+        String scriptFileName = JobFileAppender.getGlueSrcPath()
                 .concat(File.separator)
                 .concat(String.valueOf(jobId))
                 .concat("_")
@@ -68,23 +68,23 @@ public class ScriptJobHandler extends IJobHandler {
         }
 
         // log file
-        String logFileName = XxlJobContext.getXxlJobContext().getJobLogFileName();
+        String logFileName = JobContext.getXxlJobContext().getJobLogFileName();
 
         // script params：0=param、1=分片序号、2=分片总数
         String[] scriptParams = new String[3];
-        scriptParams[0] = XxlJobHelper.getJobParam();
-        scriptParams[1] = String.valueOf(XxlJobContext.getXxlJobContext().getShardIndex());
-        scriptParams[2] = String.valueOf(XxlJobContext.getXxlJobContext().getShardTotal());
+        scriptParams[0] = JobHelper.getJobParam();
+        scriptParams[1] = String.valueOf(JobContext.getXxlJobContext().getShardIndex());
+        scriptParams[2] = String.valueOf(JobContext.getXxlJobContext().getShardTotal());
 
         // invoke
-        XxlJobHelper.log("----------- script file:" + scriptFileName + " -----------");
+        JobHelper.log("----------- script file:" + scriptFileName + " -----------");
         int exitValue = ScriptUtil.execToFile(cmd, scriptFileName, logFileName, scriptParams);
 
         if (exitValue == 0) {
-            XxlJobHelper.handleSuccess();
+            JobHelper.handleSuccess();
             return;
         } else {
-            XxlJobHelper.handleFail("script exit value(" + exitValue + ") is failed");
+            JobHelper.handleFail("script exit value(" + exitValue + ") is failed");
             return;
         }
 

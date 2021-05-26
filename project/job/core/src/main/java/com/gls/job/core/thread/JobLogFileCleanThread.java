@@ -1,6 +1,6 @@
 package com.gls.job.core.thread;
 
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class JobLogFileCleanThread {
                 while (!toStop) {
                     try {
                         // clean log dir, over logRetentionDays
-                        File[] childDirs = new File(XxlJobFileAppender.getLogPath()).listFiles();
+                        File[] childDirs = new File(JobFileAppender.getLogPath()).listFiles();
                         if (childDirs != null && childDirs.length > 0) {
 
                             // today

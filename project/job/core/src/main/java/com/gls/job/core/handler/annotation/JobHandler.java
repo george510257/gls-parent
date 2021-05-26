@@ -9,7 +9,7 @@
 ///**
 // * annotation for job handler
 // *
-// * will be replaced by {@link XxlJob}
+// * will be replaced by {@link Job}
 // *
 // * @author 2016-5-17 21:06:49
 // */

@@ -1,6 +1,6 @@
 package com.gls.job.core.handler.impl;
 
-import com.gls.job.core.context.XxlJobHelper;
+import com.gls.job.core.context.JobHelper;
 import com.gls.job.core.handler.IJobHandler;
 
 /**
@@ -24,7 +24,7 @@ public class GlueJobHandler extends IJobHandler {
 
     @Override
     public void execute() throws Exception {
-        XxlJobHelper.log("----------- glue.version:" + glueUpdatetime + " -----------");
+        JobHelper.log("----------- glue.version:" + glueUpdatetime + " -----------");
         jobHandler.execute();
     }
 

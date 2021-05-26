@@ -13,8 +13,8 @@ import java.util.Date;
  *
  * @author xuxueli 2016-3-12 19:25:12
  */
-public class XxlJobFileAppender {
-    private static Logger logger = LoggerFactory.getLogger(XxlJobFileAppender.class);
+public class JobFileAppender {
+    private static Logger logger = LoggerFactory.getLogger(JobFileAppender.class);
 
     /**
      * log base path

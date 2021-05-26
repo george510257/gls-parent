@@ -1,6 +1,6 @@
 package com.gls.job.core.context;
 
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.Date;
  *
  * @author xuxueli 2020-11-05
  */
-public class XxlJobHelper {
+public class JobHelper {
 
     // ---------------------- base info ----------------------
 
@@ -28,12 +28,12 @@ public class XxlJobHelper {
      * @return
      */
     public static long getJobId() {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return -1;
         }
 
-        return xxlJobContext.getJobId();
+        return jobContext.getJobId();
     }
 
     // ---------------------- for log ----------------------
@@ -44,12 +44,12 @@ public class XxlJobHelper {
      * @return
      */
     public static String getJobParam() {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return null;
         }
 
-        return xxlJobContext.getJobParam();
+        return jobContext.getJobParam();
     }
 
     // ---------------------- for shard ----------------------
@@ -60,12 +60,12 @@ public class XxlJobHelper {
      * @return
      */
     public static String getJobLogFileName() {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return null;
         }
 
-        return xxlJobContext.getJobLogFileName();
+        return jobContext.getJobLogFileName();
     }
 
     /**
@@ -74,12 +74,12 @@ public class XxlJobHelper {
      * @return
      */
     public static int getShardIndex() {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return -1;
         }
 
-        return xxlJobContext.getShardIndex();
+        return jobContext.getShardIndex();
     }
 
     // ---------------------- tool for log ----------------------
@@ -90,12 +90,12 @@ public class XxlJobHelper {
      * @return
      */
     public static int getShardTotal() {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return -1;
         }
 
-        return xxlJobContext.getShardTotal();
+        return jobContext.getShardTotal();
     }
 
     /**
@@ -140,8 +140,8 @@ public class XxlJobHelper {
      * @param appendLog
      */
     private static boolean logDetail(StackTraceElement callInfo, String appendLog) {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return false;
         }
 
@@ -158,10 +158,10 @@ public class XxlJobHelper {
         String formatAppendLog = stringBuffer.toString();
 
         // appendlog
-        String logFileName = xxlJobContext.getJobLogFileName();
+        String logFileName = jobContext.getJobLogFileName();
 
         if (logFileName != null && logFileName.trim().length() > 0) {
-            XxlJobFileAppender.appendLog(logFileName, formatAppendLog);
+            JobFileAppender.appendLog(logFileName, formatAppendLog);
             return true;
         } else {
             logger.info(">>>>>>>>>>> {}", formatAppendLog);
@@ -177,7 +177,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleSuccess() {
-        return handleResult(XxlJobContext.HANDLE_COCE_SUCCESS, null);
+        return handleResult(JobContext.HANDLE_COCE_SUCCESS, null);
     }
 
     /**
@@ -187,7 +187,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleSuccess(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_COCE_SUCCESS, handleMsg);
+        return handleResult(JobContext.HANDLE_COCE_SUCCESS, handleMsg);
     }
 
     /**
@@ -196,7 +196,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleFail() {
-        return handleResult(XxlJobContext.HANDLE_COCE_FAIL, null);
+        return handleResult(JobContext.HANDLE_COCE_FAIL, null);
     }
 
     /**
@@ -206,7 +206,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleFail(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_COCE_FAIL, handleMsg);
+        return handleResult(JobContext.HANDLE_COCE_FAIL, handleMsg);
     }
 
     /**
@@ -215,7 +215,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleTimeout() {
-        return handleResult(XxlJobContext.HANDLE_COCE_TIMEOUT, null);
+        return handleResult(JobContext.HANDLE_COCE_TIMEOUT, null);
     }
 
     /**
@@ -225,7 +225,7 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleTimeout(String handleMsg) {
-        return handleResult(XxlJobContext.HANDLE_COCE_TIMEOUT, handleMsg);
+        return handleResult(JobContext.HANDLE_COCE_TIMEOUT, handleMsg);
     }
 
     /**
@@ -236,14 +236,14 @@ public class XxlJobHelper {
      * @return
      */
     public static boolean handleResult(int handleCode, String handleMsg) {
-        XxlJobContext xxlJobContext = XxlJobContext.getXxlJobContext();
-        if (xxlJobContext == null) {
+        JobContext jobContext = JobContext.getXxlJobContext();
+        if (jobContext == null) {
             return false;
         }
 
-        xxlJobContext.setHandleCode(handleCode);
+        jobContext.setHandleCode(handleCode);
         if (handleMsg != null) {
-            xxlJobContext.setHandleMsg(handleMsg);
+            jobContext.setHandleMsg(handleMsg);
         }
         return true;
     }

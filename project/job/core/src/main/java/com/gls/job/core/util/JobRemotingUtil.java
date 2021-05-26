@@ -16,7 +16,7 @@ import java.security.cert.X509Certificate;
 /**
  * @author xuxueli 2018-11-25 00:55:31
  */
-public class XxlJobRemotingUtil {
+public class JobRemotingUtil {
     public static final String XXL_JOB_ACCESS_TOKEN = "XXL-JOB-ACCESS-TOKEN";
     private static final TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -29,7 +29,7 @@ public class XxlJobRemotingUtil {
         public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         }
     }};
-    private static Logger logger = LoggerFactory.getLogger(XxlJobRemotingUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(JobRemotingUtil.class);
 
     // trust-https start
     private static void trustAllHosts(HttpsURLConnection connection) {

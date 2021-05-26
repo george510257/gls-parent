@@ -5,8 +5,8 @@ import com.gls.job.core.biz.impl.ExecutorBizImpl;
 import com.gls.job.core.biz.model.*;
 import com.gls.job.core.thread.ExecutorRegistryThread;
 import com.gls.job.core.util.GsonTool;
+import com.gls.job.core.util.JobRemotingUtil;
 import com.gls.job.core.util.ThrowableUtil;
-import com.gls.job.core.util.XxlJobRemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -167,7 +167,7 @@ public class EmbedServer {
             String uri = msg.uri();
             HttpMethod httpMethod = msg.method();
             boolean keepAlive = HttpUtil.isKeepAlive(msg);
-            String accessTokenReq = msg.headers().get(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN);
+            String accessTokenReq = msg.headers().get(JobRemotingUtil.XXL_JOB_ACCESS_TOKEN);
 
             // invoke
             bizThreadPool.execute(new Runnable() {

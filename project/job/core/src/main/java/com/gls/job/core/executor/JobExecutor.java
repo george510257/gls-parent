@@ -3,7 +3,7 @@ package com.gls.job.core.executor;
 import com.gls.job.core.biz.AdminBiz;
 import com.gls.job.core.biz.client.AdminBizClient;
 import com.gls.job.core.handler.IJobHandler;
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.server.EmbedServer;
 import com.gls.job.core.thread.JobLogFileCleanThread;
 import com.gls.job.core.thread.JobThread;
@@ -22,8 +22,8 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by xuxueli on 2016/3/2 21:14.
  */
-public class XxlJobExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobExecutor.class);
+public class JobExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
     // ---------------------- admin-client (rpc invoker) ----------------------
     private static List<AdminBiz> adminBizList;
     // ---------------------- job handler repository ----------------------
@@ -121,7 +121,7 @@ public class XxlJobExecutor {
     public void start() throws Exception {
 
         // init logpath
-        XxlJobFileAppender.initLogPath(logPath);
+        JobFileAppender.initLogPath(logPath);
 
         // init invoker, admin-client
         initAdminBizList(adminAddresses, accessToken);

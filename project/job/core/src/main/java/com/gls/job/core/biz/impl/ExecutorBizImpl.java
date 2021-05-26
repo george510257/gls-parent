@@ -3,13 +3,13 @@ package com.gls.job.core.biz.impl;
 import com.gls.job.core.biz.ExecutorBiz;
 import com.gls.job.core.biz.model.*;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
-import com.gls.job.core.executor.XxlJobExecutor;
+import com.gls.job.core.executor.JobExecutor;
 import com.gls.job.core.glue.GlueFactory;
 import com.gls.job.core.glue.GlueTypeEnum;
 import com.gls.job.core.handler.IJobHandler;
 import com.gls.job.core.handler.impl.GlueJobHandler;
 import com.gls.job.core.handler.impl.ScriptJobHandler;
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.thread.JobThread;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
         // isRunningOrHasQueue
         boolean isRunningOrHasQueue = false;
-        JobThread jobThread = XxlJobExecutor.loadJobThread(idleBeatParam.getJobId());
+        JobThread jobThread = JobExecutor.loadJobThread(idleBeatParam.getJobId());
         if (jobThread != null && jobThread.isRunningOrHasQueue()) {
             isRunningOrHasQueue = true;
         }
@@ -46,7 +46,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
     @Override
     public ReturnT<String> run(TriggerParam triggerParam) {
         // load old：jobHandler + jobThread
-        JobThread jobThread = XxlJobExecutor.loadJobThread(triggerParam.getJobId());
+        JobThread jobThread = JobExecutor.loadJobThread(triggerParam.getJobId());
         IJobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
         String removeOldReason = null;
 
@@ -55,7 +55,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
         if (GlueTypeEnum.BEAN == glueTypeEnum) {
 
             // new jobhandler
-            IJobHandler newJobHandler = XxlJobExecutor.loadJobHandler(triggerParam.getExecutorHandler());
+            IJobHandler newJobHandler = JobExecutor.loadJobHandler(triggerParam.getExecutorHandler());
 
             // valid old jobThread
             if (jobThread != null && jobHandler != newJobHandler) {
@@ -140,7 +140,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
         // replace thread (new or exists invalid)
         if (jobThread == null) {
-            jobThread = XxlJobExecutor.registJobThread(triggerParam.getJobId(), jobHandler, removeOldReason);
+            jobThread = JobExecutor.registJobThread(triggerParam.getJobId(), jobHandler, removeOldReason);
         }
 
         // push data to queue
@@ -151,9 +151,9 @@ public class ExecutorBizImpl implements ExecutorBiz {
     @Override
     public ReturnT<String> kill(KillParam killParam) {
         // kill handlerThread, and create new one
-        JobThread jobThread = XxlJobExecutor.loadJobThread(killParam.getJobId());
+        JobThread jobThread = JobExecutor.loadJobThread(killParam.getJobId());
         if (jobThread != null) {
-            XxlJobExecutor.removeJobThread(killParam.getJobId(), "scheduling center kill job.");
+            JobExecutor.removeJobThread(killParam.getJobId(), "scheduling center kill job.");
             return ReturnT.SUCCESS;
         }
 
@@ -163,9 +163,9 @@ public class ExecutorBizImpl implements ExecutorBiz {
     @Override
     public ReturnT<LogResult> log(LogParam logParam) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logParam.getLogDateTim()), logParam.getLogId());
+        String logFileName = JobFileAppender.makeLogFileName(new Date(logParam.getLogDateTim()), logParam.getLogId());
 
-        LogResult logResult = XxlJobFileAppender.readLog(logFileName, logParam.getFromLineNum());
+        LogResult logResult = JobFileAppender.readLog(logFileName, logParam.getFromLineNum());
         return new ReturnT<LogResult>(logResult);
     }
 

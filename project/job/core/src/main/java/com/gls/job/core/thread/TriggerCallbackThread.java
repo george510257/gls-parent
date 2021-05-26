@@ -3,11 +3,11 @@ package com.gls.job.core.thread;
 import com.gls.job.core.biz.AdminBiz;
 import com.gls.job.core.biz.model.HandleCallbackParam;
 import com.gls.job.core.biz.model.ReturnT;
-import com.gls.job.core.context.XxlJobContext;
-import com.gls.job.core.context.XxlJobHelper;
+import com.gls.job.core.context.JobContext;
+import com.gls.job.core.context.JobHelper;
 import com.gls.job.core.enums.RegistryConfig;
-import com.gls.job.core.executor.XxlJobExecutor;
-import com.gls.job.core.log.XxlJobFileAppender;
+import com.gls.job.core.executor.JobExecutor;
+import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.core.util.JdkSerializeTool;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class TriggerCallbackThread {
     private static Logger logger = LoggerFactory.getLogger(TriggerCallbackThread.class);
 
     private static TriggerCallbackThread instance = new TriggerCallbackThread();
-    private static String failCallbackFilePath = XxlJobFileAppender.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
+    private static String failCallbackFilePath = JobFileAppender.getLogPath().concat(File.separator).concat("callbacklog").concat(File.separator);
     private static String failCallbackFileName = failCallbackFilePath.concat("xxl-job-callback-{x}").concat(".log");
     /**
      * job results callback queue
@@ -52,7 +52,7 @@ public class TriggerCallbackThread {
     public void start() {
 
         // valid
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (JobExecutor.getAdminBizList() == null) {
             logger.warn(">>>>>>>>>>> xxl-job, executor callback config fail, adminAddresses is null.");
             return;
         }
@@ -169,7 +169,7 @@ public class TriggerCallbackThread {
     private void doCallback(List<HandleCallbackParam> callbackParamList) {
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminBiz adminBiz : XxlJobExecutor.getAdminBizList()) {
+        for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
             try {
                 ReturnT<String> callbackResult = adminBiz.callback(callbackParamList);
                 if (callbackResult != null && ReturnT.SUCCESS_CODE == callbackResult.getCode()) {
@@ -193,14 +193,14 @@ public class TriggerCallbackThread {
      */
     private void callbackLog(List<HandleCallbackParam> callbackParamList, String logContent) {
         for (HandleCallbackParam callbackParam : callbackParamList) {
-            String logFileName = XxlJobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
-            XxlJobContext.setXxlJobContext(new XxlJobContext(
+            String logFileName = JobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
+            JobContext.setXxlJobContext(new JobContext(
                     -1,
                     null,
                     logFileName,
                     -1,
                     -1));
-            XxlJobHelper.log(logContent);
+            JobHelper.log(logContent);
         }
     }
 

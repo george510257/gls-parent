@@ -1,8 +1,8 @@
 package com.gls.job.core.executor.impl;
 
-import com.gls.job.core.executor.XxlJobExecutor;
+import com.gls.job.core.executor.JobExecutor;
 import com.gls.job.core.glue.GlueFactory;
-import com.gls.job.core.handler.annotation.XxlJob;
+import com.gls.job.core.handler.annotation.Job;
 import com.gls.job.core.handler.impl.MethodJobHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +22,8 @@ import java.util.Map;
  *
  * @author xuxueli 2018-11-01 09:24:52
  */
-public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobSpringExecutor.class);
+public class JobSpringExecutor extends JobExecutor implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
+    private static final Logger logger = LoggerFactory.getLogger(JobSpringExecutor.class);
     // ---------------------- applicationContext ----------------------
     private static ApplicationContext applicationContext;
 
@@ -95,13 +95,13 @@ public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationC
         for (String beanDefinitionName : beanDefinitionNames) {
             Object bean = applicationContext.getBean(beanDefinitionName);
 
-            Map<Method, XxlJob> annotatedMethods = null;   // referred to ：org.springframework.context.event.EventListenerMethodProcessor.processBean
+            Map<Method, Job> annotatedMethods = null;   // referred to ：org.springframework.context.event.EventListenerMethodProcessor.processBean
             try {
                 annotatedMethods = MethodIntrospector.selectMethods(bean.getClass(),
-                        new MethodIntrospector.MetadataLookup<XxlJob>() {
+                        new MethodIntrospector.MetadataLookup<Job>() {
                             @Override
-                            public XxlJob inspect(Method method) {
-                                return AnnotatedElementUtils.findMergedAnnotation(method, XxlJob.class);
+                            public Job inspect(Method method) {
+                                return AnnotatedElementUtils.findMergedAnnotation(method, Job.class);
                             }
                         });
             } catch (Throwable ex) {
@@ -111,14 +111,14 @@ public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationC
                 continue;
             }
 
-            for (Map.Entry<Method, XxlJob> methodXxlJobEntry : annotatedMethods.entrySet()) {
+            for (Map.Entry<Method, Job> methodXxlJobEntry : annotatedMethods.entrySet()) {
                 Method executeMethod = methodXxlJobEntry.getKey();
-                XxlJob xxlJob = methodXxlJobEntry.getValue();
-                if (xxlJob == null) {
+                Job job = methodXxlJobEntry.getValue();
+                if (job == null) {
                     continue;
                 }
 
-                String name = xxlJob.value();
+                String name = job.value();
                 if (name.trim().length() == 0) {
                     throw new RuntimeException("xxl-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                 }
@@ -142,17 +142,17 @@ public class XxlJobSpringExecutor extends XxlJobExecutor implements ApplicationC
                 Method initMethod = null;
                 Method destroyMethod = null;
 
-                if (xxlJob.init().trim().length() > 0) {
+                if (job.init().trim().length() > 0) {
                     try {
-                        initMethod = bean.getClass().getDeclaredMethod(xxlJob.init());
+                        initMethod = bean.getClass().getDeclaredMethod(job.init());
                         initMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
-                if (xxlJob.destroy().trim().length() > 0) {
+                if (job.destroy().trim().length() > 0) {
                     try {
-                        destroyMethod = bean.getClass().getDeclaredMethod(xxlJob.destroy());
+                        destroyMethod = bean.getClass().getDeclaredMethod(job.destroy());
                         destroyMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException("xxl-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");

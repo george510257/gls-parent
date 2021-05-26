@@ -1,7 +1,7 @@
 package com.gls.job.core.executor.impl;
 
-import com.gls.job.core.executor.XxlJobExecutor;
-import com.gls.job.core.handler.annotation.XxlJob;
+import com.gls.job.core.executor.JobExecutor;
+import com.gls.job.core.handler.annotation.Job;
 import com.gls.job.core.handler.impl.MethodJobHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,8 @@ import java.util.List;
  *
  * @author xuxueli 2020-11-05
  */
-public class XxlJobSimpleExecutor extends XxlJobExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobSimpleExecutor.class);
+public class JobSimpleExecutor extends JobExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(JobSimpleExecutor.class);
 
     private List<Object> xxlJobBeanList = new ArrayList<>();
 
@@ -60,12 +60,12 @@ public class XxlJobSimpleExecutor extends XxlJobExecutor {
             for (Method executeMethod : methods) {
 
                 // anno
-                XxlJob xxlJob = executeMethod.getAnnotation(XxlJob.class);
-                if (xxlJob == null) {
+                Job job = executeMethod.getAnnotation(Job.class);
+                if (job == null) {
                     continue;
                 }
 
-                String name = xxlJob.value();
+                String name = job.value();
                 if (name.trim().length() == 0) {
                     throw new RuntimeException("xxl-job method-jobhandler name invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                 }
@@ -89,17 +89,17 @@ public class XxlJobSimpleExecutor extends XxlJobExecutor {
                 Method initMethod = null;
                 Method destroyMethod = null;
 
-                if (xxlJob.init().trim().length() > 0) {
+                if (job.init().trim().length() > 0) {
                     try {
-                        initMethod = bean.getClass().getDeclaredMethod(xxlJob.init());
+                        initMethod = bean.getClass().getDeclaredMethod(job.init());
                         initMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException("xxl-job method-jobhandler initMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
                     }
                 }
-                if (xxlJob.destroy().trim().length() > 0) {
+                if (job.destroy().trim().length() > 0) {
                     try {
-                        destroyMethod = bean.getClass().getDeclaredMethod(xxlJob.destroy());
+                        destroyMethod = bean.getClass().getDeclaredMethod(job.destroy());
                         destroyMethod.setAccessible(true);
                     } catch (NoSuchMethodException e) {
                         throw new RuntimeException("xxl-job method-jobhandler destroyMethod invalid, for[" + bean.getClass() + "#" + executeMethod.getName() + "] .");
