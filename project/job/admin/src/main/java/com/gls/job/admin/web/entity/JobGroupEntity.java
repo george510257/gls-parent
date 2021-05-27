@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by xuxueli on 16/9/30.
  */
-public class JobGroup {
+public class JobGroupEntity {
 
     private int id;
     private String appname;

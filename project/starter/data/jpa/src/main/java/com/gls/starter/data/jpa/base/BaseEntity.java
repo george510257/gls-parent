@@ -55,7 +55,7 @@ public abstract class BaseEntity implements Serializable {
 
     @CreatedBy
     @Comment("创建用户ID")
-    private Long createdBy;
+    private Long createdUserId;
 
     @CreatedDate
     @Comment("创建时间")
@@ -63,9 +63,9 @@ public abstract class BaseEntity implements Serializable {
 
     @LastModifiedBy
     @Comment("最后修改用户ID")
-    private Long lastModifiedBy;
+    private Long updateUserId;
 
     @LastModifiedDate
     @Comment("最后修改时间")
-    private Timestamp lastModifiedDate;
+    private Timestamp updateDate;
 }

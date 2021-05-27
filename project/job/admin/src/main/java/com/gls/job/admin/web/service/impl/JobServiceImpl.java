@@ -6,10 +6,10 @@ import com.gls.job.admin.core.scheduler.MisfireStrategyEnum;
 import com.gls.job.admin.core.scheduler.ScheduleTypeEnum;
 import com.gls.job.admin.core.thread.JobScheduleHelper;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.*;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLogReport;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogReportEntity;
+import com.gls.job.admin.web.repository.*;
 import com.gls.job.admin.web.service.JobService;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
@@ -32,22 +32,22 @@ import java.util.*;
 public class JobServiceImpl implements JobService {
     private static Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
     @Resource
-    public JobLogDao jobLogDao;
+    public JobLogRepository jobLogRepository;
     @Resource
-    private JobGroupDao jobGroupDao;
+    private JobGroupRepository jobGroupRepository;
     @Resource
-    private JobInfoDao jobInfoDao;
+    private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobLogGlueDao jobLogGlueDao;
+    private JobLogGlueRepository jobLogGlueRepository;
     @Resource
-    private JobLogReportDao jobLogReportDao;
+    private JobLogReportRepository jobLogReportRepository;
 
     @Override
     public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
         // page list
-        List<JobInfo> list = jobInfoDao.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
-        int list_count = jobInfoDao.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+        List<JobInfoEntity> list = jobInfoRepository.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+        int list_count = jobInfoRepository.pageListCount(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
 
         // package result
         Map<String, Object> maps = new HashMap<String, Object>();
@@ -58,35 +58,35 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public ReturnT<String> add(JobInfo jobInfo) {
+    public ReturnT<String> add(JobInfoEntity jobInfoEntity) {
 
         // valid base
-        JobGroup group = jobGroupDao.load(jobInfo.getJobGroup());
+        JobGroupEntity group = jobGroupRepository.load(jobInfoEntity.getJobGroup());
         if (group == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_choose") + I18nUtil.getString("job_info_field_jobgroup")));
         }
-        if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
+        if (jobInfoEntity.getJobDesc() == null || jobInfoEntity.getJobDesc().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_field_jobdesc")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfoEntity.getAuthor() == null || jobInfoEntity.getAuthor().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_field_author")));
         }
 
         // valid trigger
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
+        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfoEntity.getScheduleType(), null);
         if (scheduleTypeEnum == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
         }
         if (scheduleTypeEnum == ScheduleTypeEnum.CRON) {
-            if (jobInfo.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfo.getScheduleConf())) {
+            if (jobInfoEntity.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfoEntity.getScheduleConf())) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, "Cron" + I18nUtil.getString("system_un_valid"));
             }
         } else if (scheduleTypeEnum == ScheduleTypeEnum.FIX_RATE/* || scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
-            if (jobInfo.getScheduleConf() == null) {
+            if (jobInfoEntity.getScheduleConf() == null) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type")));
             }
             try {
-                int fixSecond = Integer.valueOf(jobInfo.getScheduleConf());
+                int fixSecond = Integer.valueOf(jobInfoEntity.getScheduleConf());
                 if (fixSecond < 1) {
                     return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
                 }
@@ -96,35 +96,35 @@ public class JobServiceImpl implements JobService {
         }
 
         // valid job
-        if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
+        if (GlueTypeEnum.match(jobInfoEntity.getGlueType()) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_glue_type") + I18nUtil.getString("system_un_valid")));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
+        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfoEntity.getGlueType()) && (jobInfoEntity.getExecutorHandler() == null || jobInfoEntity.getExecutorHandler().trim().length() == 0)) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
         // 》fix "\r" in shell
-        if (GlueTypeEnum.GLUE_SHELL == GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource() != null) {
-            jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
+        if (GlueTypeEnum.GLUE_SHELL == GlueTypeEnum.match(jobInfoEntity.getGlueType()) && jobInfoEntity.getGlueSource() != null) {
+            jobInfoEntity.setGlueSource(jobInfoEntity.getGlueSource().replaceAll("\r", ""));
         }
 
         // valid advanced
-        if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
+        if (ExecutorRouteStrategyEnum.match(jobInfoEntity.getExecutorRouteStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_executorRouteStrategy") + I18nUtil.getString("system_un_valid")));
         }
-        if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
+        if (MisfireStrategyEnum.match(jobInfoEntity.getMisfireStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_un_valid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (ExecutorBlockStrategyEnum.match(jobInfoEntity.getExecutorBlockStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_executorBlockStrategy") + I18nUtil.getString("system_un_valid")));
         }
 
         // 》ChildJobId valid
-        if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
-            String[] childJobIds = jobInfo.getChildJobId().split(",");
+        if (jobInfoEntity.getChildJobId() != null && jobInfoEntity.getChildJobId().trim().length() > 0) {
+            String[] childJobIds = jobInfoEntity.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    JobInfo childJobInfo = jobInfoDao.loadById(Integer.parseInt(childJobIdItem));
-                    if (childJobInfo == null) {
+                    JobInfoEntity childJobInfoEntity = jobInfoRepository.loadById(Integer.parseInt(childJobIdItem));
+                    if (childJobInfoEntity == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("job_info_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }
@@ -141,19 +141,19 @@ public class JobServiceImpl implements JobService {
             }
             temp = temp.substring(0, temp.length() - 1);
 
-            jobInfo.setChildJobId(temp);
+            jobInfoEntity.setChildJobId(temp);
         }
 
         // add in db
-        jobInfo.setAddTime(new Date());
-        jobInfo.setUpdateTime(new Date());
-        jobInfo.setGlueUpdatetime(new Date());
-        jobInfoDao.save(jobInfo);
-        if (jobInfo.getId() < 1) {
+        jobInfoEntity.setAddTime(new Date());
+        jobInfoEntity.setUpdateTime(new Date());
+        jobInfoEntity.setGlueUpdatetime(new Date());
+        jobInfoRepository.save(jobInfoEntity);
+        if (jobInfoEntity.getId() < 1) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_add") + I18nUtil.getString("system_fail")));
         }
 
-        return new ReturnT<String>(String.valueOf(jobInfo.getId()));
+        return new ReturnT<String>(String.valueOf(jobInfoEntity.getId()));
     }
 
     private boolean isNumeric(String str) {
@@ -166,31 +166,31 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public ReturnT<String> update(JobInfo jobInfo) {
+    public ReturnT<String> update(JobInfoEntity jobInfoEntity) {
 
         // valid base
-        if (jobInfo.getJobDesc() == null || jobInfo.getJobDesc().trim().length() == 0) {
+        if (jobInfoEntity.getJobDesc() == null || jobInfoEntity.getJobDesc().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_field_jobdesc")));
         }
-        if (jobInfo.getAuthor() == null || jobInfo.getAuthor().trim().length() == 0) {
+        if (jobInfoEntity.getAuthor() == null || jobInfoEntity.getAuthor().trim().length() == 0) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_field_author")));
         }
 
         // valid trigger
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
+        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfoEntity.getScheduleType(), null);
         if (scheduleTypeEnum == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
         }
         if (scheduleTypeEnum == ScheduleTypeEnum.CRON) {
-            if (jobInfo.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfo.getScheduleConf())) {
+            if (jobInfoEntity.getScheduleConf() == null || !CronExpression.isValidExpression(jobInfoEntity.getScheduleConf())) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, "Cron" + I18nUtil.getString("system_un_valid"));
             }
         } else if (scheduleTypeEnum == ScheduleTypeEnum.FIX_RATE /*|| scheduleTypeEnum == ScheduleTypeEnum.FIX_DELAY*/) {
-            if (jobInfo.getScheduleConf() == null) {
+            if (jobInfoEntity.getScheduleConf() == null) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
             }
             try {
-                int fixSecond = Integer.valueOf(jobInfo.getScheduleConf());
+                int fixSecond = Integer.valueOf(jobInfoEntity.getScheduleConf());
                 if (fixSecond < 1) {
                     return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
                 }
@@ -200,23 +200,23 @@ public class JobServiceImpl implements JobService {
         }
 
         // valid advanced
-        if (ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null) == null) {
+        if (ExecutorRouteStrategyEnum.match(jobInfoEntity.getExecutorRouteStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_executorRouteStrategy") + I18nUtil.getString("system_un_valid")));
         }
-        if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
+        if (MisfireStrategyEnum.match(jobInfoEntity.getMisfireStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_un_valid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (ExecutorBlockStrategyEnum.match(jobInfoEntity.getExecutorBlockStrategy(), null) == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_executorBlockStrategy") + I18nUtil.getString("system_un_valid")));
         }
 
         // 》ChildJobId valid
-        if (jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
-            String[] childJobIds = jobInfo.getChildJobId().split(",");
+        if (jobInfoEntity.getChildJobId() != null && jobInfoEntity.getChildJobId().trim().length() > 0) {
+            String[] childJobIds = jobInfoEntity.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    JobInfo childJobInfo = jobInfoDao.loadById(Integer.parseInt(childJobIdItem));
-                    if (childJobInfo == null) {
+                    JobInfoEntity childJobInfoEntity = jobInfoRepository.loadById(Integer.parseInt(childJobIdItem));
+                    if (childJobInfoEntity == null) {
                         return new ReturnT<String>(ReturnT.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("job_info_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
                     }
@@ -233,27 +233,27 @@ public class JobServiceImpl implements JobService {
             }
             temp = temp.substring(0, temp.length() - 1);
 
-            jobInfo.setChildJobId(temp);
+            jobInfoEntity.setChildJobId(temp);
         }
 
         // group valid
-        JobGroup jobGroup = jobGroupDao.load(jobInfo.getJobGroup());
-        if (jobGroup == null) {
+        JobGroupEntity jobGroupEntity = jobGroupRepository.load(jobInfoEntity.getJobGroup());
+        if (jobGroupEntity == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_jobgroup") + I18nUtil.getString("system_un_valid")));
         }
 
         // stage job info
-        JobInfo exists_jobInfo = jobInfoDao.loadById(jobInfo.getId());
-        if (exists_jobInfo == null) {
+        JobInfoEntity existsJobInfoEntity = jobInfoRepository.loadById(jobInfoEntity.getId());
+        if (existsJobInfoEntity == null) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("job_info_field_id") + I18nUtil.getString("system_not_found")));
         }
 
         // next trigger time (5s后生效，避开预读周期)
-        long nextTriggerTime = exists_jobInfo.getTriggerNextTime();
-        boolean scheduleDataNotChanged = jobInfo.getScheduleType().equals(exists_jobInfo.getScheduleType()) && jobInfo.getScheduleConf().equals(exists_jobInfo.getScheduleConf());
-        if (exists_jobInfo.getTriggerStatus() == 1 && !scheduleDataNotChanged) {
+        long nextTriggerTime = existsJobInfoEntity.getTriggerNextTime();
+        boolean scheduleDataNotChanged = jobInfoEntity.getScheduleType().equals(existsJobInfoEntity.getScheduleType()) && jobInfoEntity.getScheduleConf().equals(existsJobInfoEntity.getScheduleConf());
+        if (existsJobInfoEntity.getTriggerStatus() == 1 && !scheduleDataNotChanged) {
             try {
-                Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
+                Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfoEntity, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
                 if (nextValidTime == null) {
                     return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
                 }
@@ -264,47 +264,47 @@ public class JobServiceImpl implements JobService {
             }
         }
 
-        exists_jobInfo.setJobGroup(jobInfo.getJobGroup());
-        exists_jobInfo.setJobDesc(jobInfo.getJobDesc());
-        exists_jobInfo.setAuthor(jobInfo.getAuthor());
-        exists_jobInfo.setAlarmEmail(jobInfo.getAlarmEmail());
-        exists_jobInfo.setScheduleType(jobInfo.getScheduleType());
-        exists_jobInfo.setScheduleConf(jobInfo.getScheduleConf());
-        exists_jobInfo.setMisfireStrategy(jobInfo.getMisfireStrategy());
-        exists_jobInfo.setExecutorRouteStrategy(jobInfo.getExecutorRouteStrategy());
-        exists_jobInfo.setExecutorHandler(jobInfo.getExecutorHandler());
-        exists_jobInfo.setExecutorParam(jobInfo.getExecutorParam());
-        exists_jobInfo.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        exists_jobInfo.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        exists_jobInfo.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
-        exists_jobInfo.setChildJobId(jobInfo.getChildJobId());
-        exists_jobInfo.setTriggerNextTime(nextTriggerTime);
+        existsJobInfoEntity.setJobGroup(jobInfoEntity.getJobGroup());
+        existsJobInfoEntity.setJobDesc(jobInfoEntity.getJobDesc());
+        existsJobInfoEntity.setAuthor(jobInfoEntity.getAuthor());
+        existsJobInfoEntity.setAlarmEmail(jobInfoEntity.getAlarmEmail());
+        existsJobInfoEntity.setScheduleType(jobInfoEntity.getScheduleType());
+        existsJobInfoEntity.setScheduleConf(jobInfoEntity.getScheduleConf());
+        existsJobInfoEntity.setMisfireStrategy(jobInfoEntity.getMisfireStrategy());
+        existsJobInfoEntity.setExecutorRouteStrategy(jobInfoEntity.getExecutorRouteStrategy());
+        existsJobInfoEntity.setExecutorHandler(jobInfoEntity.getExecutorHandler());
+        existsJobInfoEntity.setExecutorParam(jobInfoEntity.getExecutorParam());
+        existsJobInfoEntity.setExecutorBlockStrategy(jobInfoEntity.getExecutorBlockStrategy());
+        existsJobInfoEntity.setExecutorTimeout(jobInfoEntity.getExecutorTimeout());
+        existsJobInfoEntity.setExecutorFailRetryCount(jobInfoEntity.getExecutorFailRetryCount());
+        existsJobInfoEntity.setChildJobId(jobInfoEntity.getChildJobId());
+        existsJobInfoEntity.setTriggerNextTime(nextTriggerTime);
 
-        exists_jobInfo.setUpdateTime(new Date());
-        jobInfoDao.update(exists_jobInfo);
+        existsJobInfoEntity.setUpdateTime(new Date());
+        jobInfoRepository.update(existsJobInfoEntity);
 
         return ReturnT.SUCCESS;
     }
 
     @Override
     public ReturnT<String> remove(int id) {
-        JobInfo jobInfo = jobInfoDao.loadById(id);
-        if (jobInfo == null) {
+        JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(id);
+        if (jobInfoEntity == null) {
             return ReturnT.SUCCESS;
         }
 
-        jobInfoDao.delete(id);
-        jobLogDao.delete(id);
-        jobLogGlueDao.deleteByJobId(id);
+        jobInfoRepository.delete(id);
+        jobLogRepository.delete(id);
+        jobLogGlueRepository.deleteByJobId(id);
         return ReturnT.SUCCESS;
     }
 
     @Override
     public ReturnT<String> start(int id) {
-        JobInfo jobInfo = jobInfoDao.loadById(id);
+        JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(id);
 
         // valid
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), ScheduleTypeEnum.NONE);
+        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfoEntity.getScheduleType(), ScheduleTypeEnum.NONE);
         if (ScheduleTypeEnum.NONE == scheduleTypeEnum) {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type_none_limit_start")));
         }
@@ -312,7 +312,7 @@ public class JobServiceImpl implements JobService {
         // next trigger time (5s后生效，避开预读周期)
         long nextTriggerTime = 0;
         try {
-            Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
+            Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfoEntity, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
             if (nextValidTime == null) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
             }
@@ -322,46 +322,46 @@ public class JobServiceImpl implements JobService {
             return new ReturnT<String>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_un_valid")));
         }
 
-        jobInfo.setTriggerStatus(1);
-        jobInfo.setTriggerLastTime(0);
-        jobInfo.setTriggerNextTime(nextTriggerTime);
+        jobInfoEntity.setTriggerStatus(1);
+        jobInfoEntity.setTriggerLastTime(0);
+        jobInfoEntity.setTriggerNextTime(nextTriggerTime);
 
-        jobInfo.setUpdateTime(new Date());
-        jobInfoDao.update(jobInfo);
+        jobInfoEntity.setUpdateTime(new Date());
+        jobInfoRepository.update(jobInfoEntity);
         return ReturnT.SUCCESS;
     }
 
     @Override
     public ReturnT<String> stop(int id) {
-        JobInfo jobInfo = jobInfoDao.loadById(id);
+        JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(id);
 
-        jobInfo.setTriggerStatus(0);
-        jobInfo.setTriggerLastTime(0);
-        jobInfo.setTriggerNextTime(0);
+        jobInfoEntity.setTriggerStatus(0);
+        jobInfoEntity.setTriggerLastTime(0);
+        jobInfoEntity.setTriggerNextTime(0);
 
-        jobInfo.setUpdateTime(new Date());
-        jobInfoDao.update(jobInfo);
+        jobInfoEntity.setUpdateTime(new Date());
+        jobInfoRepository.update(jobInfoEntity);
         return ReturnT.SUCCESS;
     }
 
     @Override
     public Map<String, Object> dashboardInfo() {
 
-        int jobInfoCount = jobInfoDao.findAllCount();
+        int jobInfoCount = jobInfoRepository.findAllCount();
         int jobLogCount = 0;
         int jobLogSuccessCount = 0;
-        JobLogReport jobLogReport = jobLogReportDao.queryLogReportTotal();
-        if (jobLogReport != null) {
-            jobLogCount = jobLogReport.getRunningCount() + jobLogReport.getSucCount() + jobLogReport.getFailCount();
-            jobLogSuccessCount = jobLogReport.getSucCount();
+        JobLogReportEntity jobLogReportEntity = jobLogReportRepository.queryLogReportTotal();
+        if (jobLogReportEntity != null) {
+            jobLogCount = jobLogReportEntity.getRunningCount() + jobLogReportEntity.getSucCount() + jobLogReportEntity.getFailCount();
+            jobLogSuccessCount = jobLogReportEntity.getSucCount();
         }
 
         // executor count
         Set<String> executorAddressSet = new HashSet<String>();
-        List<JobGroup> groupList = jobGroupDao.findAll();
+        List<JobGroupEntity> groupList = jobGroupRepository.findAll();
 
         if (groupList != null && !groupList.isEmpty()) {
-            for (JobGroup group : groupList) {
+            for (JobGroupEntity group : groupList) {
                 if (group.getRegistryList() != null && !group.getRegistryList().isEmpty()) {
                     executorAddressSet.addAll(group.getRegistryList());
                 }
@@ -390,10 +390,10 @@ public class JobServiceImpl implements JobService {
         int triggerCountSucTotal = 0;
         int triggerCountFailTotal = 0;
 
-        List<JobLogReport> logReportList = jobLogReportDao.queryLogReport(startDate, endDate);
+        List<JobLogReportEntity> logReportList = jobLogReportRepository.queryLogReport(startDate, endDate);
 
         if (logReportList != null && logReportList.size() > 0) {
-            for (JobLogReport item : logReportList) {
+            for (JobLogReportEntity item : logReportList) {
                 String day = DateUtil.formatDate(item.getTriggerDay());
                 int triggerDayCountRunning = item.getRunningCount();
                 int triggerDayCountSuc = item.getSucCount();

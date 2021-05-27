@@ -1,11 +1,11 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import java.util.Date;
 
 /**
  * Created by xuxueli on 16/9/30.
  */
-public class JobRegistry {
+public class JobRegistryEntity {
 
     private int id;
     private String registryGroup;

@@ -1,6 +1,6 @@
-package com.gls.job.admin.web.dao;
+package com.gls.job.admin.web.repository;
 
-import com.gls.job.admin.web.model.JobRegistry;
+import com.gls.job.admin.web.entity.JobRegistryEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,15 +11,15 @@ import java.util.List;
  * Created by xuxueli on 16/9/30.
  */
 @Mapper
-public interface JobRegistryDao {
+public interface JobRegistryRepository {
 
     public List<Integer> findDead(@Param("timeout") int timeout,
                                   @Param("nowTime") Date nowTime);
 
     public int removeDead(@Param("ids") List<Integer> ids);
 
-    public List<JobRegistry> findAll(@Param("timeout") int timeout,
-                                     @Param("nowTime") Date nowTime);
+    public List<JobRegistryEntity> findAll(@Param("timeout") int timeout,
+                                           @Param("nowTime") Date nowTime);
 
     public int registryUpdate(@Param("registryGroup") String registryGroup,
                               @Param("registryKey") String registryKey,

@@ -3,8 +3,8 @@ package com.gls.job.admin.web.service;
 import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.core.util.JacksonUtil;
-import com.gls.job.admin.web.dao.JobUserDao;
-import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.entity.JobUserEntity;
+import com.gls.job.admin.web.repository.JobUserRepository;
 import com.gls.job.core.biz.model.ReturnT;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.DigestUtils;
@@ -23,21 +23,21 @@ public class LoginService {
     public static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 
     @Resource
-    private JobUserDao jobUserDao;
+    private JobUserRepository jobUserRepository;
 
-    private String makeToken(JobUser jobUser) {
-        String tokenJson = JacksonUtil.writeValueAsString(jobUser);
+    private String makeToken(JobUserEntity jobUserEntity) {
+        String tokenJson = JacksonUtil.writeValueAsString(jobUserEntity);
         String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
         return tokenHex;
     }
 
-    private JobUser parseToken(String tokenHex) {
-        JobUser jobUser = null;
+    private JobUserEntity parseToken(String tokenHex) {
+        JobUserEntity jobUserEntity = null;
         if (tokenHex != null) {
             String tokenJson = new String(new BigInteger(tokenHex, 16).toByteArray());      // username_password(md5)
-            jobUser = JacksonUtil.readValue(tokenJson, JobUser.class);
+            jobUserEntity = JacksonUtil.readValue(tokenJson, JobUserEntity.class);
         }
-        return jobUser;
+        return jobUserEntity;
     }
 
     public ReturnT<String> login(HttpServletRequest request, HttpServletResponse response, String username, String password, boolean ifRemember) {
@@ -48,16 +48,16 @@ public class LoginService {
         }
 
         // valid passowrd
-        JobUser jobUser = jobUserDao.loadByUserName(username);
-        if (jobUser == null) {
+        JobUserEntity jobUserEntity = jobUserRepository.loadByUserName(username);
+        if (jobUserEntity == null) {
             return new ReturnT<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        if (!passwordMd5.equals(jobUser.getPassword())) {
+        if (!passwordMd5.equals(jobUserEntity.getPassword())) {
             return new ReturnT<String>(500, I18nUtil.getString("login_param_un_valid"));
         }
 
-        String loginToken = makeToken(jobUser);
+        String loginToken = makeToken(jobUserEntity);
 
         // do login
         CookieUtil.set(response, LOGIN_IDENTITY_KEY, loginToken, ifRemember);
@@ -81,17 +81,17 @@ public class LoginService {
      * @param request
      * @return
      */
-    public JobUser ifLogin(HttpServletRequest request, HttpServletResponse response) {
+    public JobUserEntity ifLogin(HttpServletRequest request, HttpServletResponse response) {
         String cookieToken = CookieUtil.getValue(request, LOGIN_IDENTITY_KEY);
         if (cookieToken != null) {
-            JobUser cookieUser = null;
+            JobUserEntity cookieUser = null;
             try {
                 cookieUser = parseToken(cookieToken);
             } catch (Exception e) {
                 logout(request, response);
             }
             if (cookieUser != null) {
-                JobUser dbUser = jobUserDao.loadByUserName(cookieUser.getUsername());
+                JobUserEntity dbUser = jobUserRepository.loadByUserName(cookieUser.getUsername());
                 if (dbUser != null) {
                     if (cookieUser.getPassword().equals(dbUser.getPassword())) {
                         return dbUser;

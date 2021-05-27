@@ -2,7 +2,7 @@ package com.gls.job.admin.core.conf;
 
 import com.gls.job.admin.core.alarm.JobAlarmer;
 import com.gls.job.admin.core.scheduler.JobScheduler;
-import com.gls.job.admin.web.dao.*;
+import com.gls.job.admin.web.repository.*;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,17 +42,17 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
     @Value("${gls.job.logretentiondays}")
     private int logretentiondays;
     @Resource
-    private JobLogDao jobLogDao;
+    private JobLogRepository jobLogRepository;
     @Resource
-    private JobInfoDao jobInfoDao;
+    private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobRegistryDao jobRegistryDao;
+    private JobRegistryRepository jobRegistryRepository;
 
     // dao, service
     @Resource
-    private JobGroupDao jobGroupDao;
+    private JobGroupRepository jobGroupRepository;
     @Resource
-    private JobLogReportDao jobLogReportDao;
+    private JobLogReportRepository jobLogReportRepository;
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -113,24 +113,24 @@ public class JobAdminConfig implements InitializingBean, DisposableBean {
         return logretentiondays;
     }
 
-    public JobLogDao getJobLogDao() {
-        return jobLogDao;
+    public JobLogRepository getJobLogRepository() {
+        return jobLogRepository;
     }
 
-    public JobInfoDao getJobInfoDao() {
-        return jobInfoDao;
+    public JobInfoRepository getJobInfoRepository() {
+        return jobInfoRepository;
     }
 
-    public JobRegistryDao getJobRegistryDao() {
-        return jobRegistryDao;
+    public JobRegistryRepository getJobRegistryRepository() {
+        return jobRegistryRepository;
     }
 
-    public JobGroupDao getJobGroupDao() {
-        return jobGroupDao;
+    public JobGroupRepository getJobGroupRepository() {
+        return jobGroupRepository;
     }
 
-    public JobLogReportDao getJobLogReportDao() {
-        return jobLogReportDao;
+    public JobLogReportRepository getJobLogReportRepository() {
+        return jobLogReportRepository;
     }
 
     public JavaMailSender getMailSender() {

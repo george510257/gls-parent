@@ -4,8 +4,8 @@ import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.context.JobContext;
 import org.slf4j.Logger;
@@ -22,36 +22,36 @@ public class JobCompleter {
     /**
      * common fresh handle entrance (limit only once)
      *
-     * @param jobLog
+     * @param jobLogEntity
      * @return
      */
-    public static int updateHandleInfoAndFinish(JobLog jobLog) {
+    public static int updateHandleInfoAndFinish(JobLogEntity jobLogEntity) {
 
         // finish
-        finishJob(jobLog);
+        finishJob(jobLogEntity);
 
         // text最大64kb 避免长度过长
-        if (jobLog.getHandleMsg().length() > 15000) {
-            jobLog.setHandleMsg(jobLog.getHandleMsg().substring(0, 15000));
+        if (jobLogEntity.getHandleMsg().length() > 15000) {
+            jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().substring(0, 15000));
         }
 
         // fresh handle
-        return JobAdminConfig.getAdminConfig().getJobLogDao().updateHandleInfo(jobLog);
+        return JobAdminConfig.getAdminConfig().getJobLogRepository().updateHandleInfo(jobLogEntity);
     }
 
     /**
      * do somethind to finish job
      */
-    private static void finishJob(JobLog jobLog) {
+    private static void finishJob(JobLogEntity jobLogEntity) {
 
         // 1、handle success, to trigger child job
         String triggerChildMsg = null;
-        if (JobContext.HANDLE_COCE_SUCCESS == jobLog.getHandleCode()) {
-            JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(jobLog.getJobId());
-            if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
+        if (JobContext.HANDLE_COCE_SUCCESS == jobLogEntity.getHandleCode()) {
+            JobInfoEntity jobInfoEntity = JobAdminConfig.getAdminConfig().getJobInfoRepository().loadById(jobLogEntity.getJobId());
+            if (jobInfoEntity != null && jobInfoEntity.getChildJobId() != null && jobInfoEntity.getChildJobId().trim().length() > 0) {
                 triggerChildMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
-                String[] childJobIds = jobInfo.getChildJobId().split(",");
+                String[] childJobIds = jobInfoEntity.getChildJobId().split(",");
                 for (int i = 0; i < childJobIds.length; i++) {
                     int childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Integer.valueOf(childJobIds[i]) : -1;
                     if (childJobId > 0) {
@@ -78,7 +78,7 @@ public class JobCompleter {
         }
 
         if (triggerChildMsg != null) {
-            jobLog.setHandleMsg(jobLog.getHandleMsg() + triggerChildMsg);
+            jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg() + triggerChildMsg);
         }
 
         // 2、fix_delay trigger next

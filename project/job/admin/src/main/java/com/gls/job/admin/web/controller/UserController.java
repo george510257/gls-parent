@@ -2,10 +2,10 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.dao.JobUserDao;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobUserEntity;
+import com.gls.job.admin.web.repository.JobGroupRepository;
+import com.gls.job.admin.web.repository.JobUserRepository;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.core.biz.model.ReturnT;
 import org.springframework.stereotype.Controller;
@@ -30,16 +30,16 @@ import java.util.Map;
 public class UserController {
 
     @Resource
-    private JobUserDao jobUserDao;
+    private JobUserRepository jobUserRepository;
     @Resource
-    private JobGroupDao jobGroupDao;
+    private JobGroupRepository jobGroupRepository;
 
     @RequestMapping
     @PermissionLimit(administer = true)
     public String index(Model model) {
 
         // 执行器列表
-        List<JobGroup> groupList = jobGroupDao.findAll();
+        List<JobGroupEntity> groupList = jobGroupRepository.findAll();
         model.addAttribute("groupList", groupList);
 
         return "user/user.index";
@@ -53,12 +53,12 @@ public class UserController {
                                         String username, int role) {
 
         // page list
-        List<JobUser> list = jobUserDao.pageList(start, length, username, role);
-        int listCount = jobUserDao.pageListCount(start, length, username, role);
+        List<JobUserEntity> list = jobUserRepository.pageList(start, length, username, role);
+        int listCount = jobUserRepository.pageListCount(start, length, username, role);
 
         // filter
         if (list != null && list.size() > 0) {
-            for (JobUser item : list) {
+            for (JobUserEntity item : list) {
                 item.setPassword(null);
             }
         }
@@ -77,63 +77,63 @@ public class UserController {
     @RequestMapping("/add")
     @ResponseBody
     @PermissionLimit(administer = true)
-    public ReturnT<String> add(JobUser jobUser) {
+    public ReturnT<String> add(JobUserEntity jobUserEntity) {
 
         // valid username
-        if (!StringUtils.hasText(jobUser.getUsername())) {
+        if (!StringUtils.hasText(jobUserEntity.getUsername())) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
         }
-        jobUser.setUsername(jobUser.getUsername().trim());
-        if (!(jobUser.getUsername().length() >= 4 && jobUser.getUsername().length() <= 20)) {
+        jobUserEntity.setUsername(jobUserEntity.getUsername().trim());
+        if (!(jobUserEntity.getUsername().length() >= 4 && jobUserEntity.getUsername().length() <= 20)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         // valid password
-        if (!StringUtils.hasText(jobUser.getPassword())) {
+        if (!StringUtils.hasText(jobUserEntity.getPassword())) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"));
         }
-        jobUser.setPassword(jobUser.getPassword().trim());
-        if (!(jobUser.getPassword().length() >= 4 && jobUser.getPassword().length() <= 20)) {
+        jobUserEntity.setPassword(jobUserEntity.getPassword().trim());
+        if (!(jobUserEntity.getPassword().length() >= 4 && jobUserEntity.getPassword().length() <= 20)) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
         }
         // md5 password
-        jobUser.setPassword(DigestUtils.md5DigestAsHex(jobUser.getPassword().getBytes()));
+        jobUserEntity.setPassword(DigestUtils.md5DigestAsHex(jobUserEntity.getPassword().getBytes()));
 
         // check repeat
-        JobUser existUser = jobUserDao.loadByUserName(jobUser.getUsername());
+        JobUserEntity existUser = jobUserRepository.loadByUserName(jobUserEntity.getUsername());
         if (existUser != null) {
             return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
         }
 
         // write
-        jobUserDao.save(jobUser);
+        jobUserRepository.save(jobUserEntity);
         return ReturnT.SUCCESS;
     }
 
     @RequestMapping("/update")
     @ResponseBody
     @PermissionLimit(administer = true)
-    public ReturnT<String> update(HttpServletRequest request, JobUser jobUser) {
+    public ReturnT<String> update(HttpServletRequest request, JobUserEntity jobUserEntity) {
 
         // avoid opt login
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getUsername().equals(jobUser.getUsername())) {
+        JobUserEntity loginUser = (JobUserEntity) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        if (loginUser.getUsername().equals(jobUserEntity.getUsername())) {
             return new ReturnT<>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_login_user_limit"));
         }
 
         // valid password
-        if (StringUtils.hasText(jobUser.getPassword())) {
-            jobUser.setPassword(jobUser.getPassword().trim());
-            if (!(jobUser.getPassword().length() >= 4 && jobUser.getPassword().length() <= 20)) {
+        if (StringUtils.hasText(jobUserEntity.getPassword())) {
+            jobUserEntity.setPassword(jobUserEntity.getPassword().trim());
+            if (!(jobUserEntity.getPassword().length() >= 4 && jobUserEntity.getPassword().length() <= 20)) {
                 return new ReturnT<>(ReturnT.FAIL_CODE, I18nUtil.getString("system_length_limit") + "[4-20]");
             }
             // md5 password
-            jobUser.setPassword(DigestUtils.md5DigestAsHex(jobUser.getPassword().getBytes()));
+            jobUserEntity.setPassword(DigestUtils.md5DigestAsHex(jobUserEntity.getPassword().getBytes()));
         } else {
-            jobUser.setPassword(null);
+            jobUserEntity.setPassword(null);
         }
 
         // write
-        jobUserDao.update(jobUser);
+        jobUserRepository.update(jobUserEntity);
         return ReturnT.SUCCESS;
     }
 
@@ -143,12 +143,12 @@ public class UserController {
     public ReturnT<String> remove(HttpServletRequest request, int id) {
 
         // avoid opt login 
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUserEntity loginUser = (JobUserEntity) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (loginUser.getId() == id) {
             return new ReturnT<>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_login_user_limit"));
         }
 
-        jobUserDao.delete(id);
+        jobUserRepository.delete(id);
         return ReturnT.SUCCESS;
     }
 
@@ -169,12 +169,12 @@ public class UserController {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         // update pwd
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUserEntity loginUser = (JobUserEntity) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
 
         // do write
-        JobUser existUser = jobUserDao.loadByUserName(loginUser.getUsername());
+        JobUserEntity existUser = jobUserRepository.loadByUserName(loginUser.getUsername());
         existUser.setPassword(md5Password);
-        jobUserDao.update(existUser);
+        jobUserRepository.update(existUser);
 
         return ReturnT.SUCCESS;
     }

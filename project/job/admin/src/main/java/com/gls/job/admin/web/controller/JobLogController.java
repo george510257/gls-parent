@@ -4,12 +4,12 @@ import com.gls.job.admin.core.complete.JobCompleter;
 import com.gls.job.admin.core.exception.JobException;
 import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.dao.JobInfoDao;
-import com.gls.job.admin.web.dao.JobLogDao;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
+import com.gls.job.admin.web.repository.JobGroupRepository;
+import com.gls.job.admin.web.repository.JobInfoRepository;
+import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.core.biz.ExecutorBiz;
 import com.gls.job.core.biz.model.KillParam;
 import com.gls.job.core.biz.model.LogParam;
@@ -40,37 +40,37 @@ import java.util.Map;
 @RequestMapping("/joblog")
 public class JobLogController {
     @Resource
-    public JobInfoDao jobInfoDao;
+    public JobInfoRepository jobInfoRepository;
     @Resource
-    public JobLogDao jobLogDao;
+    public JobLogRepository jobLogRepository;
     @Resource
-    private JobGroupDao jobGroupDao;
+    private JobGroupRepository jobGroupRepository;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Integer jobId) {
 
         // 执行器列表
-        List<JobGroup> jobGroupListAll = jobGroupDao.findAll();
+        List<JobGroupEntity> jobGroupEntityListAll = jobGroupRepository.findAll();
 
         // filter group
-        List<JobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupListAll);
-        if (jobGroupList == null || jobGroupList.size() == 0) {
+        List<JobGroupEntity> jobGroupEntityList = JobInfoController.filterJobGroupByRole(request, jobGroupEntityListAll);
+        if (jobGroupEntityList == null || jobGroupEntityList.size() == 0) {
             throw new JobException(I18nUtil.getString("job_group_empty"));
         }
 
-        model.addAttribute("JobGroupList", jobGroupList);
+        model.addAttribute("JobGroupList", jobGroupEntityList);
 
         // 任务
         if (jobId > 0) {
-            JobInfo jobInfo = jobInfoDao.loadById(jobId);
-            if (jobInfo == null) {
+            JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(jobId);
+            if (jobInfoEntity == null) {
                 throw new RuntimeException(I18nUtil.getString("job_info_field_id") + I18nUtil.getString("system_un_valid"));
             }
 
-            model.addAttribute("jobInfo", jobInfo);
+            model.addAttribute("jobInfo", jobInfoEntity);
 
             // valid permission
-            JobInfoController.validPermission(request, jobInfo.getJobGroup());
+            JobInfoController.validPermission(request, jobInfoEntity.getJobGroup());
         }
 
         return "joblog/joblog.index";
@@ -78,8 +78,8 @@ public class JobLogController {
 
     @RequestMapping("/getJobsByGroup")
     @ResponseBody
-    public ReturnT<List<JobInfo>> getJobsByGroup(int jobGroup) {
-        List<JobInfo> list = jobInfoDao.getJobsByGroup(jobGroup);
+    public ReturnT<List<JobInfoEntity>> getJobsByGroup(int jobGroup) {
+        List<JobInfoEntity> list = jobInfoRepository.getJobsByGroup(jobGroup);
         return new ReturnT<>(list);
     }
 
@@ -106,8 +106,8 @@ public class JobLogController {
         }
 
         // page query
-        List<JobLog> list = jobLogDao.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
-        int listCount = jobLogDao.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+        List<JobLogEntity> list = jobLogRepository.pageList(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
+        int listCount = jobLogRepository.pageListCount(start, length, jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus);
 
         // package result
         Map<String, Object> maps = new HashMap<>(3);
@@ -124,16 +124,16 @@ public class JobLogController {
     public String logDetailPage(int id, Model model) {
 
         // base check
-        JobLog jobLog = jobLogDao.load(id);
-        if (jobLog == null) {
+        JobLogEntity jobLogEntity = jobLogRepository.load(id);
+        if (jobLogEntity == null) {
             throw new RuntimeException(I18nUtil.getString("job_log_log_id_un_valid"));
         }
 
-        model.addAttribute("triggerCode", jobLog.getTriggerCode());
-        model.addAttribute("handleCode", jobLog.getHandleCode());
-        model.addAttribute("executorAddress", jobLog.getExecutorAddress());
-        model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
-        model.addAttribute("logId", jobLog.getId());
+        model.addAttribute("triggerCode", jobLogEntity.getTriggerCode());
+        model.addAttribute("handleCode", jobLogEntity.getHandleCode());
+        model.addAttribute("executorAddress", jobLogEntity.getExecutorAddress());
+        model.addAttribute("triggerTime", jobLogEntity.getTriggerTime().getTime());
+        model.addAttribute("logId", jobLogEntity.getId());
         return "joblog/joblog.detail";
     }
 
@@ -146,8 +146,8 @@ public class JobLogController {
 
             // is end
             if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
-                JobLog jobLog = jobLogDao.load(logId);
-                if (jobLog.getHandleCode() > 0) {
+                JobLogEntity jobLogEntity = jobLogRepository.load(logId);
+                if (jobLogEntity.getHandleCode() > 0) {
                     logResult.getContent().setEnd(true);
                 }
             }
@@ -163,30 +163,30 @@ public class JobLogController {
     @ResponseBody
     public ReturnT<String> logKill(int id) {
         // base check
-        JobLog jobLog = jobLogDao.load(id);
-        JobInfo jobInfo = jobInfoDao.loadById(jobLog.getJobId());
-        if (jobInfo == null) {
+        JobLogEntity jobLogEntity = jobLogRepository.load(id);
+        JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(jobLogEntity.getJobId());
+        if (jobInfoEntity == null) {
             return new ReturnT<>(500, I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
-        if (ReturnT.SUCCESS_CODE != jobLog.getTriggerCode()) {
+        if (ReturnT.SUCCESS_CODE != jobLogEntity.getTriggerCode()) {
             return new ReturnT<>(500, I18nUtil.getString("job_log_kill_log_limit"));
         }
 
         // request of kill
         ReturnT<String> runResult;
         try {
-            ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(jobLog.getExecutorAddress());
-            runResult = executorBiz.kill(new KillParam(jobInfo.getId()));
+            ExecutorBiz executorBiz = JobScheduler.getExecutorBiz(jobLogEntity.getExecutorAddress());
+            runResult = executorBiz.kill(new KillParam(jobInfoEntity.getId()));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             runResult = new ReturnT<>(500, e.getMessage());
         }
 
         if (ReturnT.SUCCESS_CODE == runResult.getCode()) {
-            jobLog.setHandleCode(ReturnT.FAIL_CODE);
-            jobLog.setHandleMsg(I18nUtil.getString("job_log_kill_log_by_man") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
-            jobLog.setHandleTime(new Date());
-            JobCompleter.updateHandleInfoAndFinish(jobLog);
+            jobLogEntity.setHandleCode(ReturnT.FAIL_CODE);
+            jobLogEntity.setHandleMsg(I18nUtil.getString("job_log_kill_log_by_man") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
+            jobLogEntity.setHandleTime(new Date());
+            JobCompleter.updateHandleInfoAndFinish(jobLogEntity);
             return new ReturnT<>(runResult.getMsg());
         } else {
             return new ReturnT<>(500, runResult.getMsg());
@@ -242,9 +242,9 @@ public class JobLogController {
 
         List<Long> logIds;
         do {
-            logIds = jobLogDao.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
+            logIds = jobLogRepository.findClearLogIds(jobGroup, jobId, clearBeforeTime, clearBeforeNum, 1000);
             if (logIds != null && logIds.size() > 0) {
-                jobLogDao.clearLog(logIds);
+                jobLogRepository.clearLog(logIds);
             }
         } while (logIds != null && logIds.size() > 0);
 

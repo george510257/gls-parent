@@ -5,7 +5,7 @@ import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.scheduler.MisfireStrategyEnum;
 import com.gls.job.admin.core.scheduler.ScheduleTypeEnum;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
-import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.entity.JobInfoEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +34,13 @@ public class JobScheduleHelper {
     }
 
     // ---------------------- tools ----------------------
-    public static Date generateNextValidTime(JobInfo jobInfo, Date fromTime) throws Exception {
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
+    public static Date generateNextValidTime(JobInfoEntity jobInfoEntity, Date fromTime) throws Exception {
+        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfoEntity.getScheduleType(), null);
         if (ScheduleTypeEnum.CRON == scheduleTypeEnum) {
-            Date nextValidTime = new CronExpression(jobInfo.getScheduleConf()).getNextValidTimeAfter(fromTime);
+            Date nextValidTime = new CronExpression(jobInfoEntity.getScheduleConf()).getNextValidTimeAfter(fromTime);
             return nextValidTime;
         } else if (ScheduleTypeEnum.FIX_RATE == scheduleTypeEnum /*|| ScheduleTypeEnum.FIX_DELAY == scheduleTypeEnum*/) {
-            return new Date(fromTime.getTime() + Integer.valueOf(jobInfo.getScheduleConf()) * 1000);
+            return new Date(fromTime.getTime() + Integer.valueOf(jobInfoEntity.getScheduleConf()) * 1000);
         }
         return null;
     }
@@ -87,48 +87,48 @@ public class JobScheduleHelper {
 
                         // 1、pre read
                         long nowTime = System.currentTimeMillis();
-                        List<JobInfo> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
+                        List<JobInfoEntity> scheduleList = JobAdminConfig.getAdminConfig().getJobInfoRepository().scheduleJobQuery(nowTime + PRE_READ_MS, preReadCount);
                         if (scheduleList != null && scheduleList.size() > 0) {
                             // 2、push time-ring
-                            for (JobInfo jobInfo : scheduleList) {
+                            for (JobInfoEntity jobInfoEntity : scheduleList) {
 
                                 // time-ring jump
-                                if (nowTime > jobInfo.getTriggerNextTime() + PRE_READ_MS) {
+                                if (nowTime > jobInfoEntity.getTriggerNextTime() + PRE_READ_MS) {
                                     // 2.1、trigger-expire > 5s：pass && make next-trigger-time
-                                    logger.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfo.getId());
+                                    logger.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfoEntity.getId());
 
                                     // 1、misfire match
-                                    MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
+                                    MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfoEntity.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
                                     if (MisfireStrategyEnum.FIRE_ONCE_NOW == misfireStrategyEnum) {
                                         // FIRE_ONCE_NOW 》 trigger
-                                        JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.MISFIRE, -1, null, null, null);
-                                        logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
+                                        JobTriggerPoolHelper.trigger(jobInfoEntity.getId(), TriggerTypeEnum.MISFIRE, -1, null, null, null);
+                                        logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
                                     }
 
                                     // 2、fresh next
-                                    refreshNextValidTime(jobInfo, new Date());
+                                    refreshNextValidTime(jobInfoEntity, new Date());
 
-                                } else if (nowTime > jobInfo.getTriggerNextTime()) {
+                                } else if (nowTime > jobInfoEntity.getTriggerNextTime()) {
                                     // 2.2、trigger-expire < 5s：direct-trigger && make next-trigger-time
 
                                     // 1、trigger
-                                    JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.CRON, -1, null, null, null);
-                                    logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
+                                    JobTriggerPoolHelper.trigger(jobInfoEntity.getId(), TriggerTypeEnum.CRON, -1, null, null, null);
+                                    logger.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
 
                                     // 2、fresh next
-                                    refreshNextValidTime(jobInfo, new Date());
+                                    refreshNextValidTime(jobInfoEntity, new Date());
 
                                     // next-trigger-time in 5s, pre-read again
-                                    if (jobInfo.getTriggerStatus() == 1 && nowTime + PRE_READ_MS > jobInfo.getTriggerNextTime()) {
+                                    if (jobInfoEntity.getTriggerStatus() == 1 && nowTime + PRE_READ_MS > jobInfoEntity.getTriggerNextTime()) {
 
                                         // 1、make ring second
-                                        int ringSecond = (int) ((jobInfo.getTriggerNextTime() / 1000) % 60);
+                                        int ringSecond = (int) ((jobInfoEntity.getTriggerNextTime() / 1000) % 60);
 
                                         // 2、push time ring
-                                        pushTimeRing(ringSecond, jobInfo.getId());
+                                        pushTimeRing(ringSecond, jobInfoEntity.getId());
 
                                         // 3、fresh next
-                                        refreshNextValidTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
+                                        refreshNextValidTime(jobInfoEntity, new Date(jobInfoEntity.getTriggerNextTime()));
 
                                     }
 
@@ -136,21 +136,21 @@ public class JobScheduleHelper {
                                     // 2.3、trigger-pre-read：time-ring trigger && make next-trigger-time
 
                                     // 1、make ring second
-                                    int ringSecond = (int) ((jobInfo.getTriggerNextTime() / 1000) % 60);
+                                    int ringSecond = (int) ((jobInfoEntity.getTriggerNextTime() / 1000) % 60);
 
                                     // 2、push time ring
-                                    pushTimeRing(ringSecond, jobInfo.getId());
+                                    pushTimeRing(ringSecond, jobInfoEntity.getId());
 
                                     // 3、fresh next
-                                    refreshNextValidTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
+                                    refreshNextValidTime(jobInfoEntity, new Date(jobInfoEntity.getTriggerNextTime()));
 
                                 }
 
                             }
 
                             // 3、update trigger info
-                            for (JobInfo jobInfo : scheduleList) {
-                                JobAdminConfig.getAdminConfig().getJobInfoDao().scheduleUpdate(jobInfo);
+                            for (JobInfoEntity jobInfoEntity : scheduleList) {
+                                JobAdminConfig.getAdminConfig().getJobInfoRepository().scheduleUpdate(jobInfoEntity);
                             }
 
                         } else {
@@ -276,17 +276,17 @@ public class JobScheduleHelper {
         ringThread.start();
     }
 
-    private void refreshNextValidTime(JobInfo jobInfo, Date fromTime) throws Exception {
-        Date nextValidTime = generateNextValidTime(jobInfo, fromTime);
+    private void refreshNextValidTime(JobInfoEntity jobInfoEntity, Date fromTime) throws Exception {
+        Date nextValidTime = generateNextValidTime(jobInfoEntity, fromTime);
         if (nextValidTime != null) {
-            jobInfo.setTriggerLastTime(jobInfo.getTriggerNextTime());
-            jobInfo.setTriggerNextTime(nextValidTime.getTime());
+            jobInfoEntity.setTriggerLastTime(jobInfoEntity.getTriggerNextTime());
+            jobInfoEntity.setTriggerNextTime(nextValidTime.getTime());
         } else {
-            jobInfo.setTriggerStatus(0);
-            jobInfo.setTriggerLastTime(0);
-            jobInfo.setTriggerNextTime(0);
+            jobInfoEntity.setTriggerStatus(0);
+            jobInfoEntity.setTriggerLastTime(0);
+            jobInfoEntity.setTriggerNextTime(0);
             logger.warn(">>>>>>>>>>> gls-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
-                    jobInfo.getId(), jobInfo.getScheduleType(), jobInfo.getScheduleConf());
+                    jobInfoEntity.getId(), jobInfoEntity.getScheduleType(), jobInfoEntity.getScheduleConf());
         }
     }
 

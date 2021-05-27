@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller.interceptor;
 
 import com.gls.job.admin.core.util.I18nUtil;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
-import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.entity.JobUserEntity;
 import com.gls.job.admin.web.service.LoginService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -41,7 +41,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
         }
 
         if (needLogin) {
-            JobUser loginUser = loginService.ifLogin(request, response);
+            JobUserEntity loginUser = loginService.ifLogin(request, response);
             if (loginUser == null) {
                 response.setStatus(302);
                 response.setHeader("location", request.getContextPath() + "/toLogin");

@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author xuxueli  2016-1-12 18:25:49
  */
-public class JobInfo {
+public class JobInfoEntity {
 
     private int id;                // 主键ID
 

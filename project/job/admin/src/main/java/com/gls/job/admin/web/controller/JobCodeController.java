@@ -1,10 +1,10 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.JobInfoDao;
-import com.gls.job.admin.web.dao.JobLogGlueDao;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLogGlue;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogGlueEntity;
+import com.gls.job.admin.web.repository.JobInfoRepository;
+import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.glue.GlueTypeEnum;
 import org.springframework.stereotype.Controller;
@@ -27,30 +27,30 @@ import java.util.List;
 public class JobCodeController {
 
     @Resource
-    private JobInfoDao jobInfoDao;
+    private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobLogGlueDao jobLogGlueDao;
+    private JobLogGlueRepository jobLogGlueRepository;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, int jobId) {
-        JobInfo jobInfo = jobInfoDao.loadById(jobId);
-        List<JobLogGlue> jobLogGlues = jobLogGlueDao.findByJobId(jobId);
+        JobInfoEntity jobInfoEntity = jobInfoRepository.loadById(jobId);
+        List<JobLogGlueEntity> jobLogGlueEntities = jobLogGlueRepository.findByJobId(jobId);
 
-        if (jobInfo == null) {
+        if (jobInfoEntity == null) {
             throw new RuntimeException(I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfoEntity.getGlueType())) {
             throw new RuntimeException(I18nUtil.getString("job_info_glue_glue_type_un_valid"));
         }
 
         // valid permission
-        JobInfoController.validPermission(request, jobInfo.getJobGroup());
+        JobInfoController.validPermission(request, jobInfoEntity.getJobGroup());
 
         // Glue类型-字典
         model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
 
-        model.addAttribute("jobInfo", jobInfo);
-        model.addAttribute("jobLogGlues", jobLogGlues);
+        model.addAttribute("jobInfo", jobInfoEntity);
+        model.addAttribute("jobLogGlues", jobLogGlueEntities);
         return "jobcode/jobcode.index";
     }
 
@@ -64,32 +64,32 @@ public class JobCodeController {
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
             return new ReturnT<>(500, I18nUtil.getString("job_info_glue_remark_limit"));
         }
-        JobInfo existsJobInfo = jobInfoDao.loadById(id);
-        if (existsJobInfo == null) {
+        JobInfoEntity existsJobInfoEntity = jobInfoRepository.loadById(id);
+        if (existsJobInfoEntity == null) {
             return new ReturnT<>(500, I18nUtil.getString("job_info_glue_job_id_un_valid"));
         }
 
         // update new code
-        existsJobInfo.setGlueSource(glueSource);
-        existsJobInfo.setGlueRemark(glueRemark);
-        existsJobInfo.setGlueUpdatetime(new Date());
+        existsJobInfoEntity.setGlueSource(glueSource);
+        existsJobInfoEntity.setGlueRemark(glueRemark);
+        existsJobInfoEntity.setGlueUpdatetime(new Date());
 
-        existsJobInfo.setUpdateTime(new Date());
-        jobInfoDao.update(existsJobInfo);
+        existsJobInfoEntity.setUpdateTime(new Date());
+        jobInfoRepository.update(existsJobInfoEntity);
 
         // log old code
-        JobLogGlue jobLogGlue = new JobLogGlue();
-        jobLogGlue.setJobId(existsJobInfo.getId());
-        jobLogGlue.setGlueType(existsJobInfo.getGlueType());
-        jobLogGlue.setGlueSource(glueSource);
-        jobLogGlue.setGlueRemark(glueRemark);
+        JobLogGlueEntity jobLogGlueEntity = new JobLogGlueEntity();
+        jobLogGlueEntity.setJobId(existsJobInfoEntity.getId());
+        jobLogGlueEntity.setGlueType(existsJobInfoEntity.getGlueType());
+        jobLogGlueEntity.setGlueSource(glueSource);
+        jobLogGlueEntity.setGlueRemark(glueRemark);
 
-        jobLogGlue.setAddTime(new Date());
-        jobLogGlue.setUpdateTime(new Date());
-        jobLogGlueDao.save(jobLogGlue);
+        jobLogGlueEntity.setAddTime(new Date());
+        jobLogGlueEntity.setUpdateTime(new Date());
+        jobLogGlueRepository.save(jobLogGlueEntity);
 
         // remove code backup more than 30
-        jobLogGlueDao.removeOld(existsJobInfo.getId(), 30);
+        jobLogGlueRepository.removeOld(existsJobInfoEntity.getId(), 30);
 
         return ReturnT.SUCCESS;
     }

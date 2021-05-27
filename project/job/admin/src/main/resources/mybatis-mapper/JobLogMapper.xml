@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gls.job.admin.web.dao.JobLogDao">
+<mapper namespace="com.gls.job.admin.web.repository.JobLogRepository">
 
-    <resultMap id="JobLog" type="com.gls.job.admin.web.model.JobLog">
+    <resultMap id="JobLog" type="com.gls.job.admin.web.entity.JobLogEntity">
         <result column="id" property="id"/>
 
-        <result column="job_group" property="jobGroup"/>
+        <result column="job_group" property="jobGroupEntity"/>
         <result column="job_id" property="jobId"/>
 
         <result column="executor_address" property="executorAddress"/>
@@ -49,8 +49,8 @@
         <include refid="Base_Column_List"/>
         FROM gls_job_log AS t
         <trim prefix="WHERE" prefixOverrides="AND | OR">
-            <if test="jobId==0 and jobGroup gt 0">
-                AND t.job_group = #{jobGroup}
+            <if test="jobId==0 and jobGroupEntity gt 0">
+                AND t.job_group = #{jobGroupEntity}
             </if>
             <if test="jobId gt 0">
                 AND t.job_id = #{jobId}
@@ -83,8 +83,8 @@
         SELECT count(1)
         FROM gls_job_log AS t
         <trim prefix="WHERE" prefixOverrides="AND | OR">
-            <if test="jobId==0 and jobGroup gt 0">
-                AND t.job_group = #{jobGroup}
+            <if test="jobId==0 and jobGroupEntity gt 0">
+                AND t.job_group = #{jobGroupEntity}
             </if>
             <if test="jobId gt 0">
                 AND t.job_id = #{jobId}
@@ -119,7 +119,7 @@
     </select>
 
 
-    <insert id="save" parameterType="com.gls.job.admin.web.model.JobLog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobLogEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO gls_job_log (
         `job_group`,
         `job_id`,
@@ -127,7 +127,7 @@
         `trigger_code`,
         `handle_code`
         ) VALUES (
-        #{jobGroup},
+        #{jobGroupEntity},
         #{jobId},
         #{triggerTime},
         #{triggerCode},
@@ -189,8 +189,8 @@
     <select id="findClearLogIds" resultType="long">
         SELECT id FROM gls_job_log
         <trim prefix="WHERE" prefixOverrides="AND | OR">
-            <if test="jobGroup gt 0">
-                AND job_group = #{jobGroup}
+            <if test="jobGroupEntity gt 0">
+                AND job_group = #{jobGroupEntity}
             </if>
             <if test="jobId gt 0">
                 AND job_id = #{jobId}
@@ -203,8 +203,8 @@
                 SELECT id FROM(
                 SELECT id FROM gls_job_log AS t
                 <trim prefix="WHERE" prefixOverrides="AND | OR">
-                    <if test="jobGroup gt 0">
-                        AND t.job_group = #{jobGroup}
+                    <if test="jobGroupEntity gt 0">
+                        AND t.job_group = #{jobGroupEntity}
                     </if>
                     <if test="jobId gt 0">
                         AND t.job_id = #{jobId}

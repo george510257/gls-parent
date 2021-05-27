@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author xuxueli  2015-12-19 23:19:09
  */
-public class JobLog {
+public class JobLogEntity {
 
     private long id;
 

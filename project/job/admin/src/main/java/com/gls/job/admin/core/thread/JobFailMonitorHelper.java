@@ -3,8 +3,8 @@ package com.gls.job.admin.core.thread;
 import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,24 +39,24 @@ public class JobFailMonitorHelper {
                 while (!toStop) {
                     try {
 
-                        List<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogDao().findFailJobLogIds(1000);
+                        List<Long> failLogIds = JobAdminConfig.getAdminConfig().getJobLogRepository().findFailJobLogIds(1000);
                         if (failLogIds != null && !failLogIds.isEmpty()) {
                             for (long failLogId : failLogIds) {
 
                                 // lock log
-                                int lockRet = JobAdminConfig.getAdminConfig().getJobLogDao().updateAlarmStatus(failLogId, 0, -1);
+                                int lockRet = JobAdminConfig.getAdminConfig().getJobLogRepository().updateAlarmStatus(failLogId, 0, -1);
                                 if (lockRet < 1) {
                                     continue;
                                 }
-                                JobLog log = JobAdminConfig.getAdminConfig().getJobLogDao().load(failLogId);
-                                JobInfo info = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(log.getJobId());
+                                JobLogEntity log = JobAdminConfig.getAdminConfig().getJobLogRepository().load(failLogId);
+                                JobInfoEntity info = JobAdminConfig.getAdminConfig().getJobInfoRepository().loadById(log.getJobId());
 
                                 // 1、fail retry monitor
                                 if (log.getExecutorFailRetryCount() > 0) {
                                     JobTriggerPoolHelper.trigger(log.getJobId(), TriggerTypeEnum.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
                                     String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
                                     log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-                                    JobAdminConfig.getAdminConfig().getJobLogDao().updateTriggerInfo(log);
+                                    JobAdminConfig.getAdminConfig().getJobLogRepository().updateTriggerInfo(log);
                                 }
 
                                 // 2、fail alarm monitor
@@ -68,7 +68,7 @@ public class JobFailMonitorHelper {
                                     newAlarmStatus = 1;
                                 }
 
-                                JobAdminConfig.getAdminConfig().getJobLogDao().updateAlarmStatus(failLogId, -1, newAlarmStatus);
+                                JobAdminConfig.getAdminConfig().getJobLogRepository().updateAlarmStatus(failLogId, -1, newAlarmStatus);
                             }
                         }
 

@@ -8,10 +8,10 @@ import com.gls.job.admin.core.thread.JobScheduleHelper;
 import com.gls.job.admin.core.thread.JobTriggerPoolHelper;
 import com.gls.job.admin.core.trigger.TriggerTypeEnum;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobUserEntity;
+import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.service.JobService;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.core.biz.model.ReturnT;
@@ -40,33 +40,33 @@ import java.util.*;
 public class JobInfoController {
 
     @Resource
-    private JobGroupDao jobGroupDao;
+    private JobGroupRepository jobGroupRepository;
     @Resource
     private JobService jobService;
 
-    public static List<JobGroup> filterJobGroupByRole(HttpServletRequest request, List<JobGroup> jobGroupListAll) {
-        List<JobGroup> jobGroupList = new ArrayList<>();
-        if (jobGroupListAll != null && jobGroupListAll.size() > 0) {
-            JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+    public static List<JobGroupEntity> filterJobGroupByRole(HttpServletRequest request, List<JobGroupEntity> jobGroupEntityListAll) {
+        List<JobGroupEntity> jobGroupEntityList = new ArrayList<>();
+        if (jobGroupEntityListAll != null && jobGroupEntityListAll.size() > 0) {
+            JobUserEntity loginUser = (JobUserEntity) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
             if (loginUser.getRole() == 1) {
-                jobGroupList = jobGroupListAll;
+                jobGroupEntityList = jobGroupEntityListAll;
             } else {
                 List<String> groupIds = new ArrayList<>();
                 if (loginUser.getPermission() != null && loginUser.getPermission().trim().length() > 0) {
                     groupIds = Arrays.asList(loginUser.getPermission().trim().split(","));
                 }
-                for (JobGroup groupItem : jobGroupListAll) {
+                for (JobGroupEntity groupItem : jobGroupEntityListAll) {
                     if (groupIds.contains(String.valueOf(groupItem.getId()))) {
-                        jobGroupList.add(groupItem);
+                        jobGroupEntityList.add(groupItem);
                     }
                 }
             }
         }
-        return jobGroupList;
+        return jobGroupEntityList;
     }
 
     public static void validPermission(HttpServletRequest request, int jobGroup) {
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUserEntity loginUser = (JobUserEntity) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
         }
@@ -83,15 +83,15 @@ public class JobInfoController {
         model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
 
         // 执行器列表
-        List<JobGroup> jobGroupListAll = jobGroupDao.findAll();
+        List<JobGroupEntity> jobGroupEntityListAll = jobGroupRepository.findAll();
 
         // filter group
-        List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupListAll);
-        if (jobGroupList == null || jobGroupList.size() == 0) {
+        List<JobGroupEntity> jobGroupEntityList = filterJobGroupByRole(request, jobGroupEntityListAll);
+        if (jobGroupEntityList == null || jobGroupEntityList.size() == 0) {
             throw new JobException(I18nUtil.getString("job_group_empty"));
         }
 
-        model.addAttribute("JobGroupList", jobGroupList);
+        model.addAttribute("JobGroupList", jobGroupEntityList);
         model.addAttribute("jobGroup", jobGroup);
 
         return "jobinfo/jobinfo.index";
@@ -108,14 +108,14 @@ public class JobInfoController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public ReturnT<String> add(JobInfo jobInfo) {
-        return jobService.add(jobInfo);
+    public ReturnT<String> add(JobInfoEntity jobInfoEntity) {
+        return jobService.add(jobInfoEntity);
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    public ReturnT<String> update(JobInfo jobInfo) {
-        return jobService.update(jobInfo);
+    public ReturnT<String> update(JobInfoEntity jobInfoEntity) {
+        return jobService.update(jobInfoEntity);
     }
 
     @RequestMapping("/remove")
@@ -152,15 +152,15 @@ public class JobInfoController {
     @ResponseBody
     public ReturnT<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
 
-        JobInfo paramJobInfo = new JobInfo();
-        paramJobInfo.setScheduleType(scheduleType);
-        paramJobInfo.setScheduleConf(scheduleConf);
+        JobInfoEntity paramJobInfoEntity = new JobInfoEntity();
+        paramJobInfoEntity.setScheduleType(scheduleType);
+        paramJobInfoEntity.setScheduleConf(scheduleConf);
 
         List<String> result = new ArrayList<>();
         try {
             Date lastTime = new Date();
             for (int i = 0; i < 5; i++) {
-                lastTime = JobScheduleHelper.generateNextValidTime(paramJobInfo, lastTime);
+                lastTime = JobScheduleHelper.generateNextValidTime(paramJobInfoEntity, lastTime);
                 if (lastTime != null) {
                     result.add(DateUtil.formatDateTime(lastTime));
                 } else {

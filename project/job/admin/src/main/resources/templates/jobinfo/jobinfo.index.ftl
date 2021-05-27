@@ -29,10 +29,10 @@
                 <div class="col-xs-3">
                     <div class="input-group">
                         <span class="input-group-addon">${I18n.job_info_field_jobgroup}</span>
-                        <select class="form-control" id="jobGroup">
+                        <select class="form-control" id="jobGroupEntity">
                             <#list JobGroupList as group>
                                 <option value="${group.id}"
-                                        <#if jobGroup==group.id>selected</#if> >${group.title}</option>
+                                        <#if jobGroupEntity==group.id>selected</#if> >${group.title}</option>
                             </#list>
                         </select>
                     </div>
@@ -83,7 +83,7 @@
                                 <thead>
                                 <tr>
                                     <th name="id">${I18n.job_info_field_id}</th>
-                                    <th name="jobGroup">${I18n.job_info_field_jobgroup}</th>
+                                    <th name="jobGroupEntity">${I18n.job_info_field_jobgroup}</th>
                                     <th name="jobDesc">${I18n.job_info_field_jobdesc}</th>
                                     <th name="scheduleType">${I18n.schedule_type}</th>
                                     <th name="glueType">${I18n.job_info_field_glue_type}</th>
@@ -125,10 +125,10 @@
                         <label for="firstname" class="col-sm-2 control-label">${I18n.job_info_field_jobgroup}<font
                                     color="red">*</font></label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="jobGroup">
+                            <select class="form-control" name="jobGroupEntity">
                                 <#list JobGroupList as group>
                                     <option value="${group.id}"
-                                            <#if jobGroup==group.id>selected</#if> >${group.title}</option>
+                                            <#if jobGroupEntity==group.id>selected</#if> >${group.title}</option>
                                 </#list>
                             </select>
                         </div>
@@ -420,7 +420,7 @@ exit 0
                         <label for="firstname" class="col-sm-2 control-label">${I18n.job_info_field_jobgroup}<font
                                     color="red">*</font></label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="jobGroup">
+                            <select class="form-control" name="jobGroupEntity">
                                 <#list JobGroupList as group>
                                     <option value="${group.id}">${group.title}</option>
                                 </#list>

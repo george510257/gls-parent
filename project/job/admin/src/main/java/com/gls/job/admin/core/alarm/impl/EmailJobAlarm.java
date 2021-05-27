@@ -3,9 +3,9 @@ package com.gls.job.admin.core.alarm.impl;
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.core.biz.model.ReturnT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,25 +61,25 @@ public class EmailJobAlarm implements JobAlarm {
     /**
      * fail alarm
      *
-     * @param jobLog
+     * @param jobLogEntity
      */
-    public boolean doAlarm(JobInfo info, JobLog jobLog) {
+    public boolean doAlarm(JobInfoEntity info, JobLogEntity jobLogEntity) {
         boolean alarmResult = true;
 
         // send monitor email
         if (info != null && info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0) {
 
             // alarmContent
-            String alarmContent = "Alarm Job LogId=" + jobLog.getId();
-            if (jobLog.getTriggerCode() != ReturnT.SUCCESS_CODE) {
-                alarmContent += "<br>TriggerMsg=<br>" + jobLog.getTriggerMsg();
+            String alarmContent = "Alarm Job LogId=" + jobLogEntity.getId();
+            if (jobLogEntity.getTriggerCode() != ReturnT.SUCCESS_CODE) {
+                alarmContent += "<br>TriggerMsg=<br>" + jobLogEntity.getTriggerMsg();
             }
-            if (jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != ReturnT.SUCCESS_CODE) {
-                alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
+            if (jobLogEntity.getHandleCode() > 0 && jobLogEntity.getHandleCode() != ReturnT.SUCCESS_CODE) {
+                alarmContent += "<br>HandleCode=" + jobLogEntity.getHandleMsg();
             }
 
             // email info
-            JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(Integer.valueOf(info.getJobGroup()));
+            JobGroupEntity group = JobAdminConfig.getAdminConfig().getJobGroupRepository().load(Integer.valueOf(info.getJobGroup()));
             String personal = I18nUtil.getString("admin_name_full");
             String title = I18nUtil.getString("jobconf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
@@ -103,7 +103,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     JobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
                 } catch (Exception e) {
-                    logger.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    logger.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLogEntity.getId(), e);
 
                     alarmResult = false;
                 }

@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.core.biz.model.ReturnT;
 
 import java.util.Date;
@@ -29,18 +29,18 @@ public interface JobService {
     /**
      * add job
      *
-     * @param jobInfo
+     * @param jobInfoEntity
      * @return
      */
-    public ReturnT<String> add(JobInfo jobInfo);
+    public ReturnT<String> add(JobInfoEntity jobInfoEntity);
 
     /**
      * update job
      *
-     * @param jobInfo
+     * @param jobInfoEntity
      * @return
      */
-    public ReturnT<String> update(JobInfo jobInfo);
+    public ReturnT<String> update(JobInfoEntity jobInfoEntity);
 
     /**
      * remove job

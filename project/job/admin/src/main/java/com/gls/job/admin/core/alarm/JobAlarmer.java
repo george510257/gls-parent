@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -38,10 +38,10 @@ public class JobAlarmer implements ApplicationContextAware, InitializingBean {
      * job alarm
      *
      * @param info
-     * @param jobLog
+     * @param jobLogEntity
      * @return
      */
-    public boolean alarm(JobInfo info, JobLog jobLog) {
+    public boolean alarm(JobInfoEntity info, JobLogEntity jobLogEntity) {
 
         boolean result = false;
         if (jobAlarmList != null && jobAlarmList.size() > 0) {
@@ -49,7 +49,7 @@ public class JobAlarmer implements ApplicationContextAware, InitializingBean {
             for (JobAlarm alarm : jobAlarmList) {
                 boolean resultItem = false;
                 try {
-                    resultItem = alarm.doAlarm(info, jobLog);
+                    resultItem = alarm.doAlarm(info, jobLogEntity);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 }

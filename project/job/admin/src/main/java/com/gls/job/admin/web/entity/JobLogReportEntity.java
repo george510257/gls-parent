@@ -1,8 +1,8 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import java.util.Date;
 
-public class JobLogReport {
+public class JobLogReportEntity {
 
     private int id;
 

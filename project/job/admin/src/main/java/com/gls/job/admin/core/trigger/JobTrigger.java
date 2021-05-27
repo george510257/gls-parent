@@ -4,9 +4,9 @@ import com.gls.job.admin.core.conf.JobAdminConfig;
 import com.gls.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.gls.job.admin.core.scheduler.JobScheduler;
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.core.biz.ExecutorBiz;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.biz.model.TriggerParam;
@@ -46,16 +46,16 @@ public class JobTrigger {
                                String addressList) {
 
         // load data
-        JobInfo jobInfo = JobAdminConfig.getAdminConfig().getJobInfoDao().loadById(jobId);
-        if (jobInfo == null) {
+        JobInfoEntity jobInfoEntity = JobAdminConfig.getAdminConfig().getJobInfoRepository().loadById(jobId);
+        if (jobInfoEntity == null) {
             logger.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
         }
         if (executorParam != null) {
-            jobInfo.setExecutorParam(executorParam);
+            jobInfoEntity.setExecutorParam(executorParam);
         }
-        int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
-        JobGroup group = JobAdminConfig.getAdminConfig().getJobGroupDao().load(jobInfo.getJobGroup());
+        int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfoEntity.getExecutorFailRetryCount();
+        JobGroupEntity group = JobAdminConfig.getAdminConfig().getJobGroupRepository().load(jobInfoEntity.getJobGroup());
 
         // cover addressList
         if (addressList != null && addressList.trim().length() > 0) {
@@ -73,17 +73,17 @@ public class JobTrigger {
                 shardingParam[1] = Integer.valueOf(shardingArr[1]);
             }
         }
-        if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null)
+        if (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == ExecutorRouteStrategyEnum.match(jobInfoEntity.getExecutorRouteStrategy(), null)
                 && group.getRegistryList() != null && !group.getRegistryList().isEmpty()
                 && shardingParam == null) {
             for (int i = 0; i < group.getRegistryList().size(); i++) {
-                processTrigger(group, jobInfo, finalFailRetryCount, triggerType, i, group.getRegistryList().size());
+                processTrigger(group, jobInfoEntity, finalFailRetryCount, triggerType, i, group.getRegistryList().size());
             }
         } else {
             if (shardingParam == null) {
                 shardingParam = new int[]{0, 1};
             }
-            processTrigger(group, jobInfo, finalFailRetryCount, triggerType, shardingParam[0], shardingParam[1]);
+            processTrigger(group, jobInfoEntity, finalFailRetryCount, triggerType, shardingParam[0], shardingParam[1]);
         }
 
     }
@@ -99,39 +99,39 @@ public class JobTrigger {
 
     /**
      * @param group               job group, registry list may be empty
-     * @param jobInfo
+     * @param jobInfoEntity
      * @param finalFailRetryCount
      * @param triggerType
      * @param index               sharding index
      * @param total               sharding index
      */
-    private static void processTrigger(JobGroup group, JobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
+    private static void processTrigger(JobGroupEntity group, JobInfoEntity jobInfoEntity, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
 
         // param
-        ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block strategy
-        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
+        ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfoEntity.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block strategy
+        ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfoEntity.getExecutorRouteStrategy(), null);    // route strategy
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
-        JobLog jobLog = new JobLog();
-        jobLog.setJobGroup(jobInfo.getJobGroup());
-        jobLog.setJobId(jobInfo.getId());
-        jobLog.setTriggerTime(new Date());
-        JobAdminConfig.getAdminConfig().getJobLogDao().save(jobLog);
-        logger.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLog.getId());
+        JobLogEntity jobLogEntity = new JobLogEntity();
+        jobLogEntity.setJobGroup(jobInfoEntity.getJobGroup());
+        jobLogEntity.setJobId(jobInfoEntity.getId());
+        jobLogEntity.setTriggerTime(new Date());
+        JobAdminConfig.getAdminConfig().getJobLogRepository().save(jobLogEntity);
+        logger.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLogEntity.getId());
 
         // 2、init trigger-param
         TriggerParam triggerParam = new TriggerParam();
-        triggerParam.setJobId(jobInfo.getId());
-        triggerParam.setExecutorHandler(jobInfo.getExecutorHandler());
-        triggerParam.setExecutorParams(jobInfo.getExecutorParam());
-        triggerParam.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
-        triggerParam.setExecutorTimeout(jobInfo.getExecutorTimeout());
-        triggerParam.setLogId(jobLog.getId());
-        triggerParam.setLogDateTime(jobLog.getTriggerTime().getTime());
-        triggerParam.setGlueType(jobInfo.getGlueType());
-        triggerParam.setGlueSource(jobInfo.getGlueSource());
-        triggerParam.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
+        triggerParam.setJobId(jobInfoEntity.getId());
+        triggerParam.setExecutorHandler(jobInfoEntity.getExecutorHandler());
+        triggerParam.setExecutorParams(jobInfoEntity.getExecutorParam());
+        triggerParam.setExecutorBlockStrategy(jobInfoEntity.getExecutorBlockStrategy());
+        triggerParam.setExecutorTimeout(jobInfoEntity.getExecutorTimeout());
+        triggerParam.setLogId(jobLogEntity.getId());
+        triggerParam.setLogDateTime(jobLogEntity.getTriggerTime().getTime());
+        triggerParam.setGlueType(jobInfoEntity.getGlueType());
+        triggerParam.setGlueSource(jobInfoEntity.getGlueSource());
+        triggerParam.setGlueUpdatetime(jobInfoEntity.getGlueUpdatetime().getTime());
         triggerParam.setBroadcastIndex(index);
         triggerParam.setBroadcastTotal(total);
 
@@ -175,24 +175,24 @@ public class JobTrigger {
             triggerMsgSb.append("(" + shardingParam + ")");
         }
         triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_executorBlockStrategy")).append("：").append(blockStrategy.getTitle());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_timeout")).append("：").append(jobInfo.getExecutorTimeout());
+        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_timeout")).append("：").append(jobInfoEntity.getExecutorTimeout());
         triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_executorFailRetryCount")).append("：").append(finalFailRetryCount);
 
         triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + I18nUtil.getString("jobconf_trigger_run") + "<<<<<<<<<<< </span><br>")
                 .append((routeAddressResult != null && routeAddressResult.getMsg() != null) ? routeAddressResult.getMsg() + "<br><br>" : "").append(triggerResult.getMsg() != null ? triggerResult.getMsg() : "");
 
         // 6、save log trigger-info
-        jobLog.setExecutorAddress(address);
-        jobLog.setExecutorHandler(jobInfo.getExecutorHandler());
-        jobLog.setExecutorParam(jobInfo.getExecutorParam());
-        jobLog.setExecutorShardingParam(shardingParam);
-        jobLog.setExecutorFailRetryCount(finalFailRetryCount);
-        //jobLog.setTriggerTime();
-        jobLog.setTriggerCode(triggerResult.getCode());
-        jobLog.setTriggerMsg(triggerMsgSb.toString());
-        JobAdminConfig.getAdminConfig().getJobLogDao().updateTriggerInfo(jobLog);
+        jobLogEntity.setExecutorAddress(address);
+        jobLogEntity.setExecutorHandler(jobInfoEntity.getExecutorHandler());
+        jobLogEntity.setExecutorParam(jobInfoEntity.getExecutorParam());
+        jobLogEntity.setExecutorShardingParam(shardingParam);
+        jobLogEntity.setExecutorFailRetryCount(finalFailRetryCount);
+        //jobLogEntity.setTriggerTime();
+        jobLogEntity.setTriggerCode(triggerResult.getCode());
+        jobLogEntity.setTriggerMsg(triggerMsgSb.toString());
+        JobAdminConfig.getAdminConfig().getJobLogRepository().updateTriggerInfo(jobLogEntity);
 
-        logger.debug(">>>>>>>>>>> gls-job trigger end, jobId:{}", jobLog.getId());
+        logger.debug(">>>>>>>>>>> gls-job trigger end, jobId:{}", jobLogEntity.getId());
     }
 
     /**

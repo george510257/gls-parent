@@ -2,7 +2,7 @@
 //
 //import JobAdminConfig;
 //import com.gls.job.admin.core.jobbean.RemoteHttpJobBean;
-//import JobInfo;
+//import JobInfoEntity;
 //import JobFailMonitorHelper;
 //import com.gls.job.admin.core.thread.JobRegistryMonitorHelper;
 //import JobTriggerPoolHelper;
@@ -162,7 +162,7 @@
 //     *
 //     * @param jobInfo
 //     */
-//	public static void fillJobInfo(JobInfo jobInfo) {
+//	public static void fillJobInfo(JobInfoEntity jobInfo) {
 //
 //        String name = String.valueOf(jobInfo.getId());
 //

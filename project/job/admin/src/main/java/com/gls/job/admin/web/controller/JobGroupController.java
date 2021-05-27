@@ -1,11 +1,11 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.util.I18nUtil;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.dao.JobInfoDao;
-import com.gls.job.admin.web.dao.JobRegistryDao;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobRegistry;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobRegistryEntity;
+import com.gls.job.admin.web.repository.JobGroupRepository;
+import com.gls.job.admin.web.repository.JobInfoRepository;
+import com.gls.job.admin.web.repository.JobRegistryRepository;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.enums.RegistryConfig;
 import org.springframework.stereotype.Controller;
@@ -26,11 +26,11 @@ import java.util.*;
 public class JobGroupController {
 
     @Resource
-    public JobInfoDao jobInfoDao;
+    public JobInfoRepository jobInfoRepository;
     @Resource
-    public JobGroupDao jobGroupDao;
+    public JobGroupRepository jobGroupRepository;
     @Resource
-    private JobRegistryDao jobRegistryDao;
+    private JobRegistryRepository jobRegistryRepository;
 
     @RequestMapping
     public String index() {
@@ -44,8 +44,8 @@ public class JobGroupController {
                                         String appname, String title) {
 
         // page query
-        List<JobGroup> list = jobGroupDao.pageList(start, length, appname, title);
-        int listCount = jobGroupDao.pageListCount(start, length, appname, title);
+        List<JobGroupEntity> list = jobGroupRepository.pageList(start, length, appname, title);
+        int listCount = jobGroupRepository.pageListCount(start, length, appname, title);
 
         // package result
         Map<String, Object> maps = new HashMap<>();
@@ -57,33 +57,33 @@ public class JobGroupController {
 
     @RequestMapping("/save")
     @ResponseBody
-    public ReturnT<String> save(JobGroup jobGroup) {
+    public ReturnT<String> save(JobGroupEntity jobGroupEntity) {
 
         // valid
-        if (jobGroup.getAppname() == null || jobGroup.getAppname().trim().length() == 0) {
+        if (jobGroupEntity.getAppname() == null || jobGroupEntity.getAppname().trim().length() == 0) {
             return new ReturnT<>(500, (I18nUtil.getString("system_please_input") + "AppName"));
         }
-        if (jobGroup.getAppname().length() < 4 || jobGroup.getAppname().length() > 64) {
+        if (jobGroupEntity.getAppname().length() < 4 || jobGroupEntity.getAppname().length() > 64) {
             return new ReturnT<>(500, I18nUtil.getString("job_group_field_appname_length"));
         }
-        if (jobGroup.getAppname().contains(">") || jobGroup.getAppname().contains("<")) {
+        if (jobGroupEntity.getAppname().contains(">") || jobGroupEntity.getAppname().contains("<")) {
             return new ReturnT<>(500, "AppName" + I18nUtil.getString("system_un_valid"));
         }
-        if (jobGroup.getTitle() == null || jobGroup.getTitle().trim().length() == 0) {
+        if (jobGroupEntity.getTitle() == null || jobGroupEntity.getTitle().trim().length() == 0) {
             return new ReturnT<>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_group_field_title")));
         }
-        if (jobGroup.getTitle().contains(">") || jobGroup.getTitle().contains("<")) {
+        if (jobGroupEntity.getTitle().contains(">") || jobGroupEntity.getTitle().contains("<")) {
             return new ReturnT<>(500, I18nUtil.getString("job_group_field_title") + I18nUtil.getString("system_un_valid"));
         }
-        if (jobGroup.getAddressType() != 0) {
-            if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
+        if (jobGroupEntity.getAddressType() != 0) {
+            if (jobGroupEntity.getAddressList() == null || jobGroupEntity.getAddressList().trim().length() == 0) {
                 return new ReturnT<>(500, I18nUtil.getString("job_group_field_addressType_limit"));
             }
-            if (jobGroup.getAddressList().contains(">") || jobGroup.getAddressList().contains("<")) {
+            if (jobGroupEntity.getAddressList().contains(">") || jobGroupEntity.getAddressList().contains("<")) {
                 return new ReturnT<>(500, I18nUtil.getString("job_group_field_registryList") + I18nUtil.getString("system_un_valid"));
             }
 
-            String[] addresses = jobGroup.getAddressList().split(",");
+            String[] addresses = jobGroupEntity.getAddressList().split(",");
             for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
                     return new ReturnT<>(500, I18nUtil.getString("job_group_field_registryList_un_valid"));
@@ -92,28 +92,28 @@ public class JobGroupController {
         }
 
         // process
-        jobGroup.setUpdateTime(new Date());
+        jobGroupEntity.setUpdateTime(new Date());
 
-        int ret = jobGroupDao.save(jobGroup);
+        int ret = jobGroupRepository.save(jobGroupEntity);
         return (ret > 0) ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    public ReturnT<String> update(JobGroup jobGroup) {
+    public ReturnT<String> update(JobGroupEntity jobGroupEntity) {
         // valid
-        if (jobGroup.getAppname() == null || jobGroup.getAppname().trim().length() == 0) {
+        if (jobGroupEntity.getAppname() == null || jobGroupEntity.getAppname().trim().length() == 0) {
             return new ReturnT<>(500, (I18nUtil.getString("system_please_input") + "AppName"));
         }
-        if (jobGroup.getAppname().length() < 4 || jobGroup.getAppname().length() > 64) {
+        if (jobGroupEntity.getAppname().length() < 4 || jobGroupEntity.getAppname().length() > 64) {
             return new ReturnT<>(500, I18nUtil.getString("job_group_field_appname_length"));
         }
-        if (jobGroup.getTitle() == null || jobGroup.getTitle().trim().length() == 0) {
+        if (jobGroupEntity.getTitle() == null || jobGroupEntity.getTitle().trim().length() == 0) {
             return new ReturnT<>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_group_field_title")));
         }
-        if (jobGroup.getAddressType() == 0) {
+        if (jobGroupEntity.getAddressType() == 0) {
             // 0=自动注册
-            List<String> registryList = findRegistryByAppName(jobGroup.getAppname());
+            List<String> registryList = findRegistryByAppName(jobGroupEntity.getAppname());
             StringBuilder addressListStr = null;
             if (registryList != null && !registryList.isEmpty()) {
                 Collections.sort(registryList);
@@ -123,13 +123,13 @@ public class JobGroupController {
                 }
                 addressListStr = new StringBuilder(addressListStr.substring(0, addressListStr.length() - 1));
             }
-            jobGroup.setAddressList(addressListStr.toString());
+            jobGroupEntity.setAddressList(addressListStr.toString());
         } else {
             // 1=手动录入
-            if (jobGroup.getAddressList() == null || jobGroup.getAddressList().trim().length() == 0) {
+            if (jobGroupEntity.getAddressList() == null || jobGroupEntity.getAddressList().trim().length() == 0) {
                 return new ReturnT<>(500, I18nUtil.getString("job_group_field_addressType_limit"));
             }
-            String[] addresses = jobGroup.getAddressList().split(",");
+            String[] addresses = jobGroupEntity.getAddressList().split(",");
             for (String item : addresses) {
                 if (item == null || item.trim().length() == 0) {
                     return new ReturnT<>(500, I18nUtil.getString("job_group_field_registryList_un_valid"));
@@ -138,17 +138,17 @@ public class JobGroupController {
         }
 
         // process
-        jobGroup.setUpdateTime(new Date());
+        jobGroupEntity.setUpdateTime(new Date());
 
-        int ret = jobGroupDao.update(jobGroup);
+        int ret = jobGroupRepository.update(jobGroupEntity);
         return (ret > 0) ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
     private List<String> findRegistryByAppName(String appnameParam) {
         HashMap<String, List<String>> appAddressMap = new HashMap<>();
-        List<JobRegistry> list = jobRegistryDao.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+        List<JobRegistryEntity> list = jobRegistryRepository.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
         if (list != null) {
-            for (JobRegistry item : list) {
+            for (JobRegistryEntity item : list) {
                 if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
                     String appname = item.getRegistryKey();
                     List<String> registryList = appAddressMap.get(appname);
@@ -171,25 +171,25 @@ public class JobGroupController {
     public ReturnT<String> remove(int id) {
 
         // valid
-        int count = jobInfoDao.pageListCount(0, 10, id, -1, null, null, null);
+        int count = jobInfoRepository.pageListCount(0, 10, id, -1, null, null, null);
         if (count > 0) {
             return new ReturnT<>(500, I18nUtil.getString("job_group_del_limit_0"));
         }
 
-        List<JobGroup> allList = jobGroupDao.findAll();
+        List<JobGroupEntity> allList = jobGroupRepository.findAll();
         if (allList.size() == 1) {
             return new ReturnT<>(500, I18nUtil.getString("job_group_del_limit_1"));
         }
 
-        int ret = jobGroupDao.remove(id);
+        int ret = jobGroupRepository.remove(id);
         return (ret > 0) ? ReturnT.SUCCESS : ReturnT.FAIL;
     }
 
     @RequestMapping("/loadById")
     @ResponseBody
-    public ReturnT<JobGroup> loadById(int id) {
-        JobGroup jobGroup = jobGroupDao.load(id);
-        return jobGroup != null ? new ReturnT<>(jobGroup) : new ReturnT<>(ReturnT.FAIL_CODE, null);
+    public ReturnT<JobGroupEntity> loadById(int id) {
+        JobGroupEntity jobGroupEntity = jobGroupRepository.load(id);
+        return jobGroupEntity != null ? new ReturnT<>(jobGroupEntity) : new ReturnT<>(ReturnT.FAIL_CODE, null);
     }
 
 }

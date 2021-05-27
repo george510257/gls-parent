@@ -1,11 +1,11 @@
-package com.gls.job.admin.web.model;
+package com.gls.job.admin.web.entity;
 
 import org.springframework.util.StringUtils;
 
 /**
  * @author xuxueli 2019-05-04 16:43:12
  */
-public class JobUser {
+public class JobUserEntity {
 
     private int id;
     private String username;        // 账号

@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.thread;
 
 import com.gls.job.admin.core.conf.JobAdminConfig;
-import com.gls.job.admin.web.model.JobLogReport;
+import com.gls.job.admin.web.entity.JobLogReportEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,28 +61,28 @@ public class JobLogReportHelper {
                             Date todayTo = itemDay.getTime();
 
                             // refresh log-report every minute
-                            JobLogReport jobLogReport = new JobLogReport();
-                            jobLogReport.setTriggerDay(todayFrom);
-                            jobLogReport.setRunningCount(0);
-                            jobLogReport.setSucCount(0);
-                            jobLogReport.setFailCount(0);
+                            JobLogReportEntity jobLogReportEntity = new JobLogReportEntity();
+                            jobLogReportEntity.setTriggerDay(todayFrom);
+                            jobLogReportEntity.setRunningCount(0);
+                            jobLogReportEntity.setSucCount(0);
+                            jobLogReportEntity.setFailCount(0);
 
-                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogDao().findLogReport(todayFrom, todayTo);
+                            Map<String, Object> triggerCountMap = JobAdminConfig.getAdminConfig().getJobLogRepository().findLogReport(todayFrom, todayTo);
                             if (triggerCountMap != null && triggerCountMap.size() > 0) {
                                 int triggerDayCount = triggerCountMap.containsKey("triggerDayCount") ? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCount"))) : 0;
                                 int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning") ? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))) : 0;
                                 int triggerDayCountSuc = triggerCountMap.containsKey("triggerDayCountSuc") ? Integer.valueOf(String.valueOf(triggerCountMap.get("triggerDayCountSuc"))) : 0;
                                 int triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc;
 
-                                jobLogReport.setRunningCount(triggerDayCountRunning);
-                                jobLogReport.setSucCount(triggerDayCountSuc);
-                                jobLogReport.setFailCount(triggerDayCountFail);
+                                jobLogReportEntity.setRunningCount(triggerDayCountRunning);
+                                jobLogReportEntity.setSucCount(triggerDayCountSuc);
+                                jobLogReportEntity.setFailCount(triggerDayCountFail);
                             }
 
                             // do refresh
-                            int ret = JobAdminConfig.getAdminConfig().getJobLogReportDao().update(jobLogReport);
+                            int ret = JobAdminConfig.getAdminConfig().getJobLogReportRepository().update(jobLogReportEntity);
                             if (ret < 1) {
-                                JobAdminConfig.getAdminConfig().getJobLogReportDao().save(jobLogReport);
+                                JobAdminConfig.getAdminConfig().getJobLogReportRepository().save(jobLogReportEntity);
                             }
                         }
 
@@ -108,9 +108,9 @@ public class JobLogReportHelper {
                         // clean expired log
                         List<Long> logIds = null;
                         do {
-                            logIds = JobAdminConfig.getAdminConfig().getJobLogDao().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
+                            logIds = JobAdminConfig.getAdminConfig().getJobLogRepository().findClearLogIds(0, 0, clearBeforeTime, 0, 1000);
                             if (logIds != null && logIds.size() > 0) {
-                                JobAdminConfig.getAdminConfig().getJobLogDao().clearLog(logIds);
+                                JobAdminConfig.getAdminConfig().getJobLogRepository().clearLog(logIds);
                             }
                         } while (logIds != null && logIds.size() > 0);
 

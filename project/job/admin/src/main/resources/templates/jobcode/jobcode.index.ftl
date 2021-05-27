@@ -38,8 +38,8 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="javascript:;">
                                 <span class="sr-only">(current)</span>
-                                【<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>】
-                                ${jobInfo.jobDesc}
+                                【<#list GlueTypeEnum as item><#if item == jobInfoEntity.glueType>${item.desc}</#if></#list>】
+                                ${jobInfoEntity.jobDesc}
                             </a></li>
                     </ul>
                 </div>
@@ -51,16 +51,16 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                                aria-expanded="false">${I18n.job_info_glue_rollback} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li <#if jobLogGlues?exists && jobLogGlues?size gt 0 >style="display: none;"</#if> >
+                                <li <#if jobLogGlueEntities?exists && jobLogGlueEntities?size gt 0 >style="display: none;"</#if> >
                                     <a href="javascript:;" class="source_version" version="version_now"
-                                       glueType="${jobInfo.glueType}">
-                                        <#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>
-                                        ： ${jobInfo.glueRemark}
+                                       glueType="${jobInfoEntity.glueType}">
+                                        <#list GlueTypeEnum as item><#if item == jobInfoEntity.glueType>${item.desc}</#if></#list>
+                                        ： ${jobInfoEntity.glueRemark}
                                     </a>
                                 </li>
-                                <textarea id="version_now" style="display:none;">${jobInfo.glueSource}</textarea>
-                                <#if jobLogGlues?exists && jobLogGlues?size gt 0 >
-                                    <#list jobLogGlues as glue>
+                                <textarea id="version_now" style="display:none;">${jobInfoEntity.glueSource}</textarea>
+                                <#if jobLogGlueEntities?exists && jobLogGlueEntities?size gt 0 >
+                                    <#list jobLogGlueEntities as glue>
                                         <li>
                                             <a href="javascript:;" class="source_version" version="version_${glue.id}"
                                                glueType="${glue.glueType}">
@@ -135,23 +135,23 @@
 <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/clike/clike.js" />
 <#assign glueTypeIdeMode = "text/x-java" />
 
-<#if jobInfo.glueType == "GLUE_GROOVY" >
+<#if jobInfoEntity.glueType == "GLUE_GROOVY" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/clike/clike.js" />
     <#assign glueTypeIdeMode = "text/x-java" />
-<#elseif jobInfo.glueType == "GLUE_SHELL" >
+<#elseif jobInfoEntity.glueType == "GLUE_SHELL" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/shell/shell.js" />
     <#assign glueTypeIdeMode = "text/x-sh" />
-<#elseif jobInfo.glueType == "GLUE_PYTHON" >
+<#elseif jobInfoEntity.glueType == "GLUE_PYTHON" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/python/python.js" />
     <#assign glueTypeIdeMode = "text/x-python" />
-<#elseif jobInfo.glueType == "GLUE_PHP" >
+<#elseif jobInfoEntity.glueType == "GLUE_PHP" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/php/php.js" />
     <#assign glueTypeIdeMode = "text/x-php" />
     <#assign glueTypeModeSrc02 = "${request.contextPath}/static/plugins/codemirror/mode/clike/clike.js" />
-<#elseif jobInfo.glueType == "GLUE_NODEJS" >
+<#elseif jobInfoEntity.glueType == "GLUE_NODEJS" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/javascript/javascript.js" />
     <#assign glueTypeIdeMode = "text/javascript" />
-<#elseif jobInfo.glueType == "GLUE_POWERSHELL" >
+<#elseif jobInfoEntity.glueType == "GLUE_POWERSHELL" >
     <#assign glueTypeModeSrc = "${request.contextPath}/static/plugins/codemirror/mode/powershell/powershell.js" />
     <#assign glueTypeIdeMode = "powershell" />
 </#if>
@@ -166,7 +166,7 @@
 <script src="${request.contextPath}/static/plugins/codemirror/addon/hint/anyword-hint.js"></script>
 
 <script>
-    var id = '${jobInfo.id}';
+    var id = '${jobInfoEntity.id}';
     var ideMode = '${glueTypeIdeMode}';
 </script>
 <script src="${request.contextPath}/static/js/jobcode.index.1.js"></script>
