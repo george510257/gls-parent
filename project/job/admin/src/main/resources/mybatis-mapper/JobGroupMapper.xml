@@ -36,7 +36,8 @@
         ORDER BY t.app_name, t.title, t.id ASC
     </select>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobGroupEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobGroupEntity" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO gls_job_group (`app_name`, `title`, `address_type`, `address_list`, `update_time`)
         values (#{appname}, #{title}, #{addressType}, #{addressList}, #{updateTime});
     </insert>

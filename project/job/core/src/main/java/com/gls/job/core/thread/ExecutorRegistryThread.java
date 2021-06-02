@@ -4,6 +4,7 @@ import com.gls.job.core.biz.AdminBiz;
 import com.gls.job.core.biz.model.RegistryParam;
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.enums.RegistryConfig;
+import com.gls.job.core.enums.RegistryType;
 import com.gls.job.core.executor.JobExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
-                        RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        RegistryParam registryParam = new RegistryParam(RegistryType.EXECUTOR.name(), appname, address);
                         for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
                             try {
                                 ReturnT<String> registryResult = adminBiz.registry(registryParam);
@@ -79,7 +80,7 @@ public class ExecutorRegistryThread {
 
                 // registry remove
                 try {
-                    RegistryParam registryParam = new RegistryParam(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                    RegistryParam registryParam = new RegistryParam(RegistryType.EXECUTOR.name(), appname, address);
                     for (AdminBiz adminBiz : JobExecutor.getAdminBizList()) {
                         try {
                             ReturnT<String> registryResult = adminBiz.registryRemove(registryParam);

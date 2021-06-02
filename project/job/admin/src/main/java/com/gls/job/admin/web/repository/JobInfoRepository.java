@@ -1,9 +1,14 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobInfoEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.gls.job.admin.web.repository.custom.JobInfoCustomRepository;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -11,39 +16,25 @@ import java.util.List;
  *
  * @author xuxueli 2016-1-12 18:03:45
  */
-@Mapper
-public interface JobInfoRepository {
+public interface JobInfoRepository extends BaseEntityRepository<JobInfoEntity>, JobInfoCustomRepository {
 
-    public List<JobInfoEntity> pageList(@Param("offset") int offset,
-                                        @Param("pagesize") int pagesize,
-                                        @Param("jobGroup") int jobGroup,
-                                        @Param("triggerStatus") int triggerStatus,
-                                        @Param("jobDesc") String jobDesc,
-                                        @Param("executorHandler") String executorHandler,
-                                        @Param("author") String author);
+    /**
+     * 根据jobGroupId获取
+     *
+     * @param jobGroupId
+     * @return
+     */
+    List<JobInfoEntity> findByJobGroupId(Long jobGroupId);
 
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("jobGroup") int jobGroup,
-                             @Param("triggerStatus") int triggerStatus,
-                             @Param("jobDesc") String jobDesc,
-                             @Param("executorHandler") String executorHandler,
-                             @Param("author") String author);
-
-    public int save(JobInfoEntity info);
-
-    public JobInfoEntity loadById(@Param("id") int id);
-
-    public int update(JobInfoEntity jobInfoEntity);
-
-    public int delete(@Param("id") long id);
-
-    public List<JobInfoEntity> getJobsByGroup(@Param("jobGroup") int jobGroup);
-
-    public int findAllCount();
-
-    public List<JobInfoEntity> scheduleJobQuery(@Param("maxNextTime") long maxNextTime, @Param("pagesize") int pagesize);
-
-    public int scheduleUpdate(JobInfoEntity jobInfoEntity);
-
+    /**
+     * 根据maxNextTime获取
+     *
+     * @param maxNextTime
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select jobInfo from JobInfoEntity jobInfo " +
+            "where jobInfo.triggerStatus = true " +
+            "and jobInfo.triggerNextTime <= :maxNextTime")
+    Page<JobInfoEntity> findByMaxNextTime(@Param("maxNextTime") Timestamp maxNextTime, Pageable pageable);
 }

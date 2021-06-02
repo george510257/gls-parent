@@ -2,23 +2,22 @@ package com.gls.job.admin.core.route;
 
 import com.gls.job.core.biz.model.ReturnT;
 import com.gls.job.core.biz.model.TriggerParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/3/10.
+ * @author xuxueli
+ * @date 17/3/10
  */
-public abstract class ExecutorRouter {
-    protected static Logger logger = LoggerFactory.getLogger(ExecutorRouter.class);
+public interface ExecutorRouter {
 
     /**
      * route address
      *
+     * @param triggerParam
      * @param addressList
-     * @return ReturnT.content=address
+     * @return
      */
-    public abstract ReturnT<String> route(TriggerParam triggerParam, List<String> addressList);
+    ReturnT<String> route(TriggerParam triggerParam, List<String> addressList);
 
 }

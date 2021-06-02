@@ -1,9 +1,13 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobLogEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.gls.job.admin.web.repository.custom.JobLogCustomRepository;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,53 +17,44 @@ import java.util.Map;
  *
  * @author xuxueli 2016-1-12 18:03:06
  */
-@Mapper
-public interface JobLogRepository {
+public interface JobLogRepository extends BaseEntityRepository<JobLogEntity>, JobLogCustomRepository {
 
-    // exist jobId not use jobGroup, not exist use jobGroup
-    public List<JobLogEntity> pageList(@Param("offset") int offset,
-                                       @Param("pagesize") int pagesize,
-                                       @Param("jobGroup") int jobGroup,
-                                       @Param("jobId") int jobId,
-                                       @Param("triggerTimeStart") Date triggerTimeStart,
-                                       @Param("triggerTimeEnd") Date triggerTimeEnd,
-                                       @Param("logStatus") int logStatus);
+    /**
+     * 根据triggerCode获取合计
+     *
+     * @param triggerCodeFrom
+     * @param triggerCodeTo
+     * @return
+     */
+    @Query(value = "select count(jobLog.handleCode) as triggerDayCount, " +
+            "sum(case when (jobLog.triggerCode in (0,200) and jobLog.handleCode = 0) then 1 else 0 end ) as triggerDayCountRunning, " +
+            "sum(case when jobLog.handleCode = 200 then 1 else 0 end ) as triggerDayCountSuc " +
+            "from JobLogEntity jobLog where jobLog.triggerCode between :triggerCodeFrom and :triggerCodeTo")
+    Map<String, Object> findLogReport(@Param("triggerCodeFrom") Date triggerCodeFrom, @Param("triggerCodeTo") Date triggerCodeTo);
 
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("jobGroup") int jobGroup,
-                             @Param("jobId") int jobId,
-                             @Param("triggerTimeStart") Date triggerTimeStart,
-                             @Param("triggerTimeEnd") Date triggerTimeEnd,
-                             @Param("logStatus") int logStatus);
+    /**
+     * 获取失败的日志
+     *
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select jobLog from JobLogEntity jobLog " +
+            "where jobLog.alarmStatus = 0 " +
+            "and not ((jobLog.triggerCode in (0,200) and jobLog.handleCode = 0) or jobLog.handleCode = 200)")
+    List<JobLogEntity> findFailJobLog(Pageable pageable);
 
-    public JobLogEntity load(@Param("id") long id);
-
-    public long save(JobLogEntity jobLogEntity);
-
-    public int updateTriggerInfo(JobLogEntity jobLogEntity);
-
-    public int updateHandleInfo(JobLogEntity jobLogEntity);
-
-    public int delete(@Param("jobId") int jobId);
-
-    public Map<String, Object> findLogReport(@Param("from") Date from,
-                                             @Param("to") Date to);
-
-    public List<Long> findClearLogIds(@Param("jobGroup") int jobGroup,
-                                      @Param("jobId") int jobId,
-                                      @Param("clearBeforeTime") Date clearBeforeTime,
-                                      @Param("clearBeforeNum") int clearBeforeNum,
-                                      @Param("pagesize") int pagesize);
-
-    public int clearLog(@Param("logIds") List<Long> logIds);
-
-    public List<Long> findFailJobLogIds(@Param("pagesize") int pagesize);
-
-    public int updateAlarmStatus(@Param("logId") long logId,
-                                 @Param("oldAlarmStatus") int oldAlarmStatus,
-                                 @Param("newAlarmStatus") int newAlarmStatus);
-
-    public List<Long> findLostJobIds(@Param("losedTime") Date losedTime);
+    /**
+     * 根据triggerTime获取
+     *
+     * @param triggerTime
+     * @return
+     */
+    @Query(value = "select jobLog from JobLogEntity jobLog " +
+            "left join JobRegistryEntity jobRegistry on jobLog.executorAddress = jobRegistry.registryValue " +
+            "where jobLog.triggerCode = 200 " +
+            "and jobLog.handleCode = 0 " +
+            "and jobLog.triggerTime <= :triggerTime " +
+            "and jobRegistry.id is null ")
+    List<JobLogEntity> findLostJobLog(@Param("triggerTime") Timestamp triggerTime);
 
 }

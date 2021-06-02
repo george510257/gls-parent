@@ -55,7 +55,8 @@
         WHERE t.username = #{username}
     </select>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobUserEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobUserEntity" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO gls_job_user (username,
                                   password,
                                   role,

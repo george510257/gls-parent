@@ -1,69 +1,25 @@
 package com.gls.job.core.biz.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * Created by xuxueli on 17/3/2.
+ * @author xuxueli
+ * @date 17/3/2
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class HandleCallbackParam implements Serializable {
-    private static final long serialVersionUID = 42L;
 
-    private long logId;
-    private long logDateTim;
+    private Long logId;
+    private Date logDateTime;
 
-    private int handleCode;
+    private Integer handleCode;
     private String handleMsg;
-
-    public HandleCallbackParam() {
-    }
-
-    public HandleCallbackParam(long logId, long logDateTim, int handleCode, String handleMsg) {
-        this.logId = logId;
-        this.logDateTim = logDateTim;
-        this.handleCode = handleCode;
-        this.handleMsg = handleMsg;
-    }
-
-    public long getLogId() {
-        return logId;
-    }
-
-    public void setLogId(long logId) {
-        this.logId = logId;
-    }
-
-    public long getLogDateTim() {
-        return logDateTim;
-    }
-
-    public void setLogDateTim(long logDateTim) {
-        this.logDateTim = logDateTim;
-    }
-
-    public int getHandleCode() {
-        return handleCode;
-    }
-
-    public void setHandleCode(int handleCode) {
-        this.handleCode = handleCode;
-    }
-
-    public String getHandleMsg() {
-        return handleMsg;
-    }
-
-    public void setHandleMsg(String handleMsg) {
-        this.handleMsg = handleMsg;
-    }
-
-    @Override
-    public String toString() {
-        return "HandleCallbackParam{" +
-                "logId=" + logId +
-                ", logDateTim=" + logDateTim +
-                ", handleCode=" + handleCode +
-                ", handleMsg='" + handleMsg + '\'' +
-                '}';
-    }
 
 }

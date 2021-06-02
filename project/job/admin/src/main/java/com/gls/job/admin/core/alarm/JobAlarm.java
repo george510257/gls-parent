@@ -15,6 +15,6 @@ public interface JobAlarm {
      * @param jobLogEntity
      * @return
      */
-    public boolean doAlarm(JobInfoEntity info, JobLogEntity jobLogEntity);
+    boolean doAlarm(JobInfoEntity info, JobLogEntity jobLogEntity);
 
 }

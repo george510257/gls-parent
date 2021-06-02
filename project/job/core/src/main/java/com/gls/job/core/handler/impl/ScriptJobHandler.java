@@ -2,7 +2,7 @@ package com.gls.job.core.handler.impl;
 
 import com.gls.job.core.context.JobContext;
 import com.gls.job.core.context.JobHelper;
-import com.gls.job.core.glue.GlueTypeEnum;
+import com.gls.job.core.enums.GlueType;
 import com.gls.job.core.handler.IJobHandler;
 import com.gls.job.core.log.JobFileAppender;
 import com.gls.job.core.util.ScriptUtil;
@@ -17,9 +17,9 @@ public class ScriptJobHandler extends IJobHandler {
     private int jobId;
     private long glueUpdatetime;
     private String gluesource;
-    private GlueTypeEnum glueType;
+    private GlueType glueType;
 
-    public ScriptJobHandler(int jobId, long glueUpdatetime, String gluesource, GlueTypeEnum glueType) {
+    public ScriptJobHandler(int jobId, long glueUpdatetime, String gluesource, GlueType glueType) {
         this.jobId = jobId;
         this.glueUpdatetime = glueUpdatetime;
         this.gluesource = gluesource;

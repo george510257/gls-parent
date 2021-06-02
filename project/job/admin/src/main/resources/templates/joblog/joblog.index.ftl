@@ -45,7 +45,8 @@
                 <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">${I18n.job_info_job}</span>
-                        <select class="form-control" id="jobId" paramVal="<#if jobInfoEntity?exists>${jobInfoEntity.id}</#if>">
+                        <select class="form-control" id="jobId"
+                                paramVal="<#if jobInfoEntity?exists>${jobInfoEntity.id}</#if>">
                             <option value="0">${I18n.system_all}</option>
                         </select>
                     </div>

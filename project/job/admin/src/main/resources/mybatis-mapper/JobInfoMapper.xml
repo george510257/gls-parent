@@ -112,7 +112,8 @@
         </trim>
     </select>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobInfoEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobInfoEntity" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO gls_job_info (
         job_group,
         job_desc,

@@ -1,37 +1,30 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobGroupEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.gls.job.admin.web.repository.custom.JobGroupCustomRepository;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
 import java.util.List;
 
 /**
- * Created by xuxueli on 16/9/30.
+ * @author xuxueli
+ * @date 16/9/30
  */
-@Mapper
-public interface JobGroupRepository {
+public interface JobGroupRepository extends BaseEntityRepository<JobGroupEntity>, JobGroupCustomRepository {
 
-    public List<JobGroupEntity> findAll();
+    /**
+     * 获取所有
+     *
+     * @return
+     */
+    List<JobGroupEntity> findAllByOrderByAppnameAscTitleAscIdAsc();
 
-    public List<JobGroupEntity> findByAddressType(@Param("addressType") int addressType);
-
-    public int save(JobGroupEntity jobGroupEntity);
-
-    public int update(JobGroupEntity jobGroupEntity);
-
-    public int remove(@Param("id") int id);
-
-    public JobGroupEntity load(@Param("id") int id);
-
-    public List<JobGroupEntity> pageList(@Param("offset") int offset,
-                                         @Param("pagesize") int pagesize,
-                                         @Param("appname") String appname,
-                                         @Param("title") String title);
-
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("appname") String appname,
-                             @Param("title") String title);
+    /**
+     * 跟进注册类型获取所有的执行器信息
+     *
+     * @param addressType 注册类型
+     * @return
+     */
+    List<JobGroupEntity> findByAddressTypeOrderByAppnameAscTitleAscIdAsc(Boolean addressType);
 
 }

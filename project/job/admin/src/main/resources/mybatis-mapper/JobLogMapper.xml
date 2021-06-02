@@ -119,7 +119,8 @@
     </select>
 
 
-    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobLogEntity" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.gls.job.admin.web.entity.JobLogEntity" useGeneratedKeys="true"
+            keyProperty="id">
         INSERT INTO gls_job_log (
         `job_group`,
         `job_id`,

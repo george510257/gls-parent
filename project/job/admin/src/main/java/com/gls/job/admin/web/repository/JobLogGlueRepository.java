@@ -1,8 +1,9 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobLogGlueEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,15 +12,22 @@ import java.util.List;
  *
  * @author xuxueli 2016-5-19 18:04:56
  */
-@Mapper
-public interface JobLogGlueRepository {
+public interface JobLogGlueRepository extends BaseEntityRepository<JobLogGlueEntity> {
 
-    public int save(JobLogGlueEntity jobLogGlueEntity);
+    /**
+     * 根据jobInfoId获取
+     *
+     * @param jobInfoId
+     * @return
+     */
+    List<JobLogGlueEntity> findByJobInfoId(Long jobInfoId);
 
-    public List<JobLogGlueEntity> findByJobId(@Param("jobId") int jobId);
-
-    public int removeOld(@Param("jobId") int jobId, @Param("limit") int limit);
-
-    public int deleteByJobId(@Param("jobId") int jobId);
-
+    /**
+     * 根据jobInfoId获取
+     *
+     * @param jobInfoId
+     * @param pageable
+     * @return
+     */
+    Page<JobLogGlueEntity> findByJobInfoIdOrderByTimeVersionDesc(Long jobInfoId, Pageable pageable);
 }

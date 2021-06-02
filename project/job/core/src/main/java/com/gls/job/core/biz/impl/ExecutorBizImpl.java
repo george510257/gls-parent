@@ -2,10 +2,10 @@ package com.gls.job.core.biz.impl;
 
 import com.gls.job.core.biz.ExecutorBiz;
 import com.gls.job.core.biz.model.*;
-import com.gls.job.core.enums.ExecutorBlockStrategyEnum;
+import com.gls.job.core.enums.ExecutorBlockStrategy;
+import com.gls.job.core.enums.GlueType;
 import com.gls.job.core.executor.JobExecutor;
 import com.gls.job.core.glue.GlueFactory;
-import com.gls.job.core.glue.GlueTypeEnum;
 import com.gls.job.core.handler.IJobHandler;
 import com.gls.job.core.handler.impl.GlueJobHandler;
 import com.gls.job.core.handler.impl.ScriptJobHandler;
@@ -51,8 +51,8 @@ public class ExecutorBizImpl implements ExecutorBiz {
         String removeOldReason = null;
 
         // valid：jobHandler + jobThread
-        GlueTypeEnum glueTypeEnum = GlueTypeEnum.match(triggerParam.getGlueType());
-        if (GlueTypeEnum.BEAN == glueTypeEnum) {
+        GlueType glueType = GlueType.match(triggerParam.getGlueType());
+        if (GlueType.BEAN == glueType) {
 
             // new jobhandler
             IJobHandler newJobHandler = JobExecutor.loadJobHandler(triggerParam.getExecutorHandler());
@@ -74,7 +74,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
                 }
             }
 
-        } else if (GlueTypeEnum.GLUE_GROOVY == glueTypeEnum) {
+        } else if (GlueType.GLUE_GROOVY == glueType) {
 
             // valid old jobThread
             if (jobThread != null &&
@@ -97,7 +97,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
                     return new ReturnT<String>(ReturnT.FAIL_CODE, e.getMessage());
                 }
             }
-        } else if (glueTypeEnum != null && glueTypeEnum.isScript()) {
+        } else if (glueType != null && glueType.isScript()) {
 
             // valid old jobThread
             if (jobThread != null &&
@@ -112,7 +112,7 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
             // valid handler
             if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerParam.getJobId(), triggerParam.getGlueUpdatetime(), triggerParam.getGlueSource(), GlueTypeEnum.match(triggerParam.getGlueType()));
+                jobHandler = new ScriptJobHandler(triggerParam.getJobId(), triggerParam.getGlueUpdatetime(), triggerParam.getGlueSource(), GlueType.match(triggerParam.getGlueType()));
             }
         } else {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "glueType[" + triggerParam.getGlueType() + "] is not valid.");
@@ -120,16 +120,16 @@ public class ExecutorBizImpl implements ExecutorBiz {
 
         // executor block strategy
         if (jobThread != null) {
-            ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(triggerParam.getExecutorBlockStrategy(), null);
-            if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
+            ExecutorBlockStrategy blockStrategy = ExecutorBlockStrategy.match(triggerParam.getExecutorBlockStrategy(), null);
+            if (ExecutorBlockStrategy.DISCARD_LATER == blockStrategy) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
-                    return new ReturnT<String>(ReturnT.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
+                    return new ReturnT<String>(ReturnT.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
                 }
-            } else if (ExecutorBlockStrategyEnum.COVER_EARLY == blockStrategy) {
+            } else if (ExecutorBlockStrategy.COVER_EARLY == blockStrategy) {
                 // kill running jobThread
                 if (jobThread.isRunningOrHasQueue()) {
-                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategyEnum.COVER_EARLY.getTitle();
+                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategy.COVER_EARLY.getTitle();
 
                     jobThread = null;
                 }

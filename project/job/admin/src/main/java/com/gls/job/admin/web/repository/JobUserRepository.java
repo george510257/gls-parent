@@ -1,33 +1,24 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobUserEntity;
+import com.gls.job.admin.web.repository.custom.JobUserCustomRepository;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * @author xuxueli 2019-05-04 16:44:59
  */
 @Mapper
-public interface JobUserRepository {
+public interface JobUserRepository extends BaseEntityRepository<JobUserEntity>, JobUserCustomRepository {
 
-    public List<JobUserEntity> pageList(@Param("offset") int offset,
-                                        @Param("pagesize") int pagesize,
-                                        @Param("username") String username,
-                                        @Param("role") int role);
-
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("username") String username,
-                             @Param("role") int role);
-
-    public JobUserEntity loadByUserName(@Param("username") String username);
-
-    public int save(JobUserEntity jobUserEntity);
-
-    public int update(JobUserEntity jobUserEntity);
-
-    public int delete(@Param("id") int id);
+    /**
+     * 根据用户名获取
+     *
+     * @param username
+     * @return
+     */
+    Optional<JobUserEntity> findByUsername(String username);
 
 }

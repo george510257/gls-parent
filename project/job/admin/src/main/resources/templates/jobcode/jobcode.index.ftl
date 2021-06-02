@@ -38,7 +38,8 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="javascript:;">
                                 <span class="sr-only">(current)</span>
-                                【<#list GlueTypeEnum as item><#if item == jobInfoEntity.glueType>${item.desc}</#if></#list>】
+                                【<#list GlueTypeEnum as item><#if item == jobInfoEntity.glueType>${item.desc}</#if></#list>
+                                】
                                 ${jobInfoEntity.jobDesc}
                             </a></li>
                     </ul>

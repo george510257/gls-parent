@@ -1,54 +1,30 @@
 package com.gls.job.admin.web.entity;
 
-import java.util.Date;
+import com.gls.starter.data.jpa.annotations.Comment;
+import com.gls.starter.data.jpa.base.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class JobLogReportEntity {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.sql.Timestamp;
 
-    private int id;
+/**
+ * @author george
+ */
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+@Table(name = "job_log_report")
+@Comment("执行日志Report信息表")
+public class JobLogReportEntity extends BaseEntity {
 
-    private Date triggerDay;
+    private Timestamp triggerDay;
 
-    private int runningCount;
-    private int sucCount;
-    private int failCount;
+    private Integer runningCount;
+    private Integer sucCount;
+    private Integer failCount;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getTriggerDay() {
-        return triggerDay;
-    }
-
-    public void setTriggerDay(Date triggerDay) {
-        this.triggerDay = triggerDay;
-    }
-
-    public int getRunningCount() {
-        return runningCount;
-    }
-
-    public void setRunningCount(int runningCount) {
-        this.runningCount = runningCount;
-    }
-
-    public int getSucCount() {
-        return sucCount;
-    }
-
-    public void setSucCount(int sucCount) {
-        this.sucCount = sucCount;
-    }
-
-    public int getFailCount() {
-        return failCount;
-    }
-
-    public void setFailCount(int failCount) {
-        this.failCount = failCount;
-    }
 }

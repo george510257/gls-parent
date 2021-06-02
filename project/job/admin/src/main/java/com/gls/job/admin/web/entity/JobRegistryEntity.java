@@ -1,55 +1,29 @@
 package com.gls.job.admin.web.entity;
 
-import java.util.Date;
+import com.gls.job.core.enums.RegistryType;
+import com.gls.starter.data.jpa.annotations.Comment;
+import com.gls.starter.data.jpa.base.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
- * Created by xuxueli on 16/9/30.
+ * @author xuxueli
+ * @date 16/9/30
  */
-public class JobRegistryEntity {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+@Table(name = "job_registry")
+@Comment("执行注册信息表")
+public class JobRegistryEntity extends BaseEntity {
 
-    private int id;
-    private String registryGroup;
+    private RegistryType registryType;
     private String registryKey;
     private String registryValue;
-    private Date updateTime;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getRegistryGroup() {
-        return registryGroup;
-    }
-
-    public void setRegistryGroup(String registryGroup) {
-        this.registryGroup = registryGroup;
-    }
-
-    public String getRegistryKey() {
-        return registryKey;
-    }
-
-    public void setRegistryKey(String registryKey) {
-        this.registryKey = registryKey;
-    }
-
-    public String getRegistryValue() {
-        return registryValue;
-    }
-
-    public void setRegistryValue(String registryValue) {
-        this.registryValue = registryValue;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

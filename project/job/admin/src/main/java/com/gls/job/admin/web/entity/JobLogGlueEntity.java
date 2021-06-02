@@ -1,76 +1,36 @@
 package com.gls.job.admin.web.entity;
 
-import java.util.Date;
+import com.gls.job.core.enums.GlueType;
+import com.gls.starter.data.jpa.annotations.Comment;
+import com.gls.starter.data.jpa.base.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import javax.persistence.*;
 
 /**
  * gls-job log for glue, used to track job code process
  *
  * @author xuxueli 2016-5-19 17:57:46
  */
-public class JobLogGlueEntity {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Data
+@Table(name = "job_log_glue")
+@Comment("执行日志Glue信息表")
+public class JobLogGlueEntity extends BaseEntity {
 
-    private int id;
-    private int jobId;                // 任务主键ID
-    private String glueType;        // GLUE类型	#GlueTypeEnum
+    @ManyToOne
+    private JobInfoEntity jobInfo;
+
+    @Comment("GLUE类型")
+    @Enumerated(EnumType.STRING)
+    private GlueType glueType;
+
     private String glueSource;
+
     private String glueRemark;
-    private Date addTime;
-    private Date updateTime;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
-    }
-
-    public String getGlueType() {
-        return glueType;
-    }
-
-    public void setGlueType(String glueType) {
-        this.glueType = glueType;
-    }
-
-    public String getGlueSource() {
-        return glueSource;
-    }
-
-    public void setGlueSource(String glueSource) {
-        this.glueSource = glueSource;
-    }
-
-    public String getGlueRemark() {
-        return glueRemark;
-    }
-
-    public void setGlueRemark(String glueRemark) {
-        this.glueRemark = glueRemark;
-    }
-
-    public Date getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 
 }

@@ -1,38 +1,54 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobRegistryEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.gls.job.core.enums.RegistryType;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Created by xuxueli on 16/9/30.
+ * @author xuxueli
+ * @date 16/9/30
  */
-@Mapper
-public interface JobRegistryRepository {
+public interface JobRegistryRepository extends BaseEntityRepository<JobRegistryEntity> {
 
-    public List<Integer> findDead(@Param("timeout") int timeout,
-                                  @Param("nowTime") Date nowTime);
+    /**
+     * 根据updateDate获取
+     *
+     * @param updateDate
+     * @return
+     */
+    List<JobRegistryEntity> findAllByUpdateDateBefore(Timestamp updateDate);
 
-    public int removeDead(@Param("ids") List<Integer> ids);
+    /**
+     * 更新
+     *
+     * @param updateDate
+     * @param registryType
+     * @param registryKey
+     * @param registryValue
+     * @return
+     */
+    @Query(value = "update JobRegistryEntity jobRegistry " +
+            "set jobRegistry.updateDate = :updateDate " +
+            "where jobRegistry.registryType = :registryType " +
+            "and jobRegistry.registryKey = :registryKey " +
+            "and jobRegistry.registryValue = :registryValue")
+    void updateRegistry(@Param("updateDate") Timestamp updateDate,
+                        @Param("registryType") RegistryType registryType,
+                        @Param("registryKey") String registryKey,
+                        @Param("registryValue") String registryValue);
 
-    public List<JobRegistryEntity> findAll(@Param("timeout") int timeout,
-                                           @Param("nowTime") Date nowTime);
-
-    public int registryUpdate(@Param("registryGroup") String registryGroup,
-                              @Param("registryKey") String registryKey,
-                              @Param("registryValue") String registryValue,
-                              @Param("updateTime") Date updateTime);
-
-    public int registrySave(@Param("registryGroup") String registryGroup,
-                            @Param("registryKey") String registryKey,
-                            @Param("registryValue") String registryValue,
-                            @Param("updateTime") Date updateTime);
-
-    public int registryDelete(@Param("registryGroup") String registryGroup,
-                              @Param("registryKey") String registryKey,
-                              @Param("registryValue") String registryValue);
+    /**
+     * 删除
+     *
+     * @param registryType
+     * @param registryKey
+     * @param registryValue
+     */
+    void deleteByRegistryTypeAndRegistryKeyAndRegistryValue(RegistryType registryType, String registryKey, String registryValue);
 
 }
