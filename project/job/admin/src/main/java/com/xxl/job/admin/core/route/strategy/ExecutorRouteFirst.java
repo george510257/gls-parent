@@ -1,8 +1,8 @@
 package com.xxl.job.admin.core.route.strategy;
 
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
 import com.xxl.job.admin.core.route.ExecutorRouter;
-import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.biz.model.TriggerParam;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class ExecutorRouteFirst extends ExecutorRouter {
 
     @Override
-    public ReturnT<String> route(TriggerParam triggerParam, List<String> addressList) {
-        return new ReturnT<String>(addressList.get(0));
+    public Result<String> route(TriggerModel triggerModel, List<String> addressList) {
+        return new Result<String>(addressList.get(0));
     }
 
 }

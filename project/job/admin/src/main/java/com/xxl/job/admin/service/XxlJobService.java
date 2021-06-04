@@ -1,7 +1,7 @@
 package com.xxl.job.admin.service;
 
+import com.gls.job.core.api.model.Result;
 import com.xxl.job.admin.core.model.XxlJobInfo;
-import com.xxl.job.core.biz.model.ReturnT;
 
 import java.util.Date;
 import java.util.Map;
@@ -32,7 +32,7 @@ public interface XxlJobService {
      * @param jobInfo
      * @return
      */
-    public ReturnT<String> add(XxlJobInfo jobInfo);
+    public Result<String> add(XxlJobInfo jobInfo);
 
     /**
      * update job
@@ -40,7 +40,7 @@ public interface XxlJobService {
      * @param jobInfo
      * @return
      */
-    public ReturnT<String> update(XxlJobInfo jobInfo);
+    public Result<String> update(XxlJobInfo jobInfo);
 
     /**
      * remove job
@@ -49,7 +49,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public ReturnT<String> remove(int id);
+    public Result<String> remove(int id);
 
     /**
      * start job
@@ -57,7 +57,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public ReturnT<String> start(int id);
+    public Result<String> start(int id);
 
     /**
      * stop job
@@ -65,7 +65,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public ReturnT<String> stop(int id);
+    public Result<String> stop(int id);
 
     /**
      * dashboard info
@@ -81,6 +81,6 @@ public interface XxlJobService {
      * @param endDate
      * @return
      */
-    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate);
+    public Result<Map<String, Object>> chartInfo(Date startDate, Date endDate);
 
 }

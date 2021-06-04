@@ -16,7 +16,7 @@ public abstract class IJobHandler {
 
 
 	/*@Deprecated
-	public abstract ReturnT<String> execute(String param) throws Exception;*/
+	public abstract Result<String> execute(String param) throws Exception;*/
 
     /**
      * init handler, invoked when JobThread init

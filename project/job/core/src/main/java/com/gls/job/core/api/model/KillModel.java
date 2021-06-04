@@ -1,18 +1,18 @@
-package com.xxl.job.core.biz.model;
+package com.gls.job.core.api.model;
 
 import java.io.Serializable;
 
 /**
  * @author xuxueli 2020-04-11 22:27
  */
-public class IdleBeatParam implements Serializable {
+public class KillModel implements Serializable {
     private static final long serialVersionUID = 42L;
     private int jobId;
 
-    public IdleBeatParam() {
+    public KillModel() {
     }
 
-    public IdleBeatParam(int jobId) {
+    public KillModel(int jobId) {
         this.jobId = jobId;
     }
 

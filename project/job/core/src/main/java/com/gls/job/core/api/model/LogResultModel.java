@@ -1,21 +1,21 @@
-package com.xxl.job.core.biz.model;
+package com.gls.job.core.api.model;
 
 import java.io.Serializable;
 
 /**
  * Created by xuxueli on 17/3/23.
  */
-public class LogResult implements Serializable {
+public class LogResultModel implements Serializable {
     private static final long serialVersionUID = 42L;
     private int fromLineNum;
     private int toLineNum;
     private String logContent;
     private boolean isEnd;
 
-    public LogResult() {
+    public LogResultModel() {
     }
 
-    public LogResult(int fromLineNum, int toLineNum, String logContent, boolean isEnd) {
+    public LogResultModel(int fromLineNum, int toLineNum, String logContent, boolean isEnd) {
         this.fromLineNum = fromLineNum;
         this.toLineNum = toLineNum;
         this.logContent = logContent;

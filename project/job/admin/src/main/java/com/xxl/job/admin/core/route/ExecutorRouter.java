@@ -1,7 +1,7 @@
 package com.xxl.job.admin.core.route;
 
-import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.biz.model.TriggerParam;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.TriggerModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +17,8 @@ public abstract class ExecutorRouter {
      * route address
      *
      * @param addressList
-     * @return ReturnT.content=address
+     * @return Result.content=address
      */
-    public abstract ReturnT<String> route(TriggerParam triggerParam, List<String> addressList);
+    public abstract Result<String> route(TriggerModel triggerModel, List<String> addressList);
 
 }

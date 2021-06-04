@@ -1,6 +1,6 @@
 package com.gls.demo.job.executor;
 
-import com.gls.job.core.handler.IJobHandler;
+import com.xxl.job.core.handler.IJobHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
 package com.xxl.job.admin.controller;
 
+import com.gls.job.core.api.model.Result;
 import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
@@ -14,7 +15,6 @@ import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.service.LoginService;
 import com.xxl.job.admin.service.XxlJobService;
-import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.util.DateUtil;
@@ -109,50 +109,50 @@ public class JobInfoController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public ReturnT<String> add(XxlJobInfo jobInfo) {
+    public Result<String> add(XxlJobInfo jobInfo) {
         return xxlJobService.add(jobInfo);
     }
 
     @RequestMapping("/update")
     @ResponseBody
-    public ReturnT<String> update(XxlJobInfo jobInfo) {
+    public Result<String> update(XxlJobInfo jobInfo) {
         return xxlJobService.update(jobInfo);
     }
 
     @RequestMapping("/remove")
     @ResponseBody
-    public ReturnT<String> remove(int id) {
+    public Result<String> remove(int id) {
         return xxlJobService.remove(id);
     }
 
     @RequestMapping("/stop")
     @ResponseBody
-    public ReturnT<String> pause(int id) {
+    public Result<String> pause(int id) {
         return xxlJobService.stop(id);
     }
 
     @RequestMapping("/start")
     @ResponseBody
-    public ReturnT<String> start(int id) {
+    public Result<String> start(int id) {
         return xxlJobService.start(id);
     }
 
     @RequestMapping("/trigger")
     @ResponseBody
     //@PermissionLimit(limit = false)
-    public ReturnT<String> triggerJob(int id, String executorParam, String addressList) {
+    public Result<String> triggerJob(int id, String executorParam, String addressList) {
         // force cover job param
         if (executorParam == null) {
             executorParam = "";
         }
 
         JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
     @RequestMapping("/nextTriggerTime")
     @ResponseBody
-    public ReturnT<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
+    public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
 
         XxlJobInfo paramXxlJobInfo = new XxlJobInfo();
         paramXxlJobInfo.setScheduleType(scheduleType);
@@ -171,9 +171,9 @@ public class JobInfoController {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new ReturnT<List<String>>(ReturnT.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")) + e.getMessage());
+            return new Result<List<String>>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")) + e.getMessage());
         }
-        return new ReturnT<List<String>>(result);
+        return new Result<List<String>>(result);
 
     }
 

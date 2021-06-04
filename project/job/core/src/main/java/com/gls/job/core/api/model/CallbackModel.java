@@ -1,11 +1,11 @@
-package com.xxl.job.core.biz.model;
+package com.gls.job.core.api.model;
 
 import java.io.Serializable;
 
 /**
  * Created by xuxueli on 17/3/2.
  */
-public class HandleCallbackParam implements Serializable {
+public class CallbackModel implements Serializable {
     private static final long serialVersionUID = 42L;
 
     private long logId;
@@ -14,10 +14,10 @@ public class HandleCallbackParam implements Serializable {
     private int handleCode;
     private String handleMsg;
 
-    public HandleCallbackParam() {
+    public CallbackModel() {
     }
 
-    public HandleCallbackParam(long logId, long logDateTim, int handleCode, String handleMsg) {
+    public CallbackModel(long logId, long logDateTim, int handleCode, String handleMsg) {
         this.logId = logId;
         this.logDateTim = logDateTim;
         this.handleCode = handleCode;
@@ -58,7 +58,7 @@ public class HandleCallbackParam implements Serializable {
 
     @Override
     public String toString() {
-        return "HandleCallbackParam{" +
+        return "CallbackModel{" +
                 "logId=" + logId +
                 ", logDateTim=" + logDateTim +
                 ", handleCode=" + handleCode +

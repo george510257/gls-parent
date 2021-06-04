@@ -1,7 +1,7 @@
 package com.xxl.job.core.executor;
 
-import com.xxl.job.core.biz.AdminBiz;
-import com.xxl.job.core.biz.client.AdminBizClient;
+import com.gls.job.core.api.rpc.AdminApi;
+import com.gls.job.core.api.rpc.client.AdminApiClient;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.server.EmbedServer;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 public class XxlJobExecutor {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobExecutor.class);
     // ---------------------- admin-client (rpc invoker) ----------------------
-    private static List<AdminBiz> adminBizList;
+    private static List<AdminApi> adminApiList;
     // ---------------------- job handler repository ----------------------
     private static ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<String, IJobHandler>();
     // ---------------------- job thread repository ----------------------
@@ -42,8 +42,8 @@ public class XxlJobExecutor {
     // ---------------------- executor-server (rpc provider) ----------------------
     private EmbedServer embedServer = null;
 
-    public static List<AdminBiz> getAdminBizList() {
-        return adminBizList;
+    public static List<AdminApi> getAdminBizList() {
+        return adminApiList;
     }
 
     public static IJobHandler loadJobHandler(String name) {
@@ -170,12 +170,12 @@ public class XxlJobExecutor {
             for (String address : adminAddresses.trim().split(",")) {
                 if (address != null && address.trim().length() > 0) {
 
-                    AdminBiz adminBiz = new AdminBizClient(address.trim(), accessToken);
+                    AdminApi adminApi = new AdminApiClient(address.trim(), accessToken);
 
-                    if (adminBizList == null) {
-                        adminBizList = new ArrayList<AdminBiz>();
+                    if (adminApiList == null) {
+                        adminApiList = new ArrayList<AdminApi>();
                     }
-                    adminBizList.add(adminBiz);
+                    adminApiList.add(adminApi);
                 }
             }
         }

@@ -1,10 +1,10 @@
 package com.xxl.job.admin.core.thread;
 
+import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.api.model.Result;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
-import com.xxl.job.core.biz.model.RegistryParam;
-import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,57 +146,57 @@ public class JobRegistryHelper {
 
     // ---------------------- helper ----------------------
 
-    public ReturnT<String> registry(RegistryParam registryParam) {
+    public Result<String> registry(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryParam.getRegistryGroup())
-                || !StringUtils.hasText(registryParam.getRegistryKey())
-                || !StringUtils.hasText(registryParam.getRegistryValue())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+                || !StringUtils.hasText(registryModel.getRegistryKey())
+                || !StringUtils.hasText(registryModel.getRegistryValue())) {
+            return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
         // async execute
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryUpdate(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
                 if (ret < 1) {
-                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue(), new Date());
+                    XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registrySave(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue(), new Date());
 
                     // fresh
-                    freshGroupRegistryInfo(registryParam);
+                    freshGroupRegistryInfo(registryModel);
                 }
             }
         });
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
-    public ReturnT<String> registryRemove(RegistryParam registryParam) {
+    public Result<String> registryRemove(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryParam.getRegistryGroup())
-                || !StringUtils.hasText(registryParam.getRegistryKey())
-                || !StringUtils.hasText(registryParam.getRegistryValue())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "Illegal Argument.");
+        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+                || !StringUtils.hasText(registryModel.getRegistryKey())
+                || !StringUtils.hasText(registryModel.getRegistryValue())) {
+            return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
         }
 
         // async execute
         registryOrRemoveThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryParam.getRegistryGroup(), registryParam.getRegistryKey(), registryParam.getRegistryValue());
+                int ret = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().registryDelete(registryModel.getRegistryGroup(), registryModel.getRegistryKey(), registryModel.getRegistryValue());
                 if (ret > 0) {
                     // fresh
-                    freshGroupRegistryInfo(registryParam);
+                    freshGroupRegistryInfo(registryModel);
                 }
             }
         });
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
-    private void freshGroupRegistryInfo(RegistryParam registryParam) {
+    private void freshGroupRegistryInfo(RegistryModel registryModel) {
         // Under consideration, prevent affecting core tables
     }
 

@@ -1,5 +1,10 @@
 package com.xxl.job.admin.controller;
 
+import com.gls.job.core.api.model.KillModel;
+import com.gls.job.core.api.model.LogModel;
+import com.gls.job.core.api.model.LogResultModel;
+import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.rpc.ExecutorApi;
 import com.xxl.job.admin.core.complete.XxlJobCompleter;
 import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
@@ -10,11 +15,6 @@ import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.dao.XxlJobLogDao;
-import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.model.KillParam;
-import com.xxl.job.core.biz.model.LogParam;
-import com.xxl.job.core.biz.model.LogResult;
-import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,9 +79,9 @@ public class JobLogController {
 
     @RequestMapping("/getJobsByGroup")
     @ResponseBody
-    public ReturnT<List<XxlJobInfo>> getJobsByGroup(int jobGroup) {
+    public Result<List<XxlJobInfo>> getJobsByGroup(int jobGroup) {
         List<XxlJobInfo> list = xxlJobInfoDao.getJobsByGroup(jobGroup);
-        return new ReturnT<List<XxlJobInfo>>(list);
+        return new Result<List<XxlJobInfo>>(list);
     }
 
     @RequestMapping("/pageList")
@@ -121,7 +121,7 @@ public class JobLogController {
     public String logDetailPage(int id, Model model) {
 
         // base check
-        ReturnT<String> logStatue = ReturnT.SUCCESS;
+        Result<String> logStatue = Result.SUCCESS;
         XxlJobLog jobLog = xxlJobLogDao.load(id);
         if (jobLog == null) {
             throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
@@ -137,10 +137,10 @@ public class JobLogController {
 
     @RequestMapping("/logDetailCat")
     @ResponseBody
-    public ReturnT<LogResult> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum) {
+    public Result<LogResultModel> logDetailCat(String executorAddress, long triggerTime, long logId, int fromLineNum) {
         try {
-            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(executorAddress);
-            ReturnT<LogResult> logResult = executorBiz.log(new LogParam(triggerTime, logId, fromLineNum));
+            ExecutorApi executorApi = XxlJobScheduler.getExecutorBiz(executorAddress);
+            Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNum));
 
             // is end
             if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
@@ -153,47 +153,47 @@ public class JobLogController {
             return logResult;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new ReturnT<LogResult>(ReturnT.FAIL_CODE, e.getMessage());
+            return new Result<LogResultModel>(Result.FAIL_CODE, e.getMessage());
         }
     }
 
     @RequestMapping("/logKill")
     @ResponseBody
-    public ReturnT<String> logKill(int id) {
+    public Result<String> logKill(int id) {
         // base check
         XxlJobLog log = xxlJobLogDao.load(id);
         XxlJobInfo jobInfo = xxlJobInfoDao.loadById(log.getJobId());
         if (jobInfo == null) {
-            return new ReturnT<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
         }
-        if (ReturnT.SUCCESS_CODE != log.getTriggerCode()) {
-            return new ReturnT<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+        if (Result.SUCCESS_CODE != log.getTriggerCode()) {
+            return new Result<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
         }
 
         // request of kill
-        ReturnT<String> runResult = null;
+        Result<String> runResult = null;
         try {
-            ExecutorBiz executorBiz = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
-            runResult = executorBiz.kill(new KillParam(jobInfo.getId()));
+            ExecutorApi executorApi = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
+            runResult = executorApi.kill(new KillModel(jobInfo.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            runResult = new ReturnT<String>(500, e.getMessage());
+            runResult = new Result<String>(500, e.getMessage());
         }
 
-        if (ReturnT.SUCCESS_CODE == runResult.getCode()) {
-            log.setHandleCode(ReturnT.FAIL_CODE);
+        if (Result.SUCCESS_CODE == runResult.getCode()) {
+            log.setHandleCode(Result.FAIL_CODE);
             log.setHandleMsg(I18nUtil.getString("joblog_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
             XxlJobCompleter.updateHandleInfoAndFinish(log);
-            return new ReturnT<String>(runResult.getMsg());
+            return new Result<String>(runResult.getMsg());
         } else {
-            return new ReturnT<String>(500, runResult.getMsg());
+            return new Result<String>(500, runResult.getMsg());
         }
     }
 
     @RequestMapping("/clearLog")
     @ResponseBody
-    public ReturnT<String> clearLog(int jobGroup, int jobId, int type) {
+    public Result<String> clearLog(int jobGroup, int jobId, int type) {
 
         Date clearBeforeTime = null;
         int clearBeforeNum = 0;
@@ -216,7 +216,7 @@ public class JobLogController {
         } else if (type == 9) {
             clearBeforeNum = 0;            // 清理所有日志数据
         } else {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
         }
 
         List<Long> logIds = null;
@@ -227,7 +227,7 @@ public class JobLogController {
             }
         } while (logIds != null && logIds.size() > 0);
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
 }

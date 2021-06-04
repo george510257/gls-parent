@@ -76,11 +76,11 @@ public class XxlJobSimpleExecutor extends XxlJobExecutor {
                 // execute method
                 /*if (!(method.getParameterTypes().length == 1 && method.getParameterTypes()[0].isAssignableFrom(String.class))) {
                     throw new RuntimeException("xxl-job method-jobhandler param-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
-                            "The correct method format like \" public ReturnT<String> execute(String param) \" .");
+                            "The correct method format like \" public Result<String> execute(String param) \" .");
                 }
-                if (!method.getReturnType().isAssignableFrom(ReturnT.class)) {
+                if (!method.getReturnType().isAssignableFrom(Result.class)) {
                     throw new RuntimeException("xxl-job method-jobhandler return-classtype invalid, for[" + bean.getClass() + "#" + method.getName() + "] , " +
-                            "The correct method format like \" public ReturnT<String> execute(String param) \" .");
+                            "The correct method format like \" public Result<String> execute(String param) \" .");
                 }*/
 
                 executeMethod.setAccessible(true);

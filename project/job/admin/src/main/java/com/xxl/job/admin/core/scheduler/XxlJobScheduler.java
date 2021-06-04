@@ -1,10 +1,10 @@
 package com.xxl.job.admin.core.scheduler;
 
+import com.gls.job.core.api.rpc.ExecutorApi;
+import com.gls.job.core.api.rpc.client.ExecutorApiClient;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.thread.*;
 import com.xxl.job.admin.core.util.I18nUtil;
-import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.client.ExecutorBizClient;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentMap;
 public class XxlJobScheduler {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobScheduler.class);
     // ---------------------- executor-client ----------------------
-    private static ConcurrentMap<String, ExecutorBiz> executorBizRepository = new ConcurrentHashMap<String, ExecutorBiz>();
+    private static ConcurrentMap<String, ExecutorApi> executorBizRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
-    public static ExecutorBiz getExecutorBiz(String address) throws Exception {
+    public static ExecutorApi getExecutorBiz(String address) throws Exception {
         // valid
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -29,16 +29,16 @@ public class XxlJobScheduler {
 
         // load-cache
         address = address.trim();
-        ExecutorBiz executorBiz = executorBizRepository.get(address);
-        if (executorBiz != null) {
-            return executorBiz;
+        ExecutorApi executorApi = executorBizRepository.get(address);
+        if (executorApi != null) {
+            return executorApi;
         }
 
         // set-cache
-        executorBiz = new ExecutorBizClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
+        executorApi = new ExecutorApiClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
 
-        executorBizRepository.put(address, executorBiz);
-        return executorBiz;
+        executorBizRepository.put(address, executorApi);
+        return executorApi;
     }
 
     // ---------------------- I18n ----------------------

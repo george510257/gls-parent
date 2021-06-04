@@ -1,11 +1,11 @@
 package com.xxl.job.admin.core.thread;
 
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.Result;
 import com.xxl.job.admin.core.complete.XxlJobCompleter;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.util.I18nUtil;
-import com.xxl.job.core.biz.model.HandleCallbackParam;
-import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +85,7 @@ public class JobCompleteHelper {
                                 jobLog.setId(logId);
 
                                 jobLog.setHandleTime(new Date());
-                                jobLog.setHandleCode(ReturnT.FAIL_CODE);
+                                jobLog.setHandleCode(Result.FAIL_CODE);
                                 jobLog.setHandleMsg(I18nUtil.getString("joblog_lost_fail"));
 
                                 XxlJobCompleter.updateHandleInfoAndFinish(jobLog);
@@ -134,30 +134,30 @@ public class JobCompleteHelper {
 
     // ---------------------- helper ----------------------
 
-    public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList) {
+    public Result<String> callback(List<CallbackModel> callbackParamList) {
 
         callbackThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                for (HandleCallbackParam handleCallbackParam : callbackParamList) {
-                    ReturnT<String> callbackResult = callback(handleCallbackParam);
-                    logger.debug(">>>>>>>>> JobApiController.callback {}, handleCallbackParam={}, callbackResult={}",
-                            (callbackResult.getCode() == ReturnT.SUCCESS_CODE ? "success" : "fail"), handleCallbackParam, callbackResult);
+                for (CallbackModel callbackModel : callbackParamList) {
+                    Result<String> callbackResult = callback(callbackModel);
+                    logger.debug(">>>>>>>>> JobApiController.callback {}, callbackModel={}, callbackResult={}",
+                            (callbackResult.getCode() == Result.SUCCESS_CODE ? "success" : "fail"), callbackModel, callbackResult);
                 }
             }
         });
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
-    private ReturnT<String> callback(HandleCallbackParam handleCallbackParam) {
+    private Result<String> callback(CallbackModel callbackModel) {
         // valid log item
-        XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(handleCallbackParam.getLogId());
+        XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(callbackModel.getLogId());
         if (log == null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "log item not found.");
+            return new Result<String>(Result.FAIL_CODE, "log item not found.");
         }
         if (log.getHandleCode() > 0) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
+            return new Result<String>(Result.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
         }
 
         // handle msg
@@ -165,17 +165,17 @@ public class JobCompleteHelper {
         if (log.getHandleMsg() != null) {
             handleMsg.append(log.getHandleMsg()).append("<br>");
         }
-        if (handleCallbackParam.getHandleMsg() != null) {
-            handleMsg.append(handleCallbackParam.getHandleMsg());
+        if (callbackModel.getHandleMsg() != null) {
+            handleMsg.append(callbackModel.getHandleMsg());
         }
 
         // success, save log
         log.setHandleTime(new Date());
-        log.setHandleCode(handleCallbackParam.getHandleCode());
+        log.setHandleCode(callbackModel.getHandleCode());
         log.setHandleMsg(handleMsg.toString());
         XxlJobCompleter.updateHandleInfoAndFinish(log);
 
-        return ReturnT.SUCCESS;
+        return Result.SUCCESS;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.xxl.job.core.server;
 
-import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.impl.ExecutorBizImpl;
-import com.xxl.job.core.biz.model.*;
+import com.gls.job.core.api.model.*;
+import com.gls.job.core.api.rpc.ExecutorApi;
+import com.gls.job.core.api.rpc.impl.ExecutorApiImpl;
 import com.xxl.job.core.thread.ExecutorRegistryThread;
 import com.xxl.job.core.util.GsonTool;
 import com.xxl.job.core.util.ThrowableUtil;
@@ -30,11 +30,11 @@ import java.util.concurrent.*;
 public class EmbedServer {
     private static final Logger logger = LoggerFactory.getLogger(EmbedServer.class);
 
-    private ExecutorBiz executorBiz;
+    private ExecutorApi executorApi;
     private Thread thread;
 
     public void start(final String address, final int port, final String appname, final String accessToken) {
-        executorBiz = new ExecutorBizImpl();
+        executorApi = new ExecutorApiImpl();
         thread = new Thread(new Runnable() {
 
             @Override
@@ -74,7 +74,7 @@ public class EmbedServer {
                                             .addLast(new IdleStateHandler(0, 0, 30 * 3, TimeUnit.SECONDS))  // beat 3N, close if idle
                                             .addLast(new HttpServerCodec())
                                             .addLast(new HttpObjectAggregator(5 * 1024 * 1024))  // merge request & reponse to FULL
-                                            .addLast(new EmbedHttpServerHandler(executorBiz, accessToken, bizThreadPool));
+                                            .addLast(new EmbedHttpServerHandler(executorApi, accessToken, bizThreadPool));
                                 }
                             })
                             .childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -148,12 +148,12 @@ public class EmbedServer {
     public static class EmbedHttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
         private static final Logger logger = LoggerFactory.getLogger(EmbedHttpServerHandler.class);
 
-        private ExecutorBiz executorBiz;
+        private ExecutorApi executorApi;
         private String accessToken;
         private ThreadPoolExecutor bizThreadPool;
 
-        public EmbedHttpServerHandler(ExecutorBiz executorBiz, String accessToken, ThreadPoolExecutor bizThreadPool) {
-            this.executorBiz = executorBiz;
+        public EmbedHttpServerHandler(ExecutorApi executorApi, String accessToken, ThreadPoolExecutor bizThreadPool) {
+            this.executorApi = executorApi;
             this.accessToken = accessToken;
             this.bizThreadPool = bizThreadPool;
         }
@@ -189,39 +189,39 @@ public class EmbedServer {
 
             // valid
             if (HttpMethod.POST != httpMethod) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, HttpMethod not support.");
+                return new Result<String>(Result.FAIL_CODE, "invalid request, HttpMethod not support.");
             }
             if (uri == null || uri.trim().length() == 0) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping empty.");
+                return new Result<String>(Result.FAIL_CODE, "invalid request, uri-mapping empty.");
             }
             if (accessToken != null
                     && accessToken.trim().length() > 0
                     && !accessToken.equals(accessTokenReq)) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
+                return new Result<String>(Result.FAIL_CODE, "The access token is wrong.");
             }
 
             // services mapping
             try {
                 if ("/beat".equals(uri)) {
-                    return executorBiz.beat();
+                    return executorApi.beat();
                 } else if ("/idleBeat".equals(uri)) {
-                    IdleBeatParam idleBeatParam = GsonTool.fromJson(requestData, IdleBeatParam.class);
-                    return executorBiz.idleBeat(idleBeatParam);
+                    IdleBeatModel idleBeatModel = GsonTool.fromJson(requestData, IdleBeatModel.class);
+                    return executorApi.idleBeat(idleBeatModel);
                 } else if ("/run".equals(uri)) {
-                    TriggerParam triggerParam = GsonTool.fromJson(requestData, TriggerParam.class);
-                    return executorBiz.run(triggerParam);
+                    TriggerModel triggerModel = GsonTool.fromJson(requestData, TriggerModel.class);
+                    return executorApi.run(triggerModel);
                 } else if ("/kill".equals(uri)) {
-                    KillParam killParam = GsonTool.fromJson(requestData, KillParam.class);
-                    return executorBiz.kill(killParam);
+                    KillModel killModel = GsonTool.fromJson(requestData, KillModel.class);
+                    return executorApi.kill(killModel);
                 } else if ("/log".equals(uri)) {
-                    LogParam logParam = GsonTool.fromJson(requestData, LogParam.class);
-                    return executorBiz.log(logParam);
+                    LogModel logModel = GsonTool.fromJson(requestData, LogModel.class);
+                    return executorApi.log(logModel);
                 } else {
-                    return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping(" + uri + ") not found.");
+                    return new Result<String>(Result.FAIL_CODE, "invalid request, uri-mapping(" + uri + ") not found.");
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                return new ReturnT<String>(ReturnT.FAIL_CODE, "request error:" + ThrowableUtil.toString(e));
+                return new Result<String>(Result.FAIL_CODE, "request error:" + ThrowableUtil.toString(e));
             }
         }
 

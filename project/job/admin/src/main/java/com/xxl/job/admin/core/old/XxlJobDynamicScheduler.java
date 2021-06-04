@@ -7,8 +7,8 @@
 //import com.xxl.job.admin.core.thread.JobRegistryMonitorHelper;
 //import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
 //import com.xxl.job.admin.core.util.I18nUtil;
-//import com.xxl.job.core.biz.AdminBiz;
-//import com.xxl.job.core.biz.ExecutorBiz;
+//import AdminApi;
+//import ExecutorApi;
 //import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 //import com.xxl.rpc.remoting.invoker.XxlRpcInvokerFactory;
 //import com.xxl.rpc.remoting.invoker.call.CallType;
@@ -108,7 +108,7 @@
 //                null);
 //
 //        // add services
-//        xxlRpcProviderFactory.addService(AdminBiz.class.getName(), null, XxlJobAdminConfig.getAdminConfig().getAdminBiz());
+//        xxlRpcProviderFactory.addService(AdminApi.class.getName(), null, XxlJobAdminConfig.getAdminConfig().getAdminBiz());
 //
 //        // servlet handler
 //        servletServerHandler = new ServletServerHandler(xxlRpcProviderFactory);
@@ -122,8 +122,8 @@
 //
 //
 //    // ---------------------- executor-client ----------------------
-//    private static ConcurrentHashMap<String, ExecutorBiz> executorBizRepository = new ConcurrentHashMap<String, ExecutorBiz>();
-//    public static ExecutorBiz getExecutorBiz(String address) throws Exception {
+//    private static ConcurrentHashMap<String, ExecutorApi> executorBizRepository = new ConcurrentHashMap<String, ExecutorApi>();
+//    public static ExecutorApi getExecutorBiz(String address) throws Exception {
 //        // valid
 //        if (address==null || address.trim().length()==0) {
 //            return null;
@@ -131,18 +131,18 @@
 //
 //        // load-cache
 //        address = address.trim();
-//        ExecutorBiz executorBiz = executorBizRepository.get(address);
+//        ExecutorApi executorBiz = executorBizRepository.get(address);
 //        if (executorBiz != null) {
 //            return executorBiz;
 //        }
 //
 //        // set-cache
-//        executorBiz = (ExecutorBiz) new XxlRpcReferenceBean(
+//        executorBiz = (ExecutorApi) new XxlRpcReferenceBean(
 //                NetEnum.NETTY_HTTP,
 //                Serializer.SerializeEnum.HESSIAN.getSerializer(),
 //                CallType.SYNC,
 //                LoadBalance.ROUND,
-//                ExecutorBiz.class,
+//                ExecutorApi.class,
 //                null,
 //                5000,
 //                address,
