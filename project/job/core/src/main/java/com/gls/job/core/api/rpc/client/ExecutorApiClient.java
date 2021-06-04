@@ -11,9 +11,9 @@ import com.xxl.job.core.util.XxlJobRemotingUtil;
  */
 public class ExecutorApiClient implements ExecutorApi {
 
+    private final int timeout = 3;
     private String addressUrl;
     private String accessToken;
-    private int timeout = 3;
 
     public ExecutorApiClient() {
     }

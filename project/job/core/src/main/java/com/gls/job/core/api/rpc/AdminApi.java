@@ -11,17 +11,13 @@ import java.util.List;
  */
 public interface AdminApi {
 
-    // ---------------------- callback ----------------------
-
     /**
      * callback
      *
-     * @param callbackParamList
+     * @param callbackModelList
      * @return
      */
-    public Result<String> callback(List<CallbackModel> callbackParamList);
-
-    // ---------------------- registry ----------------------
+    Result<String> callback(List<CallbackModel> callbackModelList);
 
     /**
      * registry
@@ -29,7 +25,7 @@ public interface AdminApi {
      * @param registryModel
      * @return
      */
-    public Result<String> registry(RegistryModel registryModel);
+    Result<String> registry(RegistryModel registryModel);
 
     /**
      * registry remove
@@ -37,9 +33,6 @@ public interface AdminApi {
      * @param registryModel
      * @return
      */
-    public Result<String> registryRemove(RegistryModel registryModel);
-
-    // ---------------------- biz (custome) ----------------------
-    // group、job ... manage
+    Result<String> registryRemove(RegistryModel registryModel);
 
 }

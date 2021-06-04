@@ -11,16 +11,16 @@ import com.xxl.job.core.handler.impl.GlueJobHandler;
 import com.xxl.job.core.handler.impl.ScriptJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.thread.JobThread;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
 /**
- * Created by xuxueli on 17/3/1.
+ * @author xuxueli
+ * @date 17/3/1
  */
+@Slf4j
 public class ExecutorApiImpl implements ExecutorApi {
-    private static Logger logger = LoggerFactory.getLogger(ExecutorApiImpl.class);
 
     @Override
     public Result<String> beat() {
@@ -38,7 +38,7 @@ public class ExecutorApiImpl implements ExecutorApi {
         }
 
         if (isRunningOrHasQueue) {
-            return new Result<String>(Result.FAIL_CODE, "job thread is running or has trigger queue.");
+            return new Result<>(Result.FAIL_CODE, "job thread is running or has trigger queue.");
         }
         return Result.SUCCESS;
     }
@@ -70,7 +70,7 @@ public class ExecutorApiImpl implements ExecutorApi {
             if (jobHandler == null) {
                 jobHandler = newJobHandler;
                 if (jobHandler == null) {
-                    return new Result<String>(Result.FAIL_CODE, "job handler [" + triggerModel.getExecutorHandler() + "] not found.");
+                    return new Result<>(Result.FAIL_CODE, "job handler [" + triggerModel.getExecutorHandler() + "] not found.");
                 }
             }
 
@@ -93,8 +93,8 @@ public class ExecutorApiImpl implements ExecutorApi {
                     IJobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
                     jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdatetime());
                 } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                    return new Result<String>(Result.FAIL_CODE, e.getMessage());
+                    log.error(e.getMessage(), e);
+                    return new Result<>(Result.FAIL_CODE, e.getMessage());
                 }
             }
         } else if (glueTypeEnum != null && glueTypeEnum.isScript()) {
@@ -115,7 +115,7 @@ public class ExecutorApiImpl implements ExecutorApi {
                 jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdatetime(), triggerModel.getGlueSource(), GlueTypeEnum.match(triggerModel.getGlueType()));
             }
         } else {
-            return new Result<String>(Result.FAIL_CODE, "glueType[" + triggerModel.getGlueType() + "] is not valid.");
+            return new Result<>(Result.FAIL_CODE, "glueType[" + triggerModel.getGlueType() + "] is not valid.");
         }
 
         // executor block strategy
@@ -124,7 +124,7 @@ public class ExecutorApiImpl implements ExecutorApi {
             if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
-                    return new Result<String>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
+                    return new Result<>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
                 }
             } else if (ExecutorBlockStrategyEnum.COVER_EARLY == blockStrategy) {
                 // kill running jobThread
@@ -133,9 +133,8 @@ public class ExecutorApiImpl implements ExecutorApi {
 
                     jobThread = null;
                 }
-            } else {
-                // just queue trigger
-            }
+            }  // just queue trigger
+
         }
 
         // replace thread (new or exists invalid)
@@ -144,8 +143,7 @@ public class ExecutorApiImpl implements ExecutorApi {
         }
 
         // push data to queue
-        Result<String> pushResult = jobThread.pushTriggerQueue(triggerModel);
-        return pushResult;
+        return jobThread.pushTriggerQueue(triggerModel);
     }
 
     @Override
@@ -157,7 +155,7 @@ public class ExecutorApiImpl implements ExecutorApi {
             return Result.SUCCESS;
         }
 
-        return new Result<String>(Result.SUCCESS_CODE, "job thread already killed.");
+        return new Result<>(Result.SUCCESS_CODE, "job thread already killed.");
     }
 
     @Override
@@ -166,7 +164,7 @@ public class ExecutorApiImpl implements ExecutorApi {
         String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logModel.getLogDateTim()), logModel.getLogId());
 
         LogResultModel logResultModel = XxlJobFileAppender.readLog(logFileName, logModel.getFromLineNum());
-        return new Result<LogResultModel>(logResultModel);
+        return new Result<>(logResultModel);
     }
 
 }

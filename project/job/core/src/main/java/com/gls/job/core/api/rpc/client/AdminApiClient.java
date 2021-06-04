@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class AdminApiClient implements AdminApi {
 
+    private final int timeout = 3;
     private String addressUrl;
     private String accessToken;
-    private int timeout = 3;
 
     public AdminApiClient() {
     }
