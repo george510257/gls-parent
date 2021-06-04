@@ -2,6 +2,7 @@ package com.xxl.job.core.thread;
 
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.xxl.job.core.enums.RegistryConfig;
 import com.xxl.job.core.executor.XxlJobExecutor;
@@ -11,12 +12,13 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by xuxueli on 17/3/2.
+ * @author xuxueli
+ * @date 17/3/2
  */
 public class ExecutorRegistryThread {
-    private static Logger logger = LoggerFactory.getLogger(ExecutorRegistryThread.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExecutorRegistryThread.class);
 
-    private static ExecutorRegistryThread instance = new ExecutorRegistryThread();
+    private static final ExecutorRegistryThread instance = new ExecutorRegistryThread();
     private Thread registryThread;
     private volatile boolean toStop = false;
 
@@ -43,7 +45,7 @@ public class ExecutorRegistryThread {
                 // registry
                 while (!toStop) {
                     try {
-                        RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                        RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
                         for (AdminApi adminApi : XxlJobExecutor.getAdminBizList()) {
                             try {
                                 Result<String> registryResult = adminApi.registry(registryModel);
@@ -79,7 +81,7 @@ public class ExecutorRegistryThread {
 
                 // registry remove
                 try {
-                    RegistryModel registryModel = new RegistryModel(RegistryConfig.RegistType.EXECUTOR.name(), appname, address);
+                    RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
                     for (AdminApi adminApi : XxlJobExecutor.getAdminBizList()) {
                         try {
                             Result<String> registryResult = adminApi.registryRemove(registryModel);

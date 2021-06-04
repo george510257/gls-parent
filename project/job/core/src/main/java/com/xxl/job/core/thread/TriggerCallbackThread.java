@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -193,7 +192,7 @@ public class TriggerCallbackThread {
      */
     private void callbackLog(List<CallbackModel> callbackParamList, String logContent) {
         for (CallbackModel callbackParam : callbackParamList) {
-            String logFileName = XxlJobFileAppender.makeLogFileName(new Date(callbackParam.getLogDateTim()), callbackParam.getLogId());
+            String logFileName = XxlJobFileAppender.makeLogFileName(callbackParam.getLogDateTime(), callbackParam.getLogId());
             XxlJobContext.setXxlJobContext(new XxlJobContext(
                     -1,
                     null,

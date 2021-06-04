@@ -2,29 +2,27 @@ package com.xxl.job.core.handler.impl;
 
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.IJobHandler;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Date;
 
 /**
  * glue job handler
  *
  * @author xuxueli 2016-5-19 21:05:45
  */
+@AllArgsConstructor
 public class GlueJobHandler extends IJobHandler {
 
-    private long glueUpdatetime;
-    private IJobHandler jobHandler;
+    private final IJobHandler jobHandler;
 
-    public GlueJobHandler(IJobHandler jobHandler, long glueUpdatetime) {
-        this.jobHandler = jobHandler;
-        this.glueUpdatetime = glueUpdatetime;
-    }
-
-    public long getGlueUpdatetime() {
-        return glueUpdatetime;
-    }
+    @Getter
+    private final Date glueUpdateTime;
 
     @Override
     public void execute() throws Exception {
-        XxlJobHelper.log("----------- glue.version:" + glueUpdatetime + " -----------");
+        XxlJobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
     }
 

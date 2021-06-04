@@ -1,9 +1,9 @@
-package com.xxl.job.core.enums;
+package com.gls.job.core.api.model.enums;
 
 /**
  * Created by xuxueli on 17/5/9.
  */
-public enum ExecutorBlockStrategyEnum {
+public enum ExecutorBlockStrategy {
 
     SERIAL_EXECUTION("Serial execution"),
     /*CONCURRENT_EXECUTION("并行"),*/
@@ -12,13 +12,13 @@ public enum ExecutorBlockStrategyEnum {
 
     private String title;
 
-    private ExecutorBlockStrategyEnum(String title) {
+    private ExecutorBlockStrategy(String title) {
         this.title = title;
     }
 
-    public static ExecutorBlockStrategyEnum match(String name, ExecutorBlockStrategyEnum defaultItem) {
+    public static ExecutorBlockStrategy match(String name, ExecutorBlockStrategy defaultItem) {
         if (name != null) {
-            for (ExecutorBlockStrategyEnum item : ExecutorBlockStrategyEnum.values()) {
+            for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
                 if (item.name().equals(name)) {
                     return item;
                 }

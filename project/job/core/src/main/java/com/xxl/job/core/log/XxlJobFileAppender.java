@@ -21,15 +21,15 @@ public class XxlJobFileAppender {
      * <p>
      * strut like:
      * ---/
-     * ---/gluesource/
-     * ---/gluesource/10_1514171108000.js
-     * ---/gluesource/10_1514171108000.js
+     * ---/glueSource/
+     * ---/glueSource/10_1514171108000.js
+     * ---/glueSource/10_1514171108000.js
      * ---/2017-12-25/
      * ---/2017-12-25/639.log
      * ---/2017-12-25/821.log
      */
     private static String logBasePath = "/data/applogs/xxl-job/jobhandler";
-    private static String glueSrcPath = logBasePath.concat("/gluesource");
+    private static String glueSrcPath = logBasePath.concat("/glueSource");
 
     public static void initLogPath(String logPath) {
         // init
@@ -44,7 +44,7 @@ public class XxlJobFileAppender {
         logBasePath = logPathDir.getPath();
 
         // mk glue dir
-        File glueBaseDir = new File(logPathDir, "gluesource");
+        File glueBaseDir = new File(logPathDir, "glueSource");
         if (!glueBaseDir.exists()) {
             glueBaseDir.mkdirs();
         }
@@ -66,7 +66,7 @@ public class XxlJobFileAppender {
      * @param logId
      * @return
      */
-    public static String makeLogFileName(Date triggerDate, long logId) {
+    public static String makeLogFileName(Date triggerDate, Long logId) {
 
         // filePath/yyyy-MM-dd
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");    // avoid concurrent problem, can not be static

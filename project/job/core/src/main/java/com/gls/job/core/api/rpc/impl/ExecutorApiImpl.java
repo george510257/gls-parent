@@ -1,19 +1,17 @@
 package com.gls.job.core.api.rpc.impl;
 
 import com.gls.job.core.api.model.*;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.executor.XxlJobExecutor;
 import com.xxl.job.core.glue.GlueFactory;
-import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.impl.GlueJobHandler;
 import com.xxl.job.core.handler.impl.ScriptJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.thread.JobThread;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Date;
 
 /**
  * @author xuxueli
@@ -51,8 +49,8 @@ public class ExecutorApiImpl implements ExecutorApi {
         String removeOldReason = null;
 
         // valid：jobHandler + jobThread
-        GlueTypeEnum glueTypeEnum = GlueTypeEnum.match(triggerModel.getGlueType());
-        if (GlueTypeEnum.BEAN == glueTypeEnum) {
+        GlueType glueType = triggerModel.getGlueType();
+        if (GlueType.BEAN == glueType) {
 
             // new jobhandler
             IJobHandler newJobHandler = XxlJobExecutor.loadJobHandler(triggerModel.getExecutorHandler());
@@ -74,13 +72,13 @@ public class ExecutorApiImpl implements ExecutorApi {
                 }
             }
 
-        } else if (GlueTypeEnum.GLUE_GROOVY == glueTypeEnum) {
+        } else if (GlueType.GLUE_GROOVY == glueType) {
 
             // valid old jobThread
             if (jobThread != null &&
                     !(jobThread.getHandler() instanceof GlueJobHandler
-                            && ((GlueJobHandler) jobThread.getHandler()).getGlueUpdatetime() == triggerModel.getGlueUpdatetime())) {
-                // change handler or gluesource updated, need kill old thread
+                            && ((GlueJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
+                // change handler or glueSource updated, need kill old thread
                 removeOldReason = "change job source or glue type, and terminate the old job thread.";
 
                 jobThread = null;
@@ -91,19 +89,19 @@ public class ExecutorApiImpl implements ExecutorApi {
             if (jobHandler == null) {
                 try {
                     IJobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
-                    jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdatetime());
+                    jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdateTime());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     return new Result<>(Result.FAIL_CODE, e.getMessage());
                 }
             }
-        } else if (glueTypeEnum != null && glueTypeEnum.isScript()) {
+        } else if (glueType != null && glueType.isScript()) {
 
             // valid old jobThread
             if (jobThread != null &&
                     !(jobThread.getHandler() instanceof ScriptJobHandler
-                            && ((ScriptJobHandler) jobThread.getHandler()).getGlueUpdatetime() == triggerModel.getGlueUpdatetime())) {
-                // change script or gluesource updated, need kill old thread
+                            && ((ScriptJobHandler) jobThread.getHandler()).getGlueUpdateTime() == triggerModel.getGlueUpdateTime())) {
+                // change script or glueSource updated, need kill old thread
                 removeOldReason = "change job source or glue type, and terminate the old job thread.";
 
                 jobThread = null;
@@ -112,7 +110,7 @@ public class ExecutorApiImpl implements ExecutorApi {
 
             // valid handler
             if (jobHandler == null) {
-                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdatetime(), triggerModel.getGlueSource(), GlueTypeEnum.match(triggerModel.getGlueType()));
+                jobHandler = new ScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), triggerModel.getGlueType());
             }
         } else {
             return new Result<>(Result.FAIL_CODE, "glueType[" + triggerModel.getGlueType() + "] is not valid.");
@@ -120,16 +118,16 @@ public class ExecutorApiImpl implements ExecutorApi {
 
         // executor block strategy
         if (jobThread != null) {
-            ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(triggerModel.getExecutorBlockStrategy(), null);
-            if (ExecutorBlockStrategyEnum.DISCARD_LATER == blockStrategy) {
+            ExecutorBlockStrategy blockStrategy = triggerModel.getExecutorBlockStrategy();
+            if (ExecutorBlockStrategy.DISCARD_LATER == blockStrategy) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
-                    return new Result<>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategyEnum.DISCARD_LATER.getTitle());
+                    return new Result<>(Result.FAIL_CODE, "block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
                 }
-            } else if (ExecutorBlockStrategyEnum.COVER_EARLY == blockStrategy) {
+            } else if (ExecutorBlockStrategy.COVER_EARLY == blockStrategy) {
                 // kill running jobThread
                 if (jobThread.isRunningOrHasQueue()) {
-                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategyEnum.COVER_EARLY.getTitle();
+                    removeOldReason = "block strategy effect：" + ExecutorBlockStrategy.COVER_EARLY.getTitle();
 
                     jobThread = null;
                 }
@@ -161,7 +159,7 @@ public class ExecutorApiImpl implements ExecutorApi {
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
         // log filename: logPath/yyyy-MM-dd/9999.log
-        String logFileName = XxlJobFileAppender.makeLogFileName(new Date(logModel.getLogDateTim()), logModel.getLogId());
+        String logFileName = XxlJobFileAppender.makeLogFileName(logModel.getLogDateTime(), logModel.getLogId());
 
         LogResultModel logResultModel = XxlJobFileAppender.readLog(logFileName, logModel.getFromLineNum());
         return new Result<>(logResultModel);

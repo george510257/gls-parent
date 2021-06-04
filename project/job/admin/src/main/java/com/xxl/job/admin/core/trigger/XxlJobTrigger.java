@@ -2,6 +2,7 @@ package com.xxl.job.admin.core.trigger;
 
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
@@ -10,7 +11,6 @@ import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.route.ExecutorRouteStrategyEnum;
 import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import com.xxl.job.admin.core.util.I18nUtil;
-import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.util.IpUtil;
 import com.xxl.job.core.util.ThrowableUtil;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class XxlJobTrigger {
      * @param addressList           null: use executor addressList
      *                              not null: cover
      */
-    public static void trigger(int jobId,
+    public static void trigger(Long jobId,
                                TriggerTypeEnum triggerType,
                                int failRetryCount,
                                String executorShardingParam,
@@ -108,7 +108,7 @@ public class XxlJobTrigger {
     private static void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
 
         // param
-        ExecutorBlockStrategyEnum blockStrategy = ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), ExecutorBlockStrategyEnum.SERIAL_EXECUTION);  // block strategy
+        ExecutorBlockStrategy blockStrategy = jobInfo.getExecutorBlockStrategy();  // block strategy
         ExecutorRouteStrategyEnum executorRouteStrategyEnum = ExecutorRouteStrategyEnum.match(jobInfo.getExecutorRouteStrategy(), null);    // route strategy
         String shardingParam = (ExecutorRouteStrategyEnum.SHARDING_BROADCAST == executorRouteStrategyEnum) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
@@ -128,10 +128,10 @@ public class XxlJobTrigger {
         triggerModel.setExecutorBlockStrategy(jobInfo.getExecutorBlockStrategy());
         triggerModel.setExecutorTimeout(jobInfo.getExecutorTimeout());
         triggerModel.setLogId(jobLog.getId());
-        triggerModel.setLogDateTime(jobLog.getTriggerTime().getTime());
+        triggerModel.setLogDateTime(jobLog.getTriggerTime());
         triggerModel.setGlueType(jobInfo.getGlueType());
         triggerModel.setGlueSource(jobInfo.getGlueSource());
-        triggerModel.setGlueUpdatetime(jobInfo.getGlueUpdatetime().getTime());
+        triggerModel.setGlueUpdateTime(jobInfo.getGlueUpdateTime());
         triggerModel.setBroadcastIndex(index);
         triggerModel.setBroadcastTotal(total);
 

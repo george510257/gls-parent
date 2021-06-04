@@ -1,9 +1,9 @@
-package com.xxl.job.core.glue;
+package com.gls.job.core.api.model.enums;
 
 /**
  * Created by xuxueli on 17/4/26.
  */
-public enum GlueTypeEnum {
+public enum GlueType {
 
     BEAN("BEAN", false, null, null),
     GLUE_GROOVY("GLUE(Java)", false, null, null),
@@ -18,15 +18,15 @@ public enum GlueTypeEnum {
     private String cmd;
     private String suffix;
 
-    private GlueTypeEnum(String desc, boolean isScript, String cmd, String suffix) {
+    private GlueType(String desc, boolean isScript, String cmd, String suffix) {
         this.desc = desc;
         this.isScript = isScript;
         this.cmd = cmd;
         this.suffix = suffix;
     }
 
-    public static GlueTypeEnum match(String name) {
-        for (GlueTypeEnum item : GlueTypeEnum.values()) {
+    public static GlueType match(String name) {
+        for (GlueType item : GlueType.values()) {
             if (item.name().equals(name)) {
                 return item;
             }

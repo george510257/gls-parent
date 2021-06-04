@@ -1,6 +1,7 @@
 package com.xxl.job.admin.controller;
 
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
 import com.xxl.job.admin.core.util.I18nUtil;
@@ -152,7 +153,7 @@ public class JobGroupController {
         List<XxlJobRegistry> list = xxlJobRegistryDao.findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
         if (list != null) {
             for (XxlJobRegistry item : list) {
-                if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
+                if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
                     String appname = item.getRegistryKey();
                     List<String> registryList = appAddressMap.get(appname);
                     if (registryList == null) {
@@ -171,7 +172,7 @@ public class JobGroupController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
 
         // valid
         int count = xxlJobInfoDao.pageListCount(0, 10, id, -1, null, null, null);
@@ -190,7 +191,7 @@ public class JobGroupController {
 
     @RequestMapping("/loadById")
     @ResponseBody
-    public Result<XxlJobGroup> loadById(int id) {
+    public Result<XxlJobGroup> loadById(Long id) {
         XxlJobGroup jobGroup = xxlJobGroupDao.load(id);
         return jobGroup != null ? new Result<XxlJobGroup>(jobGroup) : new Result<XxlJobGroup>(Result.FAIL_CODE, null);
     }

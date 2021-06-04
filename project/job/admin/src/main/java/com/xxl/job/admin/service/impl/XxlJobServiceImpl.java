@@ -1,6 +1,7 @@
 package com.xxl.job.admin.service.impl;
 
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.xxl.job.admin.core.cron.CronExpression;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
@@ -12,8 +13,6 @@ import com.xxl.job.admin.core.thread.JobScheduleHelper;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.*;
 import com.xxl.job.admin.service.XxlJobService;
-import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
-import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,7 @@ public class XxlJobServiceImpl implements XxlJobService {
     private XxlJobLogReportDao xxlJobLogReportDao;
 
     @Override
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+    public Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
         // page list
         List<XxlJobInfo> list = xxlJobInfoDao.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
@@ -96,14 +95,14 @@ public class XxlJobServiceImpl implements XxlJobService {
         }
 
         // valid job
-        if (GlueTypeEnum.match(jobInfo.getGlueType()) == null) {
+        if (jobInfo.getGlueType() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_gluetype") + I18nUtil.getString("system_unvalid")));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType()) && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
+        if (GlueType.BEAN == jobInfo.getGlueType() && (jobInfo.getExecutorHandler() == null || jobInfo.getExecutorHandler().trim().length() == 0)) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("system_please_input") + "JobHandler"));
         }
         // 》fix "\r" in shell
-        if (GlueTypeEnum.GLUE_SHELL == GlueTypeEnum.match(jobInfo.getGlueType()) && jobInfo.getGlueSource() != null) {
+        if (GlueType.GLUE_SHELL == jobInfo.getGlueType() && jobInfo.getGlueSource() != null) {
             jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
         }
 
@@ -114,7 +113,7 @@ public class XxlJobServiceImpl implements XxlJobService {
         if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (jobInfo.getExecutorBlockStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
 
@@ -123,7 +122,7 @@ public class XxlJobServiceImpl implements XxlJobService {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    XxlJobInfo childJobInfo = xxlJobInfoDao.loadById(Integer.parseInt(childJobIdItem));
+                    XxlJobInfo childJobInfo = xxlJobInfoDao.loadById(Long.parseLong(childJobIdItem));
                     if (childJobInfo == null) {
                         return new Result<String>(Result.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
@@ -147,7 +146,7 @@ public class XxlJobServiceImpl implements XxlJobService {
         // add in db
         jobInfo.setAddTime(new Date());
         jobInfo.setUpdateTime(new Date());
-        jobInfo.setGlueUpdatetime(new Date());
+        jobInfo.setGlueUpdateTime(new Date());
         xxlJobInfoDao.save(jobInfo);
         if (jobInfo.getId() < 1) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_add") + I18nUtil.getString("system_fail")));
@@ -206,7 +205,7 @@ public class XxlJobServiceImpl implements XxlJobService {
         if (MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), null) == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("misfire_strategy") + I18nUtil.getString("system_unvalid")));
         }
-        if (ExecutorBlockStrategyEnum.match(jobInfo.getExecutorBlockStrategy(), null) == null) {
+        if (jobInfo.getExecutorBlockStrategy() == null) {
             return new Result<String>(Result.FAIL_CODE, (I18nUtil.getString("jobinfo_field_executorBlockStrategy") + I18nUtil.getString("system_unvalid")));
         }
 
@@ -215,7 +214,7 @@ public class XxlJobServiceImpl implements XxlJobService {
             String[] childJobIds = jobInfo.getChildJobId().split(",");
             for (String childJobIdItem : childJobIds) {
                 if (childJobIdItem != null && childJobIdItem.trim().length() > 0 && isNumeric(childJobIdItem)) {
-                    XxlJobInfo childJobInfo = xxlJobInfoDao.loadById(Integer.parseInt(childJobIdItem));
+                    XxlJobInfo childJobInfo = xxlJobInfoDao.loadById(Long.parseLong(childJobIdItem));
                     if (childJobInfo == null) {
                         return new Result<String>(Result.FAIL_CODE,
                                 MessageFormat.format((I18nUtil.getString("jobinfo_field_childJobId") + "({0})" + I18nUtil.getString("system_not_found")), childJobIdItem));
@@ -287,7 +286,7 @@ public class XxlJobServiceImpl implements XxlJobService {
     }
 
     @Override
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
         XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
         if (xxlJobInfo == null) {
             return Result.SUCCESS;
@@ -300,7 +299,7 @@ public class XxlJobServiceImpl implements XxlJobService {
     }
 
     @Override
-    public Result<String> start(int id) {
+    public Result<String> start(Long id) {
         XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
 
         // valid
@@ -332,7 +331,7 @@ public class XxlJobServiceImpl implements XxlJobService {
     }
 
     @Override
-    public Result<String> stop(int id) {
+    public Result<String> stop(Long id) {
         XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(id);
 
         xxlJobInfo.setTriggerStatus(0);

@@ -2,12 +2,14 @@ package com.xxl.job.admin.core.thread;
 
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
 import com.xxl.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -74,7 +76,7 @@ public class JobRegistryHelper {
                             List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
                             if (list != null) {
                                 for (XxlJobRegistry item : list) {
-                                    if (RegistryConfig.RegistType.EXECUTOR.name().equals(item.getRegistryGroup())) {
+                                    if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
                                         String appname = item.getRegistryKey();
                                         List<String> registryList = appAddressMap.get(appname);
                                         if (registryList == null) {
@@ -149,7 +151,7 @@ public class JobRegistryHelper {
     public Result<String> registry(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+        if (ObjectUtils.isEmpty(registryModel.getRegistryGroup())
                 || !StringUtils.hasText(registryModel.getRegistryKey())
                 || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");
@@ -175,7 +177,7 @@ public class JobRegistryHelper {
     public Result<String> registryRemove(RegistryModel registryModel) {
 
         // valid
-        if (!StringUtils.hasText(registryModel.getRegistryGroup())
+        if (ObjectUtils.isEmpty(registryModel.getRegistryGroup())
                 || !StringUtils.hasText(registryModel.getRegistryKey())
                 || !StringUtils.hasText(registryModel.getRegistryValue())) {
             return new Result<String>(Result.FAIL_CODE, "Illegal Argument.");

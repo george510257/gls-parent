@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.*;
@@ -27,7 +26,7 @@ import java.util.concurrent.*;
 public class JobThread extends Thread {
     private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
-    private int jobId;
+    private Long jobId;
     private IJobHandler handler;
     private LinkedBlockingQueue<TriggerModel> triggerQueue;
     private Set<Long> triggerLogIdSet;        // avoid repeat trigger for the same TRIGGER_LOG_ID
@@ -38,7 +37,7 @@ public class JobThread extends Thread {
     private boolean running = false;    // if running job
     private int idleTimes = 0;            // idel times
 
-    public JobThread(int jobId, IJobHandler handler) {
+    public JobThread(Long jobId, IJobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
         this.triggerQueue = new LinkedBlockingQueue<TriggerModel>();
@@ -116,7 +115,7 @@ public class JobThread extends Thread {
                     triggerLogIdSet.remove(triggerModel.getLogId());
 
                     // log filename, like "logPath/yyyy-MM-dd/9999.log"
-                    String logFileName = XxlJobFileAppender.makeLogFileName(new Date(triggerModel.getLogDateTime()), triggerModel.getLogId());
+                    String logFileName = XxlJobFileAppender.makeLogFileName(triggerModel.getLogDateTime(), triggerModel.getLogId());
                     XxlJobContext xxlJobContext = new XxlJobContext(
                             triggerModel.getJobId(),
                             triggerModel.getExecutorParams(),

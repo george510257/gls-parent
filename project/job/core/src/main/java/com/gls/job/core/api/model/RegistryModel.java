@@ -1,5 +1,6 @@
 package com.gls.job.core.api.model;
 
+import com.gls.job.core.api.model.enums.RegistryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RegistryModel implements Serializable {
 
-    private String registryGroup;
+    private RegistryType registryGroup;
     private String registryKey;
     private String registryValue;
 

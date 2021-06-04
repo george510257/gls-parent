@@ -20,16 +20,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Created by xuxueli on 2016/3/2 21:14.
+ * @author xuxueli
+ * @date 2016/3/2 21:14
  */
 public class XxlJobExecutor {
     private static final Logger logger = LoggerFactory.getLogger(XxlJobExecutor.class);
+    // ---------------------- job handler repository ----------------------
+    private static final ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<>();
+    // ---------------------- job thread repository ----------------------
+    private static final ConcurrentMap<Long, JobThread> jobThreadRepository = new ConcurrentHashMap<>();
     // ---------------------- admin-client (rpc invoker) ----------------------
     private static List<AdminApi> adminApiList;
-    // ---------------------- job handler repository ----------------------
-    private static ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<String, IJobHandler>();
-    // ---------------------- job thread repository ----------------------
-    private static ConcurrentMap<Integer, JobThread> jobThreadRepository = new ConcurrentHashMap<Integer, JobThread>();
     // ---------------------- param ----------------------
     private String adminAddresses;
     private String accessToken;
@@ -55,7 +56,7 @@ public class XxlJobExecutor {
         return jobHandlerRepository.put(name, jobHandler);
     }
 
-    public static JobThread registJobThread(int jobId, IJobHandler handler, String removeOldReason) {
+    public static JobThread registJobThread(Long jobId, IJobHandler handler, String removeOldReason) {
         JobThread newJobThread = new JobThread(jobId, handler);
         newJobThread.start();
         logger.info(">>>>>>>>>>> xxl-job regist JobThread success, jobId:{}, handler:{}", new Object[]{jobId, handler});
@@ -69,7 +70,7 @@ public class XxlJobExecutor {
         return newJobThread;
     }
 
-    public static JobThread removeJobThread(int jobId, String removeOldReason) {
+    public static JobThread removeJobThread(Long jobId, String removeOldReason) {
         JobThread oldJobThread = jobThreadRepository.remove(jobId);
         if (oldJobThread != null) {
             oldJobThread.toStop(removeOldReason);
@@ -80,7 +81,7 @@ public class XxlJobExecutor {
         return null;
     }
 
-    public static JobThread loadJobThread(int jobId) {
+    public static JobThread loadJobThread(Long jobId) {
         JobThread jobThread = jobThreadRepository.get(jobId);
         return jobThread;
     }
@@ -142,7 +143,7 @@ public class XxlJobExecutor {
 
         // destory jobThreadRepository
         if (jobThreadRepository.size() > 0) {
-            for (Map.Entry<Integer, JobThread> item : jobThreadRepository.entrySet()) {
+            for (Map.Entry<Long, JobThread> item : jobThreadRepository.entrySet()) {
                 JobThread oldJobThread = removeJobThread(item.getKey(), "web container destroy and kill the job.");
                 // wait for job thread push result to callback queue
                 if (oldJobThread != null) {
@@ -189,8 +190,9 @@ public class XxlJobExecutor {
 
         // generate address
         if (address == null || address.trim().length() == 0) {
-            String ip_port_address = IpUtil.getIpPort(ip, port);   // registry-address：default use address to registry , otherwise use ip:port if address is null
-            address = "http://{ip_port}/".replace("{ip_port}", ip_port_address);
+            String ipPortAddress = IpUtil.getIpPort(ip, port);
+            // registry-address：default use address to registry , otherwise use ip:port if address is null
+            address = "http://{ip_port}/".replace("{ip_port}", ipPortAddress);
         }
 
         // accessToken

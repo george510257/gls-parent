@@ -137,7 +137,7 @@ public class UserController {
     @RequestMapping("/remove")
     @ResponseBody
     @PermissionLimit(adminuser = true)
-    public Result<String> remove(HttpServletRequest request, int id) {
+    public Result<String> remove(HttpServletRequest request, Long id) {
 
         // avoid opt login seft
         XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);

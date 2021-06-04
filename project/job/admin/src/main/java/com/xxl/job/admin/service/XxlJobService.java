@@ -24,7 +24,7 @@ public interface XxlJobService {
      * @param author
      * @return
      */
-    public Map<String, Object> pageList(int start, int length, int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
+    public Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
 
     /**
      * add job
@@ -49,7 +49,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public Result<String> remove(int id);
+    public Result<String> remove(Long id);
 
     /**
      * start job
@@ -57,7 +57,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public Result<String> start(int id);
+    public Result<String> start(Long id);
 
     /**
      * stop job
@@ -65,7 +65,7 @@ public interface XxlJobService {
      * @param id
      * @return
      */
-    public Result<String> stop(int id);
+    public Result<String> stop(Long id);
 
     /**
      * dashboard info

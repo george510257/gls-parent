@@ -9,7 +9,7 @@
 //import com.xxl.job.admin.core.util.I18nUtil;
 //import AdminApi;
 //import ExecutorApi;
-//import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
+//import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 //import com.xxl.rpc.remoting.invoker.XxlRpcInvokerFactory;
 //import com.xxl.rpc.remoting.invoker.call.CallType;
 //import com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
@@ -87,7 +87,7 @@
 //    // ---------------------- I18n ----------------------
 //
 //    private void initI18n(){
-//        for (ExecutorBlockStrategyEnum item:ExecutorBlockStrategyEnum.values()) {
+//        for (ExecutorBlockStrategy item:ExecutorBlockStrategy.values()) {
 //            item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
 //        }
 //    }

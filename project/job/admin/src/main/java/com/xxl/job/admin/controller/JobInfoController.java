@@ -1,6 +1,8 @@
 package com.xxl.job.admin.controller;
 
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
@@ -15,8 +17,6 @@ import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobGroupDao;
 import com.xxl.job.admin.service.LoginService;
 import com.xxl.job.admin.service.XxlJobService;
-import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
-import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class JobInfoController {
         return jobGroupList;
     }
 
-    public static void validPermission(HttpServletRequest request, int jobGroup) {
+    public static void validPermission(HttpServletRequest request, Long jobGroup) {
         XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
@@ -74,12 +74,12 @@ public class JobInfoController {
     }
 
     @RequestMapping
-    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") int jobGroup) {
+    public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") Long jobGroup) {
 
         // 枚举-字典
         model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());        // 路由策略-列表
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());                                // Glue类型-字典
-        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategyEnum.values());        // 阻塞处理策略-字典
+        model.addAttribute("GlueTypeEnum", GlueType.values());                                // Glue类型-字典
+        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
         model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());                        // 调度类型
         model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
 
@@ -102,7 +102,7 @@ public class JobInfoController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        int jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
+                                        Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
         return xxlJobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
     }
@@ -121,26 +121,26 @@ public class JobInfoController {
 
     @RequestMapping("/remove")
     @ResponseBody
-    public Result<String> remove(int id) {
+    public Result<String> remove(Long id) {
         return xxlJobService.remove(id);
     }
 
     @RequestMapping("/stop")
     @ResponseBody
-    public Result<String> pause(int id) {
+    public Result<String> pause(Long id) {
         return xxlJobService.stop(id);
     }
 
     @RequestMapping("/start")
     @ResponseBody
-    public Result<String> start(int id) {
+    public Result<String> start(Long id) {
         return xxlJobService.start(id);
     }
 
     @RequestMapping("/trigger")
     @ResponseBody
     //@PermissionLimit(limit = false)
-    public Result<String> triggerJob(int id, String executorParam, String addressList) {
+    public Result<String> triggerJob(Long id, String executorParam, String addressList) {
         // force cover job param
         if (executorParam == null) {
             executorParam = "";

@@ -1,5 +1,7 @@
 package com.xxl.job.admin.core.model;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -8,9 +10,10 @@ import java.util.List;
 /**
  * Created by xuxueli on 16/9/30.
  */
+@Data
 public class XxlJobGroup {
 
-    private int id;
+    private Long id;
     private String appname;
     private String title;
     private int addressType;        // 执行器地址类型：0=自动注册、1=手动录入
@@ -25,54 +28,6 @@ public class XxlJobGroup {
             registryList = new ArrayList<String>(Arrays.asList(addressList.split(",")));
         }
         return registryList;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAppname() {
-        return appname;
-    }
-
-    public void setAppname(String appname) {
-        this.appname = appname;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getAddressType() {
-        return addressType;
-    }
-
-    public void setAddressType(int addressType) {
-        this.addressType = addressType;
-    }
-
-    public String getAddressList() {
-        return addressList;
-    }
-
-    public void setAddressList(String addressList) {
-        this.addressList = addressList;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
 }

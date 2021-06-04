@@ -1,12 +1,12 @@
 package com.xxl.job.admin.controller;
 
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.enums.GlueType;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLogGlue;
 import com.xxl.job.admin.core.util.I18nUtil;
 import com.xxl.job.admin.dao.XxlJobInfoDao;
 import com.xxl.job.admin.dao.XxlJobLogGlueDao;
-import com.xxl.job.core.glue.GlueTypeEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,14 +32,14 @@ public class JobCodeController {
     private XxlJobLogGlueDao xxlJobLogGlueDao;
 
     @RequestMapping
-    public String index(HttpServletRequest request, Model model, int jobId) {
+    public String index(HttpServletRequest request, Model model, Long jobId) {
         XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
         List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
         }
-        if (GlueTypeEnum.BEAN == GlueTypeEnum.match(jobInfo.getGlueType())) {
+        if (GlueType.BEAN == jobInfo.getGlueType()) {
             throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
         }
 
@@ -47,7 +47,7 @@ public class JobCodeController {
         JobInfoController.validPermission(request, jobInfo.getJobGroup());
 
         // Glue类型-字典
-        model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
+        model.addAttribute("GlueTypeEnum", GlueType.values());
 
         model.addAttribute("jobInfo", jobInfo);
         model.addAttribute("jobLogGlues", jobLogGlues);
@@ -56,7 +56,7 @@ public class JobCodeController {
 
     @RequestMapping("/save")
     @ResponseBody
-    public Result<String> save(Model model, int id, String glueSource, String glueRemark) {
+    public Result<String> save(Model model, Long id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
             return new Result<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
@@ -72,7 +72,7 @@ public class JobCodeController {
         // update new code
         exists_jobInfo.setGlueSource(glueSource);
         exists_jobInfo.setGlueRemark(glueRemark);
-        exists_jobInfo.setGlueUpdatetime(new Date());
+        exists_jobInfo.setGlueUpdateTime(new Date());
 
         exists_jobInfo.setUpdateTime(new Date());
         xxlJobInfoDao.update(exists_jobInfo);

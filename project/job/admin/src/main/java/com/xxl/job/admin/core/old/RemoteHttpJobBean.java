@@ -24,7 +24,7 @@
 //
 //		// load jobId
 //		JobKey jobKey = context.getTrigger().getJobKey();
-//		Integer jobId = Integer.valueOf(jobKey.getName());
+//		Long jobId = Integer.valueOf(jobKey.getName());
 //
 //
 //	}
