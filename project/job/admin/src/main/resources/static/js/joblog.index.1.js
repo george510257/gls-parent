@@ -70,7 +70,7 @@ $(function () {
     });
 
     // init date tables
-    var logTable = $("#job_log_list").dataTable({
+    var logTable = $("#joblog_list").dataTable({
         "deferRender": true,
         "processing": true,
         "serverSide": true,
@@ -104,9 +104,9 @@ $(function () {
                     }
 
                     var temp = '';
-                    temp += I18n.job_log_field_executorAddress + '：' + (row.executorAddress ? row.executorAddress : '');
+                    temp += I18n.joblog_field_executorAddress + '：' + (row.executorAddress ? row.executorAddress : '');
                     temp += jobhandler;
-                    temp += '<br>' + I18n.job_info_field_executorparam + '：' + row.executorParam;
+                    temp += '<br>' + I18n.jobinfo_field_executorparam + '：' + row.executorParam;
 
                     return '<a class="logTips" href="javascript:;" >' + row.jobId + '<span style="display:none;">' + temp + '</span></a>';
                 }
@@ -154,11 +154,11 @@ $(function () {
                 "render": function (data, type, row) {
                     var html = data;
                     if (data == 200) {
-                        html = '<span style="color: green">' + I18n.job_log_handleCode_200 + '</span>';
+                        html = '<span style="color: green">' + I18n.joblog_handleCode_200 + '</span>';
                     } else if (data == 500) {
-                        html = '<span style="color: red">' + I18n.job_log_handleCode_500 + '</span>';
+                        html = '<span style="color: red">' + I18n.joblog_handleCode_500 + '</span>';
                     } else if (data == 502) {
-                        html = '<span style="color: red">' + I18n.job_log_handleCode_502 + '</span>';
+                        html = '<span style="color: red">' + I18n.joblog_handleCode_502 + '</span>';
                     } else if (data == 0) {
                         html = '';
                     }
@@ -181,16 +181,16 @@ $(function () {
                     return function () {
                         if (row.triggerCode == 200 || row.handleCode != 0) {
 
-                            /*var temp = '<a href="javascript:;" class="logDetail" _id="'+ row.id +'">'+ I18n.job_log_rolling_log +'</a>';
+                            /*var temp = '<a href="javascript:;" class="logDetail" _id="'+ row.id +'">'+ I18n.joblog_rolling_log +'</a>';
                             if(row.handleCode == 0){
-                                temp += '<br><a href="javascript:;" class="logKill" _id="'+ row.id +'" style="color: red;" >'+ I18n.job_log_kill_log +'</a>';
+                                temp += '<br><a href="javascript:;" class="logKill" _id="'+ row.id +'" style="color: red;" >'+ I18n.joblog_kill_log +'</a>';
                             }*/
                             //return temp;
 
                             var logKillDiv = '';
                             if (row.handleCode == 0) {
                                 logKillDiv = '       <li class="divider"></li>\n' +
-                                    '       <li><a href="javascript:void(0);" class="logKill" _id="' + row.id + '" >' + I18n.job_log_kill_log + '</a></li>\n';
+                                    '       <li><a href="javascript:void(0);" class="logKill" _id="' + row.id + '" >' + I18n.joblog_kill_log + '</a></li>\n';
                             }
 
                             var html = '<div class="btn-group">\n' +
@@ -200,7 +200,7 @@ $(function () {
                                 '       <span class="sr-only">Toggle Dropdown</span>\n' +
                                 '     </button>\n' +
                                 '     <ul class="dropdown-menu" role="menu" _id="' + row.id + '" >\n' +
-                                '       <li><a href="javascript:void(0);" class="logDetail" _id="' + row.id + '" >' + I18n.job_log_rolling_log + '</a></li>\n' +
+                                '       <li><a href="javascript:void(0);" class="logDetail" _id="' + row.id + '" >' + I18n.joblog_rolling_log + '</a></li>\n' +
                                 logKillDiv +
                                 '     </ul>\n' +
                                 '   </div>';
@@ -244,7 +244,7 @@ $(function () {
     });
 
     // logTips alert
-    $('#job_log_list').on('click', '.logTips', function () {
+    $('#joblog_list').on('click', '.logTips', function () {
         var msg = $(this).find('span').html();
         ComAlertTec.show(msg);
     });
@@ -255,7 +255,7 @@ $(function () {
     });
 
     // logDetail look
-    $('#job_log_list').on('click', '.logDetail', function () {
+    $('#joblog_list').on('click', '.logDetail', function () {
         var _id = $(this).attr('_id');
 
         window.open(base_url + '/joblog/logDetailPage?id=' + _id);
@@ -265,10 +265,10 @@ $(function () {
     /**
      * log Kill
      */
-    $('#job_log_list').on('click', '.logKill', function () {
+    $('#joblog_list').on('click', '.logKill', function () {
         var _id = $(this).attr('_id');
 
-        layer.confirm((I18n.system_ok + I18n.job_log_kill_log + '?'), {
+        layer.confirm((I18n.system_ok + I18n.joblog_kill_log + '?'), {
             icon: 3,
             title: I18n.system_tips,
             btn: [I18n.system_ok, I18n.system_cancel]
@@ -332,7 +332,7 @@ $(function () {
                 layer.open({
                     title: I18n.system_tips,
                     btn: [I18n.system_ok],
-                    content: (I18n.job_log_clean_log + I18n.system_success),
+                    content: (I18n.joblog_clean_log + I18n.system_success),
                     icon: '1',
                     end: function (layero, index) {
                         logTable.fnDraw();
@@ -342,7 +342,7 @@ $(function () {
                 layer.open({
                     title: I18n.system_tips,
                     btn: [I18n.system_ok],
-                    content: (data.msg || (I18n.job_log_clean_log + I18n.system_fail)),
+                    content: (data.msg || (I18n.joblog_clean_log + I18n.system_fail)),
                     icon: '2'
                 });
             }

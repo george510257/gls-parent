@@ -8,7 +8,7 @@
           href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <title>${I18n.admin_name}</title>
 </head>
-<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["glsjob_adminlte_settings"]?exists && "off" == cookieMap["glsjob_adminlte_settings"].value >sidebar-collapse</#if> ">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -80,13 +80,13 @@
                         <span class="info-box-icon"><i class="fa ion-ios-settings-strong"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">${I18n.job_dashboard_job_group_num}</span>
+                            <span class="info-box-text">${I18n.job_dashboard_jobgroup_num}</span>
                             <span class="info-box-number">${executorCount}</span>
 
                             <div class="progress">
                                 <div class="progress-bar" style="width: 100%"></div>
                             </div>
-                            <span class="progress-description">${I18n.job_dashboard_job_group_num_tip}</span>
+                            <span class="progress-description">${I18n.job_dashboard_jobgroup_num_tip}</span>
                         </div>
                     </div>
                 </div>

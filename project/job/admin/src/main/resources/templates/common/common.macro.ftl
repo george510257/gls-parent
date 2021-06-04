@@ -70,7 +70,7 @@
 <#macro commonHeader>
     <header class="main-header">
         <a href="${request.contextPath}/" class="logo">
-            <span class="logo-mini"><b>GLS</b></span>
+            <span class="logo-mini"><b>XXL</b></span>
             <span class="logo-lg"><b>${I18n.admin_name}</b></span>
         </a>
         <nav class="navbar navbar-static-top" role="navigation">
@@ -87,7 +87,7 @@
                     <#-- login user -->
                     <li class="dropdown">
                         <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            ${I18n.system_welcome} ${Request["GLS_JOB_LOGIN_IDENTITY"].username}
+                            ${I18n.system_welcome} ${Request["XXL_JOB_LOGIN_IDENTITY"].username}
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
@@ -145,13 +145,13 @@
                                 class="fa fa-circle-o text-aqua"></i><span>${I18n.job_dashboard_name}</span></a></li>
                 <li class="nav-click <#if pageName == "jobinfo">active</#if>"><a
                             href="${request.contextPath}/jobinfo"><i
-                                class="fa fa-circle-o text-yellow"></i><span>${I18n.job_info_name}</span></a></li>
+                                class="fa fa-circle-o text-yellow"></i><span>${I18n.jobinfo_name}</span></a></li>
                 <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i
-                                class="fa fa-circle-o text-green"></i><span>${I18n.job_log_name}</span></a></li>
-                <#if Request["GLS_JOB_LOGIN_IDENTITY"].role == 1>
+                                class="fa fa-circle-o text-green"></i><span>${I18n.joblog_name}</span></a></li>
+                <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>
                     <li class="nav-click <#if pageName == "jobgroup">active</#if>"><a
                                 href="${request.contextPath}/jobgroup"><i
-                                    class="fa fa-circle-o text-red"></i><span>${I18n.job_group_name}</span></a></li>
+                                    class="fa fa-circle-o text-red"></i><span>${I18n.jobgroup_name}</span></a></li>
                     <li class="nav-click <#if pageName == "user">active</#if>"><a href="${request.contextPath}/user"><i
                                     class="fa fa-circle-o text-purple"></i><span>${I18n.user_manage}</span></a></li>
                 </#if>
@@ -242,12 +242,12 @@
 
 <#macro commonFooter >
     <footer class="main-footer">
-        Powered by <b>GLS-JOB</b> ${I18n.admin_version}
+        Powered by <b>XXL-JOB</b> ${I18n.admin_version}
         <div class="pull-right hidden-xs">
             <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
                 <a href="https://www.xuxueli.com/" target="_blank">xuxueli</a>
                 &nbsp;
-                <a href="https://github.com/xuxueli/gls-job" target="_blank">github</a>
+                <a href="https://github.com/xuxueli/xxl-job" target="_blank">github</a>
             </strong><!-- All rights reserved. -->
         </div>
     </footer>

@@ -72,19 +72,19 @@ $(function () {
 
     // left menu status v: js + server + cookie
     $('.sidebar-toggle').click(function () {
-        var glsjob_adminlte_settings = $.cookie('glsjob_adminlte_settings');	// on=open，off=close
-        if ('off' == glsjob_adminlte_settings) {
-            glsjob_adminlte_settings = 'on';
+        var xxljob_adminlte_settings = $.cookie('xxljob_adminlte_settings');	// on=open，off=close
+        if ('off' == xxljob_adminlte_settings) {
+            xxljob_adminlte_settings = 'on';
         } else {
-            glsjob_adminlte_settings = 'off';
+            xxljob_adminlte_settings = 'off';
         }
-        $.cookie('glsjob_adminlte_settings', glsjob_adminlte_settings, {expires: 7});	//$.cookie('the_cookie', '', { expires: -1 });
+        $.cookie('xxljob_adminlte_settings', xxljob_adminlte_settings, {expires: 7});	//$.cookie('the_cookie', '', { expires: -1 });
     });
 
     // left menu status v1: js + cookie
     /*
-     var glsjob_adminlte_settings = $.cookie('glsjob_adminlte_settings');
-     if (glsjob_adminlte_settings == 'off') {
+     var xxljob_adminlte_settings = $.cookie('xxljob_adminlte_settings');
+     if (xxljob_adminlte_settings == 'off') {
          $('body').addClass('sidebar-collapse');
      }
      */

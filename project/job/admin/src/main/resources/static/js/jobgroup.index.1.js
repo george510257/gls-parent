@@ -1,7 +1,7 @@
 $(function () {
 
     // init date tables
-    var jobGroupTable = $("#job_group_list").dataTable({
+    var jobGroupTable = $("#jobgroup_list").dataTable({
         "deferRender": true,
         "processing": true,
         "serverSide": true,
@@ -41,9 +41,9 @@ $(function () {
                 "visible": true,
                 "render": function (data, type, row) {
                     if (row.addressType == 0) {
-                        return I18n.job_group_field_addressType_0;
+                        return I18n.jobgroup_field_addressType_0;
                     } else {
-                        return I18n.job_group_field_addressType_1;
+                        return I18n.jobgroup_field_addressType_1;
                     }
                 }
             },
@@ -119,7 +119,7 @@ $(function () {
     });
 
     // job registryinfo
-    $("#job_group_list").on('click', '.show_registryList', function () {
+    $("#jobgroup_list").on('click', '.show_registryList', function () {
         var id = $(this).attr("_id");
         var row = tableData['key' + id];
 
@@ -132,7 +132,7 @@ $(function () {
         html += '</div>';
 
         layer.open({
-            title: I18n.job_info_opt_registryinfo,
+            title: I18n.jobinfo_opt_registryinfo,
             btn: [I18n.system_ok],
             content: html
         });
@@ -141,10 +141,10 @@ $(function () {
 
 
     // opt_del
-    $("#job_group_list").on('click', '.opt_del', function () {
+    $("#jobgroup_list").on('click', '.opt_del', function () {
         var id = $(this).parents('ul').attr("_id");
 
-        layer.confirm((I18n.system_ok + I18n.job_group_del + '？'), {
+        layer.confirm((I18n.system_ok + I18n.jobgroup_del + '？'), {
             icon: 3,
             title: I18n.system_tips,
             btn: [I18n.system_ok, I18n.system_cancel]
@@ -161,7 +161,7 @@ $(function () {
                         layer.open({
                             title: I18n.system_tips,
                             btn: [I18n.system_ok],
-                            content: (I18n.job_group_del + I18n.system_success),
+                            content: (I18n.jobgroup_del + I18n.system_success),
                             icon: '1',
                             end: function (layero, index) {
                                 jobGroupTable.fnDraw();
@@ -171,7 +171,7 @@ $(function () {
                         layer.open({
                             title: I18n.system_tips,
                             btn: [I18n.system_ok],
-                            content: (data.msg || (I18n.job_group_del + I18n.system_fail)),
+                            content: (data.msg || (I18n.jobgroup_del + I18n.system_fail)),
                             icon: '2'
                         });
                     }
@@ -186,7 +186,7 @@ $(function () {
         var length = value.length;
         var valid = /^[a-z][a-zA-Z0-9-]*$/;
         return this.optional(element) || valid.test(value);
-    }, I18n.job_group_field_appname_limit);
+    }, I18n.jobgroup_field_appname_limit);
 
     $('.add').on('click', function () {
         $('#addModal').modal({backdrop: false, keyboard: false}).modal('show');
@@ -209,12 +209,12 @@ $(function () {
         messages: {
             appname: {
                 required: I18n.system_please_input + "AppName",
-                rangelength: I18n.job_group_field_appname_length,
-                myValid01: I18n.job_group_field_appname_limit
+                rangelength: I18n.jobgroup_field_appname_length,
+                myValid01: I18n.jobgroup_field_appname_limit
             },
             title: {
-                required: I18n.system_please_input + I18n.job_group_field_title,
-                rangelength: I18n.job_group_field_title_length
+                required: I18n.system_please_input + I18n.jobgroup_field_title,
+                rangelength: I18n.jobgroup_field_title_length
             }
         },
         highlight: function (element) {
@@ -272,7 +272,7 @@ $(function () {
     });
 
     // opt_edit
-    $("#job_group_list").on('click', '.opt_edit', function () {
+    $("#jobgroup_list").on('click', '.opt_edit', function () {
         var id = $(this).parents('ul').attr("_id");
         var row = tableData['key' + id];
 
@@ -306,12 +306,12 @@ $(function () {
         messages: {
             appname: {
                 required: I18n.system_please_input + "AppName",
-                rangelength: I18n.job_group_field_appname_length,
-                myValid01: I18n.job_group_field_appname_limit
+                rangelength: I18n.jobgroup_field_appname_length,
+                myValid01: I18n.jobgroup_field_appname_limit
             },
             title: {
-                required: I18n.system_please_input + I18n.job_group_field_title,
-                rangelength: I18n.job_group_field_title_length
+                required: I18n.system_please_input + I18n.jobgroup_field_title,
+                rangelength: I18n.jobgroup_field_title_length
             }
         },
         highlight: function (element) {
