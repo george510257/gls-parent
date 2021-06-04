@@ -1,0 +1,14 @@
+package com.gls.job.core.common.constants;
+
+/**
+ * @author george
+ */
+public interface JobConstants {
+
+    int HANDLE_CODE_SUCCESS = 200;
+    int HANDLE_CODE_FAIL = 500;
+    int HANDLE_CODE_TIMEOUT = 502;
+
+    int BEAT_TIMEOUT = 30;
+    int DEAD_TIMEOUT = BEAT_TIMEOUT * 3;
+}

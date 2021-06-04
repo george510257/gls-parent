@@ -3,9 +3,10 @@ package com.xxl.job.core.thread;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.xxl.job.core.context.XxlJobContext;
-import com.xxl.job.core.context.XxlJobHelper;
-import com.xxl.job.core.enums.RegistryConfig;
+import com.gls.job.core.common.constants.JobConstants;
+import com.gls.job.core.executor.context.JobContext;
+import com.gls.job.core.executor.context.JobContextHolder;
+import com.xxl.job.core.context.JobHelper;
 import com.xxl.job.core.executor.XxlJobExecutor;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.util.FileUtil;
@@ -119,7 +120,7 @@ public class TriggerCallbackThread {
 
                     }
                     try {
-                        TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
                     } catch (InterruptedException e) {
                         if (!toStop) {
                             logger.error(e.getMessage(), e);
@@ -193,13 +194,13 @@ public class TriggerCallbackThread {
     private void callbackLog(List<CallbackModel> callbackParamList, String logContent) {
         for (CallbackModel callbackParam : callbackParamList) {
             String logFileName = XxlJobFileAppender.makeLogFileName(callbackParam.getLogDateTime(), callbackParam.getLogId());
-            XxlJobContext.setXxlJobContext(new XxlJobContext(
-                    -1,
+            JobContextHolder.setJobContext(new JobContext(
+                    -1L,
                     null,
                     logFileName,
                     -1,
                     -1));
-            XxlJobHelper.log(logContent);
+            JobHelper.log(logContent);
         }
     }
 

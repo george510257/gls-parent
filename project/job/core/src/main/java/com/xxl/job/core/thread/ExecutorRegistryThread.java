@@ -4,7 +4,7 @@ import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.xxl.job.core.enums.RegistryConfig;
+import com.gls.job.core.common.constants.JobConstants;
 import com.xxl.job.core.executor.XxlJobExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class ExecutorRegistryThread {
 
                     try {
                         if (!toStop) {
-                            TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                            TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
                         }
                     } catch (InterruptedException e) {
                         if (!toStop) {

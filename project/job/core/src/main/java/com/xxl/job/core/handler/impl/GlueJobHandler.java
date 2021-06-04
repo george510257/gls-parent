@@ -1,6 +1,6 @@
 package com.xxl.job.core.handler.impl;
 
-import com.xxl.job.core.context.XxlJobHelper;
+import com.xxl.job.core.context.JobHelper;
 import com.xxl.job.core.handler.IJobHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class GlueJobHandler extends IJobHandler {
 
     @Override
     public void execute() throws Exception {
-        XxlJobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
+        JobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
     }
 

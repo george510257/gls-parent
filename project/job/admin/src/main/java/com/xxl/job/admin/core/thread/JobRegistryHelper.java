@@ -3,10 +3,10 @@ package com.xxl.job.admin.core.thread;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
+import com.gls.job.core.common.constants.JobConstants;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
-import com.xxl.job.core.enums.RegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
@@ -66,14 +66,14 @@ public class JobRegistryHelper {
                         if (groupList != null && !groupList.isEmpty()) {
 
                             // remove dead address (admin/executor)
-                            List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(RegistryConfig.DEAD_TIMEOUT, new Date());
+                            List<Integer> ids = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findDead(JobConstants.DEAD_TIMEOUT, new Date());
                             if (ids != null && ids.size() > 0) {
                                 XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().removeDead(ids);
                             }
 
                             // fresh online address (admin/executor)
                             HashMap<String, List<String>> appAddressMap = new HashMap<String, List<String>>();
-                            List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(RegistryConfig.DEAD_TIMEOUT, new Date());
+                            List<XxlJobRegistry> list = XxlJobAdminConfig.getAdminConfig().getXxlJobRegistryDao().findAll(JobConstants.DEAD_TIMEOUT, new Date());
                             if (list != null) {
                                 for (XxlJobRegistry item : list) {
                                     if (RegistryType.EXECUTOR.name().equals(item.getRegistryGroup())) {
@@ -116,7 +116,7 @@ public class JobRegistryHelper {
                         }
                     }
                     try {
-                        TimeUnit.SECONDS.sleep(RegistryConfig.BEAT_TIMEOUT);
+                        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
                     } catch (InterruptedException e) {
                         if (!toStop) {
                             logger.error(">>>>>>>>>>> xxl-job, job registry monitor thread error:{}", e);
