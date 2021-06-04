@@ -1,7 +1,7 @@
-package com.xxl.job.core.handler.impl;
+package com.gls.job.core.executor.handler.impl;
 
+import com.gls.job.core.executor.handler.JobHandler;
 import com.xxl.job.core.context.JobHelper;
-import com.xxl.job.core.handler.IJobHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,9 +13,9 @@ import java.util.Date;
  * @author xuxueli 2016-5-19 21:05:45
  */
 @AllArgsConstructor
-public class GlueJobHandler extends IJobHandler {
+public class GlueJobHandler implements JobHandler {
 
-    private final IJobHandler jobHandler;
+    private final JobHandler jobHandler;
 
     @Getter
     private final Date glueUpdateTime;

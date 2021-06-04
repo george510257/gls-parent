@@ -5,7 +5,7 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.common.constants.JobConstants;
-import com.xxl.job.core.executor.XxlJobExecutor;
+import com.xxl.job.core.executor.JobExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public class ExecutorRegistryThread {
             logger.warn(">>>>>>>>>>> xxl-job, executor registry config fail, appname is null.");
             return;
         }
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (JobExecutor.getAdminBizList() == null) {
             logger.warn(">>>>>>>>>>> xxl-job, executor registry config fail, adminAddresses is null.");
             return;
         }
@@ -46,7 +46,7 @@ public class ExecutorRegistryThread {
                 while (!toStop) {
                     try {
                         RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
-                        for (AdminApi adminApi : XxlJobExecutor.getAdminBizList()) {
+                        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
                             try {
                                 Result<String> registryResult = adminApi.registry(registryModel);
                                 if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
@@ -82,7 +82,7 @@ public class ExecutorRegistryThread {
                 // registry remove
                 try {
                     RegistryModel registryModel = new RegistryModel(RegistryType.EXECUTOR, appname, address);
-                    for (AdminApi adminApi : XxlJobExecutor.getAdminBizList()) {
+                    for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
                         try {
                             Result<String> registryResult = adminApi.registryRemove(registryModel);
                             if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {

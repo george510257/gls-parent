@@ -2,7 +2,7 @@ package com.xxl.job.core.executor;
 
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.api.rpc.client.AdminApiClient;
-import com.xxl.job.core.handler.IJobHandler;
+import com.gls.job.core.executor.handler.JobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.server.EmbedServer;
 import com.xxl.job.core.thread.JobLogFileCleanThread;
@@ -23,10 +23,10 @@ import java.util.concurrent.ConcurrentMap;
  * @author xuxueli
  * @date 2016/3/2 21:14
  */
-public class XxlJobExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobExecutor.class);
+public class JobExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
     // ---------------------- job handler repository ----------------------
-    private static final ConcurrentMap<String, IJobHandler> jobHandlerRepository = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, JobHandler> jobHandlerRepository = new ConcurrentHashMap<>();
     // ---------------------- job thread repository ----------------------
     private static final ConcurrentMap<Long, JobThread> jobThreadRepository = new ConcurrentHashMap<>();
     // ---------------------- admin-client (rpc invoker) ----------------------
@@ -47,16 +47,16 @@ public class XxlJobExecutor {
         return adminApiList;
     }
 
-    public static IJobHandler loadJobHandler(String name) {
+    public static JobHandler loadJobHandler(String name) {
         return jobHandlerRepository.get(name);
     }
 
-    public static IJobHandler registJobHandler(String name, IJobHandler jobHandler) {
-        logger.info(">>>>>>>>>>> xxl-job register jobhandler success, name:{}, jobHandler:{}", name, jobHandler);
+    public static JobHandler registJobHandler(String name, JobHandler jobHandler) {
+        logger.info(">>>>>>>>>>> xxl-job register jobHandler success, name:{}, jobHandler:{}", name, jobHandler);
         return jobHandlerRepository.put(name, jobHandler);
     }
 
-    public static JobThread registJobThread(Long jobId, IJobHandler handler, String removeOldReason) {
+    public static JobThread registJobThread(Long jobId, JobHandler handler, String removeOldReason) {
         JobThread newJobThread = new JobThread(jobId, handler);
         newJobThread.start();
         logger.info(">>>>>>>>>>> xxl-job regist JobThread success, jobId:{}, handler:{}", new Object[]{jobId, handler});

@@ -1,19 +1,19 @@
-package com.xxl.job.core.handler.annotation;
+package com.gls.job.core.executor.handler.annotation;
 
 import java.lang.annotation.*;
 
 /**
- * annotation for method jobhandler
+ * annotation for method jobHandler
  *
  * @author xuxueli 2019-12-11 20:50:13
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface XxlJob {
+public @interface Job {
 
     /**
-     * jobhandler name
+     * jobHandler name
      */
     String value();
 

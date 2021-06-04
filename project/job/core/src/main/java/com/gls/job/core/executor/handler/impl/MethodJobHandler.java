@@ -1,18 +1,18 @@
-package com.xxl.job.core.handler.impl;
+package com.gls.job.core.executor.handler.impl;
 
-import com.xxl.job.core.handler.IJobHandler;
+import com.gls.job.core.executor.handler.JobHandler;
 
 import java.lang.reflect.Method;
 
 /**
  * @author xuxueli 2019-12-11 21:12:18
  */
-public class MethodJobHandler extends IJobHandler {
+public class MethodJobHandler implements JobHandler {
 
     private final Object target;
     private final Method method;
-    private Method initMethod;
-    private Method destroyMethod;
+    private final Method initMethod;
+    private final Method destroyMethod;
 
     public MethodJobHandler(Object target, Method method, Method initMethod, Method destroyMethod) {
         this.target = target;
@@ -26,7 +26,8 @@ public class MethodJobHandler extends IJobHandler {
     public void execute() throws Exception {
         Class<?>[] paramTypes = method.getParameterTypes();
         if (paramTypes.length > 0) {
-            method.invoke(target, new Object[paramTypes.length]);       // method-param can not be primitive-types
+            method.invoke(target, new Object[paramTypes.length]);
+            // method-param can not be primitive-types
         } else {
             method.invoke(target);
         }

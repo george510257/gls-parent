@@ -7,7 +7,7 @@ import com.gls.job.core.common.constants.JobConstants;
 import com.gls.job.core.executor.context.JobContext;
 import com.gls.job.core.executor.context.JobContextHolder;
 import com.xxl.job.core.context.JobHelper;
-import com.xxl.job.core.executor.XxlJobExecutor;
+import com.xxl.job.core.executor.JobExecutor;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.util.FileUtil;
 import com.xxl.job.core.util.JdkSerializeTool;
@@ -52,7 +52,7 @@ public class TriggerCallbackThread {
     public void start() {
 
         // valid
-        if (XxlJobExecutor.getAdminBizList() == null) {
+        if (JobExecutor.getAdminBizList() == null) {
             logger.warn(">>>>>>>>>>> xxl-job, executor callback config fail, adminAddresses is null.");
             return;
         }
@@ -169,7 +169,7 @@ public class TriggerCallbackThread {
     private void doCallback(List<CallbackModel> callbackParamList) {
         boolean callbackRet = false;
         // callback, will retry if error
-        for (AdminApi adminApi : XxlJobExecutor.getAdminBizList()) {
+        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
             try {
                 Result<String> callbackResult = adminApi.callback(callbackParamList);
                 if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {

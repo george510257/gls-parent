@@ -4,11 +4,11 @@ import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.xxl.job.core.executor.XxlJobExecutor;
+import com.gls.job.core.executor.handler.JobHandler;
+import com.gls.job.core.executor.handler.impl.GlueJobHandler;
+import com.gls.job.core.executor.handler.impl.ScriptJobHandler;
+import com.xxl.job.core.executor.JobExecutor;
 import com.xxl.job.core.glue.GlueFactory;
-import com.xxl.job.core.handler.IJobHandler;
-import com.xxl.job.core.handler.impl.GlueJobHandler;
-import com.xxl.job.core.handler.impl.ScriptJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.thread.JobThread;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class ExecutorApiImpl implements ExecutorApi {
 
         // isRunningOrHasQueue
         boolean isRunningOrHasQueue = false;
-        JobThread jobThread = XxlJobExecutor.loadJobThread(idleBeatModel.getJobId());
+        JobThread jobThread = JobExecutor.loadJobThread(idleBeatModel.getJobId());
         if (jobThread != null && jobThread.isRunningOrHasQueue()) {
             isRunningOrHasQueue = true;
         }
@@ -44,21 +44,21 @@ public class ExecutorApiImpl implements ExecutorApi {
     @Override
     public Result<String> run(TriggerModel triggerModel) {
         // load old：jobHandler + jobThread
-        JobThread jobThread = XxlJobExecutor.loadJobThread(triggerModel.getJobId());
-        IJobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
+        JobThread jobThread = JobExecutor.loadJobThread(triggerModel.getJobId());
+        JobHandler jobHandler = jobThread != null ? jobThread.getHandler() : null;
         String removeOldReason = null;
 
         // valid：jobHandler + jobThread
         GlueType glueType = triggerModel.getGlueType();
         if (GlueType.BEAN == glueType) {
 
-            // new jobhandler
-            IJobHandler newJobHandler = XxlJobExecutor.loadJobHandler(triggerModel.getExecutorHandler());
+            // new jobHandler
+            JobHandler newJobHandler = JobExecutor.loadJobHandler(triggerModel.getExecutorHandler());
 
             // valid old jobThread
             if (jobThread != null && jobHandler != newJobHandler) {
                 // change handler, need kill old thread
-                removeOldReason = "change jobhandler or glue type, and terminate the old job thread.";
+                removeOldReason = "change jobHandler or glue type, and terminate the old job thread.";
 
                 jobThread = null;
                 jobHandler = null;
@@ -88,7 +88,7 @@ public class ExecutorApiImpl implements ExecutorApi {
             // valid handler
             if (jobHandler == null) {
                 try {
-                    IJobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
+                    JobHandler originJobHandler = GlueFactory.getInstance().loadNewInstance(triggerModel.getGlueSource());
                     jobHandler = new GlueJobHandler(originJobHandler, triggerModel.getGlueUpdateTime());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
@@ -137,7 +137,7 @@ public class ExecutorApiImpl implements ExecutorApi {
 
         // replace thread (new or exists invalid)
         if (jobThread == null) {
-            jobThread = XxlJobExecutor.registJobThread(triggerModel.getJobId(), jobHandler, removeOldReason);
+            jobThread = JobExecutor.registJobThread(triggerModel.getJobId(), jobHandler, removeOldReason);
         }
 
         // push data to queue
@@ -147,9 +147,9 @@ public class ExecutorApiImpl implements ExecutorApi {
     @Override
     public Result<String> kill(KillModel killModel) {
         // kill handlerThread, and create new one
-        JobThread jobThread = XxlJobExecutor.loadJobThread(killModel.getJobId());
+        JobThread jobThread = JobExecutor.loadJobThread(killModel.getJobId());
         if (jobThread != null) {
-            XxlJobExecutor.removeJobThread(killModel.getJobId(), "scheduling center kill job.");
+            JobExecutor.removeJobThread(killModel.getJobId(), "scheduling center kill job.");
             return Result.SUCCESS;
         }
 

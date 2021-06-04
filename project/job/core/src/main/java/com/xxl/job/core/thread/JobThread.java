@@ -6,9 +6,9 @@ import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.common.constants.JobConstants;
 import com.gls.job.core.executor.context.JobContext;
 import com.gls.job.core.executor.context.JobContextHolder;
+import com.gls.job.core.executor.handler.JobHandler;
 import com.xxl.job.core.context.JobHelper;
-import com.xxl.job.core.executor.XxlJobExecutor;
-import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.executor.JobExecutor;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class JobThread extends Thread {
     private static Logger logger = LoggerFactory.getLogger(JobThread.class);
 
     private Long jobId;
-    private IJobHandler handler;
+    private JobHandler handler;
     private LinkedBlockingQueue<TriggerModel> triggerQueue;
     private Set<Long> triggerLogIdSet;        // avoid repeat trigger for the same TRIGGER_LOG_ID
 
@@ -42,14 +42,14 @@ public class JobThread extends Thread {
     private boolean running = false;    // if running job
     private int idleTimes = 0;            // idel times
 
-    public JobThread(Long jobId, IJobHandler handler) {
+    public JobThread(Long jobId, JobHandler handler) {
         this.jobId = jobId;
         this.handler = handler;
         this.triggerQueue = new LinkedBlockingQueue<TriggerModel>();
         this.triggerLogIdSet = Collections.synchronizedSet(new HashSet<Long>());
     }
 
-    public IJobHandler getHandler() {
+    public JobHandler getHandler() {
         return handler;
     }
 
@@ -184,7 +184,7 @@ public class JobThread extends Thread {
                 } else {
                     if (idleTimes > 30) {
                         if (triggerQueue.size() == 0) {    // avoid concurrent trigger causes jobId-lost
-                            XxlJobExecutor.removeJobThread(jobId, "excutor idel times over limit.");
+                            JobExecutor.removeJobThread(jobId, "excutor idel times over limit.");
                         }
                     }
                 }

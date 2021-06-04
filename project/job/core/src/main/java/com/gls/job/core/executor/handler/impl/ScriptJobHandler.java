@@ -1,9 +1,9 @@
-package com.xxl.job.core.handler.impl;
+package com.gls.job.core.executor.handler.impl;
 
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.executor.context.JobContextHolder;
+import com.gls.job.core.executor.handler.JobHandler;
 import com.xxl.job.core.context.JobHelper;
-import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.util.ScriptUtil;
 
@@ -14,7 +14,7 @@ import java.util.Date;
  * @author xuxueli
  * @date 17/4/27
  */
-public class ScriptJobHandler extends IJobHandler {
+public class ScriptJobHandler implements JobHandler {
 
     private final Long jobId;
     private final Date glueUpdateTime;
