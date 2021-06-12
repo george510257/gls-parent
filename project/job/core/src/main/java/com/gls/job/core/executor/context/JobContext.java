@@ -45,11 +45,12 @@ public class JobContext {
      * 500 : fail
      * 502 : timeout
      */
-    private int handleCode;
+    private int handleCode = JobConstants.HANDLE_CODE_SUCCESS;
+    ;
     /**
      * handleMsg：The simple log msg of job execution
      */
-    private String handleMsg;
+    private String handleMsg = "";
 
     public JobContext(Long jobId, String jobParam, String jobLogFileName, int shardIndex, int shardTotal) {
         this.jobId = jobId;
@@ -57,9 +58,5 @@ public class JobContext {
         this.jobLogFileName = jobLogFileName;
         this.shardIndex = shardIndex;
         this.shardTotal = shardTotal;
-
-        this.handleCode = JobConstants.HANDLE_CODE_SUCCESS;
-        // default success
     }
-
 }

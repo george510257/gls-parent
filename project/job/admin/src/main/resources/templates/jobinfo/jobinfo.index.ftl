@@ -300,7 +300,7 @@
                     <textarea class="glueSource_java" style="display:none;">
 package com.xxl.job.service.handler;
 
-import com.xxl.job.core.context.JobHelper;
+import com.gls.job.core.executor.log.JobLogHelper;
 import com.xxl.job.core.handler.IJobHandler;
 
 public class DemoGlueJobHandler extends IJobHandler {

@@ -1,9 +1,9 @@
 package com.gls.job.core.executor.handler.impl;
 
 import com.gls.job.core.executor.handler.JobHandler;
-import com.xxl.job.core.context.JobHelper;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 
@@ -12,17 +12,17 @@ import java.util.Date;
  *
  * @author xuxueli 2016-5-19 21:05:45
  */
+@Slf4j
+@Data
 @AllArgsConstructor
 public class GlueJobHandler implements JobHandler {
 
     private final JobHandler jobHandler;
-
-    @Getter
     private final Date glueUpdateTime;
 
     @Override
     public void execute() throws Exception {
-        JobHelper.log("----------- glue.version:" + glueUpdateTime + " -----------");
+        log.info("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
     }
 
