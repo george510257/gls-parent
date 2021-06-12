@@ -2,11 +2,11 @@ package com.xxl.job.admin.core.thread;
 
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.util.DateUtil;
 import com.xxl.job.admin.core.complete.XxlJobCompleter;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.util.I18nUtil;
-import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

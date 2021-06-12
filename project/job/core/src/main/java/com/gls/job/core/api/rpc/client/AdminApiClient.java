@@ -4,7 +4,7 @@ import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.xxl.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.XxlJobRemotingUtil;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.gls.job.core.api.rpc.client;
 
 import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.xxl.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.XxlJobRemotingUtil;
 
 /**
  * admin api test
