@@ -27,11 +27,10 @@ public class CallbackRepositoryImpl implements CallbackRepository {
 
     @Resource
     private JobExecutorProperties jobExecutorProperties;
-    private final String baseFileName = jobExecutorProperties.getCallbackLogPath().concat("/gls-job-callback-{x}.log");
 
     @Override
     public void save(List<CallbackModel> callbackModels) {
-        String fileName = baseFileName.replace("{x}", String.valueOf(System.currentTimeMillis()));
+        String fileName = getBaseFileName().replace("{x}", String.valueOf(System.currentTimeMillis()));
         byte[] callbackModelsBytes = jsonRedisSerializer.serialize(callbackModels);
         try {
             IOUtils.write(callbackModelsBytes, new FileOutputStream(fileName));
@@ -53,5 +52,9 @@ public class CallbackRepositoryImpl implements CallbackRepository {
             }
         }
         return callbackModels;
+    }
+
+    private String getBaseFileName() {
+        return jobExecutorProperties.getCallbackLogPath().concat("/gls-job-callback-{x}.log");
     }
 }

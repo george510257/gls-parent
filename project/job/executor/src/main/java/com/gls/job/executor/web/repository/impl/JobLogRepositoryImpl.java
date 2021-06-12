@@ -27,7 +27,6 @@ public class JobLogRepositoryImpl implements JobLogRepository {
 
     @Resource
     private JobExecutorProperties jobExecutorProperties;
-    private final String baseFileName = jobExecutorProperties.getLogBasePath().concat("/{yyyy-MM-dd}/{logId}.log");
 
     @Override
     public void logFileClean(int logRetentionDays) {
@@ -58,7 +57,7 @@ public class JobLogRepositoryImpl implements JobLogRepository {
 
     @Override
     public String getLogFileName(Date logDateTime, Long logId) {
-        return baseFileName.replace("{yyyy-MM-dd}", DateUtil.formatDate(logDateTime)).replace("{logId}", logId.toString());
+        return getBaseFileName().replace("{yyyy-MM-dd}", DateUtil.formatDate(logDateTime)).replace("{logId}", logId.toString());
     }
 
     @Override
@@ -68,5 +67,9 @@ public class JobLogRepositoryImpl implements JobLogRepository {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    private String getBaseFileName() {
+        return jobExecutorProperties.getLogBasePath().concat("/{yyyy-MM-dd}/{logId}.log");
     }
 }

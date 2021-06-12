@@ -25,12 +25,10 @@ public class ScriptJobRepositoryImpl implements ScriptJobRepository {
     @Resource
     private JobExecutorProperties jobExecutorProperties;
 
-    private final String baseFileName = jobExecutorProperties.getGlueSrcPath().concat("/{jobId}_{updateTime}{suffix}");
-
     @Override
     public String saveScriptJob(Long jobId, Date glueUpdateTime, String glueSource, GlueType glueType) {
         deleteOldScriptJob(jobId);
-        String scriptFileName = baseFileName
+        String scriptFileName = getBaseFileName()
                 .replace("{jobId}", jobId.toString())
                 .replace("{updateTime}", glueUpdateTime.toString())
                 .replace("{suffix}", glueType.getSuffix());
@@ -45,10 +43,13 @@ public class ScriptJobRepositoryImpl implements ScriptJobRepository {
     private void deleteOldScriptJob(Long jobId) {
         List<String> fileNames = FileUtil.findFiles(jobExecutorProperties.getGlueSrcPath());
         fileNames.forEach(fileName -> {
-            if (fileName.startsWith(baseFileName.replace("{jobId}", jobId.toString()).replace("_{updateTime}{suffix}", ""))) {
+            if (fileName.startsWith(getBaseFileName().replace("{jobId}", jobId.toString()).replace("_{updateTime}{suffix}", ""))) {
                 FileUtil.deleteFile(fileName);
             }
         });
     }
 
+    private String getBaseFileName() {
+        return jobExecutorProperties.getGlueSrcPath().concat("/{jobId}_{updateTime}{suffix}");
+    }
 }

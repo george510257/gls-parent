@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -28,14 +28,21 @@ public class FileUtil {
     }
 
     public static List<String> findFiles(String filePath) {
-        return Arrays.stream(Objects.requireNonNull(new File(filePath).listFiles())).map(file -> {
-            try {
-                return file.getCanonicalPath();
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-            return null;
-        }).filter(StringUtils::hasText).collect(Collectors.toList());
+        log.info("filePath:{}", filePath);
+        File[] files = new File(filePath).listFiles();
+        if (files != null) {
+
+            return Arrays.stream(files).map(file -> {
+                try {
+                    return file.getCanonicalPath();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+                return null;
+            }).filter(StringUtils::hasText).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+
     }
 
     public static byte[] readFile(String fileName) {

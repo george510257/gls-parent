@@ -3,3 +3,11 @@ spring:
     name: gls-demo-job
 server:
   port: 8802
+
+gls:
+  job:
+    executor:
+      base-path: E:\data
+      callback-log-path: E:\data\callback
+      glue-src-path: E:\data\glue
+      log-base-path: E:\data\log
