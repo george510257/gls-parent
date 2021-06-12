@@ -22,16 +22,18 @@ public class JobLogCleanThread extends BaseThread {
 
     @Override
     protected void initExecute() throws Exception {
-
+        log.info(">>>>>>>>>>> xxl-job, executor JobLogCleanThread thread init.");
     }
 
     @Override
     protected void doExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor JobLogCleanThread thread doExecute.");
         jobLogService.logFileClean(jobExecutorProperties.getLogRetentionDays());
     }
 
     @Override
     protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor JobLogCleanThread thread sleep.");
         TimeUnit.DAYS.sleep(1);
     }
 

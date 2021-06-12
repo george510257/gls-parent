@@ -20,21 +20,23 @@ public class RetryCallbackThread extends BaseThread {
 
     @Override
     protected void initExecute() throws Exception {
-
+        log.info(">>>>>>>>>>> xxl-job, executor RetryCallbackThread thread init.");
     }
 
     @Override
     protected void doExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor RetryCallbackThread thread doExecute.");
         callbackService.retryCallback();
     }
 
     @Override
     protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor RetryCallbackThread thread sleep.");
         TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 
     @Override
     protected void destroyExecute() throws Exception {
-        log.info(">>>>>>>>>>> xxl-job, executor retry callback thread destroy.");
+        log.info(">>>>>>>>>>> xxl-job, executor RetryCallbackThread thread destroy.");
     }
 }

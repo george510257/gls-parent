@@ -21,4 +21,9 @@ public class DaemonHolder extends BaseHolder<String, Daemon<? extends BaseThread
         daemon.start();
         regist(key, daemon, reason);
     }
+
+    @Override
+    protected void delete(Daemon<? extends BaseThread> oldValue, String reason) {
+        oldValue.stop(reason);
+    }
 }

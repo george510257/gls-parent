@@ -3,6 +3,7 @@ package com.gls.job.executor.thread;
 import com.gls.job.core.common.base.BaseThread;
 import com.gls.job.core.common.constants.JobConstants;
 import com.gls.job.executor.web.service.RegistryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author george
  */
+@Slf4j
 @Component
 public class RegistryThread extends BaseThread {
     @Resource
@@ -18,21 +20,24 @@ public class RegistryThread extends BaseThread {
 
     @Override
     protected void initExecute() throws Exception {
-
+        log.info(">>>>>>>>>>> xxl-job, executor RegistryThread thread init.");
     }
 
     @Override
     protected void doExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor RegistryThread thread doExecute.");
         registryService.registry();
     }
 
     @Override
     protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> xxl-job, executor RegistryThread thread sleep.");
         TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 
     @Override
     protected void destroyExecute() throws Exception {
         registryService.registryRemove();
+        log.info(">>>>>>>>>>> xxl-job, executor RegistryThread thread destroy.");
     }
 }
