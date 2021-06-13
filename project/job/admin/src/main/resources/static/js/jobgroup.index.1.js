@@ -132,7 +132,7 @@ $(function () {
         html += '</div>';
 
         layer.open({
-            title: I18n.jobinfo_opt_registryinfo,
+            title: I18n.job_info_opt_registryinfo,
             btn: [I18n.system_ok],
             content: html
         });

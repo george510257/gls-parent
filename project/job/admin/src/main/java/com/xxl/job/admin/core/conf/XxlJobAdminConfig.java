@@ -1,6 +1,6 @@
 package com.xxl.job.admin.core.conf;
 
-import com.xxl.job.admin.core.alarm.JobAlarmer;
+import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import com.xxl.job.admin.dao.*;
 import org.springframework.beans.factory.DisposableBean;
@@ -58,7 +58,7 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
     @Resource
     private DataSource dataSource;
     @Resource
-    private JobAlarmer jobAlarmer;
+    private JobAlarmHolder jobAlarmHolder;
 
     public static XxlJobAdminConfig getAdminConfig() {
         return adminConfig;
@@ -141,8 +141,8 @@ public class XxlJobAdminConfig implements InitializingBean, DisposableBean {
         return dataSource;
     }
 
-    public JobAlarmer getJobAlarmer() {
-        return jobAlarmer;
+    public JobAlarmHolder getJobAlarmer() {
+        return jobAlarmHolder;
     }
 
 }

@@ -92,7 +92,7 @@ public class XxlJobScheduler {
 
     private void initI18n() {
         for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
-            item.setTitle(I18nUtil.getString("jobconf_block_".concat(item.name())));
+            item.setTitle(I18nUtil.getString("job_conf_block_".concat(item.name())));
         }
     }
 

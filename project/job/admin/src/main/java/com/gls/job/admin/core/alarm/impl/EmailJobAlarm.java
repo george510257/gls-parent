@@ -1,14 +1,13 @@
-package com.xxl.job.admin.core.alarm.impl;
+package com.gls.job.admin.core.alarm.impl;
 
+import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.core.api.model.Result;
-import com.xxl.job.admin.core.alarm.JobAlarm;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.util.I18nUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
@@ -23,25 +22,25 @@ import java.util.Set;
  *
  * @author xuxueli 2020-01-19
  */
+@Slf4j
 @Component
 public class EmailJobAlarm implements JobAlarm {
-    private static Logger logger = LoggerFactory.getLogger(EmailJobAlarm.class);
 
     /**
      * load email job alarm template
      *
      * @return
      */
-    private static final String loadEmailJobAlarmTemplate() {
-        String mailBodyTemplate = "<h5>" + I18nUtil.getString("jobconf_monitor_detail") + "：</span>" +
+    private String loadEmailJobAlarmTemplate() {
+        return "<h5>" + I18nUtil.getString("job_conf_monitor_detail") + "：</span>" +
                 "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
                 "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
                 "      <tr>\n" +
-                "         <td width=\"20%\" >" + I18nUtil.getString("jobinfo_field_jobgroup") + "</td>\n" +
-                "         <td width=\"10%\" >" + I18nUtil.getString("jobinfo_field_id") + "</td>\n" +
-                "         <td width=\"20%\" >" + I18nUtil.getString("jobinfo_field_jobdesc") + "</td>\n" +
-                "         <td width=\"10%\" >" + I18nUtil.getString("jobconf_monitor_alarm_title") + "</td>\n" +
-                "         <td width=\"40%\" >" + I18nUtil.getString("jobconf_monitor_alarm_content") + "</td>\n" +
+                "         <td width=\"20%\" >" + I18nUtil.getString("job_info_field_jobgroup") + "</td>\n" +
+                "         <td width=\"10%\" >" + I18nUtil.getString("job_info_field_id") + "</td>\n" +
+                "         <td width=\"20%\" >" + I18nUtil.getString("job_info_field_jobdesc") + "</td>\n" +
+                "         <td width=\"10%\" >" + I18nUtil.getString("job_conf_monitor_alarm_title") + "</td>\n" +
+                "         <td width=\"40%\" >" + I18nUtil.getString("job_conf_monitor_alarm_content") + "</td>\n" +
                 "      </tr>\n" +
                 "   </thead>\n" +
                 "   <tbody>\n" +
@@ -49,13 +48,11 @@ public class EmailJobAlarm implements JobAlarm {
                 "         <td>{0}</td>\n" +
                 "         <td>{1}</td>\n" +
                 "         <td>{2}</td>\n" +
-                "         <td>" + I18nUtil.getString("jobconf_monitor_alarm_type") + "</td>\n" +
+                "         <td>" + I18nUtil.getString("job_conf_monitor_alarm_type") + "</td>\n" +
                 "         <td>{3}</td>\n" +
                 "      </tr>\n" +
                 "   </tbody>\n" +
                 "</table>";
-
-        return mailBodyTemplate;
     }
 
     /**
@@ -63,6 +60,7 @@ public class EmailJobAlarm implements JobAlarm {
      *
      * @param jobLog
      */
+    @Override
     public boolean doAlarm(XxlJobInfo info, XxlJobLog jobLog) {
         boolean alarmResult = true;
 
@@ -81,14 +79,14 @@ public class EmailJobAlarm implements JobAlarm {
             // email info
             XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(info.getJobGroup());
             String personal = I18nUtil.getString("admin_name_full");
-            String title = I18nUtil.getString("jobconf_monitor");
+            String title = I18nUtil.getString("job_conf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
                     group != null ? group.getTitle() : "null",
                     info.getId(),
                     info.getJobDesc(),
                     alarmContent);
 
-            Set<String> emailSet = new HashSet<String>(Arrays.asList(info.getAlarmEmail().split(",")));
+            Set<String> emailSet = new HashSet<>(Arrays.asList(info.getAlarmEmail().split(",")));
             for (String email : emailSet) {
 
                 // make mail
@@ -103,7 +101,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     XxlJobAdminConfig.getAdminConfig().getMailSender().send(mimeMessage);
                 } catch (Exception e) {
-                    logger.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    log.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 
                     alarmResult = false;
                 }

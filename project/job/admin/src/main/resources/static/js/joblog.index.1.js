@@ -106,7 +106,7 @@ $(function () {
                     var temp = '';
                     temp += I18n.joblog_field_executorAddress + '：' + (row.executorAddress ? row.executorAddress : '');
                     temp += jobHandler;
-                    temp += '<br>' + I18n.jobinfo_field_executorparam + '：' + row.executorParam;
+                    temp += '<br>' + I18n.job_info_field_executorparam + '：' + row.executorParam;
 
                     return '<a class="logTips" href="javascript:;" >' + row.jobId + '<span style="display:none;">' + temp + '</span></a>';
                 }

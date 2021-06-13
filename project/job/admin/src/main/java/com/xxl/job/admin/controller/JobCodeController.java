@@ -37,10 +37,10 @@ public class JobCodeController {
         List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            throw new RuntimeException(I18nUtil.getString("job_info_glue_jobid_unvalid"));
         }
         if (GlueType.BEAN == jobInfo.getGlueType()) {
-            throw new RuntimeException(I18nUtil.getString("jobinfo_glue_gluetype_unvalid"));
+            throw new RuntimeException(I18nUtil.getString("job_info_glue_gluetype_unvalid"));
         }
 
         // valid permission
@@ -59,14 +59,14 @@ public class JobCodeController {
     public Result<String> save(Model model, Long id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
-            return new Result<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("jobinfo_glue_remark")));
+            return new Result<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_glue_remark")));
         }
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_remark_limit"));
+            return new Result<String>(500, I18nUtil.getString("job_info_glue_remark_limit"));
         }
         XxlJobInfo exists_jobInfo = xxlJobInfoDao.loadById(id);
         if (exists_jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("job_info_glue_jobid_unvalid"));
         }
 
         // update new code

@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobinfo_field_jobgroup}</span>
+                        <span class="input-group-addon">${I18n.job_info_field_jobgroup}</span>
                         <select class="form-control" id="jobGroup"
                                 paramVal="<#if jobInfo?exists>${jobInfo.jobGroup}</#if>">
                             <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobinfo_job}</span>
+                        <span class="input-group-addon">${I18n.job_info_job}</span>
                         <select class="form-control" id="jobId" paramVal="<#if jobInfo?exists>${jobInfo.id}</#if>">
                             <option value="0">${I18n.system_all}</option>
                         </select>
@@ -89,7 +89,7 @@
                             <table id="joblog_list" class="table table-bordered table-striped display" width="100%">
                                 <thead>
                                 <tr>
-                                    <th name="jobId">${I18n.jobinfo_field_id}</th>
+                                    <th name="jobId">${I18n.job_info_field_id}</th>
                                     <th name="jobGroup">jobGroup</th>
                                     <#--<th name="executorAddress" >执行器地址</th>
                                     <th name="glueType" >运行模式</th>
@@ -126,7 +126,7 @@
             <div class="modal-body">
                 <form class="form-horizontal form" role="form">
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">${I18n.jobinfo_field_jobgroup}：</label>
+                        <label class="col-sm-3 control-label">${I18n.job_info_field_jobgroup}：</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control jobGroupText" readonly>
                             <input type="hidden" name="jobGroup">
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">${I18n.jobinfo_job}：</label>
+                        <label class="col-sm-3 control-label">${I18n.job_info_job}：</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control jobIdText" readonly>
                             <input type="hidden" name="jobId">

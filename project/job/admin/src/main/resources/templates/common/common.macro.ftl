@@ -145,7 +145,7 @@
                                 class="fa fa-circle-o text-aqua"></i><span>${I18n.job_dashboard_name}</span></a></li>
                 <li class="nav-click <#if pageName == "jobinfo">active</#if>"><a
                             href="${request.contextPath}/jobinfo"><i
-                                class="fa fa-circle-o text-yellow"></i><span>${I18n.jobinfo_name}</span></a></li>
+                                class="fa fa-circle-o text-yellow"></i><span>${I18n.job_info_name}</span></a></li>
                 <li class="nav-click <#if pageName == "joblog">active</#if>"><a href="${request.contextPath}/joblog"><i
                                 class="fa fa-circle-o text-green"></i><span>${I18n.joblog_name}</span></a></li>
                 <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>

@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +31,10 @@ public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBe
 
     public V load(K key) {
         return map.get(key);
+    }
+
+    public List<V> loadAll() {
+        return new ArrayList<>(map.values());
     }
 
     public V remove(K key, String reason) {

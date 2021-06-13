@@ -65,7 +65,7 @@ public class JobLogController {
         if (jobId > 0) {
             XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
             if (jobInfo == null) {
-                throw new RuntimeException(I18nUtil.getString("jobinfo_field_id") + I18nUtil.getString("system_unvalid"));
+                throw new RuntimeException(I18nUtil.getString("job_info_field_id") + I18nUtil.getString("system_unvalid"));
             }
 
             model.addAttribute("jobInfo", jobInfo);
@@ -164,7 +164,7 @@ public class JobLogController {
         XxlJobLog log = xxlJobLogDao.load(id);
         XxlJobInfo jobInfo = xxlJobInfoDao.loadById(log.getJobId());
         if (jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("jobinfo_glue_jobid_unvalid"));
+            return new Result<String>(500, I18nUtil.getString("job_info_glue_jobid_unvalid"));
         }
         if (Result.SUCCESS_CODE != log.getTriggerCode()) {
             return new Result<String>(500, I18nUtil.getString("joblog_kill_log_limit"));

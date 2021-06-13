@@ -49,7 +49,7 @@
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                               aria-expanded="false">${I18n.jobinfo_glue_rollback} <span class="caret"></span></a>
+                               aria-expanded="false">${I18n.job_info_glue_rollback} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li <#if jobLogGlues?exists && jobLogGlues?size gt 0 >style="display: none;"</#if> >
                                     <a href="javascript:;" class="source_version" version="version_now"
@@ -109,10 +109,10 @@
             <div class="modal-body">
                 <div class="form-horizontal form" role="form">
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-2 control-label">${I18n.jobinfo_glue_remark}<font
+                        <label for="lastname" class="col-sm-2 control-label">${I18n.job_info_glue_remark}<font
                                     color="red">*</font></label>
                         <div class="col-sm-10"><input type="text" class="form-control" id="glueRemark"
-                                                      placeholder="${I18n.system_please_input}${I18n.jobinfo_glue_remark}"
+                                                      placeholder="${I18n.system_please_input}${I18n.job_info_glue_remark}"
                                                       maxlength="64"></div>
                     </div>
                     <hr>

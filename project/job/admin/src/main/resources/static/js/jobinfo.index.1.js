@@ -113,15 +113,15 @@ $(function () {
                         // status
                         var start_stop_div = "";
                         if (1 == row.triggerStatus) {
-                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_pause" >' + I18n.jobinfo_opt_stop + '</a></li>\n';
+                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_pause" >' + I18n.job_info_opt_stop + '</a></li>\n';
                         } else {
-                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_resume" >' + I18n.jobinfo_opt_start + '</a></li>\n';
+                            start_stop_div = '<li><a href="javascript:void(0);" class="job_operate" _type="job_resume" >' + I18n.job_info_opt_start + '</a></li>\n';
                         }
 
                         // job_next_time_html
                         var job_next_time_html = '';
                         if (row.scheduleType == 'CRON' || row.scheduleType == 'FIX_RATE') {
-                            job_next_time_html = '<li><a href="javascript:void(0);" class="job_next_time" >' + I18n.jobinfo_opt_next_time + '</a></li>\n';
+                            job_next_time_html = '<li><a href="javascript:void(0);" class="job_next_time" >' + I18n.job_info_opt_next_time + '</a></li>\n';
                         }
 
                         // log url
@@ -146,9 +146,9 @@ $(function () {
                             '       <span class="sr-only">Toggle Dropdown</span>\n' +
                             '     </button>\n' +
                             '     <ul class="dropdown-menu" role="menu" _id="' + row.id + '" >\n' +
-                            '       <li><a href="javascript:void(0);" class="job_trigger" >' + I18n.jobinfo_opt_run + '</a></li>\n' +
-                            '       <li><a href="' + logHref + '">' + I18n.jobinfo_opt_log + '</a></li>\n' +
-                            '       <li><a href="javascript:void(0);" class="job_registryinfo" >' + I18n.jobinfo_opt_registryinfo + '</a></li>\n' +
+                            '       <li><a href="javascript:void(0);" class="job_trigger" >' + I18n.job_info_opt_run + '</a></li>\n' +
+                            '       <li><a href="' + logHref + '">' + I18n.job_info_opt_log + '</a></li>\n' +
+                            '       <li><a href="javascript:void(0);" class="job_registryinfo" >' + I18n.job_info_opt_registryinfo + '</a></li>\n' +
                             job_next_time_html +
                             '       <li class="divider"></li>\n' +
                             codeBtn +
@@ -213,11 +213,11 @@ $(function () {
 
         var type = $(this).attr("_type");
         if ("job_pause" == type) {
-            typeName = I18n.jobinfo_opt_stop;
+            typeName = I18n.job_info_opt_stop;
             url = base_url + "/jobinfo/stop";
             needFresh = true;
         } else if ("job_resume" == type) {
-            typeName = I18n.jobinfo_opt_start;
+            typeName = I18n.job_info_opt_start;
             url = base_url + "/jobinfo/start";
             needFresh = true;
         } else if ("job_del" == type) {
@@ -283,9 +283,9 @@ $(function () {
                 if (data.code == 200) {
                     $('#jobTriggerModal').modal('hide');
 
-                    layer.msg(I18n.jobinfo_opt_run + I18n.system_success);
+                    layer.msg(I18n.job_info_opt_run + I18n.system_success);
                 } else {
-                    layer.msg(data.msg || I18n.jobinfo_opt_run + I18n.system_fail);
+                    layer.msg(data.msg || I18n.job_info_opt_run + I18n.system_fail);
                 }
             }
         });
@@ -320,7 +320,7 @@ $(function () {
                 html += '</div>';
 
                 layer.open({
-                    title: I18n.jobinfo_opt_registryinfo,
+                    title: I18n.job_info_opt_registryinfo,
                     btn: [I18n.system_ok],
                     content: html
                 });
@@ -347,7 +347,7 @@ $(function () {
 
                 if (data.code != 200) {
                     layer.open({
-                        title: I18n.jobinfo_opt_next_time,
+                        title: I18n.job_info_opt_next_time,
                         btn: [I18n.system_ok],
                         content: data.msg
                     });
@@ -361,7 +361,7 @@ $(function () {
                     html += '</center>';
 
                     layer.open({
-                        title: I18n.jobinfo_opt_next_time,
+                        title: I18n.job_info_opt_next_time,
                         btn: [I18n.system_ok],
                         content: html
                     });
@@ -408,10 +408,10 @@ $(function () {
         },
         messages: {
             jobDesc: {
-                required: I18n.system_please_input + I18n.jobinfo_field_jobdesc
+                required: I18n.system_please_input + I18n.job_info_field_jobdesc
             },
             author: {
-                required: I18n.system_please_input + I18n.jobinfo_field_author
+                required: I18n.system_please_input + I18n.job_info_field_author
             }/*,
             executorTimeout : {
                 digits: I18n.system_please_input + I18n.system_digits
@@ -596,10 +596,10 @@ $(function () {
         },
         messages: {
             jobDesc: {
-                required: I18n.system_please_input + I18n.jobinfo_field_jobdesc
+                required: I18n.system_please_input + I18n.job_info_field_jobdesc
             },
             author: {
-                required: I18n.system_please_input + I18n.jobinfo_field_author
+                required: I18n.system_please_input + I18n.job_info_field_author
             }
         },
         highlight: function (element) {
