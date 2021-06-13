@@ -1,11 +1,11 @@
 package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.job.admin.core.alarm.JobAlarm;
+import com.gls.job.admin.web.model.XxlJobGroup;
+import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.XxlJobLog;
 import com.gls.job.core.api.model.Result;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import com.xxl.job.admin.core.model.XxlJobGroup;
-import com.xxl.job.admin.core.model.XxlJobInfo;
-import com.xxl.job.admin.core.model.XxlJobLog;
 import com.xxl.job.admin.core.util.I18nUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.MimeMessageHelper;

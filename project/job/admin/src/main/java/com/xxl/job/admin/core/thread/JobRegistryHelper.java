@@ -1,12 +1,12 @@
 package com.xxl.job.admin.core.thread;
 
+import com.gls.job.admin.web.model.XxlJobGroup;
+import com.gls.job.admin.web.model.XxlJobRegistry;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import com.xxl.job.admin.core.model.XxlJobGroup;
-import com.xxl.job.admin.core.model.XxlJobRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
