@@ -25,6 +25,8 @@ public class JobTriggerPoolHelper {
     private ThreadPoolExecutor slowTriggerPool = null;
     // job timeout count
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
+
+    @Resource
     private JobTriggerService jobTriggerService;
     @Resource
     private JobAdminProperties jobAdminProperties;

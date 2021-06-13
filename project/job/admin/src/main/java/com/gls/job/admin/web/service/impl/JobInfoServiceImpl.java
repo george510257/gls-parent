@@ -85,7 +85,7 @@ public class JobInfoServiceImpl implements JobInfoService {
                 return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type")));
             }
             try {
-                int fixSecond = Integer.valueOf(jobInfo.getScheduleConf());
+                int fixSecond = Integer.parseInt(jobInfo.getScheduleConf());
                 if (fixSecond < 1) {
                     return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
                 }
@@ -134,13 +134,13 @@ public class JobInfoServiceImpl implements JobInfoService {
             }
 
             // join , avoid "xxx,,"
-            String temp = "";
+            StringBuilder temp = new StringBuilder();
             for (String item : childJobIds) {
-                temp += item + ",";
+                temp.append(item).append(",");
             }
-            temp = temp.substring(0, temp.length() - 1);
+            temp = new StringBuilder(temp.substring(0, temp.length() - 1));
 
-            jobInfo.setChildJobId(temp);
+            jobInfo.setChildJobId(temp.toString());
         }
 
         // add in db
@@ -157,7 +157,7 @@ public class JobInfoServiceImpl implements JobInfoService {
 
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            int result = Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -189,7 +189,7 @@ public class JobInfoServiceImpl implements JobInfoService {
                 return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
             }
             try {
-                int fixSecond = Integer.valueOf(jobInfo.getScheduleConf());
+                int fixSecond = Integer.parseInt(jobInfo.getScheduleConf());
                 if (fixSecond < 1) {
                     return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
                 }
@@ -226,13 +226,13 @@ public class JobInfoServiceImpl implements JobInfoService {
             }
 
             // join , avoid "xxx,,"
-            String temp = "";
+            StringBuilder temp = new StringBuilder();
             for (String item : childJobIds) {
-                temp += item + ",";
+                temp.append(item).append(",");
             }
-            temp = temp.substring(0, temp.length() - 1);
+            temp = new StringBuilder(temp.substring(0, temp.length() - 1));
 
-            jobInfo.setChildJobId(temp);
+            jobInfo.setChildJobId(temp.toString());
         }
 
         // group valid
