@@ -1,8 +1,12 @@
-package com.xxl.job.admin.core.trigger;
+package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
-import com.gls.job.admin.core.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.core.route.ExecutorRouterHolder;
+import com.gls.job.admin.web.dao.XxlJobGroupDao;
+import com.gls.job.admin.web.dao.XxlJobInfoDao;
+import com.gls.job.admin.web.dao.XxlJobLogDao;
 import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobInfo;
 import com.gls.job.admin.web.model.XxlJobLog;
@@ -12,9 +16,6 @@ import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
-import com.xxl.job.admin.core.util.I18nUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +32,17 @@ import java.util.Date;
 @Component
 public class XxlJobTrigger {
     @Resource
+    public I18nHelper i18nHelper;
+    @Resource
     private XxlJobScheduler xxlJobScheduler;
     @Resource
     private ExecutorRouterHolder executorRouterHolder;
+    @Resource
+    private XxlJobLogDao xxlJobLogDao;
+    @Resource
+    private XxlJobInfoDao xxlJobInfoDao;
+    @Resource
+    private XxlJobGroupDao xxlJobGroupDao;
 
     /**
      * trigger job
@@ -49,14 +58,14 @@ public class XxlJobTrigger {
      *                              not null: cover
      */
     public void trigger(Long jobId,
-                        TriggerTypeEnum triggerType,
+                        TriggerType triggerType,
                         int failRetryCount,
                         String executorShardingParam,
                         String executorParam,
                         String addressList) {
 
         // load data
-        XxlJobInfo jobInfo = XxlJobAdminConfig.getAdminConfig().getXxlJobInfoDao().loadById(jobId);
+        XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
         if (jobInfo == null) {
             log.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -65,7 +74,7 @@ public class XxlJobTrigger {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
-        XxlJobGroup group = XxlJobAdminConfig.getAdminConfig().getXxlJobGroupDao().load(jobInfo.getJobGroup());
+        XxlJobGroup group = xxlJobGroupDao.load(jobInfo.getJobGroup());
 
         // cover addressList
         if (addressList != null && addressList.trim().length() > 0) {
@@ -115,7 +124,7 @@ public class XxlJobTrigger {
      * @param index               sharding index
      * @param total               sharding index
      */
-    private void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerTypeEnum triggerType, int index, int total) {
+    private void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
 
         // param
         ExecutorBlockStrategy blockStrategy = jobInfo.getExecutorBlockStrategy();
@@ -129,7 +138,7 @@ public class XxlJobTrigger {
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
-        XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().save(jobLog);
+        xxlJobLogDao.save(jobLog);
         log.debug(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
@@ -161,7 +170,7 @@ public class XxlJobTrigger {
                 address = executorRouterHolder.load(executorRouteStrategy.getRouterKey()).route(triggerModel, group.getRegistryList());
             }
         } else {
-            routeAddressResult = new Result<>(Result.FAIL_CODE, I18nUtil.getString("job_conf_trigger_address_empty"));
+            routeAddressResult = new Result<>(Result.FAIL_CODE, i18nHelper.getString("job_conf_trigger_address_empty"));
         }
 
         // 4、trigger remote executor
@@ -174,20 +183,20 @@ public class XxlJobTrigger {
 
         // 5、collection trigger info
         StringBuilder triggerMsgSb = new StringBuilder();
-        triggerMsgSb.append(I18nUtil.getString("job_conf_trigger_type")).append("：").append(triggerType.getTitle());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_conf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_conf_trigger_exe_regtype")).append("：")
-                .append((group.getAddressType() == 0) ? I18nUtil.getString("jobgroup_field_addressType_0") : I18nUtil.getString("jobgroup_field_addressType_1"));
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_conf_trigger_exe_regaddress")).append("：").append(group.getRegistryList());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_executorRouteStrategy")).append("：").append(executorRouteStrategy.getTitle());
+        triggerMsgSb.append(i18nHelper.getString("job_conf_trigger_type")).append("：").append(triggerType.getTitle());
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_exe_regtype")).append("：")
+                .append((group.getAddressType() == 0) ? i18nHelper.getString("jobgroup_field_addressType_0") : i18nHelper.getString("jobgroup_field_addressType_1"));
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_exe_regaddress")).append("：").append(group.getRegistryList());
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_info_field_executorRouteStrategy")).append("：").append(executorRouteStrategy.getTitle());
         if (shardingParam != null) {
             triggerMsgSb.append("(").append(shardingParam).append(")");
         }
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_executorBlockStrategy")).append("：").append(blockStrategy.getTitle());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_timeout")).append("：").append(jobInfo.getExecutorTimeout());
-        triggerMsgSb.append("<br>").append(I18nUtil.getString("job_info_field_executorFailRetryCount")).append("：").append(finalFailRetryCount);
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_info_field_executorBlockStrategy")).append("：").append(blockStrategy.getTitle());
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_info_field_timeout")).append("：").append(jobInfo.getExecutorTimeout());
+        triggerMsgSb.append("<br>").append(i18nHelper.getString("job_info_field_executorFailRetryCount")).append("：").append(finalFailRetryCount);
 
-        triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>").append(I18nUtil.getString("job_conf_trigger_run")).append("<<<<<<<<<<< </span><br>")
+        triggerMsgSb.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>").append(i18nHelper.getString("job_conf_trigger_run")).append("<<<<<<<<<<< </span><br>")
                 .append((routeAddressResult != null && routeAddressResult.getMsg() != null) ? routeAddressResult.getMsg() + "<br><br>" : "").append(triggerResult.getMsg() != null ? triggerResult.getMsg() : "");
 
         // 6、save log trigger-info
@@ -199,7 +208,7 @@ public class XxlJobTrigger {
         //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
-        XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);
+        xxlJobLogDao.updateTriggerInfo(jobLog);
 
         log.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());
     }
@@ -221,7 +230,7 @@ public class XxlJobTrigger {
             runResult = new Result<>(Result.FAIL_CODE, ThrowableUtil.toString(e));
         }
 
-        String runResultStr = I18nUtil.getString("job_conf_trigger_run") + "：" + "<br>address：" + address +
+        String runResultStr = i18nHelper.getString("job_conf_trigger_run") + "：" + "<br>address：" + address +
                 "<br>code：" + runResult.getCode() +
                 "<br>msg：" + runResult.getMsg();
         runResult.setMsg(runResultStr);

@@ -3,7 +3,8 @@ package com.gls.job.admin.web.controller;
 import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
 import com.gls.job.admin.core.enums.MisfireStrategy;
 import com.gls.job.admin.core.enums.ScheduleType;
-import com.gls.job.admin.core.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobInfo;
@@ -17,7 +18,6 @@ import com.gls.job.core.util.DateUtil;
 import com.xxl.job.admin.core.exception.XxlJobException;
 import com.xxl.job.admin.core.thread.JobScheduleHelper;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -44,8 +44,10 @@ public class JobInfoController {
     private XxlJobGroupDao xxlJobGroupDao;
     @Resource
     private XxlJobService xxlJobService;
+    @Resource
+    private I18nHelper i18nHelper;
 
-    public static List<XxlJobGroup> filterJobGroupByRole(HttpServletRequest request, List<XxlJobGroup> jobGroupList_all) {
+    public List<XxlJobGroup> filterJobGroupByRole(HttpServletRequest request, List<XxlJobGroup> jobGroupList_all) {
         List<XxlJobGroup> jobGroupList = new ArrayList<>();
         if (jobGroupList_all != null && jobGroupList_all.size() > 0) {
             XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
@@ -66,10 +68,10 @@ public class JobInfoController {
         return jobGroupList;
     }
 
-    public static void validPermission(HttpServletRequest request, Long jobGroup) {
+    public void validPermission(HttpServletRequest request, Long jobGroup) {
         XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
-            throw new RuntimeException(I18nUtil.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
+            throw new RuntimeException(i18nHelper.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
         }
     }
 
@@ -89,7 +91,7 @@ public class JobInfoController {
         // filter group
         List<XxlJobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
+            throw new XxlJobException(i18nHelper.getString("jobgroup_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -146,7 +148,7 @@ public class JobInfoController {
             executorParam = "";
         }
 
-        JobTriggerPoolHelper.trigger(id, TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
+        JobTriggerPoolHelper.trigger(id, TriggerType.MANUAL, -1, null, executorParam, addressList);
         return Result.SUCCESS;
     }
 
@@ -171,7 +173,7 @@ public class JobInfoController {
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new Result<List<String>>(Result.FAIL_CODE, (I18nUtil.getString("schedule_type") + I18nUtil.getString("system_unvalid")) + e.getMessage());
+            return new Result<List<String>>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")) + e.getMessage());
         }
         return new Result<List<String>>(result);
 

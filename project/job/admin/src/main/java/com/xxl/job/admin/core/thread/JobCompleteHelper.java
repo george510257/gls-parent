@@ -1,15 +1,16 @@
 package com.xxl.job.admin.core.thread;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
+import com.gls.job.admin.web.dao.XxlJobLogDao;
 import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.service.XxlJobCompleter;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.util.DateUtil;
-import com.xxl.job.admin.core.complete.XxlJobCompleter;
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
@@ -28,6 +29,12 @@ public class JobCompleteHelper {
     // ---------------------- monitor ----------------------
     private Thread monitorThread;
     private volatile boolean toStop = false;
+    @Resource
+    private XxlJobCompleter xxlJobCompleter;
+    @Resource
+    private XxlJobLogDao xxlJobLogDao;
+    @Resource
+    private I18nHelper i18nHelper;
 
     public static JobCompleteHelper getInstance() {
         return instance;
@@ -76,7 +83,7 @@ public class JobCompleteHelper {
                     try {
                         // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
                         Date losedTime = DateUtil.addMinutes(new Date(), -10);
-                        List<Long> losedJobIds = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().findLostJobIds(losedTime);
+                        List<Long> losedJobIds = xxlJobLogDao.findLostJobIds(losedTime);
 
                         if (losedJobIds != null && losedJobIds.size() > 0) {
                             for (Long logId : losedJobIds) {
@@ -86,9 +93,9 @@ public class JobCompleteHelper {
 
                                 jobLog.setHandleTime(new Date());
                                 jobLog.setHandleCode(Result.FAIL_CODE);
-                                jobLog.setHandleMsg(I18nUtil.getString("joblog_lost_fail"));
+                                jobLog.setHandleMsg(i18nHelper.getString("joblog_lost_fail"));
 
-                                XxlJobCompleter.updateHandleInfoAndFinish(jobLog);
+                                xxlJobCompleter.updateHandleInfoAndFinish(jobLog);
                             }
 
                         }
@@ -152,7 +159,7 @@ public class JobCompleteHelper {
 
     private Result<String> callback(CallbackModel callbackModel) {
         // valid log item
-        XxlJobLog log = XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().load(callbackModel.getLogId());
+        XxlJobLog log = xxlJobLogDao.load(callbackModel.getLogId());
         if (log == null) {
             return new Result<String>(Result.FAIL_CODE, "log item not found.");
         }
@@ -173,7 +180,7 @@ public class JobCompleteHelper {
         log.setHandleTime(new Date());
         log.setHandleCode(callbackModel.getHandleCode());
         log.setHandleMsg(handleMsg.toString());
-        XxlJobCompleter.updateHandleInfoAndFinish(log);
+        xxlJobCompleter.updateHandleInfoAndFinish(log);
 
         return Result.SUCCESS;
     }

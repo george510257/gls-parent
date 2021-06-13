@@ -1,21 +1,21 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.dao.XxlJobInfoDao;
 import com.gls.job.admin.web.dao.XxlJobLogDao;
 import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobInfo;
 import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.service.XxlJobCompleter;
+import com.gls.job.admin.web.service.XxlJobScheduler;
 import com.gls.job.core.api.model.KillModel;
 import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.DateUtil;
-import com.xxl.job.admin.core.complete.XxlJobCompleter;
 import com.xxl.job.admin.core.exception.XxlJobException;
-import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -48,6 +48,12 @@ public class JobLogController {
     private XxlJobGroupDao xxlJobGroupDao;
     @Resource
     private XxlJobScheduler xxlJobScheduler;
+    @Resource
+    private XxlJobCompleter xxlJobCompleter;
+    @Resource
+    private JobInfoController jobInfoController;
+    @Resource
+    private I18nHelper i18nHelper;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Long jobId) {
@@ -56,9 +62,9 @@ public class JobLogController {
         List<XxlJobGroup> jobGroupList_all = xxlJobGroupDao.findAll();
 
         // filter group
-        List<XxlJobGroup> jobGroupList = JobInfoController.filterJobGroupByRole(request, jobGroupList_all);
+        List<XxlJobGroup> jobGroupList = jobInfoController.filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new XxlJobException(I18nUtil.getString("jobgroup_empty"));
+            throw new XxlJobException(i18nHelper.getString("jobgroup_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -67,13 +73,13 @@ public class JobLogController {
         if (jobId > 0) {
             XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
             if (jobInfo == null) {
-                throw new RuntimeException(I18nUtil.getString("job_info_field_id") + I18nUtil.getString("system_unvalid"));
+                throw new RuntimeException(i18nHelper.getString("job_info_field_id") + i18nHelper.getString("system_unvalid"));
             }
 
             model.addAttribute("jobInfo", jobInfo);
 
             // valid permission
-            JobInfoController.validPermission(request, jobInfo.getJobGroup());
+            jobInfoController.validPermission(request, jobInfo.getJobGroup());
         }
 
         return "joblog/joblog.index";
@@ -94,7 +100,7 @@ public class JobLogController {
                                         Long jobGroup, Long jobId, int logStatus, String filterTime) {
 
         // valid permission
-        JobInfoController.validPermission(request, jobGroup);    // 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
+        jobInfoController.validPermission(request, jobGroup);    // 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup
 
         // parse param
         Date triggerTimeStart = null;
@@ -126,7 +132,7 @@ public class JobLogController {
         Result<String> logStatue = Result.SUCCESS;
         XxlJobLog jobLog = xxlJobLogDao.load(id);
         if (jobLog == null) {
-            throw new RuntimeException(I18nUtil.getString("joblog_logid_unvalid"));
+            throw new RuntimeException(i18nHelper.getString("joblog_logid_unvalid"));
         }
 
         model.addAttribute("triggerCode", jobLog.getTriggerCode());
@@ -166,10 +172,10 @@ public class JobLogController {
         XxlJobLog log = xxlJobLogDao.load(id);
         XxlJobInfo jobInfo = xxlJobInfoDao.loadById(log.getJobId());
         if (jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("job_info_glue_jobid_unvalid"));
+            return new Result<String>(500, i18nHelper.getString("job_info_glue_jobid_unvalid"));
         }
         if (Result.SUCCESS_CODE != log.getTriggerCode()) {
-            return new Result<String>(500, I18nUtil.getString("joblog_kill_log_limit"));
+            return new Result<String>(500, i18nHelper.getString("joblog_kill_log_limit"));
         }
 
         // request of kill
@@ -184,9 +190,9 @@ public class JobLogController {
 
         if (Result.SUCCESS_CODE == runResult.getCode()) {
             log.setHandleCode(Result.FAIL_CODE);
-            log.setHandleMsg(I18nUtil.getString("joblog_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
+            log.setHandleMsg(i18nHelper.getString("joblog_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
-            XxlJobCompleter.updateHandleInfoAndFinish(log);
+            xxlJobCompleter.updateHandleInfoAndFinish(log);
             return new Result<String>(runResult.getMsg());
         } else {
             return new Result<String>(500, runResult.getMsg());
@@ -218,7 +224,7 @@ public class JobLogController {
         } else if (type == 9) {
             clearBeforeNum = 0;            // 清理所有日志数据
         } else {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("joblog_clean_type_unvalid"));
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("joblog_clean_type_unvalid"));
         }
 
         List<Long> logIds = null;

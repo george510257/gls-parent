@@ -1,11 +1,11 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
+import com.gls.job.admin.web.service.XxlJobScheduler;
 import com.gls.job.core.api.model.IdleBeatModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.xxl.job.admin.core.scheduler.XxlJobScheduler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

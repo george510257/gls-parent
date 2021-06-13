@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller.interceptor;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.xxl.job.admin.core.util.FtlUtil;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -34,7 +34,7 @@ public class CookieInterceptor extends HandlerInterceptorAdapter {
 
         // static method
         if (modelAndView != null) {
-            modelAndView.addObject("I18nUtil", FtlUtil.generateStaticModel(I18nUtil.class.getName()));
+            modelAndView.addObject("I18nUtil", FtlUtil.generateStaticModel(I18nHelper.class.getName()));
         }
 
         super.postHandle(request, response, handler, modelAndView);

@@ -1,9 +1,9 @@
 package com.gls.job.admin.web.controller.interceptor;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.model.XxlJobUser;
 import com.gls.job.admin.web.service.LoginService;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -22,6 +22,8 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     @Resource
     private LoginService loginService;
+    @Resource
+    private I18nHelper i18nHelper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -48,7 +50,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
             if (needAdminuser && loginUser.getRole() != 1) {
-                throw new RuntimeException(I18nUtil.getString("system_permission_limit"));
+                throw new RuntimeException(i18nHelper.getString("system_permission_limit"));
             }
             request.setAttribute(LoginService.LOGIN_IDENTITY_KEY, loginUser);
         }

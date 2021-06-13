@@ -1,14 +1,15 @@
-package com.xxl.job.admin.core.scheduler;
+package com.gls.job.admin.web.service;
 
+import com.gls.job.admin.core.constants.JobAdminProperties;
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.client.ExecutorApiClient;
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.thread.*;
-import com.xxl.job.admin.core.util.I18nUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -18,8 +19,11 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Component
 public class XxlJobScheduler {
+    @Resource
+    public I18nHelper i18nHelper;
+    @Resource
+    private JobAdminProperties jobAdminProperties;
     // ---------------------- executor-client ----------------------
-
     private ConcurrentMap<String, ExecutorApi> executorBizRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
     public ExecutorApi getExecutorBiz(String address) throws Exception {
@@ -36,7 +40,7 @@ public class XxlJobScheduler {
         }
 
         // set-cache
-        executorApi = new ExecutorApiClient(address, XxlJobAdminConfig.getAdminConfig().getAccessToken());
+        executorApi = new ExecutorApiClient(address, jobAdminProperties.getAccessToken());
 
         executorBizRepository.put(address, executorApi);
         return executorApi;
@@ -93,7 +97,7 @@ public class XxlJobScheduler {
 
     private void initI18n() {
         for (ExecutorBlockStrategy item : ExecutorBlockStrategy.values()) {
-            item.setTitle(I18nUtil.getString("job_conf_block_".concat(item.name())));
+            item.setTitle(i18nHelper.getString("job_conf_block_".concat(item.name())));
         }
     }
 

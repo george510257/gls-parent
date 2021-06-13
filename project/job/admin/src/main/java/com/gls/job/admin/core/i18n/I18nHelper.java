@@ -1,12 +1,13 @@
-package com.xxl.job.admin.core.util;
+package com.gls.job.admin.core.i18n;
 
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.gls.job.admin.core.constants.JobAdminProperties;
+import com.xxl.job.admin.core.util.JacksonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -19,18 +20,22 @@ import java.util.Properties;
  *
  * @author xuxueli 2018-01-17 20:39:06
  */
-public class I18nUtil {
-    private static Logger logger = LoggerFactory.getLogger(I18nUtil.class);
+@Slf4j
+@Component
+public class I18nHelper {
 
-    private static Properties prop = null;
+    private Properties prop = null;
 
-    public static Properties loadI18nProp() {
+    @javax.annotation.Resource
+    private JobAdminProperties jobAdminProperties;
+
+    public Properties loadI18nProp() {
         if (prop != null) {
             return prop;
         }
         try {
             // build i18n prop
-            String i18n = XxlJobAdminConfig.getAdminConfig().getI18n();
+            String i18n = jobAdminProperties.getI18n();
             String i18nFile = MessageFormat.format("i18n/message_{0}.properties", i18n);
 
             // load prop
@@ -38,7 +43,7 @@ public class I18nUtil {
             EncodedResource encodedResource = new EncodedResource(resource, "UTF-8");
             prop = PropertiesLoaderUtils.loadProperties(encodedResource);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
         return prop;
     }
@@ -49,7 +54,7 @@ public class I18nUtil {
      * @param key
      * @return
      */
-    public static String getString(String key) {
+    public String getString(String key) {
         return loadI18nProp().getProperty(key);
     }
 
@@ -59,7 +64,7 @@ public class I18nUtil {
      * @param keys
      * @return
      */
-    public static String getMultString(String... keys) {
+    public String getMultString(String... keys) {
         Map<String, String> map = new HashMap<String, String>();
 
         Properties prop = loadI18nProp();

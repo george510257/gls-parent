@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
@@ -7,7 +8,6 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.util.GsonTool;
 import com.gls.job.core.util.XxlJobRemotingUtil;
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by xuxueli on 17/5/10.
+ * @author xuxueli
+ * @date 17/5/10
  */
 @Controller
 @RequestMapping("/api")
@@ -27,6 +28,8 @@ public class JobApiController {
 
     @Resource
     private AdminApi adminApi;
+    @Resource
+    private JobAdminProperties jobAdminProperties;
 
     /**
      * api
@@ -47,9 +50,9 @@ public class JobApiController {
         if (uri == null || uri.trim().length() == 0) {
             return new Result<String>(Result.FAIL_CODE, "invalid request, uri-mapping empty.");
         }
-        if (XxlJobAdminConfig.getAdminConfig().getAccessToken() != null
-                && XxlJobAdminConfig.getAdminConfig().getAccessToken().trim().length() > 0
-                && !XxlJobAdminConfig.getAdminConfig().getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+        if (jobAdminProperties.getAccessToken() != null
+                && jobAdminProperties.getAccessToken().trim().length() > 0
+                && !jobAdminProperties.getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
             return new Result<String>(Result.FAIL_CODE, "The access token is wrong.");
         }
 

@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.service.impl;
+package com.gls.job.admin.web.rpc;
 
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author xuxueli 2017-07-27 21:54:20
  */
 @Service
-public class AdminApiImpl implements AdminApi {
+public class AdminRpcService implements AdminApi {
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackParamList) {

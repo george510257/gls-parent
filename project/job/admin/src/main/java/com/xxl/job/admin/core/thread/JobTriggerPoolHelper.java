@@ -1,11 +1,12 @@
 package com.xxl.job.admin.core.thread;
 
-import com.gls.job.admin.core.enums.TriggerTypeEnum;
-import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
-import com.xxl.job.admin.core.trigger.XxlJobTrigger;
+import com.gls.job.admin.core.constants.JobAdminProperties;
+import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.web.service.XxlJobTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,16 +27,18 @@ public class JobTriggerPoolHelper {
     // job timeout count
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
     private XxlJobTrigger xxlJobTrigger;
+    @Resource
+    private JobAdminProperties jobAdminProperties;
 
     public static void toStart() {
         helper.start();
     }
 
+    // ---------------------- helper ----------------------
+
     public static void toStop() {
         helper.stop();
     }
-
-    // ---------------------- helper ----------------------
 
     /**
      * @param jobId
@@ -46,14 +49,14 @@ public class JobTriggerPoolHelper {
      * @param executorParam         null: use job param
      *                              not null: cover job param
      */
-    public static void trigger(Long jobId, TriggerTypeEnum triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
+    public static void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, String addressList) {
         helper.addTrigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
     }
 
     public void start() {
         fastTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolFastMax(),
+                jobAdminProperties.getTriggerPoolFastMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(1000),
@@ -61,7 +64,7 @@ public class JobTriggerPoolHelper {
 
         slowTriggerPool = new ThreadPoolExecutor(
                 10,
-                XxlJobAdminConfig.getAdminConfig().getTriggerPoolSlowMax(),
+                jobAdminProperties.getTriggerPoolSlowMax(),
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(2000),
@@ -79,7 +82,7 @@ public class JobTriggerPoolHelper {
      * add trigger
      */
     public void addTrigger(final Long jobId,
-                           final TriggerTypeEnum triggerType,
+                           final TriggerType triggerType,
                            final int failRetryCount,
                            final String executorShardingParam,
                            final String executorParam,

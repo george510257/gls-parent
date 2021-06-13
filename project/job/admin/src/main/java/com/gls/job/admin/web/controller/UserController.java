@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.dao.XxlJobUserDao;
@@ -7,7 +8,6 @@ import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobUser;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.core.api.model.Result;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -33,6 +33,8 @@ public class UserController {
     private XxlJobUserDao xxlJobUserDao;
     @Resource
     private XxlJobGroupDao xxlJobGroupDao;
+    @Resource
+    private I18nHelper i18nHelper;
 
     @RequestMapping
     @PermissionLimit(administer = true)
@@ -78,19 +80,19 @@ public class UserController {
 
         // valid username
         if (!StringUtils.hasText(xxlJobUser.getUsername())) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_please_input") + i18nHelper.getString("user_username"));
         }
         xxlJobUser.setUsername(xxlJobUser.getUsername().trim());
         if (!(xxlJobUser.getUsername().length() >= 4 && xxlJobUser.getUsername().length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_lengh_limit") + "[4-20]");
         }
         // valid password
         if (!StringUtils.hasText(xxlJobUser.getPassword())) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"));
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_please_input") + i18nHelper.getString("user_password"));
         }
         xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
         if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_lengh_limit") + "[4-20]");
         }
         // md5 password
         xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
@@ -98,7 +100,7 @@ public class UserController {
         // check repeat
         XxlJobUser existUser = xxlJobUserDao.loadByUserName(xxlJobUser.getUsername());
         if (existUser != null) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("user_username_repeat"));
         }
 
         // write
@@ -114,14 +116,14 @@ public class UserController {
         // avoid opt login seft
         XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
         if (loginUser.getUsername().equals(xxlJobUser.getUsername())) {
-            return new Result<String>(Result.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
+            return new Result<String>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
         }
 
         // valid password
         if (StringUtils.hasText(xxlJobUser.getPassword())) {
             xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
             if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
-                return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+                return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_lengh_limit") + "[4-20]");
             }
             // md5 password
             xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
@@ -141,8 +143,8 @@ public class UserController {
 
         // avoid opt login seft
         XxlJobUser loginUser = (XxlJobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getId() == id) {
-            return new Result<String>(Result.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
+        if (loginUser.getId().equals(id)) {
+            return new Result<String>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
         }
 
         xxlJobUserDao.delete(id);
@@ -159,7 +161,7 @@ public class UserController {
         }
         password = password.trim();
         if (!(password.length() >= 4 && password.length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_lengh_limit") + "[4-20]");
         }
 
         // md5 password

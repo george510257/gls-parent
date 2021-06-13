@@ -1,12 +1,12 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.XxlJobInfoDao;
 import com.gls.job.admin.web.dao.XxlJobLogGlueDao;
 import com.gls.job.admin.web.model.XxlJobInfo;
 import com.gls.job.admin.web.model.XxlJobLogGlue;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
-import com.xxl.job.admin.core.util.I18nUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +30,10 @@ public class JobCodeController {
     private XxlJobInfoDao xxlJobInfoDao;
     @Resource
     private XxlJobLogGlueDao xxlJobLogGlueDao;
+    @Resource
+    private JobInfoController jobInfoController;
+    @Resource
+    private I18nHelper i18nHelper;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, Long jobId) {
@@ -37,14 +41,14 @@ public class JobCodeController {
         List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
-            throw new RuntimeException(I18nUtil.getString("job_info_glue_jobid_unvalid"));
+            throw new RuntimeException(i18nHelper.getString("job_info_glue_jobid_unvalid"));
         }
         if (GlueType.BEAN == jobInfo.getGlueType()) {
-            throw new RuntimeException(I18nUtil.getString("job_info_glue_gluetype_unvalid"));
+            throw new RuntimeException(i18nHelper.getString("job_info_glue_gluetype_unvalid"));
         }
 
         // valid permission
-        JobInfoController.validPermission(request, jobInfo.getJobGroup());
+        jobInfoController.validPermission(request, jobInfo.getJobGroup());
 
         // Glue类型-字典
         model.addAttribute("GlueTypeEnum", GlueType.values());
@@ -59,14 +63,14 @@ public class JobCodeController {
     public Result<String> save(Model model, Long id, String glueSource, String glueRemark) {
         // valid
         if (glueRemark == null) {
-            return new Result<String>(500, (I18nUtil.getString("system_please_input") + I18nUtil.getString("job_info_glue_remark")));
+            return new Result<String>(500, (i18nHelper.getString("system_please_input") + i18nHelper.getString("job_info_glue_remark")));
         }
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
-            return new Result<String>(500, I18nUtil.getString("job_info_glue_remark_limit"));
+            return new Result<String>(500, i18nHelper.getString("job_info_glue_remark_limit"));
         }
         XxlJobInfo exists_jobInfo = xxlJobInfoDao.loadById(id);
         if (exists_jobInfo == null) {
-            return new Result<String>(500, I18nUtil.getString("job_info_glue_jobid_unvalid"));
+            return new Result<String>(500, i18nHelper.getString("job_info_glue_jobid_unvalid"));
         }
 
         // update new code
