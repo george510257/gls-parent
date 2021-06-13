@@ -7,8 +7,8 @@ import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
-import com.gls.job.admin.web.service.JobCompleter;
-import com.gls.job.admin.web.service.JobScheduler;
+import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.KillModel;
 import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
@@ -47,9 +47,9 @@ public class JobLogController {
     @Resource
     private JobGroupDao jobGroupDao;
     @Resource
-    private JobScheduler jobScheduler;
+    private JobSchedulerService jobSchedulerService;
     @Resource
-    private JobCompleter jobCompleter;
+    private JobCompleterService jobCompleterService;
     @Resource
     private JobInfoController jobInfoController;
     @Resource
@@ -147,7 +147,7 @@ public class JobLogController {
     @ResponseBody
     public Result<LogResultModel> logDetailCat(String executorAddress, Date triggerTime, Long logId, int fromLineNum) {
         try {
-            ExecutorApi executorApi = jobScheduler.getExecutorBiz(executorAddress);
+            ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(executorAddress);
             Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNum));
 
             // is end
@@ -161,7 +161,7 @@ public class JobLogController {
             return logResult;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new Result<LogResultModel>(Result.FAIL_CODE, e.getMessage());
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
 
@@ -181,7 +181,7 @@ public class JobLogController {
         // request of kill
         Result<String> runResult = null;
         try {
-            ExecutorApi executorApi = jobScheduler.getExecutorBiz(log.getExecutorAddress());
+            ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(log.getExecutorAddress());
             runResult = executorApi.kill(new KillModel(jobInfo.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -192,7 +192,7 @@ public class JobLogController {
             log.setHandleCode(Result.FAIL_CODE);
             log.setHandleMsg(i18nHelper.getString("job_log_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
-            jobCompleter.updateHandleInfoAndFinish(log);
+            jobCompleterService.updateHandleInfoAndFinish(log);
             return new Result<String>(runResult.getMsg());
         } else {
             return new Result<String>(500, runResult.getMsg());

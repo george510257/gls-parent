@@ -7,7 +7,7 @@ import com.gls.job.admin.web.dao.*;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLogReport;
-import com.gls.job.admin.web.service.JobService;
+import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.util.DateUtil;
@@ -26,8 +26,8 @@ import java.util.*;
  * @author xuxueli 2016-5-28 15:30:33
  */
 @Service
-public class JobServiceImpl implements JobService {
-    private static Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
+public class JobInfoServiceImpl implements JobInfoService {
+    private static Logger logger = LoggerFactory.getLogger(JobInfoServiceImpl.class);
     @Resource
     public JobLogDao jobLogDao;
     @Resource

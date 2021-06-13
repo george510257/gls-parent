@@ -2,7 +2,7 @@ package com.xxl.job.admin.core.thread;
 
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.enums.TriggerType;
-import com.gls.job.admin.web.service.JobTrigger;
+import com.gls.job.admin.web.service.JobTriggerService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -25,7 +25,7 @@ public class JobTriggerPoolHelper {
     private ThreadPoolExecutor slowTriggerPool = null;
     // job timeout count
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
-    private JobTrigger jobTrigger;
+    private JobTriggerService jobTriggerService;
     @Resource
     private JobAdminProperties jobAdminProperties;
 
@@ -101,7 +101,7 @@ public class JobTriggerPoolHelper {
 
             try {
                 // do trigger
-                jobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                jobTriggerService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {

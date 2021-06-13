@@ -1,7 +1,8 @@
-package com.gls.job.admin.web.service;
+package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.i18n.I18nHelper;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.client.ExecutorApiClient;
@@ -13,12 +14,9 @@ import javax.annotation.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-/**
- * @author xuxueli 2018-10-28 00:18:17
- */
 @Slf4j
 @Service
-public class JobScheduler {
+public class JobSchedulerServiceImpl implements JobSchedulerService {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
@@ -26,7 +24,8 @@ public class JobScheduler {
     // ---------------------- executor-client ----------------------
     private ConcurrentMap<String, ExecutorApi> executorBizRepository = new ConcurrentHashMap<String, ExecutorApi>();
 
-    public ExecutorApi getExecutorBiz(String address) throws Exception {
+    @Override
+    public ExecutorApi getExecutorBiz(String address) {
         // valid
         if (address == null || address.trim().length() == 0) {
             return null;
@@ -100,5 +99,4 @@ public class JobScheduler {
             item.setTitle(i18nHelper.getString("job_conf_block_".concat(item.name())));
         }
     }
-
 }

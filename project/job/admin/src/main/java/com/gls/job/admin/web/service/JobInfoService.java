@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author xuxueli 2016-5-28 15:30:33
  */
-public interface JobService {
+public interface JobInfoService {
 
     /**
      * page list

@@ -9,7 +9,7 @@ import com.gls.job.admin.web.dao.JobGroupDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.admin.web.service.JobService;
+import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
@@ -43,7 +43,7 @@ public class JobInfoController {
     @Resource
     private JobGroupDao jobGroupDao;
     @Resource
-    private JobService jobService;
+    private JobInfoService jobInfoService;
     @Resource
     private I18nHelper i18nHelper;
 
@@ -106,37 +106,37 @@ public class JobInfoController {
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
 
-        return jobService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
+        return jobInfoService.pageList(start, length, jobGroup, triggerStatus, jobDesc, executorHandler, author);
     }
 
     @RequestMapping("/add")
     @ResponseBody
     public Result<String> add(JobInfo jobInfo) {
-        return jobService.add(jobInfo);
+        return jobInfoService.add(jobInfo);
     }
 
     @RequestMapping("/update")
     @ResponseBody
     public Result<String> update(JobInfo jobInfo) {
-        return jobService.update(jobInfo);
+        return jobInfoService.update(jobInfo);
     }
 
     @RequestMapping("/remove")
     @ResponseBody
     public Result<String> remove(Long id) {
-        return jobService.remove(id);
+        return jobInfoService.remove(id);
     }
 
     @RequestMapping("/stop")
     @ResponseBody
     public Result<String> pause(Long id) {
-        return jobService.stop(id);
+        return jobInfoService.stop(id);
     }
 
     @RequestMapping("/start")
     @ResponseBody
     public Result<String> start(Long id) {
-        return jobService.start(id);
+        return jobInfoService.start(id);
     }
 
     @RequestMapping("/trigger")

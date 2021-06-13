@@ -3,7 +3,7 @@ package com.xxl.job.admin.core.thread;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobLog;
-import com.gls.job.admin.web.service.JobCompleter;
+import com.gls.job.admin.web.service.JobCompleterService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.util.DateUtil;
@@ -32,7 +32,7 @@ public class JobCompleteHelper {
     private Thread monitorThread;
     private volatile boolean toStop = false;
     @Resource
-    private JobCompleter jobCompleter;
+    private JobCompleterService jobCompleterService;
     @Resource
     private JobLogDao jobLogDao;
     @Resource
@@ -86,7 +86,7 @@ public class JobCompleteHelper {
                             jobLog.setHandleCode(Result.FAIL_CODE);
                             jobLog.setHandleMsg(i18nHelper.getString("job_log_lost_fail"));
 
-                            jobCompleter.updateHandleInfoAndFinish(jobLog);
+                            jobCompleterService.updateHandleInfoAndFinish(jobLog);
                         }
 
                     }
@@ -168,7 +168,7 @@ public class JobCompleteHelper {
         log.setHandleTime(new Date());
         log.setHandleCode(callbackModel.getHandleCode());
         log.setHandleMsg(handleMsg.toString());
-        jobCompleter.updateHandleInfoAndFinish(log);
+        jobCompleterService.updateHandleInfoAndFinish(log);
 
         return Result.SUCCESS;
     }

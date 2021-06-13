@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.admin.web.service.JobScheduler;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
@@ -20,14 +20,14 @@ import java.util.List;
 public class ExecutorRouteFailover implements ExecutorRouter {
 
     @Resource
-    private JobScheduler jobScheduler;
+    private JobSchedulerService jobSchedulerService;
 
     @Override
     public String route(TriggerModel triggerModel, List<String> addressList) {
         try {
             for (String address : addressList) {
                 // beat
-                ExecutorApi executorApi = jobScheduler.getExecutorBiz(address);
+                ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(address);
                 Result<String> result = executorApi.beat();
                 // beat success
                 if (result.getCode() == Result.SUCCESS_CODE) {

@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.service;
+package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
 import com.gls.job.admin.core.enums.TriggerType;
@@ -10,6 +10,8 @@ import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.service.JobSchedulerService;
+import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
@@ -23,18 +25,16 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * gls-job trigger
- *
- * @author xuxueli
- * @date 17/7/13
+ * @author george
  */
 @Slf4j
 @Service
-public class JobTrigger {
+public class JobTriggerServiceImpl implements JobTriggerService {
+
     @Resource
     public I18nHelper i18nHelper;
     @Resource
-    private JobScheduler jobScheduler;
+    private JobSchedulerService jobSchedulerService;
     @Resource
     private ExecutorRouterHolder executorRouterHolder;
     @Resource
@@ -44,19 +44,7 @@ public class JobTrigger {
     @Resource
     private JobGroupDao jobGroupDao;
 
-    /**
-     * trigger job
-     *
-     * @param jobId
-     * @param triggerType
-     * @param failRetryCount        >=0: use this param
-     *                              <0: use param from job info config
-     * @param executorShardingParam
-     * @param executorParam         null: use job param
-     *                              not null: cover job param
-     * @param addressList           null: use executor addressList
-     *                              not null: cover
-     */
+    @Override
     public void trigger(Long jobId,
                         TriggerType triggerType,
                         int failRetryCount,
@@ -220,10 +208,10 @@ public class JobTrigger {
      * @param address
      * @return
      */
-    public Result<String> runExecutor(TriggerModel triggerModel, String address) {
+    private Result<String> runExecutor(TriggerModel triggerModel, String address) {
         Result<String> runResult;
         try {
-            ExecutorApi executorApi = jobScheduler.getExecutorBiz(address);
+            ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(address);
             runResult = executorApi.run(triggerModel);
         } catch (Exception e) {
             log.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
@@ -236,5 +224,4 @@ public class JobTrigger {
         runResult.setMsg(runResultStr);
         return runResult;
     }
-
 }

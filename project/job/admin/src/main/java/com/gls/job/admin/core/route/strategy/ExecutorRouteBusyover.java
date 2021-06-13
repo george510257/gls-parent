@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.admin.web.service.JobScheduler;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.IdleBeatModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
@@ -21,14 +21,14 @@ import java.util.List;
 public class ExecutorRouteBusyover implements ExecutorRouter {
 
     @Resource
-    private JobScheduler jobScheduler;
+    private JobSchedulerService jobSchedulerService;
 
     @Override
     public String route(TriggerModel triggerModel, List<String> addressList) {
         try {
             for (String address : addressList) {
                 // beat
-                ExecutorApi executorApi = jobScheduler.getExecutorBiz(address);
+                ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(address);
                 Result<String> result = executorApi.idleBeat(new IdleBeatModel(triggerModel.getJobId()));
                 // beat success
                 if (Result.SUCCESS_CODE == result.getCode()) {

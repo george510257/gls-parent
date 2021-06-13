@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.service;
+package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.core.i18n.I18nHelper;
@@ -6,6 +6,7 @@ import com.gls.job.admin.web.dao.JobInfoDao;
 import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.service.JobCompleterService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
@@ -16,11 +17,11 @@ import javax.annotation.Resource;
 import java.text.MessageFormat;
 
 /**
- * @author xuxueli 2020-10-30 20:43:10
+ * @author george
  */
 @Slf4j
 @Service
-public class JobCompleter {
+public class JobCompleterServiceImpl implements JobCompleterService {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
@@ -34,7 +35,8 @@ public class JobCompleter {
      * @param jobLog
      * @return
      */
-    public int updateHandleInfoAndFinish(JobLog jobLog) {
+    @Override
+    public void updateHandleInfoAndFinish(JobLog jobLog) {
 
         // finish
         finishJob(jobLog);
@@ -45,7 +47,7 @@ public class JobCompleter {
         }
 
         // fresh handle
-        return jobLogDao.updateHandleInfo(jobLog);
+        jobLogDao.updateHandleInfo(jobLog);
     }
 
     /**
@@ -103,5 +105,4 @@ public class JobCompleter {
             return false;
         }
     }
-
 }
