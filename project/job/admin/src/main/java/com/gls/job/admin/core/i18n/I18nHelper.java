@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.i18n;
 
 import com.gls.job.admin.core.constants.JobAdminProperties;
-import com.xxl.job.admin.core.util.JacksonUtil;
+import com.gls.job.admin.core.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;

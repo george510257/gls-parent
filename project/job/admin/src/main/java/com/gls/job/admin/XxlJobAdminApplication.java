@@ -1,4 +1,4 @@
-package com.xxl.job.admin;
+package com.gls.job.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

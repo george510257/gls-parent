@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.enums.ScheduleType;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.*;
@@ -10,7 +11,6 @@ import com.gls.job.admin.web.service.XxlJobService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.util.DateUtil;
-import com.xxl.job.admin.core.cron.CronExpression;
 import com.xxl.job.admin.core.thread.JobScheduleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

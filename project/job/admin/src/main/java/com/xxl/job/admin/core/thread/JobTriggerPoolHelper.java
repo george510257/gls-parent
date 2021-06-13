@@ -3,8 +3,7 @@ package com.xxl.job.admin.core.thread;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.web.service.XxlJobTrigger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.util.concurrent.*;
@@ -15,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author xuxueli 2018-07-03 21:08:07
  */
+@Slf4j
 public class JobTriggerPoolHelper {
-    private static final Logger logger = LoggerFactory.getLogger(JobTriggerPoolHelper.class);
 
     // ---------------------- trigger pool ----------------------
     private static final JobTriggerPoolHelper helper = new JobTriggerPoolHelper();
@@ -75,7 +74,7 @@ public class JobTriggerPoolHelper {
         //triggerPool.shutdown();
         fastTriggerPool.shutdownNow();
         slowTriggerPool.shutdownNow();
-        logger.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
+        log.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
     }
 
     /**
@@ -104,7 +103,7 @@ public class JobTriggerPoolHelper {
                 // do trigger
                 xxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             } finally {
 
                 // check timeout-count-map

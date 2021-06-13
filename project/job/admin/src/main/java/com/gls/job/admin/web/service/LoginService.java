@@ -1,11 +1,11 @@
 package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.core.i18n.I18nHelper;
+import com.gls.job.admin.core.util.CookieUtil;
+import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.web.dao.XxlJobUserDao;
 import com.gls.job.admin.web.model.XxlJobUser;
 import com.gls.job.core.api.model.Result;
-import com.xxl.job.admin.core.util.CookieUtil;
-import com.xxl.job.admin.core.util.JacksonUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.DigestUtils;
 

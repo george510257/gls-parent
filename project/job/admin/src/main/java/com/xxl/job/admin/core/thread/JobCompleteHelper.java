@@ -7,26 +7,28 @@ import com.gls.job.admin.web.service.XxlJobCompleter;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.util.DateUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * job lose-monitor instance
  *
  * @author xuxueli 2015-9-1 18:05:56
  */
+@Slf4j
 public class JobCompleteHelper {
-    private static Logger logger = LoggerFactory.getLogger(JobCompleteHelper.class);
 
     private static JobCompleteHelper instance = new JobCompleteHelper();
     private ThreadPoolExecutor callbackThreadPool = null;
 
     // ---------------------- monitor ----------------------
+
     private Thread monitorThread;
     private volatile boolean toStop = false;
     @Resource
@@ -48,76 +50,64 @@ public class JobCompleteHelper {
                 20,
                 30L,
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(3000),
-                new ThreadFactory() {
-                    @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "xxl-job, admin JobLosedMonitorHelper-callbackThreadPool-" + r.hashCode());
-                    }
-                },
-                new RejectedExecutionHandler() {
-                    @Override
-                    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                        r.run();
-                        logger.warn(">>>>>>>>>>> xxl-job, callback too fast, match threadpool rejected handler(run now).");
-                    }
+                new LinkedBlockingQueue<>(3000),
+                r -> new Thread(r, "xxl-job, admin JobLosedMonitorHelper-callbackThreadPool-" + r.hashCode()),
+                (r, executor) -> {
+                    r.run();
+                    log.warn(">>>>>>>>>>> xxl-job, callback too fast, match threadpool rejected handler(run now).");
                 });
 
         // for monitor
-        monitorThread = new Thread(new Runnable() {
+        monitorThread = new Thread(() -> {
 
-            @Override
-            public void run() {
+            // wait for JobTriggerPoolHelper-init
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                if (!toStop) {
+                    log.error(e.getMessage(), e);
+                }
+            }
 
-                // wait for JobTriggerPoolHelper-init
+            // monitor
+            while (!toStop) {
                 try {
-                    TimeUnit.MILLISECONDS.sleep(50);
-                } catch (InterruptedException e) {
+                    // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
+                    Date losedTime = DateUtil.addMinutes(new Date(), -10);
+                    List<Long> losedJobIds = xxlJobLogDao.findLostJobIds(losedTime);
+
+                    if (losedJobIds != null && losedJobIds.size() > 0) {
+                        for (Long logId : losedJobIds) {
+
+                            XxlJobLog jobLog = new XxlJobLog();
+                            jobLog.setId(logId);
+
+                            jobLog.setHandleTime(new Date());
+                            jobLog.setHandleCode(Result.FAIL_CODE);
+                            jobLog.setHandleMsg(i18nHelper.getString("joblog_lost_fail"));
+
+                            xxlJobCompleter.updateHandleInfoAndFinish(jobLog);
+                        }
+
+                    }
+                } catch (Exception e) {
                     if (!toStop) {
-                        logger.error(e.getMessage(), e);
+                        log.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
                     }
                 }
 
-                // monitor
-                while (!toStop) {
-                    try {
-                        // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
-                        Date losedTime = DateUtil.addMinutes(new Date(), -10);
-                        List<Long> losedJobIds = xxlJobLogDao.findLostJobIds(losedTime);
-
-                        if (losedJobIds != null && losedJobIds.size() > 0) {
-                            for (Long logId : losedJobIds) {
-
-                                XxlJobLog jobLog = new XxlJobLog();
-                                jobLog.setId(logId);
-
-                                jobLog.setHandleTime(new Date());
-                                jobLog.setHandleCode(Result.FAIL_CODE);
-                                jobLog.setHandleMsg(i18nHelper.getString("joblog_lost_fail"));
-
-                                xxlJobCompleter.updateHandleInfoAndFinish(jobLog);
-                            }
-
-                        }
-                    } catch (Exception e) {
-                        if (!toStop) {
-                            logger.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
-                        }
+                try {
+                    TimeUnit.SECONDS.sleep(60);
+                } catch (Exception e) {
+                    if (!toStop) {
+                        log.error(e.getMessage(), e);
                     }
-
-                    try {
-                        TimeUnit.SECONDS.sleep(60);
-                    } catch (Exception e) {
-                        if (!toStop) {
-                            logger.error(e.getMessage(), e);
-                        }
-                    }
-
                 }
-
-                logger.info(">>>>>>>>>>> xxl-job, JobLosedMonitorHelper stop");
 
             }
+
+            log.info(">>>>>>>>>>> xxl-job, JobLosedMonitorHelper stop");
+
         });
         monitorThread.setDaemon(true);
         monitorThread.setName("xxl-job, admin JobLosedMonitorHelper");
@@ -135,7 +125,7 @@ public class JobCompleteHelper {
         try {
             monitorThread.join();
         } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -143,14 +133,11 @@ public class JobCompleteHelper {
 
     public Result<String> callback(List<CallbackModel> callbackParamList) {
 
-        callbackThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (CallbackModel callbackModel : callbackParamList) {
-                    Result<String> callbackResult = callback(callbackModel);
-                    logger.debug(">>>>>>>>> JobApiController.callback {}, callbackModel={}, callbackResult={}",
-                            (callbackResult.getCode() == Result.SUCCESS_CODE ? "success" : "fail"), callbackModel, callbackResult);
-                }
+        callbackThreadPool.execute(() -> {
+            for (CallbackModel callbackModel : callbackParamList) {
+                Result<String> callbackResult = callback(callbackModel);
+                log.debug(">>>>>>>>> JobApiController.callback {}, callbackModel={}, callbackResult={}",
+                        (callbackResult.getCode() == Result.SUCCESS_CODE ? "success" : "fail"), callbackModel, callbackResult);
             }
         });
 
@@ -161,14 +148,15 @@ public class JobCompleteHelper {
         // valid log item
         XxlJobLog log = xxlJobLogDao.load(callbackModel.getLogId());
         if (log == null) {
-            return new Result<String>(Result.FAIL_CODE, "log item not found.");
+            return new Result<>(Result.FAIL_CODE, "log item not found.");
         }
         if (log.getHandleCode() > 0) {
-            return new Result<String>(Result.FAIL_CODE, "log repeate callback.");     // avoid repeat callback, trigger child job etc
+            return new Result<>(Result.FAIL_CODE, "log repeate callback.");
+            // avoid repeat callback, trigger child job etc
         }
 
         // handle msg
-        StringBuffer handleMsg = new StringBuffer();
+        StringBuilder handleMsg = new StringBuilder();
         if (log.getHandleMsg() != null) {
             handleMsg.append(log.getHandleMsg()).append("<br>");
         }

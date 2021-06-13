@@ -1,4 +1,4 @@
-package com.xxl.job.admin.core.util;
+package com.gls.job.admin.core.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

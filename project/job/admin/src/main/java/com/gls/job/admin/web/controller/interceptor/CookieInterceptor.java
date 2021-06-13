@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller.interceptor;
 
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.xxl.job.admin.core.util.FtlUtil;
+import com.gls.job.admin.core.util.FtlUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

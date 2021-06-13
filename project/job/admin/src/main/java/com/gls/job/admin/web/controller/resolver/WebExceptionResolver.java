@@ -1,8 +1,8 @@
 package com.gls.job.admin.web.controller.resolver;
 
+import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.core.api.model.Result;
-import com.xxl.job.admin.core.exception.XxlJobException;
-import com.xxl.job.admin.core.util.JacksonUtil;
+import com.gls.job.core.exception.XxlJobException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

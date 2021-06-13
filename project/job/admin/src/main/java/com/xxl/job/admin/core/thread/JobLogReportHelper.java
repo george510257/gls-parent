@@ -4,8 +4,7 @@ import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.web.dao.XxlJobLogDao;
 import com.gls.job.admin.web.dao.XxlJobLogReportDao;
 import com.gls.job.admin.web.model.XxlJobLogReport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
@@ -19,8 +18,8 @@ import java.util.concurrent.TimeUnit;
  *
  * @author xuxueli 2019-11-22
  */
+@Slf4j
 public class JobLogReportHelper {
-    private static final Logger logger = LoggerFactory.getLogger(JobLogReportHelper.class);
 
     private static final JobLogReportHelper instance = new JobLogReportHelper();
     private Thread logrThread;
@@ -94,7 +93,7 @@ public class JobLogReportHelper {
 
                 } catch (Exception e) {
                     if (!toStop) {
-                        logger.error(">>>>>>>>>>> xxl-job, job log report thread error:{}", e);
+                        log.error(">>>>>>>>>>> xxl-job, job log report thread error:{}", e);
                     }
                 }
 
@@ -128,13 +127,13 @@ public class JobLogReportHelper {
                     TimeUnit.MINUTES.sleep(1);
                 } catch (Exception e) {
                     if (!toStop) {
-                        logger.error(e.getMessage(), e);
+                        log.error(e.getMessage(), e);
                     }
                 }
 
             }
 
-            logger.info(">>>>>>>>>>> xxl-job, job log report thread stop");
+            log.info(">>>>>>>>>>> xxl-job, job log report thread stop");
 
         });
         logrThread.setDaemon(true);
@@ -149,7 +148,7 @@ public class JobLogReportHelper {
         try {
             logrThread.join();
         } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

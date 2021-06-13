@@ -1,4 +1,4 @@
-package com.xxl.job.admin.core.util;
+package com.gls.job.admin.core.util;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
