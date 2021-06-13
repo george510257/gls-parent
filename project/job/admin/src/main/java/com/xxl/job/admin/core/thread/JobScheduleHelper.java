@@ -1,8 +1,8 @@
 package com.xxl.job.admin.core.thread;
 
-import com.gls.job.admin.core.alarm.enums.MisfireStrategyEnum;
-import com.gls.job.admin.core.alarm.enums.ScheduleTypeEnum;
-import com.gls.job.admin.core.alarm.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.MisfireStrategy;
+import com.gls.job.admin.core.enums.ScheduleType;
+import com.gls.job.admin.core.enums.TriggerTypeEnum;
 import com.gls.job.admin.web.model.XxlJobInfo;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.cron.CronExpression;
@@ -35,11 +35,11 @@ public class JobScheduleHelper {
 
     // ---------------------- tools ----------------------
     public static Date generateNextValidTime(XxlJobInfo jobInfo, Date fromTime) throws Exception {
-        ScheduleTypeEnum scheduleTypeEnum = ScheduleTypeEnum.match(jobInfo.getScheduleType(), null);
-        if (ScheduleTypeEnum.CRON == scheduleTypeEnum) {
+        ScheduleType scheduleType = jobInfo.getScheduleType();
+        if (ScheduleType.CRON == scheduleType) {
             Date nextValidTime = new CronExpression(jobInfo.getScheduleConf()).getNextValidTimeAfter(fromTime);
             return nextValidTime;
-        } else if (ScheduleTypeEnum.FIX_RATE == scheduleTypeEnum /*|| ScheduleTypeEnum.FIX_DELAY == scheduleTypeEnum*/) {
+        } else if (ScheduleType.FIX_RATE == scheduleType /*|| ScheduleType.FIX_DELAY == scheduleType*/) {
             return new Date(fromTime.getTime() + Integer.valueOf(jobInfo.getScheduleConf()) * 1000);
         }
         return null;
@@ -98,8 +98,8 @@ public class JobScheduleHelper {
                                     logger.warn(">>>>>>>>>>> xxl-job, schedule misfire, jobId = " + jobInfo.getId());
 
                                     // 1、misfire match
-                                    MisfireStrategyEnum misfireStrategyEnum = MisfireStrategyEnum.match(jobInfo.getMisfireStrategy(), MisfireStrategyEnum.DO_NOTHING);
-                                    if (MisfireStrategyEnum.FIRE_ONCE_NOW == misfireStrategyEnum) {
+                                    MisfireStrategy misfireStrategy = jobInfo.getMisfireStrategy();
+                                    if (MisfireStrategy.FIRE_ONCE_NOW == misfireStrategy) {
                                         // FIRE_ONCE_NOW 》 trigger
                                         JobTriggerPoolHelper.trigger(jobInfo.getId(), TriggerTypeEnum.MISFIRE, -1, null, null, null);
                                         logger.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfo.getId());

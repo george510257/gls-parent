@@ -1,5 +1,8 @@
 package com.gls.job.admin.web.model;
 
+import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
+import com.gls.job.admin.core.enums.MisfireStrategy;
+import com.gls.job.admin.core.enums.ScheduleType;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import lombok.Data;
@@ -25,11 +28,11 @@ public class XxlJobInfo {
     private String author;        // 负责人
     private String alarmEmail;    // 报警邮件
 
-    private String scheduleType;            // 调度类型
+    private ScheduleType scheduleType;            // 调度类型
     private String scheduleConf;            // 调度配置，值含义取决于调度类型
-    private String misfireStrategy;            // 调度过期策略
+    private MisfireStrategy misfireStrategy;            // 调度过期策略
 
-    private String executorRouteStrategy;    // 执行器路由策略
+    private ExecutorRouteStrategy executorRouteStrategy;    // 执行器路由策略
     private String executorHandler;            // 执行器，任务Handler名称
     private String executorParam;            // 执行器，任务参数
     private ExecutorBlockStrategy executorBlockStrategy;    // 阻塞处理策略

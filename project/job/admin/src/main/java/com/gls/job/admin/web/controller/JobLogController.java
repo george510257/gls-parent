@@ -46,6 +46,8 @@ public class JobLogController {
     public XxlJobLogDao xxlJobLogDao;
     @Resource
     private XxlJobGroupDao xxlJobGroupDao;
+    @Resource
+    private XxlJobScheduler xxlJobScheduler;
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "0") Long jobId) {
@@ -139,7 +141,7 @@ public class JobLogController {
     @ResponseBody
     public Result<LogResultModel> logDetailCat(String executorAddress, Date triggerTime, Long logId, int fromLineNum) {
         try {
-            ExecutorApi executorApi = XxlJobScheduler.getExecutorBiz(executorAddress);
+            ExecutorApi executorApi = xxlJobScheduler.getExecutorBiz(executorAddress);
             Result<LogResultModel> logResult = executorApi.log(new LogModel(triggerTime, logId, fromLineNum));
 
             // is end
@@ -173,7 +175,7 @@ public class JobLogController {
         // request of kill
         Result<String> runResult = null;
         try {
-            ExecutorApi executorApi = XxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
+            ExecutorApi executorApi = xxlJobScheduler.getExecutorBiz(log.getExecutorAddress());
             runResult = executorApi.kill(new KillModel(jobInfo.getId()));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

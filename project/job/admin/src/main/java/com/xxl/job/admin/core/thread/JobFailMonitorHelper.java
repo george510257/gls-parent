@@ -1,6 +1,6 @@
 package com.xxl.job.admin.core.thread;
 
-import com.gls.job.admin.core.alarm.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.TriggerTypeEnum;
 import com.gls.job.admin.web.model.XxlJobInfo;
 import com.gls.job.admin.web.model.XxlJobLog;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;

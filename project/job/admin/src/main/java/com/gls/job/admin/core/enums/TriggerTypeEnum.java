@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.alarm.enums;
+package com.gls.job.admin.core.enums;
 
 import com.xxl.job.admin.core.util.I18nUtil;
 

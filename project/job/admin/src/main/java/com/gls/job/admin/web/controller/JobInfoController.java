@@ -1,9 +1,9 @@
 package com.gls.job.admin.web.controller;
 
-import com.gls.job.admin.core.alarm.enums.ExecutorRouteStrategyEnum;
-import com.gls.job.admin.core.alarm.enums.MisfireStrategyEnum;
-import com.gls.job.admin.core.alarm.enums.ScheduleTypeEnum;
-import com.gls.job.admin.core.alarm.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
+import com.gls.job.admin.core.enums.MisfireStrategy;
+import com.gls.job.admin.core.enums.ScheduleType;
+import com.gls.job.admin.core.enums.TriggerTypeEnum;
 import com.gls.job.admin.web.dao.XxlJobGroupDao;
 import com.gls.job.admin.web.model.XxlJobGroup;
 import com.gls.job.admin.web.model.XxlJobInfo;
@@ -77,11 +77,11 @@ public class JobInfoController {
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") Long jobGroup) {
 
         // 枚举-字典
-        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategyEnum.values());        // 路由策略-列表
+        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategy.values());        // 路由策略-列表
         model.addAttribute("GlueTypeEnum", GlueType.values());                                // Glue类型-字典
         model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
-        model.addAttribute("ScheduleTypeEnum", ScheduleTypeEnum.values());                        // 调度类型
-        model.addAttribute("MisfireStrategyEnum", MisfireStrategyEnum.values());                    // 调度过期策略
+        model.addAttribute("ScheduleTypeEnum", ScheduleType.values());                        // 调度类型
+        model.addAttribute("MisfireStrategyEnum", MisfireStrategy.values());                    // 调度过期策略
 
         // 执行器列表
         List<XxlJobGroup> jobGroupList_all = xxlJobGroupDao.findAll();
@@ -152,7 +152,7 @@ public class JobInfoController {
 
     @RequestMapping("/nextTriggerTime")
     @ResponseBody
-    public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
+    public Result<List<String>> nextTriggerTime(ScheduleType scheduleType, String scheduleConf) {
 
         XxlJobInfo paramXxlJobInfo = new XxlJobInfo();
         paramXxlJobInfo.setScheduleType(scheduleType);

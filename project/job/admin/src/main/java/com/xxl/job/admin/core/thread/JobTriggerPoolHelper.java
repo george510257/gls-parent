@@ -1,6 +1,6 @@
 package com.xxl.job.admin.core.thread;
 
-import com.gls.job.admin.core.alarm.enums.TriggerTypeEnum;
+import com.gls.job.admin.core.enums.TriggerTypeEnum;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.trigger.XxlJobTrigger;
 import org.slf4j.Logger;
@@ -25,6 +25,7 @@ public class JobTriggerPoolHelper {
     private ThreadPoolExecutor slowTriggerPool = null;
     // job timeout count
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
+    private XxlJobTrigger xxlJobTrigger;
 
     public static void toStart() {
         helper.start();
@@ -98,7 +99,7 @@ public class JobTriggerPoolHelper {
 
             try {
                 // do trigger
-                XxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                xxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             } finally {
