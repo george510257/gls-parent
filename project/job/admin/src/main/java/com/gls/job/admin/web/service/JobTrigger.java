@@ -186,7 +186,7 @@ public class JobTrigger {
         triggerMsgSb.append(i18nHelper.getString("job_conf_trigger_type")).append("：").append(triggerType.getTitle());
         triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_admin_adress")).append("：").append(IpUtil.getIp());
         triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_exe_regtype")).append("：")
-                .append((group.getAddressType() == 0) ? i18nHelper.getString("jobgroup_field_addressType_0") : i18nHelper.getString("jobgroup_field_addressType_1"));
+                .append((group.getAddressType() == 0) ? i18nHelper.getString("job_group_field_addressType_0") : i18nHelper.getString("job_group_field_addressType_1"));
         triggerMsgSb.append("<br>").append(i18nHelper.getString("job_conf_trigger_exe_regaddress")).append("：").append(group.getRegistryList());
         triggerMsgSb.append("<br>").append(i18nHelper.getString("job_info_field_executorRouteStrategy")).append("：").append(executorRouteStrategy.getTitle());
         if (shardingParam != null) {

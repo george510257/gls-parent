@@ -64,7 +64,7 @@ public class JobLogController {
         // filter group
         List<JobGroup> jobGroupList = jobInfoController.filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new JobException(i18nHelper.getString("jobgroup_empty"));
+            throw new JobException(i18nHelper.getString("job_group_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
@@ -132,7 +132,7 @@ public class JobLogController {
         Result<String> logStatue = Result.SUCCESS;
         JobLog jobLog = jobLogDao.load(id);
         if (jobLog == null) {
-            throw new RuntimeException(i18nHelper.getString("joblog_logid_unvalid"));
+            throw new RuntimeException(i18nHelper.getString("job_log_logid_unvalid"));
         }
 
         model.addAttribute("triggerCode", jobLog.getTriggerCode());
@@ -175,7 +175,7 @@ public class JobLogController {
             return new Result<String>(500, i18nHelper.getString("job_info_glue_jobid_unvalid"));
         }
         if (Result.SUCCESS_CODE != log.getTriggerCode()) {
-            return new Result<String>(500, i18nHelper.getString("joblog_kill_log_limit"));
+            return new Result<String>(500, i18nHelper.getString("job_log_kill_log_limit"));
         }
 
         // request of kill
@@ -190,7 +190,7 @@ public class JobLogController {
 
         if (Result.SUCCESS_CODE == runResult.getCode()) {
             log.setHandleCode(Result.FAIL_CODE);
-            log.setHandleMsg(i18nHelper.getString("joblog_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
+            log.setHandleMsg(i18nHelper.getString("job_log_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
             jobCompleter.updateHandleInfoAndFinish(log);
             return new Result<String>(runResult.getMsg());
@@ -224,7 +224,7 @@ public class JobLogController {
         } else if (type == 9) {
             clearBeforeNum = 0;            // 清理所有日志数据
         } else {
-            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("joblog_clean_type_unvalid"));
+            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("job_log_clean_type_unvalid"));
         }
 
         List<Long> logIds = null;

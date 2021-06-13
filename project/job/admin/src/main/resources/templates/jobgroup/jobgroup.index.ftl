@@ -19,7 +19,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>${I18n.jobgroup_name}</h1>
+            <h1>${I18n.job_group_name}</h1>
         </section>
 
         <!-- Main content -->
@@ -35,8 +35,8 @@
                 </div>
                 <div class="col-xs-3">
                     <div class="input-group">
-                        <span class="input-group-addon">${I18n.jobgroup_field_title}</span>
-                        <input type="text" class="form-control" id="title" placeholder="${I18n.jobgroup_field_title}">
+                        <span class="input-group-addon">${I18n.job_group_field_title}</span>
+                        <input type="text" class="form-control" id="title" placeholder="${I18n.job_group_field_title}">
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -51,14 +51,14 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body">
-                            <table id="jobgroup_list" class="table table-bordered table-striped display" width="100%">
+                            <table id="job_group_list" class="table table-bordered table-striped display" width="100%">
                                 <thead>
                                 <tr>
                                     <th name="id">ID</th>
                                     <th name="appname">AppName</th>
-                                    <th name="title">${I18n.jobgroup_field_title}</th>
-                                    <th name="addressType">${I18n.jobgroup_field_addressType}</th>
-                                    <th name="registryList">OnLine ${I18n.jobgroup_field_registryList}</th>
+                                    <th name="title">${I18n.job_group_field_title}</th>
+                                    <th name="addressType">${I18n.job_group_field_addressType}</th>
+                                    <th name="registryList">OnLine ${I18n.job_group_field_registryList}</th>
                                     <th>${I18n.system_opt}</th>
                                 </tr>
                                 </thead>
@@ -77,7 +77,7 @@
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">${I18n.jobgroup_add}</h4>
+                    <h4 class="modal-title">${I18n.job_group_add}</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form" role="form">
@@ -89,28 +89,29 @@
                                                           maxlength="64"></div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_title}<font
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_title}<font
                                         color="red">*</font></label>
                             <div class="col-sm-10"><input type="text" class="form-control" name="title"
-                                                          placeholder="${I18n.system_please_input}${I18n.jobgroup_field_title}"
+                                                          placeholder="${I18n.system_please_input}${I18n.job_group_field_title}"
                                                           maxlength="12"></div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_addressType}<font
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_addressType}
+                                <font
                                         color="red">*</font></label>
                             <div class="col-sm-10">
                                 <input type="radio" name="addressType" value="0"
-                                       checked/>${I18n.jobgroup_field_addressType_0}
+                                       checked/>${I18n.job_group_field_addressType_0}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="addressType" value="1"/>${I18n.jobgroup_field_addressType_1}
+                                <input type="radio" name="addressType" value="1"/>${I18n.job_group_field_addressType_1}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_registryList}
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_registryList}
                                 <font color="red">*</font></label>
                             <div class="col-sm-10">
                                 <textarea class="textarea" name="addressList" maxlength="20000"
-                                          placeholder="${I18n.jobgroup_field_registryList_placeholder}"
+                                          placeholder="${I18n.job_group_field_registryList_placeholder}"
                                           readonly="readonly"
                                           style="background-color:#eee; width: 100%; height: 100px; font-size: 14px; line-height: 15px; border: 1px solid #dddddd; padding: 5px;"></textarea>
                             </div>
@@ -134,7 +135,7 @@
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">${I18n.jobgroup_edit}</h4>
+                    <h4 class="modal-title">${I18n.job_group_edit}</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form" role="form">
@@ -146,27 +147,28 @@
                                                           maxlength="64"></div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_title}<font
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_title}<font
                                         color="red">*</font></label>
                             <div class="col-sm-10"><input type="text" class="form-control" name="title"
-                                                          placeholder="${I18n.system_please_input}${I18n.jobgroup_field_title}"
+                                                          placeholder="${I18n.system_please_input}${I18n.job_group_field_title}"
                                                           maxlength="12"></div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_addressType}<font
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_addressType}
+                                <font
                                         color="red">*</font></label>
                             <div class="col-sm-10">
-                                <input type="radio" name="addressType" value="0"/>${I18n.jobgroup_field_addressType_0}
+                                <input type="radio" name="addressType" value="0"/>${I18n.job_group_field_addressType_0}
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="radio" name="addressType" value="1"/>${I18n.jobgroup_field_addressType_1}
+                                <input type="radio" name="addressType" value="1"/>${I18n.job_group_field_addressType_1}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="lastname" class="col-sm-2 control-label">${I18n.jobgroup_field_registryList}
+                            <label for="lastname" class="col-sm-2 control-label">${I18n.job_group_field_registryList}
                                 <font color="red">*</font></label>
                             <div class="col-sm-10">
                                 <textarea class="textarea" name="addressList" maxlength="20000"
-                                          placeholder="${I18n.jobgroup_field_registryList_placeholder}"
+                                          placeholder="${I18n.job_group_field_registryList_placeholder}"
                                           readonly="readonly"
                                           style="background-color:#eee; width: 100%; height: 100px; font-size: 14px; line-height: 15px; border: 1px solid #dddddd; padding: 5px;"></textarea>
                             </div>

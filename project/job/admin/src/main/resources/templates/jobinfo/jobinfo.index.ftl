@@ -615,7 +615,7 @@ exit 0
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">${I18n.jobgroup_field_registryList}<font
+                        <label for="firstname" class="col-sm-2 control-label">${I18n.job_group_field_registryList}<font
                                     color="black">*</font></label>
                         <div class="col-sm-10">
                             <textarea class="textarea form-control" name="addressList"

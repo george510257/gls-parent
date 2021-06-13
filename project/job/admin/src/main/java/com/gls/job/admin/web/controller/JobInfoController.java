@@ -91,7 +91,7 @@ public class JobInfoController {
         // filter group
         List<JobGroup> jobGroupList = filterJobGroupByRole(request, jobGroupList_all);
         if (jobGroupList == null || jobGroupList.size() == 0) {
-            throw new JobException(i18nHelper.getString("jobgroup_empty"));
+            throw new JobException(i18nHelper.getString("job_group_empty"));
         }
 
         model.addAttribute("JobGroupList", jobGroupList);
