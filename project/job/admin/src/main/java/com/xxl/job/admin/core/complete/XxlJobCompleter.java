@@ -1,7 +1,7 @@
 package com.xxl.job.admin.core.complete;
 
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.common.constants.JobConstants;
+import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;

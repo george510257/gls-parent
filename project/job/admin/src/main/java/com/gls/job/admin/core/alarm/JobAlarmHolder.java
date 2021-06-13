@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.core.common.base.BaseHolder;
+import com.gls.job.core.base.BaseHolder;
 import com.xxl.job.admin.core.model.XxlJobInfo;
 import com.xxl.job.admin.core.model.XxlJobLog;
 import org.springframework.stereotype.Component;

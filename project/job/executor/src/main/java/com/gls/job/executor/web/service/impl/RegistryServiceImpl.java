@@ -4,7 +4,7 @@ import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.gls.job.executor.constants.JobExecutorProperties;
+import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;

@@ -2,7 +2,7 @@ package com.gls.job.executor.web.repository.impl;
 
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.util.FileUtil;
-import com.gls.job.executor.constants.JobExecutorProperties;
+import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.CallbackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

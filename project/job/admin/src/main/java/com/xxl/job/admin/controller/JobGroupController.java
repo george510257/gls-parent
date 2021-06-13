@@ -2,7 +2,7 @@ package com.xxl.job.admin.controller;
 
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
-import com.gls.job.core.common.constants.JobConstants;
+import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.model.XxlJobGroup;
 import com.xxl.job.admin.core.model.XxlJobRegistry;
 import com.xxl.job.admin.core.util.I18nUtil;
