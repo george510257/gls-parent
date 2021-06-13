@@ -32,13 +32,13 @@ public class RegistryServiceImpl implements RegistryService {
             Result<String> registryResult = adminApi.registry(registryModel);
             if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
                 registryResult = Result.SUCCESS;
-                log.debug(">>>>>>>>>>> xxl-job registry success, registryModel:{}, registryResult:{}", registryModel, registryResult);
+                log.debug(">>>>>>>>>>> gls-job registry success, registryModel:{}, registryResult:{}", registryModel, registryResult);
 //                    break;
             } else {
-                log.info(">>>>>>>>>>> xxl-job registry fail, registryModel:{}, registryResult:{}", registryModel, registryResult);
+                log.info(">>>>>>>>>>> gls-job registry fail, registryModel:{}, registryResult:{}", registryModel, registryResult);
             }
         } catch (Exception e) {
-            log.info(">>>>>>>>>>> xxl-job registry error, registryModel:{}", registryModel, e);
+            log.info(">>>>>>>>>>> gls-job registry error, registryModel:{}", registryModel, e);
         }
 //        }
     }
@@ -51,13 +51,13 @@ public class RegistryServiceImpl implements RegistryService {
             Result<String> registryResult = adminApi.registryRemove(registryModel);
             if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
                 registryResult = Result.SUCCESS;
-                log.info(">>>>>>>>>>> xxl-job registry-remove success, registryModel:{}, registryResult:{}", registryModel, registryResult);
+                log.info(">>>>>>>>>>> gls-job registry-remove success, registryModel:{}, registryResult:{}", registryModel, registryResult);
 //                    break;
             } else {
-                log.info(">>>>>>>>>>> xxl-job registry-remove fail, registryModel:{}, registryResult:{}", registryModel, registryResult);
+                log.info(">>>>>>>>>>> gls-job registry-remove fail, registryModel:{}, registryResult:{}", registryModel, registryResult);
             }
         } catch (Exception e) {
-            log.info(">>>>>>>>>>> xxl-job registry-remove error, registryModel:{}", registryModel, e);
+            log.info(">>>>>>>>>>> gls-job registry-remove error, registryModel:{}", registryModel, e);
         }
 //        }
     }

@@ -3,10 +3,10 @@ package com.xxl.job.admin.core.thread;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.gls.job.admin.web.dao.XxlJobInfoDao;
-import com.gls.job.admin.web.dao.XxlJobLogDao;
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.dao.JobInfoDao;
+import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -28,9 +28,9 @@ public class JobFailMonitorHelper {
     // ---------------------- monitor ----------------------
     private volatile boolean toStop = false;
     @Resource
-    private XxlJobLogDao xxlJobLogDao;
+    private JobLogDao jobLogDao;
     @Resource
-    private XxlJobInfoDao xxlJobInfoDao;
+    private JobInfoDao jobInfoDao;
     @Resource
     private JobAlarmHolder jobAlarmHolder;
 
@@ -45,24 +45,24 @@ public class JobFailMonitorHelper {
             while (!toStop) {
                 try {
 
-                    List<Long> failLogIds = xxlJobLogDao.findFailJobLogIds(1000);
+                    List<Long> failLogIds = jobLogDao.findFailJobLogIds(1000);
                     if (failLogIds != null && !failLogIds.isEmpty()) {
                         for (long failLogId : failLogIds) {
 
                             // lock log
-                            int lockRet = xxlJobLogDao.updateAlarmStatus(failLogId, 0, -1);
+                            int lockRet = jobLogDao.updateAlarmStatus(failLogId, 0, -1);
                             if (lockRet < 1) {
                                 continue;
                             }
-                            XxlJobLog log = xxlJobLogDao.load(failLogId);
-                            XxlJobInfo info = xxlJobInfoDao.loadById(log.getJobId());
+                            JobLog log = jobLogDao.load(failLogId);
+                            JobInfo info = jobInfoDao.loadById(log.getJobId());
 
                             // 1、fail retry monitor
                             if (log.getExecutorFailRetryCount() > 0) {
                                 JobTriggerPoolHelper.trigger(log.getJobId(), TriggerType.RETRY, (log.getExecutorFailRetryCount() - 1), log.getExecutorShardingParam(), log.getExecutorParam(), null);
                                 String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + i18nHelper.getString("job_conf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
                                 log.setTriggerMsg(log.getTriggerMsg() + retryMsg);
-                                xxlJobLogDao.updateTriggerInfo(log);
+                                jobLogDao.updateTriggerInfo(log);
                             }
 
                             // 2、fail alarm monitor
@@ -74,13 +74,13 @@ public class JobFailMonitorHelper {
                                 newAlarmStatus = 1;
                             }
 
-                            xxlJobLogDao.updateAlarmStatus(failLogId, -1, newAlarmStatus);
+                            jobLogDao.updateAlarmStatus(failLogId, -1, newAlarmStatus);
                         }
                     }
 
                 } catch (Exception e) {
                     if (!toStop) {
-                        log.error(">>>>>>>>>>> xxl-job, job fail monitor thread error:{}", e);
+                        log.error(">>>>>>>>>>> gls-job, job fail monitor thread error:{}", e);
                     }
                 }
 
@@ -94,11 +94,11 @@ public class JobFailMonitorHelper {
 
             }
 
-            log.info(">>>>>>>>>>> xxl-job, job fail monitor thread stop");
+            log.info(">>>>>>>>>>> gls-job, job fail monitor thread stop");
 
         });
         monitorThread.setDaemon(true);
-        monitorThread.setName("xxl-job, admin JobFailMonitorHelper");
+        monitorThread.setName("gls-job, admin JobFailMonitorHelper");
         monitorThread.start();
     }
 

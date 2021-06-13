@@ -10,12 +10,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * xxl-job info
+ * gls-job info
  *
  * @author xuxueli  2016-1-12 18:25:49
  */
 @Data
-public class XxlJobInfo {
+public class JobInfo {
 
     private Long id;                // 主键ID
 

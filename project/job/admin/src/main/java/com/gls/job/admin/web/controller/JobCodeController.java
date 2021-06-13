@@ -1,10 +1,10 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.gls.job.admin.web.dao.XxlJobInfoDao;
-import com.gls.job.admin.web.dao.XxlJobLogGlueDao;
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLogGlue;
+import com.gls.job.admin.web.dao.JobInfoDao;
+import com.gls.job.admin.web.dao.JobLogGlueDao;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLogGlue;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
 import org.springframework.stereotype.Controller;
@@ -27,9 +27,9 @@ import java.util.List;
 public class JobCodeController {
 
     @Resource
-    private XxlJobInfoDao xxlJobInfoDao;
+    private JobInfoDao jobInfoDao;
     @Resource
-    private XxlJobLogGlueDao xxlJobLogGlueDao;
+    private JobLogGlueDao jobLogGlueDao;
     @Resource
     private JobInfoController jobInfoController;
     @Resource
@@ -37,8 +37,8 @@ public class JobCodeController {
 
     @RequestMapping
     public String index(HttpServletRequest request, Model model, Long jobId) {
-        XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
-        List<XxlJobLogGlue> jobLogGlues = xxlJobLogGlueDao.findByJobId(jobId);
+        JobInfo jobInfo = jobInfoDao.loadById(jobId);
+        List<JobLogGlue> jobLogGlues = jobLogGlueDao.findByJobId(jobId);
 
         if (jobInfo == null) {
             throw new RuntimeException(i18nHelper.getString("job_info_glue_jobid_unvalid"));
@@ -68,7 +68,7 @@ public class JobCodeController {
         if (glueRemark.length() < 4 || glueRemark.length() > 100) {
             return new Result<String>(500, i18nHelper.getString("job_info_glue_remark_limit"));
         }
-        XxlJobInfo exists_jobInfo = xxlJobInfoDao.loadById(id);
+        JobInfo exists_jobInfo = jobInfoDao.loadById(id);
         if (exists_jobInfo == null) {
             return new Result<String>(500, i18nHelper.getString("job_info_glue_jobid_unvalid"));
         }
@@ -79,21 +79,21 @@ public class JobCodeController {
         exists_jobInfo.setGlueUpdateTime(new Date());
 
         exists_jobInfo.setUpdateTime(new Date());
-        xxlJobInfoDao.update(exists_jobInfo);
+        jobInfoDao.update(exists_jobInfo);
 
         // log old code
-        XxlJobLogGlue xxlJobLogGlue = new XxlJobLogGlue();
-        xxlJobLogGlue.setJobId(exists_jobInfo.getId());
-        xxlJobLogGlue.setGlueType(exists_jobInfo.getGlueType());
-        xxlJobLogGlue.setGlueSource(glueSource);
-        xxlJobLogGlue.setGlueRemark(glueRemark);
+        JobLogGlue jobLogGlue = new JobLogGlue();
+        jobLogGlue.setJobId(exists_jobInfo.getId());
+        jobLogGlue.setGlueType(exists_jobInfo.getGlueType());
+        jobLogGlue.setGlueSource(glueSource);
+        jobLogGlue.setGlueRemark(glueRemark);
 
-        xxlJobLogGlue.setAddTime(new Date());
-        xxlJobLogGlue.setUpdateTime(new Date());
-        xxlJobLogGlueDao.save(xxlJobLogGlue);
+        jobLogGlue.setAddTime(new Date());
+        jobLogGlue.setUpdateTime(new Date());
+        jobLogGlueDao.save(jobLogGlue);
 
         // remove code backup more than 30
-        xxlJobLogGlueDao.removeOld(exists_jobInfo.getId(), 30);
+        jobLogGlueDao.removeOld(exists_jobInfo.getId(), 30);
 
         return Result.SUCCESS;
     }

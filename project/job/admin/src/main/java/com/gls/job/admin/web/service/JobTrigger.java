@@ -4,12 +4,12 @@ import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.core.route.ExecutorRouterHolder;
-import com.gls.job.admin.web.dao.XxlJobGroupDao;
-import com.gls.job.admin.web.dao.XxlJobInfoDao;
-import com.gls.job.admin.web.dao.XxlJobLogDao;
-import com.gls.job.admin.web.model.XxlJobGroup;
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.dao.JobGroupDao;
+import com.gls.job.admin.web.dao.JobInfoDao;
+import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
@@ -23,26 +23,26 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * xxl-job trigger
+ * gls-job trigger
  *
  * @author xuxueli
  * @date 17/7/13
  */
 @Slf4j
 @Component
-public class XxlJobTrigger {
+public class JobTrigger {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
-    private XxlJobScheduler xxlJobScheduler;
+    private JobScheduler jobScheduler;
     @Resource
     private ExecutorRouterHolder executorRouterHolder;
     @Resource
-    private XxlJobLogDao xxlJobLogDao;
+    private JobLogDao jobLogDao;
     @Resource
-    private XxlJobInfoDao xxlJobInfoDao;
+    private JobInfoDao jobInfoDao;
     @Resource
-    private XxlJobGroupDao xxlJobGroupDao;
+    private JobGroupDao jobGroupDao;
 
     /**
      * trigger job
@@ -65,7 +65,7 @@ public class XxlJobTrigger {
                         String addressList) {
 
         // load data
-        XxlJobInfo jobInfo = xxlJobInfoDao.loadById(jobId);
+        JobInfo jobInfo = jobInfoDao.loadById(jobId);
         if (jobInfo == null) {
             log.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -74,7 +74,7 @@ public class XxlJobTrigger {
             jobInfo.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfo.getExecutorFailRetryCount();
-        XxlJobGroup group = xxlJobGroupDao.load(jobInfo.getJobGroup());
+        JobGroup group = jobGroupDao.load(jobInfo.getJobGroup());
 
         // cover addressList
         if (addressList != null && addressList.trim().length() > 0) {
@@ -124,7 +124,7 @@ public class XxlJobTrigger {
      * @param index               sharding index
      * @param total               sharding index
      */
-    private void processTrigger(XxlJobGroup group, XxlJobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
+    private void processTrigger(JobGroup group, JobInfo jobInfo, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
 
         // param
         ExecutorBlockStrategy blockStrategy = jobInfo.getExecutorBlockStrategy();
@@ -134,12 +134,12 @@ public class XxlJobTrigger {
         String shardingParam = (ExecutorRouteStrategy.SHARDING_BROADCAST == executorRouteStrategy) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
 
         // 1、save log-id
-        XxlJobLog jobLog = new XxlJobLog();
+        JobLog jobLog = new JobLog();
         jobLog.setJobGroup(jobInfo.getJobGroup());
         jobLog.setJobId(jobInfo.getId());
         jobLog.setTriggerTime(new Date());
-        xxlJobLogDao.save(jobLog);
-        log.debug(">>>>>>>>>>> xxl-job trigger start, jobId:{}", jobLog.getId());
+        jobLogDao.save(jobLog);
+        log.debug(">>>>>>>>>>> gls-job trigger start, jobId:{}", jobLog.getId());
 
         // 2、init trigger-param
         TriggerModel triggerModel = new TriggerModel();
@@ -208,9 +208,9 @@ public class XxlJobTrigger {
         //jobLog.setTriggerTime();
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
-        xxlJobLogDao.updateTriggerInfo(jobLog);
+        jobLogDao.updateTriggerInfo(jobLog);
 
-        log.debug(">>>>>>>>>>> xxl-job trigger end, jobId:{}", jobLog.getId());
+        log.debug(">>>>>>>>>>> gls-job trigger end, jobId:{}", jobLog.getId());
     }
 
     /**
@@ -223,10 +223,10 @@ public class XxlJobTrigger {
     public Result<String> runExecutor(TriggerModel triggerModel, String address) {
         Result<String> runResult;
         try {
-            ExecutorApi executorApi = xxlJobScheduler.getExecutorBiz(address);
+            ExecutorApi executorApi = jobScheduler.getExecutorBiz(address);
             runResult = executorApi.run(triggerModel);
         } catch (Exception e) {
-            log.error(">>>>>>>>>>> xxl-job trigger error, please check if the executor[{}] is running.", address, e);
+            log.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
             runResult = new Result<>(Result.FAIL_CODE, ThrowableUtil.toString(e));
         }
 

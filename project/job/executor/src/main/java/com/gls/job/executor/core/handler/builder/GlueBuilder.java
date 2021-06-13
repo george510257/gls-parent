@@ -51,12 +51,12 @@ public class GlueBuilder {
                     this.injectService(instance);
                     return (JobHandler) instance;
                 } else {
-                    throw new IllegalArgumentException(">>>>>>>>>>> xxl-glue, loadNewInstance error, "
+                    throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, "
                             + "cannot convert from instance[" + instance.getClass() + "] to JobHandler");
                 }
             }
         }
-        throw new IllegalArgumentException(">>>>>>>>>>> xxl-glue, loadNewInstance error, instance is null");
+        throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, instance is null");
     }
 
     private Class<?> getCodeSourceClass(String codeSource) {

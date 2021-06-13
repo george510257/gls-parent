@@ -2,7 +2,7 @@ package com.xxl.job.admin.core.thread;
 
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.enums.TriggerType;
-import com.gls.job.admin.web.service.XxlJobTrigger;
+import com.gls.job.admin.web.service.JobTrigger;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -25,7 +25,7 @@ public class JobTriggerPoolHelper {
     private ThreadPoolExecutor slowTriggerPool = null;
     // job timeout count
     private volatile long minTim = System.currentTimeMillis() / 60000;     // ms > min
-    private XxlJobTrigger xxlJobTrigger;
+    private JobTrigger jobTrigger;
     @Resource
     private JobAdminProperties jobAdminProperties;
 
@@ -59,7 +59,7 @@ public class JobTriggerPoolHelper {
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(1000),
-                r -> new Thread(r, "xxl-job, admin JobTriggerPoolHelper-fastTriggerPool-" + r.hashCode()));
+                r -> new Thread(r, "gls-job, admin JobTriggerPoolHelper-fastTriggerPool-" + r.hashCode()));
 
         slowTriggerPool = new ThreadPoolExecutor(
                 10,
@@ -67,14 +67,14 @@ public class JobTriggerPoolHelper {
                 60L,
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<>(2000),
-                r -> new Thread(r, "xxl-job, admin JobTriggerPoolHelper-slowTriggerPool-" + r.hashCode()));
+                r -> new Thread(r, "gls-job, admin JobTriggerPoolHelper-slowTriggerPool-" + r.hashCode()));
     }
 
     public void stop() {
         //triggerPool.shutdown();
         fastTriggerPool.shutdownNow();
         slowTriggerPool.shutdownNow();
-        log.info(">>>>>>>>> xxl-job trigger thread pool shutdown success.");
+        log.info(">>>>>>>>> gls-job trigger thread pool shutdown success.");
     }
 
     /**
@@ -101,7 +101,7 @@ public class JobTriggerPoolHelper {
 
             try {
                 // do trigger
-                xxlJobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+                jobTrigger.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             } finally {

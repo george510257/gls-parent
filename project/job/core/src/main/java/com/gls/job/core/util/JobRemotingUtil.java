@@ -16,8 +16,8 @@ import java.security.cert.X509Certificate;
 /**
  * @author xuxueli 2018-11-25 00:55:31
  */
-public class XxlJobRemotingUtil {
-    public static final String XXL_JOB_ACCESS_TOKEN = "XXL-JOB-ACCESS-TOKEN";
+public class JobRemotingUtil {
+    public static final String GLS_JOB_ACCESS_TOKEN = "GLS-JOB-ACCESS-TOKEN";
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{new X509TrustManager() {
         @Override
         public X509Certificate[] getAcceptedIssuers() {
@@ -32,7 +32,7 @@ public class XxlJobRemotingUtil {
         public void checkServerTrusted(X509Certificate[] chain, String authType) {
         }
     }};
-    private static final Logger logger = LoggerFactory.getLogger(XxlJobRemotingUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobRemotingUtil.class);
 
     private static void trustAllHosts(HttpsURLConnection connection) {
         try {
@@ -85,7 +85,7 @@ public class XxlJobRemotingUtil {
             connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
 
             if (accessToken != null && accessToken.trim().length() > 0) {
-                connection.setRequestProperty(XXL_JOB_ACCESS_TOKEN, accessToken);
+                connection.setRequestProperty(GLS_JOB_ACCESS_TOKEN, accessToken);
             }
 
             // do connection
@@ -103,7 +103,7 @@ public class XxlJobRemotingUtil {
 
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
-                return new Result<String>(Result.FAIL_CODE, "xxl-rpc remoting fail, StatusCode(" + statusCode + ") invalid. for url : " + url);
+                return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting fail, StatusCode(" + statusCode + ") invalid. for url : " + url);
             }
 
             // result
@@ -119,13 +119,13 @@ public class XxlJobRemotingUtil {
             try {
                 return GsonTool.fromJson(resultJson, Result.class, returnTagClassOfT);
             } catch (Exception e) {
-                logger.error("xxl-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
-                return new Result<String>(Result.FAIL_CODE, "xxl-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").");
+                logger.error("gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
+                return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").");
             }
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return new Result<String>(Result.FAIL_CODE, "xxl-rpc remoting error(" + e.getMessage() + "), for url : " + url);
+            return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting error(" + e.getMessage() + "), for url : " + url);
         } finally {
             try {
                 if (bufferedReader != null) {

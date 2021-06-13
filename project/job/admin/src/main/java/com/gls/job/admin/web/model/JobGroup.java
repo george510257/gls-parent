@@ -11,7 +11,7 @@ import java.util.List;
  * Created by xuxueli on 16/9/30.
  */
 @Data
-public class XxlJobGroup {
+public class JobGroup {
 
     private Long id;
     private String appname;

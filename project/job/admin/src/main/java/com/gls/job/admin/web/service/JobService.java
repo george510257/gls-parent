@@ -1,17 +1,17 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.web.model.XxlJobInfo;
+import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.core.api.model.Result;
 
 import java.util.Date;
 import java.util.Map;
 
 /**
- * core job action for xxl-job
+ * core job action for gls-job
  *
  * @author xuxueli 2016-5-28 15:30:33
  */
-public interface XxlJobService {
+public interface JobService {
 
     /**
      * page list
@@ -32,7 +32,7 @@ public interface XxlJobService {
      * @param jobInfo
      * @return
      */
-    public Result<String> add(XxlJobInfo jobInfo);
+    public Result<String> add(JobInfo jobInfo);
 
     /**
      * update job
@@ -40,7 +40,7 @@ public interface XxlJobService {
      * @param jobInfo
      * @return
      */
-    public Result<String> update(XxlJobInfo jobInfo);
+    public Result<String> update(JobInfo jobInfo);
 
     /**
      * remove job

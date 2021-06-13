@@ -3,10 +3,10 @@ package com.gls.job.admin.core.alarm.impl;
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.gls.job.admin.web.dao.XxlJobGroupDao;
-import com.gls.job.admin.web.model.XxlJobGroup;
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.dao.JobGroupDao;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,7 +29,7 @@ import java.util.Set;
 @Component
 public class EmailJobAlarm implements JobAlarm {
     @Resource
-    private XxlJobGroupDao xxlJobGroupDao;
+    private JobGroupDao jobGroupDao;
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -72,7 +72,7 @@ public class EmailJobAlarm implements JobAlarm {
      * @param jobLog
      */
     @Override
-    public boolean doAlarm(XxlJobInfo info, XxlJobLog jobLog) {
+    public boolean doAlarm(JobInfo info, JobLog jobLog) {
         boolean alarmResult = true;
 
         // send monitor email
@@ -88,7 +88,7 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            XxlJobGroup group = xxlJobGroupDao.load(info.getJobGroup());
+            JobGroup group = jobGroupDao.load(info.getJobGroup());
             String personal = i18nHelper.getString("admin_name_full");
             String title = i18nHelper.getString("job_conf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
@@ -112,7 +112,7 @@ public class EmailJobAlarm implements JobAlarm {
 
                     mailSender.send(mimeMessage);
                 } catch (Exception e) {
-                    log.error(">>>>>>>>>>> xxl-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
+                    log.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
 
                     alarmResult = false;
                 }

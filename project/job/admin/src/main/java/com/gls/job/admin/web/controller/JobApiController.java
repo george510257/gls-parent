@@ -7,7 +7,7 @@ import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.core.util.GsonTool;
-import com.gls.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.JobRemotingUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +52,7 @@ public class JobApiController {
         }
         if (jobAdminProperties.getAccessToken() != null
                 && jobAdminProperties.getAccessToken().trim().length() > 0
-                && !jobAdminProperties.getAccessToken().equals(request.getHeader(XxlJobRemotingUtil.XXL_JOB_ACCESS_TOKEN))) {
+                && !jobAdminProperties.getAccessToken().equals(request.getHeader(JobRemotingUtil.GLS_JOB_ACCESS_TOKEN))) {
             return new Result<String>(Result.FAIL_CODE, "The access token is wrong.");
         }
 

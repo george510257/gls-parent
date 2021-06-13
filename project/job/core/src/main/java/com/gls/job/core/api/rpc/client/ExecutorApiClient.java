@@ -2,7 +2,7 @@ package com.gls.job.core.api.rpc.client;
 
 import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.rpc.ExecutorApi;
-import com.gls.job.core.util.XxlJobRemotingUtil;
+import com.gls.job.core.util.JobRemotingUtil;
 
 /**
  * admin api test
@@ -30,27 +30,27 @@ public class ExecutorApiClient implements ExecutorApi {
 
     @Override
     public Result<String> beat() {
-        return XxlJobRemotingUtil.postBody(addressUrl + "beat", accessToken, timeout, "", String.class);
+        return JobRemotingUtil.postBody(addressUrl + "beat", accessToken, timeout, "", String.class);
     }
 
     @Override
     public Result<String> idleBeat(IdleBeatModel idleBeatModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "idleBeat", accessToken, timeout, idleBeatModel, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "idleBeat", accessToken, timeout, idleBeatModel, String.class);
     }
 
     @Override
     public Result<String> run(TriggerModel triggerModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "run", accessToken, timeout, triggerModel, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "run", accessToken, timeout, triggerModel, String.class);
     }
 
     @Override
     public Result<String> kill(KillModel killModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "kill", accessToken, timeout, killModel, String.class);
+        return JobRemotingUtil.postBody(addressUrl + "kill", accessToken, timeout, killModel, String.class);
     }
 
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
-        return XxlJobRemotingUtil.postBody(addressUrl + "log", accessToken, timeout, logModel, LogResultModel.class);
+        return JobRemotingUtil.postBody(addressUrl + "log", accessToken, timeout, logModel, LogResultModel.class);
     }
 
 }

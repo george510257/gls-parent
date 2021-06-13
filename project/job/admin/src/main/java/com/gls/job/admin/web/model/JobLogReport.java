@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class XxlJobLogReport {
+public class JobLogReport {
 
     private Long id;
 

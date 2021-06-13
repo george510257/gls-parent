@@ -11,7 +11,7 @@
           href="${request.contextPath}/static/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
     <title>${I18n.admin_name}</title>
 </head>
-<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["xxljob_adminlte_settings"]?exists && "off" == cookieMap["xxljob_adminlte_settings"].value >sidebar-collapse</#if> ">
+<body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && cookieMap["job_adminlte_settings"]?exists && "off" == cookieMap["job_adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
     <!-- header -->
     <@netCommon.commonHeader />
@@ -33,7 +33,7 @@
                         <span class="input-group-addon">${I18n.job_info_field_jobgroup}</span>
                         <select class="form-control" id="jobGroup"
                                 paramVal="<#if jobInfo?exists>${jobInfo.jobGroup}</#if>">
-                            <#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>
+                            <#if Request["GLS_JOB_LOGIN_IDENTITY"].role == 1>
                                 <option value="0">${I18n.system_all}</option>  <#-- 仅管理员支持查询全部；普通用户仅支持查询有权限的 jobGroup -->
                             </#if>
                             <#list JobGroupList as group>

@@ -2,10 +2,10 @@ package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.gls.job.admin.web.dao.XxlJobInfoDao;
-import com.gls.job.admin.web.dao.XxlJobLogDao;
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.dao.JobInfoDao;
+import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
@@ -20,47 +20,47 @@ import java.text.MessageFormat;
  */
 @Slf4j
 @Component
-public class XxlJobCompleter {
+public class JobCompleter {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
-    private XxlJobLogDao xxlJobLogDao;
+    private JobLogDao jobLogDao;
     @Resource
-    private XxlJobInfoDao xxlJobInfoDao;
+    private JobInfoDao jobInfoDao;
 
     /**
      * common fresh handle entrance (limit only once)
      *
-     * @param xxlJobLog
+     * @param jobLog
      * @return
      */
-    public int updateHandleInfoAndFinish(XxlJobLog xxlJobLog) {
+    public int updateHandleInfoAndFinish(JobLog jobLog) {
 
         // finish
-        finishJob(xxlJobLog);
+        finishJob(jobLog);
 
         // text最大64kb 避免长度过长
-        if (xxlJobLog.getHandleMsg().length() > 15000) {
-            xxlJobLog.setHandleMsg(xxlJobLog.getHandleMsg().substring(0, 15000));
+        if (jobLog.getHandleMsg().length() > 15000) {
+            jobLog.setHandleMsg(jobLog.getHandleMsg().substring(0, 15000));
         }
 
         // fresh handle
-        return xxlJobLogDao.updateHandleInfo(xxlJobLog);
+        return jobLogDao.updateHandleInfo(jobLog);
     }
 
     /**
      * do somethind to finish job
      */
-    private void finishJob(XxlJobLog xxlJobLog) {
+    private void finishJob(JobLog jobLog) {
 
         // 1、handle success, to trigger child job
         String triggerChildMsg = null;
-        if (JobConstants.HANDLE_CODE_SUCCESS == xxlJobLog.getHandleCode()) {
-            XxlJobInfo xxlJobInfo = xxlJobInfoDao.loadById(xxlJobLog.getJobId());
-            if (xxlJobInfo != null && xxlJobInfo.getChildJobId() != null && xxlJobInfo.getChildJobId().trim().length() > 0) {
+        if (JobConstants.HANDLE_CODE_SUCCESS == jobLog.getHandleCode()) {
+            JobInfo jobInfo = jobInfoDao.loadById(jobLog.getJobId());
+            if (jobInfo != null && jobInfo.getChildJobId() != null && jobInfo.getChildJobId().trim().length() > 0) {
                 triggerChildMsg = "<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>" + i18nHelper.getString("job_conf_trigger_child_run") + "<<<<<<<<<<< </span><br>";
 
-                String[] childJobIds = xxlJobInfo.getChildJobId().split(",");
+                String[] childJobIds = jobInfo.getChildJobId().split(",");
                 for (int i = 0; i < childJobIds.length; i++) {
                     long childJobId = (childJobIds[i] != null && childJobIds[i].trim().length() > 0 && isNumeric(childJobIds[i])) ? Long.parseLong(childJobIds[i]) : -1;
                     if (childJobId > 0) {
@@ -87,7 +87,7 @@ public class XxlJobCompleter {
         }
 
         if (triggerChildMsg != null) {
-            xxlJobLog.setHandleMsg(xxlJobLog.getHandleMsg() + triggerChildMsg);
+            jobLog.setHandleMsg(jobLog.getHandleMsg() + triggerChildMsg);
         }
 
         // 2、fix_delay trigger next

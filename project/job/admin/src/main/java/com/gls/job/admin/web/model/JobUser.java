@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
  * @author xuxueli 2019-05-04 16:43:12
  */
 @Data
-public class XxlJobUser {
+public class JobUser {
 
     private Long id;
     private String username;        // 账号

@@ -1,9 +1,9 @@
 package com.xxl.job.admin.core.thread;
 
 import com.gls.job.admin.core.constants.JobAdminProperties;
-import com.gls.job.admin.web.dao.XxlJobLogDao;
-import com.gls.job.admin.web.dao.XxlJobLogReportDao;
-import com.gls.job.admin.web.model.XxlJobLogReport;
+import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.dao.JobLogReportDao;
+import com.gls.job.admin.web.model.JobLogReport;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -25,9 +25,9 @@ public class JobLogReportHelper {
     private Thread logrThread;
     private volatile boolean toStop = false;
     @Resource
-    private XxlJobLogDao xxlJobLogDao;
+    private JobLogDao jobLogDao;
     @Resource
-    private XxlJobLogReportDao xxlJobLogReportDao;
+    private JobLogReportDao jobLogReportDao;
     @Resource
     private JobAdminProperties jobAdminProperties;
 
@@ -66,34 +66,34 @@ public class JobLogReportHelper {
                         Date todayTo = itemDay.getTime();
 
                         // refresh log-report every minute
-                        XxlJobLogReport xxlJobLogReport = new XxlJobLogReport();
-                        xxlJobLogReport.setTriggerDay(todayFrom);
-                        xxlJobLogReport.setRunningCount(0);
-                        xxlJobLogReport.setSucCount(0);
-                        xxlJobLogReport.setFailCount(0);
+                        JobLogReport jobLogReport = new JobLogReport();
+                        jobLogReport.setTriggerDay(todayFrom);
+                        jobLogReport.setRunningCount(0);
+                        jobLogReport.setSucCount(0);
+                        jobLogReport.setFailCount(0);
 
-                        Map<String, Object> triggerCountMap = xxlJobLogDao.findLogReport(todayFrom, todayTo);
+                        Map<String, Object> triggerCountMap = jobLogDao.findLogReport(todayFrom, todayTo);
                         if (triggerCountMap != null && triggerCountMap.size() > 0) {
                             int triggerDayCount = triggerCountMap.containsKey("triggerDayCount") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCount"))) : 0;
                             int triggerDayCountRunning = triggerCountMap.containsKey("triggerDayCountRunning") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCountRunning"))) : 0;
                             int triggerDayCountSuc = triggerCountMap.containsKey("triggerDayCountSuc") ? Integer.parseInt(String.valueOf(triggerCountMap.get("triggerDayCountSuc"))) : 0;
                             int triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc;
 
-                            xxlJobLogReport.setRunningCount(triggerDayCountRunning);
-                            xxlJobLogReport.setSucCount(triggerDayCountSuc);
-                            xxlJobLogReport.setFailCount(triggerDayCountFail);
+                            jobLogReport.setRunningCount(triggerDayCountRunning);
+                            jobLogReport.setSucCount(triggerDayCountSuc);
+                            jobLogReport.setFailCount(triggerDayCountFail);
                         }
 
                         // do refresh
-                        int ret = xxlJobLogReportDao.update(xxlJobLogReport);
+                        int ret = jobLogReportDao.update(jobLogReport);
                         if (ret < 1) {
-                            xxlJobLogReportDao.save(xxlJobLogReport);
+                            jobLogReportDao.save(jobLogReport);
                         }
                     }
 
                 } catch (Exception e) {
                     if (!toStop) {
-                        log.error(">>>>>>>>>>> xxl-job, job log report thread error:{}", e);
+                        log.error(">>>>>>>>>>> gls-job, job log report thread error:{}", e);
                     }
                 }
 
@@ -113,9 +113,9 @@ public class JobLogReportHelper {
                     // clean expired log
                     List<Long> logIds;
                     do {
-                        logIds = xxlJobLogDao.findClearLogIds(0L, 0L, clearBeforeTime, 0, 1000);
+                        logIds = jobLogDao.findClearLogIds(0L, 0L, clearBeforeTime, 0, 1000);
                         if (logIds != null && logIds.size() > 0) {
-                            xxlJobLogDao.clearLog(logIds);
+                            jobLogDao.clearLog(logIds);
                         }
                     } while (logIds != null && logIds.size() > 0);
 
@@ -133,11 +133,11 @@ public class JobLogReportHelper {
 
             }
 
-            log.info(">>>>>>>>>>> xxl-job, job log report thread stop");
+            log.info(">>>>>>>>>>> gls-job, job log report thread stop");
 
         });
         logrThread.setDaemon(true);
-        logrThread.setName("xxl-job, admin JobLogReportHelper");
+        logrThread.setName("gls-job, admin JobLogReportHelper");
         logrThread.start();
     }
 

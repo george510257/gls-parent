@@ -55,14 +55,14 @@ public class CallbackServiceImpl implements CallbackService {
         try {
             Result<String> callbackResult = adminApi.callback(callbackModels);
             if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
-                callbackLog(callbackModels, "<br>----------- xxl-job job callback finish.");
+                callbackLog(callbackModels, "<br>----------- gls-job job callback finish.");
                 callbackRet = true;
 //                    break;
             } else {
-                callbackLog(callbackModels, "<br>----------- xxl-job job callback fail, callbackResult:" + callbackResult);
+                callbackLog(callbackModels, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
             }
         } catch (Exception e) {
-            callbackLog(callbackModels, "<br>----------- xxl-job job callback error, errorMsg:" + e.getMessage());
+            callbackLog(callbackModels, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
         }
 //        }
         if (!callbackRet) {

@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.dao;
 
-import com.gls.job.admin.web.model.XxlJobLogGlue;
+import com.gls.job.admin.web.model.JobLogGlue;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,11 +12,11 @@ import java.util.List;
  * @author xuxueli 2016-5-19 18:04:56
  */
 @Mapper
-public interface XxlJobLogGlueDao {
+public interface JobLogGlueDao {
 
-    public int save(XxlJobLogGlue xxlJobLogGlue);
+    public int save(JobLogGlue jobLogGlue);
 
-    public List<XxlJobLogGlue> findByJobId(@Param("jobId") Long jobId);
+    public List<JobLogGlue> findByJobId(@Param("jobId") Long jobId);
 
     public int removeOld(@Param("jobId") Long jobId, @Param("limit") int limit);
 

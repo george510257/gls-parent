@@ -4,7 +4,7 @@ import com.gls.job.core.constants.JobConstants;
 import lombok.Data;
 
 /**
- * xxl-job context
+ * gls-job context
  *
  * @author xuxueli 2020-05-21
  * [Dear hj]

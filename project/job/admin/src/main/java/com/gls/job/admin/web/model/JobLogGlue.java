@@ -6,12 +6,12 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * xxl-job log for glue, used to track job code process
+ * gls-job log for glue, used to track job code process
  *
  * @author xuxueli 2016-5-19 17:57:46
  */
 @Data
-public class XxlJobLogGlue {
+public class JobLogGlue {
 
     private Long id;
     private Long jobId;                // 任务主键ID

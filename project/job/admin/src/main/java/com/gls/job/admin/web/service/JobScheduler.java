@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Slf4j
 @Component
-public class XxlJobScheduler {
+public class JobScheduler {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
@@ -70,7 +70,7 @@ public class XxlJobScheduler {
         // start-schedule  ( depend on JobTriggerPoolHelper )
         JobScheduleHelper.getInstance().start();
 
-        log.info(">>>>>>>>> init xxl-job admin success.");
+        log.info(">>>>>>>>> init gls-job admin success.");
     }
 
     public void destroy() throws Exception {

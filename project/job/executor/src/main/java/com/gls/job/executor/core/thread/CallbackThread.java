@@ -20,24 +20,24 @@ public class CallbackThread extends BaseThread {
 
     @Override
     protected void initExecute() throws Exception {
-        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread init.");
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread init.");
     }
 
     @Override
     protected void doExecute() throws Exception {
-        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread doExecute.");
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread doExecute.");
         callbackService.callback();
     }
 
     @Override
     protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread sleep.");
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread sleep.");
         TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 
     @Override
     protected void destroyExecute() throws Exception {
         callbackService.callback();
-        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread destroy.");
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread destroy.");
     }
 }

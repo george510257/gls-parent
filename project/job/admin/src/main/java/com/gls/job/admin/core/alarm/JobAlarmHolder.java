@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.web.model.XxlJobInfo;
-import com.gls.job.admin.web.model.XxlJobLog;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.base.BaseHolder;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
      * @param jobLog
      * @return
      */
-    public boolean alarm(XxlJobInfo info, XxlJobLog jobLog) {
+    public boolean alarm(JobInfo info, JobLog jobLog) {
         AtomicBoolean result = new AtomicBoolean(false);
         this.loadAll().forEach(jobAlarm -> {
             result.set(jobAlarm.doAlarm(info, jobLog));

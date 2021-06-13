@@ -94,7 +94,7 @@ public class JobThread extends BaseThread {
                 jobContextHolder.set(jobContext);
 
                 // execute
-                jobLogService.log("<br>----------- xxl-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
+                jobLogService.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
 
                 if (triggerModel.getExecutorTimeout() > 0) {
                     // limit timeout
@@ -114,7 +114,7 @@ public class JobThread extends BaseThread {
                         Boolean tempResult = futureTask.get(triggerModel.getExecutorTimeout(), TimeUnit.SECONDS);
                     } catch (TimeoutException e) {
 
-                        jobLogService.log("<br>----------- xxl-job job execute timeout");
+                        jobLogService.log("<br>----------- gls-job job execute timeout");
                         jobLogService.log(e);
 
                         // handle result
@@ -137,7 +137,7 @@ public class JobThread extends BaseThread {
                             : tempHandleMsg;
                     jobContextHolder.get().setHandleMsg(tempHandleMsg);
                 }
-                jobLogService.log("<br>----------- xxl-job job execute end(finish) -----------<br>----------- Result: handleCode="
+                jobLogService.log("<br>----------- gls-job job execute end(finish) -----------<br>----------- Result: handleCode="
                         + jobContextHolder.get().getHandleCode()
                         + ", handleMsg = "
                         + jobContextHolder.get().getHandleMsg()
@@ -163,7 +163,7 @@ public class JobThread extends BaseThread {
 
             jobContextHolder.handleFail(errorMsg);
 
-            jobLogService.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- xxl-job job execute end(error) -----------");
+            jobLogService.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
         } finally {
             if (triggerModel != null) {
                 // callback handler info

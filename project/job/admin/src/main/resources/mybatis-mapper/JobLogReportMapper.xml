@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.gls.job.admin.web.dao.XxlJobLogReportDao">
+<mapper namespace="com.gls.job.admin.web.dao.JobLogReportDao">
 
-    <resultMap id="XxlJobLogReport" type="com.gls.job.admin.web.model.XxlJobLogReport">
+    <resultMap id="JobLogReport" type="com.gls.job.admin.web.model.JobLogReport">
         <result column="id" property="id"/>
         <result column="trigger_day" property="triggerDay"/>
         <result column="running_count" property="runningCount"/>
@@ -19,9 +19,9 @@
 		t.fail_count
     </sql>
 
-    <insert id="save" parameterType="com.gls.job.admin.web.model.XxlJobLogReport" useGeneratedKeys="true"
+    <insert id="save" parameterType="com.gls.job.admin.web.model.JobLogReport" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO xxl_job_log_report (
+        INSERT INTO job_log_report (
         `trigger_day`,
         `running_count`,
         `suc_count`,
@@ -38,26 +38,26 @@
     </insert>
 
     <update id="update">
-        UPDATE xxl_job_log_report
+        UPDATE job_log_report
         SET `running_count` = #{runningCount},
             `suc_count`     = #{sucCount},
             `fail_count`    = #{failCount}
         WHERE `trigger_day` = #{triggerDay}
     </update>
 
-    <select id="queryLogReport" resultMap="XxlJobLogReport">
+    <select id="queryLogReport" resultMap="JobLogReport">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM xxl_job_log_report AS t
+        FROM job_log_report AS t
         WHERE t.trigger_day between #{triggerDayFrom} and #{triggerDayTo}
         ORDER BY t.trigger_day ASC
     </select>
 
-    <select id="queryLogReportTotal" resultMap="XxlJobLogReport">
+    <select id="queryLogReportTotal" resultMap="JobLogReport">
         SELECT SUM(running_count) running_count,
                SUM(suc_count)     suc_count,
                SUM(fail_count)    fail_count
-        FROM xxl_job_log_report AS t
+        FROM job_log_report AS t
     </select>
 
 </mapper>
