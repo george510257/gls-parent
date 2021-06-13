@@ -10,7 +10,7 @@ import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
@@ -19,7 +19,7 @@ import java.text.MessageFormat;
  * @author xuxueli 2020-10-30 20:43:10
  */
 @Slf4j
-@Component
+@Service
 public class JobCompleter {
     @Resource
     public I18nHelper i18nHelper;

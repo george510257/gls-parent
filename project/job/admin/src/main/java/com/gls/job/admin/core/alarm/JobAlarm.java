@@ -11,10 +11,10 @@ public interface JobAlarm {
     /**
      * doAlarm
      *
-     * @param info
+     * @param jobInfo
      * @param jobLog
      * @return
      */
-    boolean doAlarm(JobInfo info, JobLog jobLog);
+    boolean doAlarm(JobInfo jobInfo, JobLog jobLog);
 
 }

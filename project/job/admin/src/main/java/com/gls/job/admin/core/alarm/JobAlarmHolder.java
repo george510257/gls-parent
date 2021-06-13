@@ -21,14 +21,14 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
     /**
      * job alarm
      *
-     * @param info
+     * @param jobInfo
      * @param jobLog
      * @return
      */
-    public boolean alarm(JobInfo info, JobLog jobLog) {
+    public boolean alarm(JobInfo jobInfo, JobLog jobLog) {
         AtomicBoolean result = new AtomicBoolean(false);
         this.loadAll().forEach(jobAlarm -> {
-            result.set(jobAlarm.doAlarm(info, jobLog));
+            result.set(jobAlarm.doAlarm(jobInfo, jobLog));
         });
         return result.get();
     }

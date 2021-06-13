@@ -24,7 +24,7 @@ public interface JobService {
      * @param author
      * @return
      */
-    public Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
+    Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
 
     /**
      * add job
@@ -32,7 +32,7 @@ public interface JobService {
      * @param jobInfo
      * @return
      */
-    public Result<String> add(JobInfo jobInfo);
+    Result<String> add(JobInfo jobInfo);
 
     /**
      * update job
@@ -40,7 +40,7 @@ public interface JobService {
      * @param jobInfo
      * @return
      */
-    public Result<String> update(JobInfo jobInfo);
+    Result<String> update(JobInfo jobInfo);
 
     /**
      * remove job
@@ -49,7 +49,7 @@ public interface JobService {
      * @param id
      * @return
      */
-    public Result<String> remove(Long id);
+    Result<String> remove(Long id);
 
     /**
      * start job
@@ -57,7 +57,7 @@ public interface JobService {
      * @param id
      * @return
      */
-    public Result<String> start(Long id);
+    Result<String> start(Long id);
 
     /**
      * stop job
@@ -65,14 +65,14 @@ public interface JobService {
      * @param id
      * @return
      */
-    public Result<String> stop(Long id);
+    Result<String> stop(Long id);
 
     /**
      * dashboard info
      *
      * @return
      */
-    public Map<String, Object> dashboardInfo();
+    Map<String, Object> dashboardInfo();
 
     /**
      * chart info
@@ -81,6 +81,6 @@ public interface JobService {
      * @param endDate
      * @return
      */
-    public Result<Map<String, Object>> chartInfo(Date startDate, Date endDate);
+    Result<Map<String, Object>> chartInfo(Date startDate, Date endDate);
 
 }

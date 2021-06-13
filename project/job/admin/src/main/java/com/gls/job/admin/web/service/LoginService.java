@@ -6,7 +6,7 @@ import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.core.api.model.Result;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import java.math.BigInteger;
 /**
  * @author xuxueli 2019-05-04 22:13:264
  */
-@Configuration
+@Service
 public class LoginService {
 
     public static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
@@ -35,7 +35,8 @@ public class LoginService {
     private JobUser parseToken(String tokenHex) {
         JobUser jobUser = null;
         if (tokenHex != null) {
-            String tokenJson = new String(new BigInteger(tokenHex, 16).toByteArray());      // username_password(md5)
+            String tokenJson = new String(new BigInteger(tokenHex, 16).toByteArray());
+            // username_password(md5)
             jobUser = JacksonUtil.readValue(tokenJson, JobUser.class);
         }
         return jobUser;

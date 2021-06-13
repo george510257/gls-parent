@@ -37,11 +37,6 @@ public class EmailJobAlarm implements JobAlarm {
     @Resource
     private I18nHelper i18nHelper;
 
-    /**
-     * load email job alarm template
-     *
-     * @return
-     */
     private String loadEmailJobAlarmTemplate() {
         return "<h5>" + i18nHelper.getString("job_conf_monitor_detail") + "：</span>" +
                 "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
@@ -66,17 +61,12 @@ public class EmailJobAlarm implements JobAlarm {
                 "</table>";
     }
 
-    /**
-     * fail alarm
-     *
-     * @param jobLog
-     */
     @Override
-    public boolean doAlarm(JobInfo info, JobLog jobLog) {
+    public boolean doAlarm(JobInfo jobInfo, JobLog jobLog) {
         boolean alarmResult = true;
 
         // send monitor email
-        if (info != null && info.getAlarmEmail() != null && info.getAlarmEmail().trim().length() > 0) {
+        if (jobInfo != null && jobInfo.getAlarmEmail() != null && jobInfo.getAlarmEmail().trim().length() > 0) {
 
             // alarmContent
             String alarmContent = "Alarm Job LogId=" + jobLog.getId();
@@ -88,16 +78,16 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            JobGroup group = jobGroupDao.load(info.getJobGroup());
+            JobGroup group = jobGroupDao.load(jobInfo.getJobGroup());
             String personal = i18nHelper.getString("admin_name_full");
             String title = i18nHelper.getString("job_conf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
                     group != null ? group.getTitle() : "null",
-                    info.getId(),
-                    info.getJobDesc(),
+                    jobInfo.getId(),
+                    jobInfo.getJobDesc(),
                     alarmContent);
 
-            Set<String> emailSet = new HashSet<>(Arrays.asList(info.getAlarmEmail().split(",")));
+            Set<String> emailSet = new HashSet<>(Arrays.asList(jobInfo.getAlarmEmail().split(",")));
             for (String email : emailSet) {
 
                 // make mail

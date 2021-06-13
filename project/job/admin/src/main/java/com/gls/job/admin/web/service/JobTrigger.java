@@ -17,7 +17,7 @@ import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -29,7 +29,7 @@ import java.util.Date;
  * @date 17/7/13
  */
 @Slf4j
-@Component
+@Service
 public class JobTrigger {
     @Resource
     public I18nHelper i18nHelper;
