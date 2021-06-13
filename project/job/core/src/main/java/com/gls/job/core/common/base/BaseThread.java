@@ -29,9 +29,7 @@ public abstract class BaseThread extends Thread {
         try {
             initExecute();
         } catch (Exception e) {
-            if (!stop) {
-                log.error(e.getMessage(), e);
-            }
+            log.error(e.getMessage(), e);
         }
         // execute
         while (!stop) {
@@ -39,9 +37,7 @@ public abstract class BaseThread extends Thread {
             try {
                 doExecute();
             } catch (Exception e) {
-                if (!stop) {
-                    log.error(e.getMessage(), e);
-                }
+                log.error(e.getMessage(), e);
             }
 
             try {
@@ -49,9 +45,7 @@ public abstract class BaseThread extends Thread {
                     sleepExecute();
                 }
             } catch (Exception e) {
-                if (!stop) {
-                    log.error(e.getMessage(), e);
-                }
+                log.error(e.getMessage(), e);
             }
         }
 
@@ -59,9 +53,7 @@ public abstract class BaseThread extends Thread {
         try {
             destroyExecute();
         } catch (Exception e) {
-            if (!stop) {
-                log.error(e.getMessage(), e);
-            }
+            log.error(e.getMessage(), e);
         }
     }
 

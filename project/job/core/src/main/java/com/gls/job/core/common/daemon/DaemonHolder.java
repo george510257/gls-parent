@@ -2,6 +2,7 @@ package com.gls.job.core.common.daemon;
 
 import com.gls.job.core.common.base.BaseHolder;
 import com.gls.job.core.common.base.BaseThread;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Map;
 
@@ -24,6 +25,9 @@ public class DaemonHolder extends BaseHolder<String, Daemon<? extends BaseThread
 
     @Override
     protected void delete(Daemon<? extends BaseThread> oldValue, String reason) {
+        if (ObjectUtils.isEmpty(oldValue)) {
+            return;
+        }
         oldValue.stop(reason);
     }
 }

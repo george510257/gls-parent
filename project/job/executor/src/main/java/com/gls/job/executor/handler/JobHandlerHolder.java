@@ -3,12 +3,14 @@ package com.gls.job.executor.handler;
 import com.gls.job.core.common.base.BaseHolder;
 import com.gls.job.executor.handler.annotation.Job;
 import com.gls.job.executor.handler.impl.MethodJobHandler;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
@@ -17,22 +19,24 @@ import java.util.Map;
  * @author george
  */
 @Slf4j
-@AllArgsConstructor
+@Component
 public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
 
-    private final ApplicationContext applicationContext;
+    @Resource
+    private ApplicationContext applicationContext;
 
+    @Resource
+    private Map<String, JobHandler> jobHandlers;
+
+    @PostConstruct
     public void init() {
-        if (applicationContext == null) {
-            log.info(">>>>>>>>>>> applicationContext is null");
-        } else {
-            Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
-            log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
-            init(beans);
-        }
+        Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
+        log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
+        init(beans);
+        regist(jobHandlers);
     }
 
-    public void init(Collection<Object> beans) {
+    private void init(Collection<Object> beans) {
         for (Object bean : beans) {
             Map<Method, Job> methodJobs = MethodIntrospector.selectMethods(bean.getClass(),
                     (MethodIntrospector.MetadataLookup<Job>) method -> AnnotatedElementUtils.findMergedAnnotation(method, Job.class));
@@ -58,4 +62,8 @@ public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
         return null;
     }
 
+    @Override
+    protected void delete(JobHandler oldValue, String reason) {
+
+    }
 }

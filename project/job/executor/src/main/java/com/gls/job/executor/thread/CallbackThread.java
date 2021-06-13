@@ -31,7 +31,7 @@ public class CallbackThread extends BaseThread {
 
     @Override
     protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread sleepExecute.");
+        log.info(">>>>>>>>>>> xxl-job, executor CallbackThread thread sleep.");
         TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 

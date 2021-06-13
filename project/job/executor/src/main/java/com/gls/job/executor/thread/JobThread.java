@@ -30,7 +30,7 @@ public class JobThread extends BaseThread {
     @Getter
     private final Long jobId;
     @Getter
-    private final JobHandler handler;
+    private final JobHandler jobHandler;
 
     private final JobLogService jobLogService;
     private final JobThreadHolder jobThreadHolder;
@@ -40,7 +40,7 @@ public class JobThread extends BaseThread {
 
     private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
 
-    private final CallbackQueueHolder callbackQueueHolder = CallbackQueueHolder.getInstance();
+    private final CallbackQueueHolder callbackQueueHolder;
 
     /**
      * if running job
@@ -51,11 +51,12 @@ public class JobThread extends BaseThread {
      */
     private int idleTimes = 0;
 
-    public JobThread(Long jobId, JobHandler handler, JobLogService jobLogService, JobThreadHolder jobThreadHolder) {
+    public JobThread(Long jobId, JobHandler jobHandler, JobLogService jobLogService, JobThreadHolder jobThreadHolder, CallbackQueueHolder callbackQueueHolder) {
         this.jobId = jobId;
-        this.handler = handler;
+        this.jobHandler = jobHandler;
         this.jobLogService = jobLogService;
         this.jobThreadHolder = jobThreadHolder;
+        this.callbackQueueHolder = callbackQueueHolder;
     }
 
     /**
@@ -69,7 +70,7 @@ public class JobThread extends BaseThread {
 
     @Override
     protected void initExecute() throws Exception {
-        handler.init();
+        jobHandler.init();
     }
 
     @Override
@@ -104,7 +105,7 @@ public class JobThread extends BaseThread {
                             // init job context
                             jobContextHolder.set(jobContext);
 
-                            handler.execute();
+                            jobHandler.execute();
                             return true;
                         });
                         futureThread = new Thread(futureTask);
@@ -123,7 +124,7 @@ public class JobThread extends BaseThread {
                     }
                 } else {
                     // just execute
-                    handler.execute();
+                    jobHandler.execute();
                 }
 
                 // valid execute handle data
@@ -209,7 +210,7 @@ public class JobThread extends BaseThread {
 
         // destroy
         try {
-            handler.destroy();
+            jobHandler.destroy();
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
         }

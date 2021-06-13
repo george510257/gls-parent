@@ -46,7 +46,7 @@ public class TriggerServiceImpl implements TriggerService {
         JobHandler newJobHandler = loadJobHandlerByTriggerModel(triggerModel);
         String removeOldReason = null;
         if (jobThread != null) {
-            JobHandler oldJobHandler = jobThread.getHandler();
+            JobHandler oldJobHandler = jobThread.getJobHandler();
             if (!oldJobHandler.equals(newJobHandler)) {
                 jobThread = null;
                 removeOldReason = "change job source or glue type, and terminate the old job thread.";

@@ -22,8 +22,9 @@ import java.util.List;
 @Service
 public class CallbackServiceImpl implements CallbackService {
 
-    private final CallbackQueueHolder callbackQueueHolder = CallbackQueueHolder.getInstance();
     private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
+    @Resource
+    private CallbackQueueHolder callbackQueueHolder;
     @Resource
     private CallbackRepository callbackRepository;
     @Resource
