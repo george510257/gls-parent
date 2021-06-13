@@ -30,4 +30,8 @@ public class JobThreadHolder extends BaseHolder<Long, JobThread> {
     protected void delete(JobThread oldValue, String reason) {
         oldValue.toStop(reason);
     }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+    }
 }

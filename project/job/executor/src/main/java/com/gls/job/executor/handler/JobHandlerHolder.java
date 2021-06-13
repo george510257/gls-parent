@@ -9,7 +9,6 @@ import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -27,14 +26,6 @@ public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
 
     @Resource
     private Map<String, JobHandler> jobHandlers;
-
-    @PostConstruct
-    public void init() {
-        Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
-        log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
-        init(beans);
-        regist(jobHandlers);
-    }
 
     private void init(Collection<Object> beans) {
         for (Object bean : beans) {
@@ -64,6 +55,13 @@ public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
 
     @Override
     protected void delete(JobHandler oldValue, String reason) {
+    }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
+        log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
+        init(beans);
+        regist(jobHandlers);
     }
 }

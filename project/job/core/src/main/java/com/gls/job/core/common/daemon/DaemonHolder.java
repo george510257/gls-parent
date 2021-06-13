@@ -2,14 +2,20 @@ package com.gls.job.core.common.daemon;
 
 import com.gls.job.core.common.base.BaseHolder;
 import com.gls.job.core.common.base.BaseThread;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
  * @author george
  */
+@Component
 public class DaemonHolder extends BaseHolder<String, Daemon<? extends BaseThread>> {
+
+    @Resource
+    private Map<String, BaseThread> daemonThreads;
 
     public void registByThread(Map<String, ? extends BaseThread> threads) {
         threads.forEach((key, value) -> {
@@ -29,5 +35,10 @@ public class DaemonHolder extends BaseHolder<String, Daemon<? extends BaseThread
             return;
         }
         oldValue.stop(reason);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        registByThread(daemonThreads);
     }
 }

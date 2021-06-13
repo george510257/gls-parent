@@ -1,6 +1,8 @@
 package com.gls.job.core.common.base;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author george
  */
 @Slf4j
-public abstract class BaseHolder<K, V> {
+public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBean {
 
     private final Map<K, V> map = new ConcurrentHashMap<>();
 
@@ -48,4 +50,10 @@ public abstract class BaseHolder<K, V> {
      * @param reason
      */
     protected abstract void delete(V oldValue, String reason);
+
+    @Override
+    public void destroy() throws Exception {
+        removeAll("");
+    }
+
 }
