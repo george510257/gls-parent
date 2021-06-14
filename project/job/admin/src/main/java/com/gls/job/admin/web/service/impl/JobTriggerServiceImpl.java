@@ -19,6 +19,7 @@ import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.IpUtil;
 import com.gls.job.core.util.ThrowableUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -44,6 +45,7 @@ public class JobTriggerServiceImpl implements JobTriggerService {
     @Resource
     private JobGroupDao jobGroupDao;
 
+    @Async
     @Override
     public void trigger(Long jobId,
                         TriggerType triggerType,

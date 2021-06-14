@@ -10,14 +10,14 @@ import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobInfoService;
+import com.gls.job.admin.web.service.JobSchedulerService;
+import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.admin.web.service.LoginService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.exception.JobException;
 import com.gls.job.core.util.DateUtil;
-import com.xxl.job.admin.core.thread.JobScheduleHelper;
-import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -44,6 +44,10 @@ public class JobInfoController {
     private JobGroupDao jobGroupDao;
     @Resource
     private JobInfoService jobInfoService;
+    @Resource
+    private JobSchedulerService jobSchedulerService;
+    @Resource
+    private JobTriggerService jobTriggerService;
     @Resource
     private I18nHelper i18nHelper;
 
@@ -148,7 +152,7 @@ public class JobInfoController {
             executorParam = "";
         }
 
-        JobTriggerPoolHelper.trigger(id, TriggerType.MANUAL, -1, null, executorParam, addressList);
+        jobTriggerService.trigger(id, TriggerType.MANUAL, -1, null, executorParam, addressList);
         return Result.SUCCESS;
     }
 
@@ -164,7 +168,7 @@ public class JobInfoController {
         try {
             Date lastTime = new Date();
             for (int i = 0; i < 5; i++) {
-                lastTime = JobScheduleHelper.generateNextValidTime(paramJobInfo, lastTime);
+                lastTime = jobSchedulerService.generateNextValidTime(paramJobInfo, lastTime);
                 if (lastTime != null) {
                     result.add(DateUtil.formatDateTime(lastTime));
                 } else {

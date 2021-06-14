@@ -11,4 +11,6 @@ public interface JobConstants {
 
     int BEAT_TIMEOUT = 30;
     int DEAD_TIMEOUT = BEAT_TIMEOUT * 3;
+
+    long PRE_READ_MS = 5000;
 }

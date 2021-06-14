@@ -8,12 +8,12 @@ import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLogReport;
 import com.gls.job.admin.web.service.JobInfoService;
+import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.util.DateUtil;
-import com.xxl.job.admin.core.thread.JobScheduleHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,9 +25,9 @@ import java.util.*;
  *
  * @author xuxueli 2016-5-28 15:30:33
  */
+@Slf4j
 @Service
 public class JobInfoServiceImpl implements JobInfoService {
-    private static Logger logger = LoggerFactory.getLogger(JobInfoServiceImpl.class);
     @Resource
     public JobLogDao jobLogDao;
     @Resource
@@ -40,6 +40,8 @@ public class JobInfoServiceImpl implements JobInfoService {
     private JobLogGlueDao jobLogGlueDao;
     @Resource
     private JobLogReportDao jobLogReportDao;
+    @Resource
+    private JobSchedulerService jobSchedulerService;
 
     @Override
     public Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author) {
@@ -252,13 +254,13 @@ public class JobInfoServiceImpl implements JobInfoService {
         boolean scheduleDataNotChanged = jobInfo.getScheduleType().equals(exists_jobInfo.getScheduleType()) && jobInfo.getScheduleConf().equals(exists_jobInfo.getScheduleConf());
         if (exists_jobInfo.getTriggerStatus() == 1 && !scheduleDataNotChanged) {
             try {
-                Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
+                Date nextValidTime = jobSchedulerService.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
                 if (nextValidTime == null) {
                     return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
                 }
                 nextTriggerTime = nextValidTime.getTime();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
                 return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
             }
         }
@@ -311,13 +313,13 @@ public class JobInfoServiceImpl implements JobInfoService {
         // next trigger time (5s后生效，避开预读周期)
         long nextTriggerTime = 0;
         try {
-            Date nextValidTime = JobScheduleHelper.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobScheduleHelper.PRE_READ_MS));
+            Date nextValidTime = jobSchedulerService.generateNextValidTime(jobInfo, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
             if (nextValidTime == null) {
                 return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
             }
             nextTriggerTime = nextValidTime.getTime();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             return new Result<String>(Result.FAIL_CODE, (i18nHelper.getString("schedule_type") + i18nHelper.getString("system_unvalid")));
         }
 

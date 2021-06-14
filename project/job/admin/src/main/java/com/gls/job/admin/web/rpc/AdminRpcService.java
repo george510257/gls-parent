@@ -1,24 +1,28 @@
 package com.gls.job.admin.web.rpc;
 
+import com.gls.job.admin.web.service.JobCompleterService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.xxl.job.admin.core.thread.JobCompleteHelper;
 import com.xxl.job.admin.core.thread.JobRegistryHelper;
-import org.springframework.stereotype.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * @author xuxueli 2017-07-27 21:54:20
  */
-@Service
+@DubboService
 public class AdminRpcService implements AdminApi {
+
+    @Resource
+    private JobCompleterService jobCompleterService;
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackParamList) {
-        return JobCompleteHelper.getInstance().callback(callbackParamList);
+        return jobCompleterService.callback(callbackParamList);
     }
 
     @Override
