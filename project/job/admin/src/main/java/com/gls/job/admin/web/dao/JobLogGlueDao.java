@@ -14,12 +14,12 @@ import java.util.List;
 @Mapper
 public interface JobLogGlueDao {
 
-    public int save(JobLogGlue jobLogGlue);
+    int save(JobLogGlue jobLogGlue);
 
-    public List<JobLogGlue> findByJobId(@Param("jobId") Long jobId);
+    List<JobLogGlue> findByJobId(@Param("jobId") Long jobId);
 
-    public int removeOld(@Param("jobId") Long jobId, @Param("limit") int limit);
+    int removeOld(@Param("jobId") Long jobId, @Param("limit") int limit);
 
-    public int deleteByJobId(@Param("jobId") Long jobId);
+    int deleteByJobId(@Param("jobId") Long jobId);
 
 }

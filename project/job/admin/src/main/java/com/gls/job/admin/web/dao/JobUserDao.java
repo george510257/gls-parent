@@ -12,22 +12,22 @@ import java.util.List;
 @Mapper
 public interface JobUserDao {
 
-    public List<JobUser> pageList(@Param("offset") int offset,
-                                  @Param("pagesize") int pagesize,
-                                  @Param("username") String username,
-                                  @Param("role") int role);
+    List<JobUser> pageList(@Param("offset") int offset,
+                           @Param("pagesize") int pagesize,
+                           @Param("username") String username,
+                           @Param("role") int role);
 
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("username") String username,
-                             @Param("role") int role);
+    int pageListCount(@Param("offset") int offset,
+                      @Param("pagesize") int pagesize,
+                      @Param("username") String username,
+                      @Param("role") int role);
 
-    public JobUser loadByUserName(@Param("username") String username);
+    JobUser loadByUserName(@Param("username") String username);
 
-    public int save(JobUser jobUser);
+    int save(JobUser jobUser);
 
-    public int update(JobUser jobUser);
+    int update(JobUser jobUser);
 
-    public int delete(@Param("id") Long id);
+    int delete(@Param("id") Long id);
 
 }

@@ -14,36 +14,36 @@ import java.util.List;
 @Mapper
 public interface JobInfoDao {
 
-    public List<JobInfo> pageList(@Param("offset") int offset,
-                                  @Param("pagesize") int pagesize,
-                                  @Param("jobGroup") Long jobGroup,
-                                  @Param("triggerStatus") int triggerStatus,
-                                  @Param("jobDesc") String jobDesc,
-                                  @Param("executorHandler") String executorHandler,
-                                  @Param("author") String author);
+    List<JobInfo> pageList(@Param("offset") int offset,
+                           @Param("pagesize") int pagesize,
+                           @Param("jobGroup") Long jobGroup,
+                           @Param("triggerStatus") int triggerStatus,
+                           @Param("jobDesc") String jobDesc,
+                           @Param("executorHandler") String executorHandler,
+                           @Param("author") String author);
 
-    public int pageListCount(@Param("offset") int offset,
-                             @Param("pagesize") int pagesize,
-                             @Param("jobGroup") Long jobGroup,
-                             @Param("triggerStatus") int triggerStatus,
-                             @Param("jobDesc") String jobDesc,
-                             @Param("executorHandler") String executorHandler,
-                             @Param("author") String author);
+    int pageListCount(@Param("offset") int offset,
+                      @Param("pagesize") int pagesize,
+                      @Param("jobGroup") Long jobGroup,
+                      @Param("triggerStatus") int triggerStatus,
+                      @Param("jobDesc") String jobDesc,
+                      @Param("executorHandler") String executorHandler,
+                      @Param("author") String author);
 
-    public int save(JobInfo info);
+    int save(JobInfo info);
 
-    public JobInfo loadById(@Param("id") Long id);
+    JobInfo loadById(@Param("id") Long id);
 
-    public int update(JobInfo jobInfo);
+    int update(JobInfo jobInfo);
 
-    public int delete(@Param("id") long id);
+    int delete(@Param("id") long id);
 
-    public List<JobInfo> getJobsByGroup(@Param("jobGroup") Long jobGroup);
+    List<JobInfo> getJobsByGroup(@Param("jobGroup") Long jobGroup);
 
-    public int findAllCount();
+    int findAllCount();
 
-    public List<JobInfo> scheduleJobQuery(@Param("maxNextTime") long maxNextTime, @Param("pagesize") int pagesize);
+    List<JobInfo> scheduleJobQuery(@Param("maxNextTime") long maxNextTime, @Param("pagesize") int pagesize);
 
-    public int scheduleUpdate(JobInfo jobInfo);
+    int scheduleUpdate(JobInfo jobInfo);
 
 }
