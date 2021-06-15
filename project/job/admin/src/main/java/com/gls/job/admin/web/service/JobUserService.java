@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author xuxueli 2019-05-04 22:13:264
  */
 
-public interface LoginService {
+public interface JobUserService {
 
     String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 

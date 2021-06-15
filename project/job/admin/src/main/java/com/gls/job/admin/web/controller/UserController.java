@@ -6,7 +6,7 @@ import com.gls.job.admin.web.dao.JobGroupDao;
 import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.admin.web.service.LoginService;
+import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -114,7 +114,7 @@ public class UserController {
     public Result<String> update(HttpServletRequest request, JobUser jobUser) {
 
         // avoid opt login seft
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
         if (loginUser.getUsername().equals(jobUser.getUsername())) {
             return new Result<String>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
         }
@@ -142,7 +142,7 @@ public class UserController {
     public Result<String> remove(HttpServletRequest request, Long id) {
 
         // avoid opt login seft
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
         if (loginUser.getId().equals(id)) {
             return new Result<String>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
         }
@@ -168,7 +168,7 @@ public class UserController {
         String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
 
         // update pwd
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
 
         // do write
         JobUser existUser = jobUserDao.loadByUserName(loginUser.getUsername());

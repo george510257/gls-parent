@@ -14,8 +14,14 @@ import java.util.Date;
 public class JobLogGlue {
 
     private Long id;
-    private Long jobId;                // 任务主键ID
-    private GlueType glueType;        // GLUE类型	#com.gls.job.core.api.model.enums.GlueType
+    /**
+     * 任务主键ID
+     */
+    private Long jobId;
+    /**
+     * GLUE类型	#com.gls.job.core.api.model.enums.GlueType
+     */
+    private GlueType glueType;
     private String glueSource;
     private String glueRemark;
     private Date addTime;

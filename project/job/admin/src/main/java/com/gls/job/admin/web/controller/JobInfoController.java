@@ -12,7 +12,7 @@ import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.admin.web.service.JobTriggerService;
-import com.gls.job.admin.web.service.LoginService;
+import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
@@ -54,7 +54,7 @@ public class JobInfoController {
     public List<JobGroup> filterJobGroupByRole(HttpServletRequest request, List<JobGroup> jobGroupList_all) {
         List<JobGroup> jobGroupList = new ArrayList<>();
         if (jobGroupList_all != null && jobGroupList_all.size() > 0) {
-            JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+            JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
             if (loginUser.getRole() == 1) {
                 jobGroupList = jobGroupList_all;
             } else {
@@ -73,7 +73,7 @@ public class JobInfoController {
     }
 
     public void validPermission(HttpServletRequest request, Long jobGroup) {
-        JobUser loginUser = (JobUser) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
         if (!loginUser.validPermission(jobGroup)) {
             throw new RuntimeException(i18nHelper.getString("system_permission_limit") + "[username=" + loginUser.getUsername() + "]");
         }

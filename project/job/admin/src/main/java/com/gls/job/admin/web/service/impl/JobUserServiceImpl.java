@@ -5,7 +5,7 @@ import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.admin.web.service.LoginService;
+import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -19,7 +19,7 @@ import java.math.BigInteger;
  * @author george
  */
 @Service
-public class LoginServiceImpl implements LoginService {
+public class JobUserServiceImpl implements JobUserService {
 
     @Resource
     public I18nHelper i18nHelper;

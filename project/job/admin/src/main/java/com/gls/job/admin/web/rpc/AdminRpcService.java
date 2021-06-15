@@ -1,11 +1,11 @@
 package com.gls.job.admin.web.rpc;
 
-import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobLogService;
+import com.gls.job.admin.web.service.JobRegistryService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
-import com.xxl.job.admin.core.thread.JobRegistryHelper;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import javax.annotation.Resource;
@@ -18,21 +18,27 @@ import java.util.List;
 public class AdminRpcService implements AdminApi {
 
     @Resource
-    private JobCompleterService jobCompleterService;
+    private JobLogService jobLogService;
+
+    @Resource
+    private JobRegistryService jobRegistryService;
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackParamList) {
-        return jobCompleterService.callback(callbackParamList);
+        jobLogService.callback(callbackParamList);
+        return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registry(RegistryModel registryModel) {
-        return JobRegistryHelper.getInstance().registry(registryModel);
+        jobRegistryService.registry(registryModel);
+        return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registryRemove(RegistryModel registryModel) {
-        return JobRegistryHelper.getInstance().registryRemove(registryModel);
+        jobRegistryService.registryRemove(registryModel);
+        return Result.SUCCESS;
     }
 
 }

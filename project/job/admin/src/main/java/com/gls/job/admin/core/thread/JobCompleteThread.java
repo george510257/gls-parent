@@ -3,7 +3,7 @@ package com.gls.job.admin.core.thread;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobLog;
-import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.base.BaseThread;
 import com.gls.job.core.util.DateUtil;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class JobCompleteThread extends BaseThread {
 
     @Resource
-    private JobCompleterService jobCompleterService;
+    private JobLogService jobLogService;
     @Resource
     private JobLogDao jobLogDao;
     @Resource
@@ -50,7 +50,7 @@ public class JobCompleteThread extends BaseThread {
                 jobLog.setHandleCode(Result.FAIL_CODE);
                 jobLog.setHandleMsg(i18nHelper.getString("job_log_lost_fail"));
 
-                jobCompleterService.updateHandleInfoAndFinish(jobLog);
+                jobLogService.updateHandleInfoAndFinish(jobLog);
             }
 
         }

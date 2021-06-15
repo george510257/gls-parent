@@ -7,7 +7,7 @@ import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
-import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.KillModel;
 import com.gls.job.core.api.model.LogModel;
@@ -49,7 +49,7 @@ public class JobLogController {
     @Resource
     private JobSchedulerService jobSchedulerService;
     @Resource
-    private JobCompleterService jobCompleterService;
+    private JobLogService jobLogService;
     @Resource
     private JobInfoController jobInfoController;
     @Resource
@@ -192,7 +192,7 @@ public class JobLogController {
             log.setHandleCode(Result.FAIL_CODE);
             log.setHandleMsg(i18nHelper.getString("job_log_kill_log_byman") + ":" + (runResult.getMsg() != null ? runResult.getMsg() : ""));
             log.setHandleTime(new Date());
-            jobCompleterService.updateHandleInfoAndFinish(log);
+            jobLogService.updateHandleInfoAndFinish(log);
             return new Result<String>(runResult.getMsg());
         } else {
             return new Result<String>(500, runResult.getMsg());

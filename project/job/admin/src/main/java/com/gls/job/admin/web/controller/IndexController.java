@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.service.JobInfoService;
-import com.gls.job.admin.web.service.LoginService;
+import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -33,7 +33,7 @@ public class IndexController {
     @Resource
     private JobInfoService jobInfoService;
     @Resource
-    private LoginService loginService;
+    private JobUserService jobUserService;
 
     @RequestMapping("/")
     public String index(Model model) {
@@ -54,7 +54,7 @@ public class IndexController {
     @RequestMapping("/toLogin")
     @PermissionLimit(limit = false)
     public ModelAndView toLogin(HttpServletRequest request, HttpServletResponse response, ModelAndView modelAndView) {
-        if (loginService.ifLogin(request, response) != null) {
+        if (jobUserService.ifLogin(request, response) != null) {
             modelAndView.setView(new RedirectView("/", true, false));
             return modelAndView;
         }
@@ -66,14 +66,14 @@ public class IndexController {
     @PermissionLimit(limit = false)
     public Result<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember) {
         boolean ifRem = ifRemember != null && ifRemember.trim().length() > 0 && "on".equals(ifRemember);
-        return loginService.login(request, response, userName, password, ifRem);
+        return jobUserService.login(request, response, userName, password, ifRem);
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
     @PermissionLimit(limit = false)
     public Result<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        return loginService.logout(request, response);
+        return jobUserService.logout(request, response);
     }
 
     @RequestMapping("/help")

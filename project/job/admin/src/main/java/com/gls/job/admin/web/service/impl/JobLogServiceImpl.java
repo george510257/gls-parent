@@ -6,7 +6,7 @@ import com.gls.job.admin.web.dao.JobInfoDao;
 import com.gls.job.admin.web.dao.JobLogDao;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
-import com.gls.job.admin.web.service.JobCompleterService;
+import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class JobCompleterServiceImpl implements JobCompleterService {
+public class JobLogServiceImpl implements JobLogService {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
@@ -114,7 +114,7 @@ public class JobCompleterServiceImpl implements JobCompleterService {
 
     @Async
     @Override
-    public Result<String> callback(List<CallbackModel> callbackModels) {
+    public void callback(List<CallbackModel> callbackModels) {
 
         for (CallbackModel callbackModel : callbackModels) {
             Result<String> callbackResult = callback(callbackModel);
@@ -122,7 +122,6 @@ public class JobCompleterServiceImpl implements JobCompleterService {
                     (callbackResult.getCode() == Result.SUCCESS_CODE ? "success" : "fail"), callbackModel, callbackResult);
         }
 
-        return Result.SUCCESS;
     }
 
     private Result<String> callback(CallbackModel callbackModel) {

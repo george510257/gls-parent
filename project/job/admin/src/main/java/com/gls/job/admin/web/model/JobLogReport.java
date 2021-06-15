@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author george
+ */
 @Data
 public class JobLogReport {
 

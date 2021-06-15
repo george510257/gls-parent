@@ -3,7 +3,7 @@ package com.gls.job.admin.web.controller.interceptor;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.admin.web.service.LoginService;
+import com.gls.job.admin.web.service.JobUserService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     @Resource
-    private LoginService loginService;
+    private JobUserService jobUserService;
     @Resource
     private I18nHelper i18nHelper;
 
@@ -43,7 +43,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (needLogin) {
-            JobUser loginUser = loginService.ifLogin(request, response);
+            JobUser loginUser = jobUserService.ifLogin(request, response);
             if (loginUser == null) {
                 response.setStatus(302);
                 response.setHeader("location", request.getContextPath() + "/toLogin");
@@ -52,7 +52,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             if (needAdminuser && loginUser.getRole() != 1) {
                 throw new RuntimeException(i18nHelper.getString("system_permission_limit"));
             }
-            request.setAttribute(LoginService.LOGIN_IDENTITY_KEY, loginUser);
+            request.setAttribute(JobUserService.LOGIN_IDENTITY_KEY, loginUser);
         }
 
         return super.preHandle(request, response, handler);
