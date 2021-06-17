@@ -30,13 +30,13 @@ public class JobGroupCustomRepositoryImpl extends BaseRepositoryImpl<JobGroupEnt
     }
 
     @Override
-    public List<JobGroupEntity> getAll() {
+    public List<JobGroupEntity> getAllList() {
         Sort sort = getSort();
         return findAll(sort);
     }
 
     @Override
-    public Page<JobGroupEntity> getByAppnameAndTitle(String appname, String title, int page, int size) {
+    public Page<JobGroupEntity> getPage(String appname, String title, int page, int size) {
         return findAll(getSpecByAppnameAndTitle(appname, title), getPageable(page, size));
     }
 
@@ -46,14 +46,14 @@ public class JobGroupCustomRepositoryImpl extends BaseRepositoryImpl<JobGroupEnt
 
     private Specification<JobGroupEntity> getSpecByAppnameAndTitle(String appname, String title) {
         return (root, query, criteriaBuilder) -> {
-            List<Predicate> predicateList = new ArrayList<>();
+            List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.hasText(appname)) {
-                predicateList.add(criteriaBuilder.like(root.get("appname"), "%" + appname + "%"));
+                predicates.add(criteriaBuilder.like(root.get("appname"), "%" + appname + "%"));
             }
             if (StringUtils.hasText(title)) {
-                predicateList.add(criteriaBuilder.like(root.get("title"), "%" + title + "%"));
+                predicates.add(criteriaBuilder.like(root.get("title"), "%" + title + "%"));
             }
-            return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[2]));
         };
     }
 

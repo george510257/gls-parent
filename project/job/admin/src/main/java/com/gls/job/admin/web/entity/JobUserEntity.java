@@ -27,7 +27,7 @@ public class JobUserEntity extends BaseEntity {
     private String password;
 
     @Comment("角色：0-普通用户、1-管理员")
-    private int role;
+    private Integer role;
 
     @Comment("权限：执行器ID列表")
     @ManyToMany

@@ -15,7 +15,7 @@ public interface JobGroupCustomRepository {
      *
      * @return
      */
-    List<JobGroupEntity> getAll();
+    List<JobGroupEntity> getAllList();
 
     /**
      * get By Appname And Title
@@ -26,5 +26,5 @@ public interface JobGroupCustomRepository {
      * @param size
      * @return
      */
-    Page<JobGroupEntity> getByAppnameAndTitle(String appname, String title, int page, int size);
+    Page<JobGroupEntity> getPage(String appname, String title, int page, int size);
 }

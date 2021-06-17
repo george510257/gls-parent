@@ -12,21 +12,13 @@ server:
     context-path: /gls-job-admin
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      auto-commit: true
-      connection-test-query: SELECT 1
-      connection-timeout: 10000
-      idle-timeout: 30000
-      max-lifetime: 900000
-      maximum-pool-size: 30
-      minimum-idle: 10
-      pool-name: HikariCP
-      validation-timeout: 1000
-    password: root_pwd
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://127.0.0.1:3306/job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://172.31.124.62:3306/${spring.application.name}?serverTimezone=UTC&characterEncoding=utf8&useSSL=true
     username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
   freemarker:
     charset: UTF-8
     request-context-attribute: request
@@ -57,3 +49,6 @@ spring:
       static-locations: classpath:/static/
   application:
     name: gls-job-admin
+dubbo:
+  scan:
+    base-packages: com.gls.job.admin.web.rpc
