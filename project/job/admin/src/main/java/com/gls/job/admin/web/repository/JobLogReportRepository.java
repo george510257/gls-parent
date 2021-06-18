@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author george
@@ -21,6 +22,14 @@ public interface JobLogReportRepository extends BaseEntityRepository<JobLogRepor
      * @return
      */
     List<JobLogReportEntity> getByTriggerDayBetween(Date triggerDayFrom, Date triggerDayTo);
+
+    /**
+     * getByTriggerDay
+     *
+     * @param triggerDay
+     * @return
+     */
+    Optional<JobLogReportEntity> getByTriggerDay(Date triggerDay);
 
     /**
      * get Report Total

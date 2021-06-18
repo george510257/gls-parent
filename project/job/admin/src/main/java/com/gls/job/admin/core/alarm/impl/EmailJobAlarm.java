@@ -3,10 +3,9 @@ package com.gls.job.admin.core.alarm.impl;
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.i18n.I18nHelper;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,8 +27,7 @@ import java.util.Set;
 @Slf4j
 @Component
 public class EmailJobAlarm implements JobAlarm {
-    @Resource
-    private JobGroupDao jobGroupDao;
+
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -62,11 +60,14 @@ public class EmailJobAlarm implements JobAlarm {
     }
 
     @Override
-    public boolean doAlarm(JobInfo jobInfo, JobLog jobLog) {
+    public boolean doAlarm(JobLogEntity jobLog) {
+
+        JobInfoEntity jobInfo = jobLog.getJobInfo();
+        JobGroupEntity jobGroup = jobInfo.getJobGroup();
         boolean alarmResult = true;
 
         // send monitor email
-        if (jobInfo != null && jobInfo.getAlarmEmail() != null && jobInfo.getAlarmEmail().trim().length() > 0) {
+        if (jobInfo.getAlarmEmail() != null && jobInfo.getAlarmEmail().trim().length() > 0) {
 
             // alarmContent
             String alarmContent = "Alarm Job LogId=" + jobLog.getId();
@@ -78,11 +79,10 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            JobGroup group = jobGroupDao.load(jobInfo.getJobGroup());
             String personal = i18nHelper.getString("admin_name_full");
             String title = i18nHelper.getString("job_conf_monitor");
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
-                    group != null ? group.getTitle() : "null",
+                    jobGroup != null ? jobGroup.getTitle() : "null",
                     jobInfo.getId(),
                     jobInfo.getJobDesc(),
                     alarmContent);

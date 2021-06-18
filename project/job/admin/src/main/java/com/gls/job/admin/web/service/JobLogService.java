@@ -25,4 +25,14 @@ public interface JobLogService {
      * @return
      */
     void callback(List<CallbackModel> callbackModels);
+
+    /**
+     * do Job Complete
+     */
+    void doJobComplete();
+
+    /**
+     * do Job Fail
+     */
+    void doJobFail();
 }

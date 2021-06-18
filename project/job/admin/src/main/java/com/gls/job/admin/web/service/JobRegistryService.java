@@ -20,4 +20,9 @@ public interface JobRegistryService {
      * @param registryModel
      */
     void registryRemove(RegistryModel registryModel);
+
+    /**
+     * do JobRegistry
+     */
+    void doJobRegistry();
 }

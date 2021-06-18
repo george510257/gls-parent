@@ -1,7 +1,6 @@
 package com.gls.job.admin.core.alarm;
 
-import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.core.base.BaseHolder;
 import org.springframework.stereotype.Component;
 
@@ -21,14 +20,13 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
     /**
      * job alarm
      *
-     * @param jobInfo
-     * @param jobLog
+     * @param jobLogEntity
      * @return
      */
-    public boolean alarm(JobInfo jobInfo, JobLog jobLog) {
+    public boolean alarm(JobLogEntity jobLogEntity) {
         AtomicBoolean result = new AtomicBoolean(false);
         this.loadAll().forEach(jobAlarm -> {
-            result.set(jobAlarm.doAlarm(jobInfo, jobLog));
+            result.set(jobAlarm.doAlarm(jobLogEntity));
         });
         return result.get();
     }

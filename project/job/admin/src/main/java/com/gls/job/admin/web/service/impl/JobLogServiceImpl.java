@@ -1,19 +1,25 @@
 package com.gls.job.admin.web.service.impl;
 
+import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.dao.JobInfoDao;
 import com.gls.job.admin.web.dao.JobLogDao;
+import com.gls.job.admin.web.entity.JobInfoEntity;
+import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
+import com.gls.job.core.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.text.MessageFormat;
@@ -29,9 +35,13 @@ public class JobLogServiceImpl implements JobLogService {
     @Resource
     public I18nHelper i18nHelper;
     @Resource
+    private JobLogRepository jobLogRepository;
+    @Resource
     private JobLogDao jobLogDao;
     @Resource
     private JobInfoDao jobInfoDao;
+    @Resource
+    private JobAlarmHolder jobAlarmHolder;
     @Resource
     private JobTriggerService jobTriggerService;
 
@@ -105,7 +115,7 @@ public class JobLogServiceImpl implements JobLogService {
 
     private boolean isNumeric(String str) {
         try {
-            int result = Integer.valueOf(str);
+            int result = Integer.parseInt(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -122,6 +132,51 @@ public class JobLogServiceImpl implements JobLogService {
                     (callbackResult.getCode() == Result.SUCCESS_CODE ? "success" : "fail"), callbackModel, callbackResult);
         }
 
+    }
+
+    @Override
+    public void doJobComplete() {
+        // 任务结果丢失处理：调度记录停留在 "运行中" 状态超过10min，且对应执行器心跳注册失败不在线，则将本地调度主动标记失败；
+        Date lostTime = DateUtil.addMinutes(new Date(), -10);
+        List<JobLogEntity> jobLogEntities = jobLogRepository.getLostJobLogs(lostTime);
+        if (!ObjectUtils.isEmpty(jobLogEntities)) {
+            jobLogEntities.forEach(jobLogEntity -> {
+                jobLogEntity.setHandleCode(Result.FAIL_CODE);
+                jobLogEntity.setHandleMsg(i18nHelper.getString("job_log_lost_fail"));
+                jobLogEntity.setHandleTime(new Date());
+                jobLogRepository.save(jobLogEntity);
+            });
+        }
+    }
+
+    @Override
+    public void doJobFail() {
+        List<JobLogEntity> jobLogEntities = jobLogRepository.getFailJobLogs(1000);
+        if (!ObjectUtils.isEmpty(jobLogEntities)) {
+            jobLogEntities.forEach(jobLogEntity -> {
+                // lock log
+                jobLogEntity.setAlarmStatus(-1);
+                jobLogRepository.save(jobLogEntity);
+
+                JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
+
+                if (jobLogEntity.getExecutorFailRetryCount() > 0) {
+                    jobTriggerService.trigger(jobInfoEntity.getId(), TriggerType.RETRY, (jobLogEntity.getExecutorFailRetryCount() - 1), jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
+                    String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>" + i18nHelper.getString("job_conf_trigger_type_retry") + "<<<<<<<<<<< </span><br>";
+                    jobLogEntity.setTriggerMsg(jobLogEntity.getTriggerMsg() + retryMsg);
+                }
+                int newAlarmStatus = 0;
+                // 告警状态：0-默认、-1=锁定状态、1-无需告警、2-告警成功、3-告警失败
+                if (jobInfoEntity != null && jobInfoEntity.getAlarmEmail() != null && jobInfoEntity.getAlarmEmail().trim().length() > 0) {
+                    boolean alarmResult = jobAlarmHolder.alarm(jobLogEntity);
+                    newAlarmStatus = alarmResult ? 2 : 3;
+                } else {
+                    newAlarmStatus = 1;
+                }
+                jobLogEntity.setAlarmStatus(newAlarmStatus);
+                jobLogRepository.save(jobLogEntity);
+            });
+        }
     }
 
     private Result<String> callback(CallbackModel callbackModel) {
