@@ -3,17 +3,24 @@ package com.gls.job.admin.web.service.impl;
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.core.util.JacksonUtil;
+import com.gls.job.admin.web.converter.JobUserConverter;
 import com.gls.job.admin.web.dao.JobUserDao;
+import com.gls.job.admin.web.entity.JobUserEntity;
 import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.repository.JobUserRepository;
 import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author george
@@ -23,6 +30,10 @@ public class JobUserServiceImpl implements JobUserService {
 
     @Resource
     public I18nHelper i18nHelper;
+    @Resource
+    private JobUserRepository jobUserRepository;
+    @Resource
+    private JobUserConverter jobUserConverter;
     @Resource
     private JobUserDao jobUserDao;
 
@@ -105,5 +116,41 @@ public class JobUserServiceImpl implements JobUserService {
             }
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Object> getPageList(String username, int role, int start, int length) {
+
+        Page<JobUserEntity> page = jobUserRepository.getPage(username, role, start, length);
+
+        // package result
+        Map<String, Object> maps = new HashMap<>();
+        // 总记录数
+        maps.put("recordsTotal", page.getTotalElements());
+        // 过滤后的总记录数
+        maps.put("recordsFiltered", page.getTotalElements());
+        // 分页列表
+        maps.put("data", jobUserConverter.sourceToTargetList(page.getContent()).stream().peek(jobUser -> jobUser.setPassword("")));
+        return maps;
+    }
+
+    @Override
+    public boolean addUser(JobUser jobUser) {
+        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(jobUser.getUsername());
+        if (ObjectUtils.isEmpty(jobUserEntity)) {
+            jobUserEntity = jobUserConverter.targetToSource(jobUser);
+            jobUserRepository.save(jobUserEntity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void updateUser(JobUser jobUser) {
+        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(jobUser.getUsername());
+        if (!ObjectUtils.isEmpty(jobUserEntity)) {
+            jobUserEntity = jobUserConverter.copyTargetToSource(jobUser, jobUserEntity);
+            jobUserRepository.save(jobUserEntity);
+        }
     }
 }

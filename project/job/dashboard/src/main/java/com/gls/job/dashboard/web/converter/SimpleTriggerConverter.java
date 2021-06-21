@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * @author george
  */
 @Component
-public class SimpleTriggerConverter extends TriggerConverter<SimpleTrigger, SimpleTriggerEntity> {
+public class SimpleTriggerConverter extends TriggerConverter<SimpleTriggerEntity, SimpleTrigger> {
 
     @Resource
     private SimpleTriggerRepository simpleTriggerRepository;

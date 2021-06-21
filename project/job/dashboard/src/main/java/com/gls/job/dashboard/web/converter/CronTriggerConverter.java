@@ -14,7 +14,7 @@ import java.util.TimeZone;
  * @author george
  */
 @Component
-public class CronTriggerConverter extends TriggerConverter<CronTrigger, CronTriggerEntity> {
+public class CronTriggerConverter extends TriggerConverter<CronTriggerEntity, CronTrigger> {
 
     @Resource
     private CronTriggerRepository cronTriggerRepository;

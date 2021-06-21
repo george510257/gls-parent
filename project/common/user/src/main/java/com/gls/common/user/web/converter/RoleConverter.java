@@ -9,21 +9,19 @@ import org.springframework.stereotype.Component;
  * @author george
  */
 @Component
-public class RoleConverter extends BaseConverter<RoleEntity, RoleModel> {
+public class RoleConverter implements BaseConverter<RoleEntity, RoleModel> {
 
     @Override
-    protected RoleModel copySourceToTarget(RoleEntity role) {
-        RoleModel roleModel = new RoleModel();
-        roleModel.setId(role.getId());
-        roleModel.setRole(role.getRole());
+    public RoleModel copySourceToTarget(RoleEntity roleEntity, RoleModel roleModel) {
+        roleModel.setId(roleEntity.getId());
+        roleModel.setRole(roleEntity.getRole());
         return roleModel;
     }
 
     @Override
-    protected RoleEntity copyTargetToSource(RoleModel roleModel) {
-        RoleEntity role = new RoleEntity();
-        role.setRole(roleModel.getRole());
-        role.setId(roleModel.getId());
-        return role;
+    public RoleEntity copyTargetToSource(RoleModel roleModel, RoleEntity roleEntity) {
+        roleEntity.setRole(roleModel.getRole());
+        roleEntity.setId(roleModel.getId());
+        return roleEntity;
     }
 }

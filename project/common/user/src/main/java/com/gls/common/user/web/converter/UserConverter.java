@@ -11,36 +11,34 @@ import javax.annotation.Resource;
  * @author george
  */
 @Component
-public class UserConverter extends BaseConverter<UserEntity, UserModel> {
+public class UserConverter implements BaseConverter<UserEntity, UserModel> {
 
     @Resource
     private RoleConverter roleConverter;
 
     @Override
-    protected UserModel copySourceToTarget(UserEntity user) {
-        UserModel userModel = new UserModel();
-        userModel.setId(user.getId());
-        userModel.setPassword(user.getPassword());
-        userModel.setUsername(user.getUsername());
-        userModel.setRoles(roleConverter.sourceToTarget(user.getRoles()));
-        userModel.setAccountNonExpired(user.getAccountNonExpired());
-        userModel.setAccountNonLocked(user.getAccountNonLocked());
-        userModel.setCredentialsNonExpired(user.getCredentialsNonExpired());
-        userModel.setEnabled(user.getEnabled());
+    public UserModel copySourceToTarget(UserEntity userEntity, UserModel userModel) {
+        userModel.setId(userEntity.getId());
+        userModel.setPassword(userEntity.getPassword());
+        userModel.setUsername(userEntity.getUsername());
+        userModel.setRoles(roleConverter.sourceToTargetList(userEntity.getRoles()));
+        userModel.setAccountNonExpired(userEntity.getAccountNonExpired());
+        userModel.setAccountNonLocked(userEntity.getAccountNonLocked());
+        userModel.setCredentialsNonExpired(userEntity.getCredentialsNonExpired());
+        userModel.setEnabled(userEntity.getEnabled());
         return userModel;
     }
 
     @Override
-    protected UserEntity copyTargetToSource(UserModel userModel) {
-        UserEntity user = new UserEntity();
-        user.setUsername(userModel.getUsername());
-        user.setPassword(userModel.getPassword());
-        user.setRoles(roleConverter.targetToSource(userModel.getRoles()));
-        user.setAccountNonExpired(userModel.getAccountNonExpired());
-        user.setAccountNonLocked(userModel.getAccountNonLocked());
-        user.setCredentialsNonExpired(userModel.getCredentialsNonExpired());
-        user.setEnabled(userModel.getEnabled());
-        user.setId(userModel.getId());
-        return user;
+    public UserEntity copyTargetToSource(UserModel userModel, UserEntity userEntity) {
+        userEntity.setUsername(userModel.getUsername());
+        userEntity.setPassword(userModel.getPassword());
+        userEntity.setRoles(roleConverter.targetToSourceList(userModel.getRoles()));
+        userEntity.setAccountNonExpired(userModel.getAccountNonExpired());
+        userEntity.setAccountNonLocked(userModel.getAccountNonLocked());
+        userEntity.setCredentialsNonExpired(userModel.getCredentialsNonExpired());
+        userEntity.setEnabled(userModel.getEnabled());
+        userEntity.setId(userModel.getId());
+        return userEntity;
     }
 }

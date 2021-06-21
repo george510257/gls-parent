@@ -83,7 +83,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientModel> listClientDetails() {
         List<ClientEntity> infos = clientRepository.findAll();
-        return clientConverter.sourceToTarget(infos);
+        return clientConverter.sourceToTargetList(infos);
     }
 
     @Override

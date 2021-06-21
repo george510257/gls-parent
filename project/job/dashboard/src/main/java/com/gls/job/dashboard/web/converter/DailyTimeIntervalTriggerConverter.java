@@ -16,7 +16,7 @@ import java.time.LocalTime;
  * @author george
  */
 @Component
-public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTrigger, DailyTimeIntervalTriggerEntity> {
+public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTriggerEntity, DailyTimeIntervalTrigger> {
 
     @Resource
     private DailyTimeIntervalTriggerRepository dailyTimeIntervalTriggerRepository;

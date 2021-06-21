@@ -3,6 +3,9 @@ package com.gls.job.admin.web.model;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 /**
  * @author xuxueli 2019-05-04 16:43:12
  */
@@ -13,10 +16,14 @@ public class JobUser {
     /**
      * 账号
      */
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String username;
     /**
      * 密码
      */
+    @NotBlank
+    @Size(min = 4, max = 20)
     private String password;
     /**
      * 角色：0-普通用户、1-管理员

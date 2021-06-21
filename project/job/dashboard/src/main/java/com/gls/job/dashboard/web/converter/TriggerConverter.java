@@ -14,24 +14,24 @@ import java.util.stream.Collectors;
 /**
  * @author george
  */
-public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entity extends TriggerEntity> extends BaseConverter<Trigger, Entity> {
+public abstract class TriggerConverter<Entity extends TriggerEntity, Trigger extends org.quartz.Trigger> implements BaseConverter<Entity, Trigger> {
 
     @Resource
     private JobDetailRepository jobDetailRepository;
 
-    @Override
-    protected Entity copySourceToTarget(Trigger trigger) {
-        Entity entity = loadEntity(trigger);
-        entity.setName(trigger.getKey().getName());
-        entity.setGroupName(trigger.getKey().getGroup());
-        entity.setDescription(trigger.getDescription());
-        entity.setStartTime(trigger.getStartTime());
-        entity.setEndTime(trigger.getEndTime());
-        entity.setPriority(trigger.getPriority());
-        entity.setCalendarName(trigger.getCalendarName());
-        entity.setJobDetail(loadJobDetailEntity(trigger.getJobKey()));
-        return entity;
-    }
+//    @Override
+//    protected Entity copySourceToTarget(Trigger trigger) {
+//        Entity entity = loadEntity(trigger);
+//        entity.setName(trigger.getKey().getName());
+//        entity.setGroupName(trigger.getKey().getGroup());
+//        entity.setDescription(trigger.getDescription());
+//        entity.setStartTime(trigger.getStartTime());
+//        entity.setEndTime(trigger.getEndTime());
+//        entity.setPriority(trigger.getPriority());
+//        entity.setCalendarName(trigger.getCalendarName());
+//        entity.setJobDetail(loadJobDetailEntity(trigger.getJobKey()));
+//        return entity;
+//    }
 
     private JobDetailEntity loadJobDetailEntity(JobKey jobKey) {
         return jobDetailRepository.findByNameAndGroupName(jobKey.getName(), jobKey.getGroup());
@@ -95,6 +95,26 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
         }
     }
 
+    @Override
+    public Trigger copySourceToTarget(Entity entity, Trigger trigger) {
+        // todo
+        return trigger;
+    }
+
+    @Override
+    public Entity copyTargetToSource(Trigger trigger, Entity entity) {
+        // todo
+        entity.setName(trigger.getKey().getName());
+        entity.setGroupName(trigger.getKey().getGroup());
+        entity.setDescription(trigger.getDescription());
+        entity.setStartTime(trigger.getStartTime());
+        entity.setEndTime(trigger.getEndTime());
+        entity.setPriority(trigger.getPriority());
+        entity.setCalendarName(trigger.getCalendarName());
+        entity.setJobDetail(loadJobDetailEntity(trigger.getJobKey()));
+        return entity;
+    }
+
     /**
      * 加载 Entity
      *
@@ -103,20 +123,20 @@ public abstract class TriggerConverter<Trigger extends org.quartz.Trigger, Entit
      */
     protected abstract Entity loadEntity(Trigger trigger);
 
-    @Override
-    protected Trigger copyTargetToSource(Entity entity) {
-        return TriggerBuilder.newTrigger()
-                .withIdentity(entity.getName(), entity.getGroupName())
-                .withDescription(entity.getDescription())
-                .withPriority(entity.getPriority())
-                .withSchedule(loadScheduleBuilder(entity))
-                .modifiedByCalendar(entity.getCalendarName())
-                .startAt(entity.getStartTime())
-                .endAt(entity.getEndTime())
-                .forJob(entity.getJobDetail().getName(), entity.getJobDetail().getGroupName())
-                .usingJobData(new JobDataMap(entity.getJobDetail().getJobDataMap()))
-                .build();
-    }
+//    @Override
+//    protected Trigger copyTargetToSource(Entity entity) {
+//        return TriggerBuilder.newTrigger()
+//                .withIdentity(entity.getName(), entity.getGroupName())
+//                .withDescription(entity.getDescription())
+//                .withPriority(entity.getPriority())
+//                .withSchedule(loadScheduleBuilder(entity))
+//                .modifiedByCalendar(entity.getCalendarName())
+//                .startAt(entity.getStartTime())
+//                .endAt(entity.getEndTime())
+//                .forJob(entity.getJobDetail().getName(), entity.getJobDetail().getGroupName())
+//                .usingJobData(new JobDataMap(entity.getJobDetail().getJobDataMap()))
+//                .build();
+//    }
 
     /**
      * 加载 Trigger

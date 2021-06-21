@@ -14,7 +14,7 @@ import java.util.TimeZone;
  * @author george
  */
 @Component
-public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarIntervalTrigger, CalendarIntervalTriggerEntity> {
+public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarIntervalTriggerEntity, CalendarIntervalTrigger> {
 
     @Resource
     private CalendarIntervalTriggerRepository calendarIntervalTriggerRepository;

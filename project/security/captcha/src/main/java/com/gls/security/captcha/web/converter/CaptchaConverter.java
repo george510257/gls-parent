@@ -9,21 +9,19 @@ import org.springframework.stereotype.Component;
  * @author george
  */
 @Component
-public class CaptchaConverter extends BaseConverter<CaptchaEntity, CaptchaModel> {
+public class CaptchaConverter implements BaseConverter<CaptchaEntity, CaptchaModel> {
 
     @Override
-    protected CaptchaModel copySourceToTarget(CaptchaEntity captchaEntity) {
-        CaptchaModel model = new CaptchaModel();
-        model.setCode(captchaEntity.getCode());
-        model.setExpireTime(captchaEntity.getExpireTime());
-        return model;
+    public CaptchaModel copySourceToTarget(CaptchaEntity captchaEntity, CaptchaModel captchaModel) {
+        captchaModel.setCode(captchaEntity.getCode());
+        captchaModel.setExpireTime(captchaEntity.getExpireTime());
+        return captchaModel;
     }
 
     @Override
-    protected CaptchaEntity copyTargetToSource(CaptchaModel captchaModel) {
-        CaptchaEntity entity = new CaptchaEntity();
-        entity.setCode(captchaModel.getCode());
-        entity.setExpireTime(captchaModel.getExpireTime());
-        return entity;
+    public CaptchaEntity copyTargetToSource(CaptchaModel captchaModel, CaptchaEntity captchaEntity) {
+        captchaEntity.setCode(captchaModel.getCode());
+        captchaEntity.setExpireTime(captchaModel.getExpireTime());
+        return captchaEntity;
     }
 }
