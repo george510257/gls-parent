@@ -2,72 +2,55 @@ package com.gls.job.dashboard.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
 import com.gls.job.dashboard.web.entity.JobDetailEntity;
-import com.gls.job.dashboard.web.repository.JobDetailRepository;
 import org.quartz.Job;
-import org.quartz.JobDetail;
+import org.quartz.JobDataMap;
+import org.quartz.JobKey;
+import org.quartz.impl.JobDetailImpl;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author george
  */
 @Component
-public class JobDetailConverter implements BaseConverter<JobDetail, JobDetailEntity> {
+public class JobDetailConverter implements BaseConverter<JobDetailEntity, JobDetailImpl> {
 
-    @Resource
-    private JobDetailRepository jobDetailRepository;
-
-//    @Override
-//    protected JobDetailEntity copySourceToTarget(JobDetail jobDetail) {
-//        JobDetailEntity entity = jobDetailRepository.findByNameAndGroupName(jobDetail.getKey().getName(), jobDetail.getKey().getGroup());
-//        entity.setName(jobDetail.getKey().getName());
-//        entity.setGroupName(jobDetail.getKey().getGroup());
-//        entity.setDescription(jobDetail.getDescription());
-//        entity.setDurability(jobDetail.isDurable());
-//        entity.setShouldRecover(jobDetail.requestsRecovery());
-//        entity.setJobClassName(jobDetail.getJobClass().getName());
-//        entity.setJobDataMap(formatString(jobDetail.getJobDataMap()));
-//        return entity;
-//    }
-
-    private Map<String, String> formatString(Map<String, Object> map) {
-        Map<String, String> result = new HashMap<>(map.size());
-        map.forEach((key, value) -> result.put(key, value.toString()));
-        return result;
+    @Override
+    public JobDetailImpl copySourceToTarget(JobDetailEntity jobDetailEntity, JobDetailImpl jobDetail) {
+        jobDetail.setKey(new JobKey(jobDetailEntity.getName(), jobDetailEntity.getGroupName()));
+        jobDetail.setDescription(jobDetailEntity.getDescription());
+        jobDetail.setJobClass(getJobClass(jobDetailEntity.getJobClassName()));
+        jobDetail.setJobDataMap(new JobDataMap(jobDetailEntity.getJobDataMap()));
+        jobDetail.setDurability(jobDetailEntity.getDurability());
+        jobDetail.setRequestsRecovery(jobDetailEntity.getShouldRecover());
+        return jobDetail;
     }
 
-//    @Override
-//    protected JobDetail copyTargetToSource(JobDetailEntity jobDetailEntity) {
-//        return JobBuilder.newJob(loadClassName(jobDetailEntity.getJobClassName()))
-//                .withIdentity(jobDetailEntity.getName(), jobDetailEntity.getGroupName())
-//                .withDescription(jobDetailEntity.getDescription())
-//                .storeDurably(jobDetailEntity.getDurability())
-//                .requestRecovery(jobDetailEntity.getShouldRecover())
-//                .setJobData(new JobDataMap(jobDetailEntity.getJobDataMap()))
-//                .build();
-//    }
+    @Override
+    public JobDetailEntity copyTargetToSource(JobDetailImpl jobDetail, JobDetailEntity jobDetailEntity) {
+        jobDetailEntity.setGroupName(jobDetail.getKey().getGroup());
+        jobDetailEntity.setDescription(jobDetail.getDescription());
+        jobDetailEntity.setJobClassName(jobDetail.getJobClass().getName());
+        jobDetailEntity.setJobDataMap(getJobDataMap(jobDetail.getJobDataMap()));
+        jobDetailEntity.setDurability(jobDetail.isDurable());
+        jobDetailEntity.setShouldRecover(jobDetail.requestsRecovery());
+        jobDetailEntity.setName(jobDetail.getKey().getName());
+        return jobDetailEntity;
+    }
 
-    private Class<? extends Job> loadClassName(String jobClassName) {
+    private Map<String, String> getJobDataMap(JobDataMap jobDataMap) {
+        return jobDataMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().toString()));
+
+    }
+
+    private Class<? extends Job> getJobClass(String jobClassName) {
         try {
             return (Class<? extends Job>) Class.forName(jobClassName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    public JobDetailEntity copySourceToTarget(JobDetail jobDetail, JobDetailEntity jobDetailEntity) {
-        // todo
-        return jobDetailEntity;
-    }
-
-    @Override
-    public JobDetail copyTargetToSource(JobDetailEntity jobDetailEntity, JobDetail jobDetail) {
-        // todo
-        return jobDetail;
     }
 }

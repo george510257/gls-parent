@@ -1,14 +1,10 @@
 package com.gls.job.dashboard.web.converter;
 
-import com.gls.job.dashboard.core.constants.QuartzConstants;
 import com.gls.job.dashboard.web.entity.DailyTimeIntervalTriggerEntity;
-import com.gls.job.dashboard.web.repository.DailyTimeIntervalTriggerRepository;
-import org.quartz.DailyTimeIntervalScheduleBuilder;
-import org.quartz.DailyTimeIntervalTrigger;
 import org.quartz.TimeOfDay;
+import org.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.sql.Time;
 import java.time.LocalTime;
 
@@ -16,34 +12,28 @@ import java.time.LocalTime;
  * @author george
  */
 @Component
-public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTriggerEntity, DailyTimeIntervalTrigger> {
-
-    @Resource
-    private DailyTimeIntervalTriggerRepository dailyTimeIntervalTriggerRepository;
+public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTriggerEntity, DailyTimeIntervalTriggerImpl> {
 
     @Override
-    protected DailyTimeIntervalTriggerEntity loadEntity(DailyTimeIntervalTrigger trigger) {
-        DailyTimeIntervalTriggerEntity entity = dailyTimeIntervalTriggerRepository.findByNameAndGroupName(trigger.getKey().getName(), trigger.getKey().getGroup());
+    public DailyTimeIntervalTriggerImpl copySourceToTarget(DailyTimeIntervalTriggerEntity entity, DailyTimeIntervalTriggerImpl trigger) {
+        trigger.setRepeatInterval(entity.getIntervalTime());
+        trigger.setRepeatIntervalUnit(entity.getIntervalUnit());
+        trigger.setRepeatCount(entity.getRepeatCount());
+        trigger.setDaysOfWeek(entity.getDaysOfWeek());
+        trigger.setStartTimeOfDay(getTimeOfDay(entity.getStartTimeOfDay()));
+        trigger.setEndTimeOfDay(getTimeOfDay(entity.getEndTimeOfDay()));
+        return super.copySourceToTarget(entity, trigger);
+    }
+
+    @Override
+    public DailyTimeIntervalTriggerEntity copyTargetToSource(DailyTimeIntervalTriggerImpl trigger, DailyTimeIntervalTriggerEntity entity) {
         entity.setIntervalTime(trigger.getRepeatInterval());
         entity.setIntervalUnit(trigger.getRepeatIntervalUnit());
-        entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_DAILY_TIME_INTERVAL, trigger.getMisfireInstruction()));
         entity.setRepeatCount(trigger.getRepeatCount());
         entity.setDaysOfWeek(trigger.getDaysOfWeek());
         entity.setStartTimeOfDay(getTime(trigger.getStartTimeOfDay()));
         entity.setEndTimeOfDay(getTime(trigger.getEndTimeOfDay()));
-        return entity;
-    }
-
-    @Override
-    protected DailyTimeIntervalScheduleBuilder loadScheduleBuilder(DailyTimeIntervalTriggerEntity entity) {
-        DailyTimeIntervalScheduleBuilder scheduleBuilder = DailyTimeIntervalScheduleBuilder.dailyTimeIntervalSchedule()
-                .withInterval(entity.getIntervalTime(), entity.getIntervalUnit())
-                .withRepeatCount(entity.getRepeatCount())
-                .onDaysOfTheWeek(entity.getDaysOfWeek())
-                .startingDailyAt(getTimeOfDay(entity.getStartTimeOfDay()))
-                .endingDailyAt(getTimeOfDay(entity.getEndTimeOfDay()));
-        loadMisfireInstruction(scheduleBuilder, entity.getMisfireInstruction());
-        return scheduleBuilder;
+        return super.copyTargetToSource(trigger, entity);
     }
 
     private Time getTime(TimeOfDay timeOfDay) {

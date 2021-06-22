@@ -1,6 +1,5 @@
 package com.gls.job.dashboard.web.entity;
 
-import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import com.gls.starter.data.jpa.annotations.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,8 +40,4 @@ public class DailyTimeIntervalTriggerEntity extends TriggerEntity {
 
     @Comment("重复次数")
     private Integer repeatCount = -1;
-
-    @Comment("失败说明")
-    @Enumerated(EnumType.STRING)
-    private MisfireInstruction misfireInstruction = MisfireInstruction.DAILY_TIME_INTERVAL_MISFIRE_INSTRUCTION_SMART_POLICY;
 }

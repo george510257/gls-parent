@@ -1,14 +1,11 @@
 package com.gls.job.dashboard.web.entity;
 
-import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import com.gls.starter.data.jpa.annotations.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -27,8 +24,4 @@ public class CronTriggerEntity extends TriggerEntity {
 
     @Comment("时区")
     private String timeZone;
-
-    @Comment("失败说明")
-    @Enumerated(EnumType.STRING)
-    private MisfireInstruction misfireInstruction = MisfireInstruction.CRON_MISFIRE_INSTRUCTION_SMART_POLICY;
 }

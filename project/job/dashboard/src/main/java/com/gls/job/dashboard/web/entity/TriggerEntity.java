@@ -1,11 +1,14 @@
 package com.gls.job.dashboard.web.entity;
 
+import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import com.gls.starter.data.jpa.annotations.Comment;
 import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import java.util.Date;
@@ -39,5 +42,9 @@ public abstract class TriggerEntity extends BaseEntity {
 
     @OneToOne
     private JobDetailEntity jobDetail;
+
+    @Comment("失败说明")
+    @Enumerated(EnumType.STRING)
+    private MisfireInstruction misfireInstruction;
 
 }

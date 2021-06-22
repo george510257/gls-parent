@@ -1,6 +1,5 @@
 package com.gls.job.dashboard.web.entity;
 
-import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import com.gls.starter.data.jpa.annotations.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,10 +28,6 @@ public class CalendarIntervalTriggerEntity extends TriggerEntity {
     @Comment("间隔单位")
     @Enumerated(EnumType.STRING)
     private DateBuilder.IntervalUnit intervalUnit = DateBuilder.IntervalUnit.DAY;
-
-    @Comment("失败说明")
-    @Enumerated(EnumType.STRING)
-    private MisfireInstruction misfireInstruction = MisfireInstruction.CALENDAR_INTERVAL_MISFIRE_INSTRUCTION_SMART_POLICY;
 
     @Comment("时区")
     private String timeZone;

@@ -1,39 +1,26 @@
 package com.gls.job.dashboard.web.converter;
 
-import com.gls.job.dashboard.core.constants.QuartzConstants;
 import com.gls.job.dashboard.web.entity.SimpleTriggerEntity;
-import com.gls.job.dashboard.web.repository.SimpleTriggerRepository;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
+import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @author george
  */
 @Component
-public class SimpleTriggerConverter extends TriggerConverter<SimpleTriggerEntity, SimpleTrigger> {
-
-    @Resource
-    private SimpleTriggerRepository simpleTriggerRepository;
-
+public class SimpleTriggerConverter extends TriggerConverter<SimpleTriggerEntity, SimpleTriggerImpl> {
     @Override
-    protected SimpleTriggerEntity loadEntity(SimpleTrigger trigger) {
-        SimpleTriggerEntity entity = simpleTriggerRepository.findByNameAndGroupName(trigger.getKey().getName(), trigger.getKey().getGroup());
-        entity.setIntervalTime(trigger.getRepeatInterval());
-        entity.setRepeatCount(trigger.getRepeatCount());
-        entity.setMisfireInstruction(loadMisfireInstruction(QuartzConstants.TRIGGER_TYPE_SIMPLE, trigger.getMisfireInstruction()));
-        return entity;
+    public SimpleTriggerImpl copySourceToTarget(SimpleTriggerEntity entity, SimpleTriggerImpl trigger) {
+        trigger.setRepeatInterval(entity.getIntervalTime());
+        trigger.setRepeatCount(entity.getRepeatCount());
+        return super.copySourceToTarget(entity, trigger);
     }
 
     @Override
-    protected SimpleScheduleBuilder loadScheduleBuilder(SimpleTriggerEntity entity) {
-        SimpleScheduleBuilder simpleScheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-                .withIntervalInMilliseconds(entity.getIntervalTime())
-                .withRepeatCount(entity.getRepeatCount());
-        loadMisfireInstruction(simpleScheduleBuilder, entity.getMisfireInstruction());
-        return simpleScheduleBuilder;
+    public SimpleTriggerEntity copyTargetToSource(SimpleTriggerImpl trigger, SimpleTriggerEntity entity) {
+        entity.setIntervalTime(trigger.getRepeatInterval());
+        entity.setRepeatCount(trigger.getRepeatCount());
+        return super.copyTargetToSource(trigger, entity);
     }
 
 }
