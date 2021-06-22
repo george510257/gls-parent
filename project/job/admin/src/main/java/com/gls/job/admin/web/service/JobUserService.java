@@ -70,4 +70,11 @@ public interface JobUserService {
      * @param jobUser
      */
     void updateUser(JobUser jobUser);
+
+    /**
+     * delete User
+     *
+     * @param id
+     */
+    void deleteUser(Long id);
 }

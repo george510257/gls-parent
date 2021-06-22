@@ -4,7 +4,6 @@ import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.admin.web.converter.JobUserConverter;
-import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.entity.JobUserEntity;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.repository.JobUserRepository;
@@ -34,13 +33,10 @@ public class JobUserServiceImpl implements JobUserService {
     private JobUserRepository jobUserRepository;
     @Resource
     private JobUserConverter jobUserConverter;
-    @Resource
-    private JobUserDao jobUserDao;
 
     private String makeToken(JobUser jobUser) {
         String tokenJson = JacksonUtil.writeValueAsString(jobUser);
-        String tokenHex = new BigInteger(tokenJson.getBytes()).toString(16);
-        return tokenHex;
+        return new BigInteger(tokenJson.getBytes()).toString(16);
     }
 
     private JobUser parseToken(String tokenHex) {
@@ -62,7 +58,7 @@ public class JobUserServiceImpl implements JobUserService {
         }
 
         // valid passowrd
-        JobUser jobUser = jobUserDao.loadByUserName(username);
+        JobUser jobUser = jobUserConverter.sourceToTarget(jobUserRepository.getByUsername(username));
         if (jobUser == null) {
             return new Result<String>(500, i18nHelper.getString("login_param_unvalid"));
         }
@@ -107,7 +103,7 @@ public class JobUserServiceImpl implements JobUserService {
                 logout(request, response);
             }
             if (cookieUser != null) {
-                JobUser dbUser = jobUserDao.loadByUserName(cookieUser.getUsername());
+                JobUser dbUser = jobUserConverter.sourceToTarget(jobUserRepository.getByUsername(cookieUser.getUsername()));
                 if (dbUser != null) {
                     if (cookieUser.getPassword().equals(dbUser.getPassword())) {
                         return dbUser;
@@ -152,5 +148,10 @@ public class JobUserServiceImpl implements JobUserService {
             jobUserEntity = jobUserConverter.copyTargetToSource(jobUser, jobUserEntity);
             jobUserRepository.save(jobUserEntity);
         }
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        jobUserRepository.deleteById(id);
     }
 }

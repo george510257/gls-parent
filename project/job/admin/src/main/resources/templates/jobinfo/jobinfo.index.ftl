@@ -159,7 +159,7 @@
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control scheduleType" name="scheduleType">
-                                <#list ScheduleTypeEnum as item>
+                                <#list ScheduleType as item>
                                     <option value="${item}" <#if 'CRON' == item >selected</#if> >${item.title}</option>
                                 </#list>
                             </select>
@@ -202,7 +202,7 @@
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control glueType" name="glueType">
-                                <#list GlueTypeEnum as item>
+                                <#list GlueType as item>
                                     <option value="${item}">${item.desc}</option>
                                 </#list>
                             </select>
@@ -233,7 +233,7 @@
                                     color="black">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="executorRouteStrategy">
-                                <#list ExecutorRouteStrategyEnum as item>
+                                <#list ExecutorRouteStrategy as item>
                                     <option value="${item}">${item.title}</option>
                                 </#list>
                             </select>
@@ -251,7 +251,7 @@
                                     color="black">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="misfireStrategy">
-                                <#list MisfireStrategyEnum as item>
+                                <#list MisfireStrategy as item>
                                     <option value="${item}"
                                             <#if 'DO_NOTHING' == item >selected</#if> >${item.title}</option>
                                 </#list>
@@ -263,7 +263,7 @@
                                     color="black">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="executorBlockStrategy">
-                                <#list ExecutorBlockStrategyEnum as item>
+                                <#list ExecutorBlockStrategy as item>
                                     <option value="${item}">${item.title}</option>
                                 </#list>
                             </select>
@@ -453,7 +453,7 @@ exit 0
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control scheduleType" name="scheduleType">
-                                <#list ScheduleTypeEnum as item>
+                                <#list ScheduleType as item>
                                     <option value="${item}">${item.title}</option>
                                 </#list>
                             </select>
@@ -496,7 +496,7 @@ exit 0
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control glueType" name="glueType" disabled>
-                                <#list GlueTypeEnum as item>
+                                <#list GlueType as item>
                                     <option value="${item}">${item.desc}</option>
                                 </#list>
                             </select>
@@ -527,7 +527,7 @@ exit 0
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="executorRouteStrategy">
-                                <#list ExecutorRouteStrategyEnum as item>
+                                <#list ExecutorRouteStrategy as item>
                                     <option value="${item}">${item.title}</option>
                                 </#list>
                             </select>
@@ -545,7 +545,7 @@ exit 0
                                     color="black">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="misfireStrategy">
-                                <#list MisfireStrategyEnum as item>
+                                <#list MisfireStrategy as item>
                                     <option value="${item}"
                                             <#if 'DO_NOTHING' == item >selected</#if> >${item.title}</option>
                                 </#list>
@@ -557,7 +557,7 @@ exit 0
                                     color="red">*</font></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="executorBlockStrategy">
-                                <#list ExecutorBlockStrategyEnum as item>
+                                <#list ExecutorBlockStrategy as item>
                                     <option value="${item}">${item.title}</option>
                                 </#list>
                             </select>

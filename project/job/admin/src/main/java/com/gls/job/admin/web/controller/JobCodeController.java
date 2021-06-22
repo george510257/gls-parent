@@ -51,7 +51,7 @@ public class JobCodeController {
         jobInfoController.validPermission(request, jobInfo.getJobGroup());
 
         // Glue类型-字典
-        model.addAttribute("GlueTypeEnum", GlueType.values());
+        model.addAttribute("GlueType", GlueType.values());
 
         model.addAttribute("jobInfo", jobInfo);
         model.addAttribute("jobLogGlues", jobLogGlues);

@@ -2,8 +2,6 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
-import com.gls.job.admin.web.dao.JobGroupDao;
-import com.gls.job.admin.web.dao.JobUserDao;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobGroupService;
@@ -12,7 +10,6 @@ import com.gls.job.core.api.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,16 +28,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-
     @Resource
     private JobUserService jobUserService;
     @Resource
     private JobGroupService jobGroupService;
-
-    @Resource
-    private JobUserDao jobUserDao;
-    @Resource
-    private JobGroupDao jobGroupDao;
     @Resource
     private I18nHelper i18nHelper;
 
@@ -108,10 +99,10 @@ public class UserController {
         // avoid opt login seft
         JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
         if (loginUser.getId().equals(id)) {
-            return new Result<String>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
+            return new Result<>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
         }
 
-        jobUserDao.delete(id);
+        jobUserService.deleteUser(id);
         return Result.SUCCESS;
     }
 
@@ -121,24 +112,15 @@ public class UserController {
 
         // valid password
         if (password == null || password.trim().length() == 0) {
-            return new Result<String>(Result.FAIL.getCode(), "密码不可为空");
+            return new Result<>(Result.FAIL.getCode(), "密码不可为空");
         }
         password = password.trim();
         if (!(password.length() >= 4 && password.length() <= 20)) {
-            return new Result<String>(Result.FAIL_CODE, i18nHelper.getString("system_length_limit") + "[4-20]");
+            return new Result<>(Result.FAIL_CODE, i18nHelper.getString("system_length_limit") + "[4-20]");
         }
-
-        // md5 password
-        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
-
-        // update pwd
         JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
-
-        // do write
-        JobUser existUser = jobUserDao.loadByUserName(loginUser.getUsername());
-        existUser.setPassword(md5Password);
-        jobUserDao.update(existUser);
-
+        loginUser.setPassword(password);
+        jobUserService.updateUser(loginUser);
         return Result.SUCCESS;
     }
 

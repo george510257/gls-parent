@@ -38,7 +38,7 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="javascript:;">
                                 <span class="sr-only">(current)</span>
-                                【<#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>】
+                                【<#list GlueType as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>】
                                 ${jobInfo.jobDesc}
                             </a></li>
                     </ul>
@@ -54,7 +54,7 @@
                                 <li <#if jobLogGlues?exists && jobLogGlues?size gt 0 >style="display: none;"</#if> >
                                     <a href="javascript:;" class="source_version" version="version_now"
                                        glueType="${jobInfo.glueType}">
-                                        <#list GlueTypeEnum as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>
+                                        <#list GlueType as item><#if item == jobInfo.glueType>${item.desc}</#if></#list>
                                         ： ${jobInfo.glueRemark}
                                     </a>
                                 </li>
@@ -64,7 +64,7 @@
                                         <li>
                                             <a href="javascript:;" class="source_version" version="version_${glue.id}"
                                                glueType="${glue.glueType}">
-                                                <#list GlueTypeEnum as item><#if item == glue.glueType>${item.desc}</#if></#list>
+                                                <#list GlueType as item><#if item == glue.glueType>${item.desc}</#if></#list>
                                                 ： ${glue.glueRemark}
                                             </a>
                                         </li>

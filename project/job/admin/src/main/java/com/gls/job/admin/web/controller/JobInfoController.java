@@ -83,11 +83,11 @@ public class JobInfoController {
     public String index(HttpServletRequest request, Model model, @RequestParam(required = false, defaultValue = "-1") Long jobGroup) {
 
         // 枚举-字典
-        model.addAttribute("ExecutorRouteStrategyEnum", ExecutorRouteStrategy.values());        // 路由策略-列表
-        model.addAttribute("GlueTypeEnum", GlueType.values());                                // Glue类型-字典
-        model.addAttribute("ExecutorBlockStrategyEnum", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
-        model.addAttribute("ScheduleTypeEnum", ScheduleType.values());                        // 调度类型
-        model.addAttribute("MisfireStrategyEnum", MisfireStrategy.values());                    // 调度过期策略
+        model.addAttribute("ExecutorRouteStrategy", ExecutorRouteStrategy.values());        // 路由策略-列表
+        model.addAttribute("GlueType", GlueType.values());                                // Glue类型-字典
+        model.addAttribute("ExecutorBlockStrategy", ExecutorBlockStrategy.values());        // 阻塞处理策略-字典
+        model.addAttribute("ScheduleType", ScheduleType.values());                        // 调度类型
+        model.addAttribute("MisfireStrategy", MisfireStrategy.values());                    // 调度过期策略
 
         // 执行器列表
         List<JobGroup> jobGroupList_all = jobGroupDao.findAll();
