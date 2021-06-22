@@ -8,10 +8,9 @@ import com.gls.job.admin.web.entity.JobLogEntity;
 public interface JobAlarm {
 
     /**
-     * doAlarm
+     * do Alarm
      *
-     * @param jobInfo
-     * @param jobLog
+     * @param jobLogEntity
      * @return
      */
     boolean doAlarm(JobLogEntity jobLogEntity);

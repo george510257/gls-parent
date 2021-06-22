@@ -1,7 +1,6 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.TriggerModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ public class ExecutorRouteLRU implements ExecutorRouter {
     private static final ConcurrentMap<Long, LinkedHashMap<String, String>> JOB_LRU_MAP = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
 
+    @Override
     public String route(Long jobId, List<String> addressList) {
 
         // cache clear
@@ -63,10 +63,4 @@ public class ExecutorRouteLRU implements ExecutorRouter {
         String eldestKey = lruItem.entrySet().iterator().next().getKey();
         return lruItem.get(eldestKey);
     }
-
-    @Override
-    public String route(TriggerModel triggerModel, List<String> addressList) {
-        return route(triggerModel.getJobId(), addressList);
-    }
-
 }

@@ -1,7 +1,6 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.TriggerModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,8 +39,8 @@ public class ExecutorRouteRound implements ExecutorRouter {
     }
 
     @Override
-    public String route(TriggerModel triggerModel, List<String> addressList) {
-        return addressList.get(count(triggerModel.getJobId()) % addressList.size());
+    public String route(Long jobId, List<String> addressList) {
+        return addressList.get(count(jobId) % addressList.size());
     }
 
 }

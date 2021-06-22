@@ -1,7 +1,6 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.core.api.model.TriggerModel;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -54,7 +53,8 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
         return hashCode & 0xffffffffL;
     }
 
-    private String hashJob(Long jobId, List<String> addressList) {
+    @Override
+    public String route(Long jobId, List<String> addressList) {
 
         // ------A1------A2-------A3------
         // -----------J1------------------
@@ -73,10 +73,4 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
         }
         return addressRing.firstEntry().getValue();
     }
-
-    @Override
-    public String route(TriggerModel triggerModel, List<String> addressList) {
-        return hashJob(triggerModel.getJobId(), addressList);
-    }
-
 }

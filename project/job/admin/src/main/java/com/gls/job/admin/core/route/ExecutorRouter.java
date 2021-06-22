@@ -1,7 +1,5 @@
 package com.gls.job.admin.core.route;
 
-import com.gls.job.core.api.model.TriggerModel;
-
 import java.util.List;
 
 /**
@@ -13,10 +11,10 @@ public interface ExecutorRouter {
     /**
      * route address
      *
-     * @param triggerModel
+     * @param jobId
      * @param addressList
      * @return
      */
-    String route(TriggerModel triggerModel, List<String> addressList);
+    String route(Long jobId, List<String> addressList);
 
 }

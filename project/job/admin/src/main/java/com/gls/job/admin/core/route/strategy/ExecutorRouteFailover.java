@@ -3,7 +3,6 @@ package com.gls.job.admin.core.route.strategy;
 import com.gls.job.admin.core.route.ExecutorRouter;
 import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.Result;
-import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class ExecutorRouteFailover implements ExecutorRouter {
     private JobSchedulerService jobSchedulerService;
 
     @Override
-    public String route(TriggerModel triggerModel, List<String> addressList) {
+    public String route(Long jobId, List<String> addressList) {
         try {
             for (String address : addressList) {
                 // beat
