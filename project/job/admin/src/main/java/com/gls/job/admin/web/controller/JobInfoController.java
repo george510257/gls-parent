@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -97,11 +98,21 @@ public class JobInfoController {
         }
     }
 
-    @GetMapping("/trigger")
+    @PostMapping("/trigger")
     public Result<String> trigger(Long jobInfoId, String executorParam, String addressList) {
         try {
             jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, CollectionUtils.toList(addressList));
             return Result.SUCCESS;
+        } catch (JobException e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+    }
+
+    @PostMapping("/nextTriggerTime")
+    public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
+        try {
+            List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
+            return new Result<>(list);
         } catch (JobException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }

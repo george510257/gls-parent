@@ -93,4 +93,13 @@ public interface JobInfoService {
      * @param jobInfoId
      */
     void startJobInfo(Long jobInfoId);
+
+    /**
+     * nextTriggerTime
+     *
+     * @param scheduleType
+     * @param scheduleConf
+     * @return
+     */
+    List<String> nextTriggerTime(String scheduleType, String scheduleConf);
 }

@@ -30,6 +30,7 @@ import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
+import com.gls.job.core.util.DateUtil;
 import com.gls.job.core.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -282,6 +283,30 @@ public class JobInfoServiceImpl implements JobInfoService {
             throw new JobException("调度类型非法");
         }
         jobInfoRepository.save(jobInfoEntity);
+    }
+
+    @Override
+    public List<String> nextTriggerTime(String scheduleType, String scheduleConf) {
+        JobInfoEntity jobInfoEntity = new JobInfoEntity();
+        jobInfoEntity.setScheduleType(ScheduleType.valueOf(scheduleType));
+        jobInfoEntity.setScheduleConf(scheduleConf);
+
+        List<String> result = new ArrayList<>();
+        Date lastTime = new Date();
+        try {
+            for (int i = 0; i < 5; i++) {
+                lastTime = generateNextValidTime(jobInfoEntity, lastTime);
+                if (lastTime != null) {
+                    result.add(DateUtil.formatDateTime(lastTime));
+                } else {
+                    break;
+                }
+            }
+        } catch (ParseException e) {
+            log.error(e.getMessage(), e);
+            throw new JobException("调度类型非法");
+        }
+        return result;
     }
 
     private void validJobInfoEntity(JobInfo jobInfo) {
