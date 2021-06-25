@@ -1,8 +1,8 @@
 package com.gls.job.executor.web.repository.impl;
 
+import cn.hutool.core.date.DateUtil;
+import com.gls.framework.core.utils.FileUtils;
 import com.gls.job.core.api.model.LogResultModel;
-import com.gls.job.core.util.DateUtil;
-import com.gls.job.core.util.FileUtil;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.JobLogRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +30,12 @@ public class JobLogRepositoryImpl implements JobLogRepository {
 
     @Override
     public void logFileClean(int logRetentionDays) {
-        List<String> fileNames = FileUtil.findFiles(jobExecutorProperties.getLogBasePath());
+        List<String> fileNames = FileUtils.findFiles(jobExecutorProperties.getLogBasePath());
         fileNames.forEach(fileName -> {
             String name = fileName.replace(jobExecutorProperties.getLogBasePath().concat("/"), "");
             Date date = DateUtil.parseDate(name);
-            if (DateUtil.addDays(date, logRetentionDays + 1).getTime() < System.currentTimeMillis()) {
-                FileUtil.deleteFile(fileName);
+            if (DateUtil.offsetDay(date, logRetentionDays + 1).getTime() < System.currentTimeMillis()) {
+                FileUtils.deleteFile(fileName);
             }
         });
     }

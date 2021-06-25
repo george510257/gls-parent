@@ -6,7 +6,6 @@ import com.gls.common.user.web.entity.ClientEntity;
 import com.gls.common.user.web.repository.ClientRepository;
 import com.gls.common.user.web.service.ClientService;
 import com.gls.common.user.web.service.RoleService;
-import com.gls.framework.core.utils.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -57,22 +56,17 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void updateClientDetails(ClientModel model) {
-        ClientEntity client = clientConverter.targetToSource(model);
-        updateByClientId(client);
-    }
-
-    private void updateByClientId(ClientEntity client) {
-        ClientEntity info = clientRepository.getOneByClientId(client.getClientId());
-        info = BeanUtils.combine(client, info);
-        clientRepository.save(info);
+        ClientEntity clientEntity = clientRepository.getOneByClientId(model.getClientId());
+        clientEntity = clientConverter.copyTargetToSource(model, clientEntity);
+        clientRepository.save(clientEntity);
     }
 
     @Override
     public void updateClientSecret(String clientId, String secret) {
-        ClientEntity client = new ClientEntity();
-        client.setClientId(clientId);
-        client.setClientSecret(passwordEncoder.encode(secret));
-        updateByClientId(client);
+        ClientModel model = new ClientModel();
+        model.setClientId(clientId);
+        model.setClientSecret(passwordEncoder.encode(secret));
+        updateClientDetails(model);
     }
 
     @Override

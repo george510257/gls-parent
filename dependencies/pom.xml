@@ -17,6 +17,7 @@
         <kaptcha.version>2.3.2</kaptcha.version>
         <JustAuth.version>1.16.0</JustAuth.version>
         <mybatis.version>2.1.4</mybatis.version>
+        <hutool.version>5.7.2</hutool.version>
     </properties>
 
     <dependencyManagement>
@@ -133,6 +134,11 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

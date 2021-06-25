@@ -1,4 +1,4 @@
-package com.gls.job.core.util;
+package com.gls.framework.core.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author xuxueli 2017-12-29 17:56:48
  */
 @Slf4j
-public class FileUtil {
+public class FileUtils {
 
     public static void deleteFile(String fileName) {
         // file

@@ -1,12 +1,12 @@
 package com.gls.job.admin.web.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobLogReportEntity;
 import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.service.JobIndexService;
-import com.gls.job.core.util.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -64,7 +64,7 @@ public class JobIndexServiceImpl implements JobIndexService {
 
         if (ObjectUtils.isEmpty(jobLogReportEntities)) {
             for (int i = -6; i <= 0; i++) {
-                triggerDayList.add(DateUtil.formatDate(DateUtil.addDays(new Date(), i)));
+                triggerDayList.add(DateUtil.formatDate(DateUtil.offsetDay(new Date(), i)));
                 triggerDayCountRunningList.add(0L);
                 triggerDayCountSucList.add(0L);
                 triggerDayCountFailList.add(0L);

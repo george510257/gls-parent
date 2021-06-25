@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.gls.framework.core.utils.CollectionUtils;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.constants.JobAdminProperties;
@@ -15,7 +16,6 @@ import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
-import com.gls.job.core.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -74,7 +74,7 @@ public class JobLogServiceImpl implements JobLogService {
 
     @Override
     public void doJobComplete() {
-        Date lostTime = DateUtil.addMinutes(new Date(), -10);
+        Date lostTime = DateUtil.offsetMinute(new Date(), -10);
         List<JobLogEntity> jobLogEntities = jobLogRepository.getLostJobLogs(lostTime);
         if (ObjectUtils.isEmpty(jobLogEntities)) {
             return;

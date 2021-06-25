@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobRegistryEntity;
 import com.gls.job.admin.web.repository.JobGroupRepository;
@@ -8,7 +9,6 @@ import com.gls.job.admin.web.service.JobRegistryService;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.util.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -54,7 +54,7 @@ public class JobRegistryServiceImpl implements JobRegistryService {
         if (ObjectUtils.isEmpty(jobGroupEntities)) {
             return;
         }
-        Date date = DateUtil.addSeconds(new Date(), -JobConstants.DEAD_TIMEOUT);
+        Date date = DateUtil.offsetSecond(new Date(), -JobConstants.DEAD_TIMEOUT);
         // remove dead address (admin/executor)
         removeOld(date);
 
@@ -70,7 +70,7 @@ public class JobRegistryServiceImpl implements JobRegistryService {
 
     @Override
     public List<String> getAddressList(String appname) {
-        return freshOnline(DateUtil.addSeconds(new Date(), -JobConstants.DEAD_TIMEOUT)).get(appname);
+        return freshOnline(DateUtil.offsetSecond(new Date(), -JobConstants.DEAD_TIMEOUT)).get(appname);
     }
 
     private Map<String, List<String>> freshOnline(Date date) {

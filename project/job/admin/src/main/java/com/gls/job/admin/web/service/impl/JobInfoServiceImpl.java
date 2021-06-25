@@ -1,5 +1,7 @@
 package com.gls.job.admin.web.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.net.NetUtil;
 import com.gls.framework.core.utils.CollectionUtils;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.cron.CronExpression;
@@ -30,8 +32,6 @@ import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
-import com.gls.job.core.util.DateUtil;
-import com.gls.job.core.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -430,7 +430,7 @@ public class JobInfoServiceImpl implements JobInfoService {
     private String getTriggerMsg(JobInfoEntity jobInfoEntity, TriggerType triggerType, String shardingParam, int finalFailRetryCount, Result<String> result) {
         StringBuilder triggerMsgBuilder = new StringBuilder();
         triggerMsgBuilder.append("任务触发类型：").append(triggerType.getTitle());
-        triggerMsgBuilder.append("<br>调度机器：").append(IpUtil.getIp());
+        triggerMsgBuilder.append("<br>调度机器：").append(NetUtil.getLocalhostStr());
         triggerMsgBuilder.append("<br>执行器-注册方式：").append(jobInfoEntity.getJobGroup().getAddressType() ? "自动注册" : "手动录入");
         triggerMsgBuilder.append("<br>执行器-地址列表：").append(CollectionUtils.toString(jobInfoEntity.getJobGroup().getAddressList()));
         triggerMsgBuilder.append("<br>路由策略：").append(jobInfoEntity.getExecutorRouteStrategy().getTitle());
