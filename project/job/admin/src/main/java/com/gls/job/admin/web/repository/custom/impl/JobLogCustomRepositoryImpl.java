@@ -22,7 +22,7 @@ import java.util.List;
  * @author george
  */
 @Slf4j
-@Repository
+@Repository("jobLogCustomRepository")
 public class JobLogCustomRepositoryImpl extends BaseRepositoryImpl<JobLogEntity, Long> implements JobLogCustomRepository {
 
     public JobLogCustomRepositoryImpl(EntityManager em) {

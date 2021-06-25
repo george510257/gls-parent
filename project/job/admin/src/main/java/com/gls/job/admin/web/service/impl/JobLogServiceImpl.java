@@ -28,7 +28,7 @@ import java.util.*;
  * @author george
  */
 @Slf4j
-@Service
+@Service("jobLogService")
 public class JobLogServiceImpl implements JobLogService {
 
     private static final int HANDLE_MSG_MAX_LENGTH = 15000;

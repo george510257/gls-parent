@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author george
  */
-@Repository
+@Repository("jobUserCustomRepository")
 public class JobUserCustomRepositoryImpl extends BaseRepositoryImpl<JobUserEntity, Long> implements JobUserCustomRepository {
 
     public JobUserCustomRepositoryImpl(EntityManager em) {

@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @author george
  */
-@Service
+@Service("jobLogGlueService")
 public class JobLogGlueServiceImpl implements JobLogGlueService {
     @Resource
     private JobInfoRepository jobInfoRepository;

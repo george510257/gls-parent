@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author george
  */
-@Service
+@Service("jobGroupService")
 public class JobGroupServiceImpl implements JobGroupService {
 
     @Resource

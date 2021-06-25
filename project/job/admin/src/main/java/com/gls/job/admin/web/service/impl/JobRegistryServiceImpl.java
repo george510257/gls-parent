@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * @author george
  */
-@Service
+@Service("jobRegistryService")
 public class JobRegistryServiceImpl implements JobRegistryService {
 
     @Resource

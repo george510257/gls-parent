@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author george
  */
-@Service
+@Service("jobIndexService")
 public class JobIndexServiceImpl implements JobIndexService {
 
     @Resource

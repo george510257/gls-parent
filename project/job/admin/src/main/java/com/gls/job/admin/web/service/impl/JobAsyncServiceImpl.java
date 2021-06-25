@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author george
  */
-@Service
+@Service("jobAsyncService")
 public class JobAsyncServiceImpl implements JobAsyncService {
 
     @Resource

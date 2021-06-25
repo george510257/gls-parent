@@ -46,7 +46,7 @@ import java.util.*;
  * @author george
  */
 @Slf4j
-@Service
+@Service("jobInfoService")
 public class JobInfoServiceImpl implements JobInfoService {
 
     @Resource

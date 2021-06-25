@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author george
  */
-@Service
+@Service("jobUserService")
 public class JobUserServiceImpl implements JobUserService {
     @Resource
     private JobUserRepository jobUserRepository;
