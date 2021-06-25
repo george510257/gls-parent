@@ -21,7 +21,7 @@ public class JobLogReportEntity extends BaseEntity {
 
     private Date triggerDay;
 
-    private Integer runningCount;
-    private Integer sucCount;
-    private Integer failCount;
+    private Long runningCount;
+    private Long sucCount;
+    private Long failCount;
 }

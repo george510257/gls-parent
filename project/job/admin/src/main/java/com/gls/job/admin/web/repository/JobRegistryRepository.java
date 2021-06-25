@@ -1,6 +1,7 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobRegistryEntity;
+import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
 import java.util.Date;
@@ -26,4 +27,14 @@ public interface JobRegistryRepository extends BaseEntityRepository<JobRegistryE
      * @return
      */
     List<JobRegistryEntity> getByUpdateDateBefore(Date updateDate);
+
+    /**
+     * get By RegistryGroup And RegistryKey And RegistryValue
+     *
+     * @param registryGroup
+     * @param registryKey
+     * @param registryValue
+     * @return
+     */
+    JobRegistryEntity getByRegistryGroupAndRegistryKeyAndRegistryValue(RegistryType registryGroup, String registryKey, String registryValue);
 }

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * @author george
  */
-public class StringUtils {
+public class CollectionUtils {
 
     public static List<String> toList(String s) {
         if (s == null || s.isEmpty()) {
@@ -35,7 +35,7 @@ public class StringUtils {
         return map;
     }
 
-    public static String toString(Map<String, Object> map) {
+    public static String toString(Map<?, ?> map) {
         if (map == null || map.isEmpty()) {
             return "";
         }

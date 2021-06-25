@@ -1,22 +1,18 @@
 package com.gls.job.admin.web.controller;
 
-import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.api.model.Result;
+import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -25,103 +21,107 @@ import java.util.Map;
  * @author xuxueli 2019-05-04 16:39:50
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Resource
     private JobUserService jobUserService;
     @Resource
     private JobGroupService jobGroupService;
-    @Resource
-    private I18nHelper i18nHelper;
 
-    @RequestMapping
-    @PermissionLimit(administer = true)
-    public String index(Model model) {
-
-        // 执行器列表
-        List<JobGroup> groupList = jobGroupService.getAllGroupList();
-        model.addAttribute("groupList", groupList);
-
-        return "user/user.index";
-    }
-
-    @RequestMapping("/pageList")
-    @ResponseBody
-    @PermissionLimit(administer = true)
-    public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                        String username, int role) {
-
-        return jobUserService.getPageList(username, role, start, length);
-    }
-
-    @RequestMapping("/add")
-    @ResponseBody
-    @PermissionLimit(administer = true)
-    public Result<String> add(@Valid JobUser jobUser, BindingResult errors) {
-        if (errors.hasErrors()) {
-            errors.getAllErrors().forEach(objectError -> log.error(objectError.getDefaultMessage()));
-            return new Result<>(Result.FAIL_CODE, errors.getAllErrors().get(0).getDefaultMessage());
+    @PermissionLimit(limit = false)
+    @PostMapping("/login")
+    public Result<String> login(String userName, String password, String ifRemember) {
+        boolean ifRem = ifRemember != null && ifRemember.trim().length() > 0 && "on".equals(ifRemember);
+        String message = jobUserService.login(userName, password, ifRem);
+        if (StringUtils.hasText(message)) {
+            new Result<String>(500, message);
         }
-        boolean flag = jobUserService.addUser(jobUser);
-        if (flag) {
-            return Result.SUCCESS;
-        } else {
-            return new Result<>(Result.FAIL_CODE, i18nHelper.getString("user_username_repeat"));
-        }
-    }
-
-    @RequestMapping("/update")
-    @ResponseBody
-    @PermissionLimit(administer = true)
-    public Result<String> update(HttpServletRequest request, @Valid JobUser jobUser, BindingResult errors) {
-        if (errors.hasErrors()) {
-            errors.getAllErrors().forEach(objectError -> log.error(objectError.getDefaultMessage()));
-            return new Result<>(Result.FAIL_CODE, errors.getAllErrors().get(0).getDefaultMessage());
-        }
-        // avoid opt login seft
-        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getUsername().equals(jobUser.getUsername())) {
-            return new Result<>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
-        }
-
-        // write
-        jobUserService.updateUser(jobUser);
         return Result.SUCCESS;
     }
 
-    @RequestMapping("/remove")
-    @ResponseBody
+    @PermissionLimit(limit = false)
+    @PostMapping("/logout")
+    public Result<String> logout() {
+        String message = jobUserService.logout();
+        if (StringUtils.hasText(message)) {
+            new Result<String>(500, message);
+        }
+        return Result.SUCCESS;
+    }
+
     @PermissionLimit(administer = true)
-    public Result<String> remove(HttpServletRequest request, Long id) {
+    @GetMapping("/group")
+    public Result<List<JobGroup>> group() {
+        List<JobGroup> jobGroupList = jobGroupService.getAllList();
+        return new Result<>(jobGroupList);
+    }
 
-        // avoid opt login seft
-        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getId().equals(id)) {
-            return new Result<>(Result.FAIL.getCode(), i18nHelper.getString("user_update_loginuser_limit"));
+    @PermissionLimit(administer = true)
+    @GetMapping("/pageList")
+    public Result<Map<String, Object>> pageList(String username, int role,
+                                                @RequestParam(required = false, defaultValue = "0") int start,
+                                                @RequestParam(required = false, defaultValue = "10") int length) {
+        Map<String, Object> content = jobUserService.getPageList(username, role, start, length);
+        return new Result<>(content);
+    }
+
+    @PermissionLimit(administer = true)
+    @PostMapping("/add")
+    public Result<String> addUser(@Valid JobUser jobUser, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(objectError -> log.warn(objectError.getDefaultMessage()));
+            return new Result<>(Result.FAIL_CODE, result.getAllErrors().get(0).getDefaultMessage());
         }
-
-        jobUserService.deleteUser(id);
+        try {
+            jobUserService.addUser(jobUser);
+        } catch (JobException e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
         return Result.SUCCESS;
     }
 
-    @RequestMapping("/updatePwd")
-    @ResponseBody
-    public Result<String> updatePwd(HttpServletRequest request, String password) {
-
-        // valid password
-        if (password == null || password.trim().length() == 0) {
-            return new Result<>(Result.FAIL.getCode(), "密码不可为空");
+    @PermissionLimit(administer = true)
+    @PostMapping("/update")
+    public Result<String> updateUser(@Valid JobUser jobUser, BindingResult result) {
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(objectError -> log.warn(objectError.getDefaultMessage()));
+            return new Result<>(Result.FAIL_CODE, result.getAllErrors().get(0).getDefaultMessage());
         }
-        password = password.trim();
-        if (!(password.length() >= 4 && password.length() <= 20)) {
-            return new Result<>(Result.FAIL_CODE, i18nHelper.getString("system_length_limit") + "[4-20]");
+        try {
+            jobUserService.updateUser(jobUser);
+        } catch (JobException e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
-        JobUser loginUser = (JobUser) request.getAttribute(JobUserService.LOGIN_IDENTITY_KEY);
-        loginUser.setPassword(password);
-        jobUserService.updateUser(loginUser);
         return Result.SUCCESS;
     }
 
+    @PermissionLimit(administer = true)
+    @PostMapping("/remove")
+    public Result<String> removeUser(Long id) {
+        try {
+            jobUserService.removeUser(id);
+        } catch (JobException e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+        return Result.SUCCESS;
+    }
+
+    @PermissionLimit(administer = true)
+    @PostMapping("/updatePwd")
+    public Result<String> changePassword(String password) {
+        if (!StringUtils.hasText(password)) {
+            return new Result<>(Result.FAIL_CODE, "密码不可为空");
+        }
+        if (password.trim().length() < 4 || password.trim().length() > 20) {
+            return new Result<>(Result.FAIL_CODE, "长度限制[4-20]");
+        }
+        try {
+            jobUserService.changePassword(password);
+        } catch (JobException e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+        return Result.SUCCESS;
+    }
 }

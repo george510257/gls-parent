@@ -14,8 +14,8 @@ public class JobLogReport {
 
     private Date triggerDay;
 
-    private int runningCount;
-    private int sucCount;
-    private int failCount;
+    private Long runningCount;
+    private Long sucCount;
+    private Long failCount;
 
 }

@@ -1,28 +1,18 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.core.api.model.CallbackModel;
 
 import java.util.List;
 
 /**
- * @author xuxueli 2020-10-30 20:43:10
+ * @author george
  */
-
 public interface JobLogService {
-
-    /**
-     * update HandleInfo And Finish
-     *
-     * @param jobLog
-     */
-    void updateHandleInfoAndFinish(JobLog jobLog);
 
     /**
      * callback
      *
      * @param callbackModels
-     * @return
      */
     void callback(List<CallbackModel> callbackModels);
 
@@ -35,4 +25,12 @@ public interface JobLogService {
      * do Job Fail
      */
     void doJobFail();
+
+    /**
+     * do Job LogReport
+     *
+     * @param lastCleanLogTime
+     * @return
+     */
+    long doJobLogReport(long lastCleanLogTime);
 }

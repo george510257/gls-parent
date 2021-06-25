@@ -33,7 +33,7 @@ public interface JobInfoRepository extends BaseEntityRepository<JobInfoEntity>, 
             "where t.trigger_status = true " +
             "and t.trigger_next_time <= :triggerNextTime " +
             "order by t.id asc " +
-            "limit :size;", nativeQuery = true)
+            "limit :size", nativeQuery = true)
     List<JobInfoEntity> getScheduleJob(@Param("triggerNextTime") Date triggerNextTime, @Param("size") int size);
 
 }

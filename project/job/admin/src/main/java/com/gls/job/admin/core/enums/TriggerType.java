@@ -15,12 +15,12 @@ public enum TriggerType {
     /**
      *
      */
-    MANUAL("manual"),
-    CRON("cron"),
-    RETRY("retry"),
-    PARENT("parent"),
-    API("api"),
-    MISFIRE("misfire");
+    MANUAL("手动触发"),
+    CRON("Cron触发"),
+    RETRY("失败重试触发"),
+    PARENT("父任务触发"),
+    API("API触发"),
+    MISFIRE("调度过期补偿");
 
     private final String title;
 

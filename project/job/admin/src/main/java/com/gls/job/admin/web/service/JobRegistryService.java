@@ -2,6 +2,8 @@ package com.gls.job.admin.web.service;
 
 import com.gls.job.core.api.model.RegistryModel;
 
+import java.util.List;
+
 /**
  * @author george
  */
@@ -22,7 +24,15 @@ public interface JobRegistryService {
     void registryRemove(RegistryModel registryModel);
 
     /**
-     * do JobRegistry
+     * doJobRegistry
      */
     void doJobRegistry();
+
+    /**
+     * getAddressList
+     *
+     * @param appname
+     * @return
+     */
+    List<String> getAddressList(String appname);
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ExecutorApiHolder extends BaseHolder<String, ExecutorApi> {
-    
+
     @Override
     protected void delete(ExecutorApi oldValue, String reason) {
 

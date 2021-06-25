@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
-import com.gls.framework.core.utils.StringUtils;
+import com.gls.framework.core.utils.CollectionUtils;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.repository.JobGroupRepository;
@@ -46,7 +46,7 @@ public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
         jobInfo.setGlueSource(jobInfoEntity.getGlueSource());
         jobInfo.setGlueRemark(jobInfoEntity.getGlueRemark());
         jobInfo.setGlueUpdateTime(jobInfoEntity.getGlueUpdateTime());
-        jobInfo.setChildJobId(StringUtils.toString(jobInfoEntity.getChildJobs().stream().map(child -> child.getId().toString()).collect(Collectors.toList())));
+        jobInfo.setChildJobId(CollectionUtils.toString(jobInfoEntity.getChildJobs().stream().map(child -> child.getId().toString()).collect(Collectors.toList())));
         jobInfo.setTriggerStatus(jobInfoEntity.getTriggerStatus() ? 1 : 0);
         jobInfo.setTriggerLastTime(jobInfoEntity.getTriggerLastTime().getTime());
         jobInfo.setTriggerNextTime(jobInfoEntity.getTriggerNextTime().getTime());
@@ -72,7 +72,7 @@ public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
         jobInfoEntity.setGlueSource(jobInfo.getGlueSource());
         jobInfoEntity.setGlueRemark(jobInfo.getGlueRemark());
         jobInfoEntity.setGlueUpdateTime(jobInfo.getGlueUpdateTime());
-        jobInfoEntity.setChildJobs(StringUtils.toList(jobInfo.getChildJobId()).stream().map(jobId -> jobInfoRepository.getOne(Long.parseLong(jobId))).collect(Collectors.toList()));
+        jobInfoEntity.setChildJobs(CollectionUtils.toList(jobInfo.getChildJobId()).stream().map(jobId -> jobInfoRepository.getOne(Long.parseLong(jobId))).collect(Collectors.toList()));
         jobInfoEntity.setTriggerStatus(jobInfo.getTriggerStatus() == 1);
         jobInfoEntity.setTriggerLastTime(new Date(jobInfo.getTriggerLastTime()));
         jobInfoEntity.setTriggerNextTime(new Date(jobInfo.getTriggerNextTime()));

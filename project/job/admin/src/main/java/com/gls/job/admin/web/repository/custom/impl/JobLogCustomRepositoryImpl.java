@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
@@ -22,14 +22,11 @@ import java.util.List;
  * @author george
  */
 @Slf4j
+@Repository
 public class JobLogCustomRepositoryImpl extends BaseRepositoryImpl<JobLogEntity, Long> implements JobLogCustomRepository {
 
-    public JobLogCustomRepositoryImpl(JpaEntityInformation<JobLogEntity, Long> entityInformation, EntityManager entityManager) {
-        super(entityInformation, entityManager);
-    }
-
-    public JobLogCustomRepositoryImpl(Class<JobLogEntity> domainClass, EntityManager em) {
-        super(domainClass, em);
+    public JobLogCustomRepositoryImpl(EntityManager em) {
+        super(JobLogEntity.class, em);
     }
 
     @Override
@@ -60,21 +57,23 @@ public class JobLogCustomRepositoryImpl extends BaseRepositoryImpl<JobLogEntity,
             if (!ObjectUtils.isEmpty(triggerTimeTo)) {
                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("triggerTime"), triggerTimeTo));
             }
-            switch (logStatus) {
-                case 1:
-                    predicates.add(criteriaBuilder.equal(root.get("handleCode"), 200));
-                    break;
-                case 2:
-                    Predicate predicate1 = criteriaBuilder.not(root.get("triggerCode").in(0, 200));
-                    Predicate predicate2 = criteriaBuilder.not(root.get("handleCode").in(0, 200));
-                    predicates.add(criteriaBuilder.or(predicate1, predicate2));
-                    break;
-                case 3:
-                    predicates.add(criteriaBuilder.equal(root.get("triggerCode"), 200));
-                    predicates.add(criteriaBuilder.equal(root.get("handleCode"), 0));
-                    break;
-                default:
-                    log.info("logStatus : {}", logStatus);
+            if (!ObjectUtils.isEmpty(logStatus)) {
+                switch (logStatus) {
+                    case 1:
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 200));
+                        break;
+                    case 2:
+                        Predicate predicate1 = criteriaBuilder.not(root.get("triggerCode").in(0, 200));
+                        Predicate predicate2 = criteriaBuilder.not(root.get("handleCode").in(0, 200));
+                        predicates.add(criteriaBuilder.or(predicate1, predicate2));
+                        break;
+                    case 3:
+                        predicates.add(criteriaBuilder.equal(root.get("triggerCode"), 200));
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 0));
+                        break;
+                    default:
+                        log.info("logStatus : {}", logStatus);
+                }
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

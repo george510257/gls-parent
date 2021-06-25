@@ -37,9 +37,9 @@ public interface JobLogReportRepository extends BaseEntityRepository<JobLogRepor
      * @return
      */
     @Query(value = "select " +
-            "SUM(t.running_count) as running_count, " +
-            "SUM(t.suc_count) as suc_count, " +
-            "SUM(t.fail_count) as fail_count " +
+            "SUM(t.running_count) as runningCount, " +
+            "SUM(t.suc_count) as sucCount, " +
+            "SUM(t.fail_count) as failCount " +
             "from job_log_report_entity t;", nativeQuery = true)
-    List<Map<String, Long>> getReportTotal();
+    Map<String, Long> getReportTotal();
 }

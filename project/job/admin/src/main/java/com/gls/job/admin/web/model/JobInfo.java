@@ -7,6 +7,7 @@ import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -25,7 +26,9 @@ public class JobInfo {
     /**
      * 执行器主键ID
      */
+    @NotBlank
     private Long jobGroup;
+    @NotBlank
     private String jobDesc;
 
     private Date addTime;
@@ -34,6 +37,7 @@ public class JobInfo {
     /**
      * 负责人
      */
+    @NotBlank
     private String author;
 
     /**
@@ -44,6 +48,7 @@ public class JobInfo {
     /**
      * 调度类型
      */
+    @NotBlank
     private ScheduleType scheduleType;
 
     /**
@@ -54,11 +59,13 @@ public class JobInfo {
     /**
      * 调度过期策略
      */
+    @NotBlank
     private MisfireStrategy misfireStrategy;
 
     /**
      * 执行器路由策略
      */
+    @NotBlank
     private ExecutorRouteStrategy executorRouteStrategy;
 
     /**
@@ -72,6 +79,7 @@ public class JobInfo {
     /**
      * 阻塞处理策略
      */
+    @NotBlank
     private ExecutorBlockStrategy executorBlockStrategy;
     /**
      * 任务执行超时时间，单位秒
@@ -84,6 +92,7 @@ public class JobInfo {
     /**
      * GLUE类型	#com.gls.job.core.api.model.enums.GlueType
      */
+    @NotBlank
     private GlueType glueType;
     /**
      * GLUE源代码

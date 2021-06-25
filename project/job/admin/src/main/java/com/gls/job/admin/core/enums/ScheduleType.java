@@ -13,22 +13,22 @@ public enum ScheduleType {
     /**
      *
      */
-    NONE("none"),
+    NONE("无"),
 
     /**
      * schedule by cron
      */
-    CRON("cron"),
+    CRON("CRON"),
 
     /**
      * schedule by fixed rate (in seconds)
      */
-    FIX_RATE("fix_rate"),
+    FIX_RATE("固定速度"),
 
     /**
      * schedule by fix delay (in seconds)， after the last time
      */
-    /*FIX_DELAY("fix_delay")*/;
+    /*FIX_DELAY("固定延迟")*/;
 
     private final String title;
 

@@ -1,7 +1,6 @@
 package com.gls.job.admin.web.model;
 
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -33,22 +32,5 @@ public class JobUser {
      * 权限：执行器ID列表，多个逗号分割
      */
     private String permission;
-
-    // plugin
-    public boolean validPermission(Long jobGroup) {
-        if (this.role == 1) {
-            return true;
-        } else {
-            if (StringUtils.hasText(this.permission)) {
-                for (String permissionItem : this.permission.split(",")) {
-                    if (String.valueOf(jobGroup).equals(permissionItem)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-    }
 
 }

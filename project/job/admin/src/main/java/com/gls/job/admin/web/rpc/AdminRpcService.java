@@ -1,7 +1,6 @@
 package com.gls.job.admin.web.rpc;
 
-import com.gls.job.admin.web.service.JobLogService;
-import com.gls.job.admin.web.service.JobRegistryService;
+import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.model.Result;
@@ -18,26 +17,23 @@ import java.util.List;
 public class AdminRpcService implements AdminApi {
 
     @Resource
-    private JobLogService jobLogService;
-
-    @Resource
-    private JobRegistryService jobRegistryService;
+    private JobAsyncService jobAsyncService;
 
     @Override
-    public Result<String> callback(List<CallbackModel> callbackParamList) {
-        jobLogService.callback(callbackParamList);
+    public Result<String> callback(List<CallbackModel> callbackModels) {
+        jobAsyncService.asyncCallback(callbackModels);
         return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registry(RegistryModel registryModel) {
-        jobRegistryService.registry(registryModel);
+        jobAsyncService.asyncRegistry(registryModel);
         return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registryRemove(RegistryModel registryModel) {
-        jobRegistryService.registryRemove(registryModel);
+        jobAsyncService.asyncRegistryRemove(registryModel);
         return Result.SUCCESS;
     }
 

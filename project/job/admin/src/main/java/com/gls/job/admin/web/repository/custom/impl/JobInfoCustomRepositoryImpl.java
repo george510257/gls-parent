@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -19,14 +19,11 @@ import java.util.List;
 /**
  * @author george
  */
+@Repository
 public class JobInfoCustomRepositoryImpl extends BaseRepositoryImpl<JobInfoEntity, Long> implements JobInfoCustomRepository {
 
-    public JobInfoCustomRepositoryImpl(JpaEntityInformation<JobInfoEntity, Long> entityInformation, EntityManager entityManager) {
-        super(entityInformation, entityManager);
-    }
-
-    public JobInfoCustomRepositoryImpl(Class<JobInfoEntity> domainClass, EntityManager em) {
-        super(domainClass, em);
+    public JobInfoCustomRepositoryImpl(EntityManager em) {
+        super(JobInfoEntity.class, em);
     }
 
     @Override

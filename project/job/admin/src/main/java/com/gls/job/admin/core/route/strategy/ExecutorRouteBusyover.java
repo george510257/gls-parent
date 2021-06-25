@@ -1,10 +1,10 @@
 package com.gls.job.admin.core.route.strategy;
 
 import com.gls.job.admin.core.route.ExecutorRouter;
-import com.gls.job.admin.web.service.JobSchedulerService;
 import com.gls.job.core.api.model.IdleBeatModel;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.ExecutorApi;
+import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,14 +20,14 @@ import java.util.List;
 public class ExecutorRouteBusyover implements ExecutorRouter {
 
     @Resource
-    private JobSchedulerService jobSchedulerService;
+    private ExecutorApiHolder executorApiHolder;
 
     @Override
     public String route(Long jobId, List<String> addressList) {
         try {
             for (String address : addressList) {
                 // beat
-                ExecutorApi executorApi = jobSchedulerService.getExecutorBiz(address);
+                ExecutorApi executorApi = executorApiHolder.load(address);
                 Result<String> result = executorApi.idleBeat(new IdleBeatModel(jobId));
                 // beat success
                 if (Result.SUCCESS_CODE == result.getCode()) {

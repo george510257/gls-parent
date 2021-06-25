@@ -34,7 +34,7 @@ public interface JobLogRepository extends BaseEntityRepository<JobLogEntity>, Jo
             "sum(case when (t.triggerCode in (0,200) and t.handleCode = 0) then 1 else 0 end ) as triggerDayCountRunning," +
             "sum(case when t.handleCode = 200 then 1 else 0 end ) as triggerDayCountSuc " +
             "from JobLogEntity t where t.triggerTime between :triggerTimeFrom and :triggerTimeTo")
-    Map<String, Integer> getLogReport(@Param("triggerTimeFrom") Date triggerTimeFrom, @Param("triggerTimeTo") Date triggerTimeTo);
+    Map<String, Long> getLogReport(@Param("triggerTimeFrom") Date triggerTimeFrom, @Param("triggerTimeTo") Date triggerTimeTo);
 
     /**
      * get Fail JobLogs
@@ -43,10 +43,10 @@ public interface JobLogRepository extends BaseEntityRepository<JobLogEntity>, Jo
      * @return
      */
     @Query(value = "select t.* from job_log_entity t " +
-            "where !((t.trigger_code in (0,200) and t.handle_code = 0) or t.handle_code = 200) " +
+            "where !((t.trigger_code in (0, 200) and t.handle_code = 0) or t.handle_code = 200) " +
             "and t.alarm_status = 0 " +
             "order by t.id asc " +
-            "limit :size;", nativeQuery = true)
+            "limit :size", nativeQuery = true)
     List<JobLogEntity> getFailJobLogs(@Param("size") int size);
 
     /**

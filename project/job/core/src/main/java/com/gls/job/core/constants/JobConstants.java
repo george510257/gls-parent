@@ -13,4 +13,6 @@ public interface JobConstants {
     int DEAD_TIMEOUT = BEAT_TIMEOUT * 3;
 
     long PRE_READ_MS = 5000;
+
+    String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 }

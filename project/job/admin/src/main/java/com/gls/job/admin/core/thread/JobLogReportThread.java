@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.web.service.JobLogReportService;
+import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.core.base.BaseThread;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class JobLogReportThread extends BaseThread {
 
     @Resource
-    private JobLogReportService jobLogReportService;
+    private JobLogService jobLogService;
 
     private long lastCleanLogTime;
 
@@ -27,8 +27,7 @@ public class JobLogReportThread extends BaseThread {
 
     @Override
     protected void doExecute() throws Exception {
-        // 1、log-report refresh: refresh log report in 3 days
-        lastCleanLogTime = jobLogReportService.doJobLogReport(lastCleanLogTime);
+        lastCleanLogTime = jobLogService.doJobLogReport(lastCleanLogTime);
     }
 
     @Override

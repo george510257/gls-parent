@@ -4,8 +4,6 @@ management:
       enabled: false
   server:
     base-path: /actuator
-mybatis:
-  mapper-locations: classpath:/mybatis-mapper/*Mapper.xml
 server:
   port: 8080
   servlet:

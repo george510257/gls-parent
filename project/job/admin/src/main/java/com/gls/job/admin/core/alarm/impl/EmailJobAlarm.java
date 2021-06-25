@@ -2,7 +2,6 @@ package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.job.admin.core.alarm.JobAlarm;
 import com.gls.job.admin.core.constants.JobAdminProperties;
-import com.gls.job.admin.core.i18n.I18nHelper;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
@@ -32,19 +31,17 @@ public class EmailJobAlarm implements JobAlarm {
     private JavaMailSender mailSender;
     @Resource
     private JobAdminProperties jobAdminProperties;
-    @Resource
-    private I18nHelper i18nHelper;
 
     private String loadEmailJobAlarmTemplate() {
-        return "<h5>" + i18nHelper.getString("job_conf_monitor_detail") + "：</span>" +
+        return "<h5>监控告警明细: </span>" +
                 "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
                 "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
                 "      <tr>\n" +
-                "         <td width=\"20%\" >" + i18nHelper.getString("job_info_field_jobgroup") + "</td>\n" +
-                "         <td width=\"10%\" >" + i18nHelper.getString("job_info_field_id") + "</td>\n" +
-                "         <td width=\"20%\" >" + i18nHelper.getString("job_info_field_jobdesc") + "</td>\n" +
-                "         <td width=\"10%\" >" + i18nHelper.getString("job_conf_monitor_alarm_title") + "</td>\n" +
-                "         <td width=\"40%\" >" + i18nHelper.getString("job_conf_monitor_alarm_content") + "</td>\n" +
+                "         <td width=\"20%\" >执行器</td>\n" +
+                "         <td width=\"10%\" >任务ID</td>\n" +
+                "         <td width=\"20%\" >任务描述</td>\n" +
+                "         <td width=\"10%\" >告警类型</td>\n" +
+                "         <td width=\"40%\" >告警内容</td>\n" +
                 "      </tr>\n" +
                 "   </thead>\n" +
                 "   <tbody>\n" +
@@ -52,7 +49,7 @@ public class EmailJobAlarm implements JobAlarm {
                 "         <td>{0}</td>\n" +
                 "         <td>{1}</td>\n" +
                 "         <td>{2}</td>\n" +
-                "         <td>" + i18nHelper.getString("job_conf_monitor_alarm_type") + "</td>\n" +
+                "         <td>调度失败</td>\n" +
                 "         <td>{3}</td>\n" +
                 "      </tr>\n" +
                 "   </tbody>\n" +
@@ -79,8 +76,8 @@ public class EmailJobAlarm implements JobAlarm {
             }
 
             // email info
-            String personal = i18nHelper.getString("admin_name_full");
-            String title = i18nHelper.getString("job_conf_monitor");
+            String personal = "分布式任务调度平台GLS-JOB";
+            String title = "任务调度中心监控报警";
             String content = MessageFormat.format(loadEmailJobAlarmTemplate(),
                     jobGroup != null ? jobGroup.getTitle() : "null",
                     jobInfo.getId(),

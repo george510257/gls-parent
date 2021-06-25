@@ -1,86 +1,96 @@
 package com.gls.job.admin.web.service;
 
+import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
-import com.gls.job.core.api.model.Result;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
- * core job action for gls-job
- *
- * @author xuxueli 2016-5-28 15:30:33
+ * @author george
  */
 public interface JobInfoService {
 
     /**
-     * page list
+     * do JobSchedule Ring
+     */
+    void doJobScheduleRing();
+
+    /**
+     * trigger
      *
-     * @param start
-     * @param length
+     * @param jobId
+     * @param triggerType
+     * @param failRetryCount
+     * @param executorShardingParam
+     * @param executorParam
+     * @param addressList
+     */
+    void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList);
+
+    /**
+     * do JobSchedule
+     *
+     * @return
+     * @throws ParseException
+     */
+    boolean doJobSchedule() throws ParseException;
+
+    /**
+     * getIndexData
+     *
+     * @param jobGroupId
+     * @return
+     */
+    Map<String, Object> getIndexData(Long jobGroupId);
+
+    /**
+     * pageList
+     *
      * @param jobGroup
+     * @param triggerStatus
      * @param jobDesc
      * @param executorHandler
      * @param author
+     * @param start
+     * @param length
      * @return
      */
-    Map<String, Object> pageList(int start, int length, Long jobGroup, int triggerStatus, String jobDesc, String executorHandler, String author);
+    Map<String, Object> pageList(Long jobGroup, Boolean triggerStatus, String jobDesc, String executorHandler, String author, int start, int length);
 
     /**
-     * add job
+     * addJobInfo
      *
      * @param jobInfo
-     * @return
      */
-    Result<String> add(JobInfo jobInfo);
+    void addJobInfo(JobInfo jobInfo);
 
     /**
-     * update job
+     * updateJobInfo
      *
      * @param jobInfo
-     * @return
      */
-    Result<String> update(JobInfo jobInfo);
+    void updateJobInfo(JobInfo jobInfo);
 
     /**
-     * remove job
-     * *
+     * removeJobInfo
      *
-     * @param id
-     * @return
+     * @param jobInfoId
      */
-    Result<String> remove(Long id);
+    void removeJobInfo(Long jobInfoId);
 
     /**
-     * start job
+     * stopJobInfo
      *
-     * @param id
-     * @return
+     * @param jobInfoId
      */
-    Result<String> start(Long id);
+    void stopJobInfo(Long jobInfoId);
 
     /**
-     * stop job
+     * startJobInfo
      *
-     * @param id
-     * @return
+     * @param jobInfoId
      */
-    Result<String> stop(Long id);
-
-    /**
-     * dashboard info
-     *
-     * @return
-     */
-    Map<String, Object> dashboardInfo();
-
-    /**
-     * chart info
-     *
-     * @param startDate
-     * @param endDate
-     * @return
-     */
-    Result<Map<String, Object>> chartInfo(Date startDate, Date endDate);
-
+    void startJobInfo(Long jobInfoId);
 }

@@ -1,52 +1,33 @@
 package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.core.api.model.Result;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * @author xuxueli 2019-05-04 22:13:264
+ * @author georg2
  */
-
 public interface JobUserService {
-
-    String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 
     /**
      * login
      *
-     * @param request
-     * @param response
      * @param userName
      * @param password
-     * @param ifRem
+     * @param ifRemember
      * @return
      */
-    Result<String> login(HttpServletRequest request, HttpServletResponse response, String userName, String password, boolean ifRem);
+    String login(String userName, String password, boolean ifRemember);
 
     /**
-     * logout
+     * login
      *
-     * @param request
-     * @param response
      * @return
      */
-    Result<String> logout(HttpServletRequest request, HttpServletResponse response);
+    String logout();
 
     /**
-     * ifLogin
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    JobUser ifLogin(HttpServletRequest request, HttpServletResponse response);
-
-    /**
-     * get Page List
+     * getPageList
      *
      * @param username
      * @param role
@@ -57,24 +38,31 @@ public interface JobUserService {
     Map<String, Object> getPageList(String username, int role, int start, int length);
 
     /**
-     * add User
+     * addUser
      *
      * @param jobUser
      * @return
      */
-    boolean addUser(JobUser jobUser);
+    void addUser(JobUser jobUser);
 
     /**
-     * update User
+     * updateUser
      *
      * @param jobUser
      */
     void updateUser(JobUser jobUser);
 
     /**
-     * delete User
+     * removeUser
      *
      * @param id
      */
-    void deleteUser(Long id);
+    void removeUser(Long id);
+
+    /**
+     * changePassword
+     *
+     * @param password
+     */
+    void changePassword(String password);
 }
