@@ -1,12 +1,12 @@
 package com.gls.job.executor.web.repository.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.util.FileUtil;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.CallbackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 
@@ -23,15 +23,13 @@ import java.util.List;
 @Repository
 public class CallbackRepositoryImpl implements CallbackRepository {
 
-    private final GenericJackson2JsonRedisSerializer jsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-
     @Resource
     private JobExecutorProperties jobExecutorProperties;
 
     @Override
     public void save(List<CallbackModel> callbackModels) {
         String fileName = getBaseFileName().replace("{x}", String.valueOf(System.currentTimeMillis()));
-        byte[] callbackModelsBytes = jsonRedisSerializer.serialize(callbackModels);
+        byte[] callbackModelsBytes = JSON.toJSONBytes(callbackModels);
         try {
             IOUtils.write(callbackModelsBytes, new FileOutputStream(fileName));
         } catch (IOException e) {
@@ -46,7 +44,7 @@ public class CallbackRepositoryImpl implements CallbackRepository {
         if (!ObjectUtils.isEmpty(fileNames)) {
             for (String fileName : fileNames) {
                 byte[] callbackModelsBytes = FileUtil.readFile(fileName);
-                List<CallbackModel> callbackModelList = jsonRedisSerializer.deserialize(callbackModelsBytes, List.class);
+                List<CallbackModel> callbackModelList = JSON.parseObject(callbackModelsBytes, List.class);
                 callbackModels.addAll(callbackModelList);
                 FileUtil.deleteFile(fileName);
             }

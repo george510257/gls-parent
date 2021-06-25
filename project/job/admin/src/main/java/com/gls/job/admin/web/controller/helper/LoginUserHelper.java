@@ -1,8 +1,8 @@
 package com.gls.job.admin.web.controller.helper;
 
 import com.alibaba.fastjson.JSON;
-import com.gls.job.admin.core.util.CookieUtil;
 import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.core.util.CookieUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;

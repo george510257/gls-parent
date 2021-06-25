@@ -1,8 +1,8 @@
 package com.gls.job.admin.web.controller.resolver;
 
-import com.gls.job.admin.core.util.JacksonUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
+import com.gls.job.core.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
