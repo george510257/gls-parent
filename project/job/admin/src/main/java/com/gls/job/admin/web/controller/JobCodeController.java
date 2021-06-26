@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.web.service.JobLogGlueService;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;

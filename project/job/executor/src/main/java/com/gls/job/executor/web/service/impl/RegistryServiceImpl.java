@@ -1,7 +1,7 @@
 package com.gls.job.executor.web.service.impl;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.RegistryModel;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
 import com.gls.job.executor.core.constants.JobExecutorProperties;

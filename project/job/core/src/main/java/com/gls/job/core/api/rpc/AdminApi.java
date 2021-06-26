@@ -1,8 +1,8 @@
 package com.gls.job.core.api.rpc;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
-import com.gls.job.core.api.model.Result;
 
 import java.util.List;
 

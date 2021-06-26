@@ -1,9 +1,9 @@
 package com.gls.job.admin.web.rpc;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.AdminApi;
 import org.apache.dubbo.config.annotation.DubboService;
 

@@ -1,11 +1,11 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.web.controller.annotation.PermissionLimit;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobUserService;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;

@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller.resolver;
 
+import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.JsonUtil;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -56,7 +56,7 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
             return mv;
         } else {
 
-            mv.addObject("exceptionMsg", errorResult.getMsg());
+            mv.addObject("exceptionMsg", errorResult.getMessage());
             mv.setViewName("/common/common.exception");
             return mv;
         }

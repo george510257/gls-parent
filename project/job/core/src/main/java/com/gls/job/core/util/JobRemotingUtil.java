@@ -1,7 +1,7 @@
 package com.gls.job.core.util;
 
+import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.JsonUtil;
-import com.gls.job.core.api.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

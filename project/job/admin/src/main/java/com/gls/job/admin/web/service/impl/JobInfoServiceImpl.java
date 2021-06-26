@@ -2,6 +2,7 @@ package com.gls.job.admin.web.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
+import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.cron.CronExpression;
@@ -25,7 +26,6 @@ import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
 import com.gls.job.core.api.model.enums.GlueType;
@@ -454,9 +454,9 @@ public class JobInfoServiceImpl implements JobInfoService {
             log.error(">>>>>>>>>>> gls-job trigger error, please check if the executor[{}] is running.", address, e);
             result = new Result<>(Result.FAIL_CODE, Arrays.toString(e.getStackTrace()));
         }
-        result.setMsg("触发调度: <br>address：".concat(address)
+        result.setMessage("触发调度: <br>address：".concat(address)
                 .concat("<br>code：").concat(String.valueOf(result.getCode()))
-                .concat("<br>msg：").concat(result.getMsg()));
+                .concat("<br>msg：").concat(result.getMessage()));
         return result;
     }
 

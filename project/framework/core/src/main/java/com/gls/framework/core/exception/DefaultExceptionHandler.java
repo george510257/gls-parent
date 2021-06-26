@@ -4,7 +4,6 @@ import com.alibaba.cloud.sentinel.rest.SentinelClientHttpResponse;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.constants.FrameworkConstants;
-import com.gls.framework.core.result.ResultHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -35,9 +34,8 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public Result<String> nullPointerException(NullPointerException exception) {
         log.info("-----nullPointerException-----");
-        log.info("error message: {}", exception.getMessage());
-        exception.printStackTrace();
-        return ResultHelper.nullPointError(exception.getMessage());
+        log.error(exception.getMessage(), exception);
+        return new Result<>(Result.FAIL, exception.getMessage());
     }
 
     /**
@@ -50,9 +48,8 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.class)
     public Result<String> httpClientErrorException(HttpClientErrorException exception) {
         log.info("-----httpClientErrorException-----");
-        log.info("error message: {}", exception.getMessage());
-        exception.printStackTrace();
-        return ResultHelper.clientError(exception.getMessage());
+        log.error(exception.getMessage(), exception);
+        return new Result<>(Result.FAIL, exception.getMessage());
     }
 
     /**
@@ -65,8 +62,7 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<String> exception(Exception exception) {
         log.info("-----exception-----");
-        log.info("error message: {}", exception.getMessage());
-        exception.printStackTrace();
-        return ResultHelper.unknownError(exception.getMessage());
+        log.error(exception.getMessage(), exception);
+        return new Result<>(Result.FAIL, exception.getMessage());
     }
 }

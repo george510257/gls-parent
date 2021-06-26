@@ -1,10 +1,10 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.core.api.model.LogResultModel;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

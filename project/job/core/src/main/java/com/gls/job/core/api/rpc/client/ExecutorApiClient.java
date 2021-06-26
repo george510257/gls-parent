@@ -1,5 +1,6 @@
 package com.gls.job.core.api.rpc.client;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.util.JobRemotingUtil;

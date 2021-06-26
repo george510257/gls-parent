@@ -2,6 +2,7 @@ package com.gls.job.admin.web.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
+import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.constants.JobAdminProperties;
@@ -22,7 +23,10 @@ import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
-import com.gls.job.core.api.model.*;
+import com.gls.job.core.api.model.CallbackModel;
+import com.gls.job.core.api.model.KillModel;
+import com.gls.job.core.api.model.LogModel;
+import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
@@ -205,13 +209,13 @@ public class JobLogServiceImpl implements JobLogService {
     public LogResultModel logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
         Result<LogResultModel> logResult = executorApiHolder.load(executorAddress).log(new LogModel(Convert.toDate(triggerTime), logId, fromLineNum));
 
-        if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+        if (logResult.getModel() != null && logResult.getModel().getFromLineNum() > logResult.getModel().getToLineNum()) {
             JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
             if (jobLogEntity.getHandleCode() > 0) {
-                logResult.getContent().setIsEnd(true);
+                logResult.getModel().setIsEnd(true);
             }
         }
-        return logResult.getContent();
+        return logResult.getModel();
     }
 
     @Override
@@ -228,7 +232,7 @@ public class JobLogServiceImpl implements JobLogService {
             Result<String> result = executorApiHolder.load(jobLogEntity.getExecutorAddress()).kill(new KillModel(logId));
             if (Result.SUCCESS_CODE == result.getCode()) {
                 jobLogEntity.setHandleCode(Result.FAIL_CODE);
-                jobLogEntity.setHandleMsg("人为操作，主动终止:" + result.getMsg());
+                jobLogEntity.setHandleMsg("人为操作，主动终止:" + result.getMessage());
                 jobLogEntity.setHandleTime(new Date());
                 updateHandleInfoAndFinish(jobLogEntity);
             }

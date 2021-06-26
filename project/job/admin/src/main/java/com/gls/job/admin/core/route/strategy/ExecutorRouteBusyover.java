@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.route.strategy;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.core.route.ExecutorRouter;
 import com.gls.job.core.api.model.IdleBeatModel;
-import com.gls.job.core.api.model.Result;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import lombok.extern.slf4j.Slf4j;

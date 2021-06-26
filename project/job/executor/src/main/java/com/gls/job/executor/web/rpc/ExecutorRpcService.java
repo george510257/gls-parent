@@ -1,5 +1,6 @@
 package com.gls.job.executor.web.rpc;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.*;
 import com.gls.job.core.api.rpc.ExecutorApi;
 import com.gls.job.executor.web.service.JobLogService;

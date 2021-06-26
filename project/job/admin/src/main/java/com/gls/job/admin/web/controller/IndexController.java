@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller;
 
+import com.gls.framework.api.result.Result;
 import com.gls.job.admin.web.service.JobIndexService;
-import com.gls.job.core.api.model.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -3,7 +3,6 @@ package com.gls.starter.web.result;
 import com.alibaba.fastjson.JSON;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.constants.FrameworkConstants;
-import com.gls.framework.core.result.ResultHelper;
 import com.gls.framework.core.result.ResultProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -58,11 +57,11 @@ public class ResultHandler implements ResponseBodyAdvice<Object> {
         log.info("-----beforeBodyWrite-----");
         Result result;
         if (body == null) {
-            result = ResultHelper.success();
+            result = Result.SUCCESS;
         } else if (body instanceof Result) {
             result = (Result) body;
         } else {
-            result = ResultHelper.success(body);
+            result = new Result(body);
         }
 
         if (log.isDebugEnabled()) {
