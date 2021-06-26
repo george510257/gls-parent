@@ -1,6 +1,6 @@
 package com.gls.job.executor.core.handler.impl;
 
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 import com.gls.job.executor.core.context.JobContextHolder;
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.script.ScriptHelper;

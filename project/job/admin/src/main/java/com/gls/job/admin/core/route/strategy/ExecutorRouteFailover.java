@@ -29,7 +29,7 @@ public class ExecutorRouteFailover implements ExecutorRouter {
                 ExecutorApi executorApi = executorApiHolder.load(address);
                 Result<String> result = executorApi.beat();
                 // beat success
-                if (result.getCode() == Result.SUCCESS_CODE) {
+                if (result.getCode().equals(Result.SUCCESS_CODE)) {
                     return address;
                 }
             }

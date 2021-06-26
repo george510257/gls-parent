@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
-import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobUserConverter;
 import com.gls.job.admin.web.entity.JobUserEntity;
 import com.gls.job.admin.web.model.JobUser;
@@ -27,8 +27,6 @@ public class JobUserServiceImpl implements JobUserService {
     private JobUserRepository jobUserRepository;
     @Resource
     private JobUserConverter jobUserConverter;
-    @Resource
-    private LoginUserHelper loginUserHelper;
 
     @Override
     public String login(String userName, String password, boolean ifRemember) {
@@ -44,13 +42,13 @@ public class JobUserServiceImpl implements JobUserService {
         if (!passwordMd5.equals(jobUserEntity.getPassword())) {
             return "账号或密码错误";
         }
-        loginUserHelper.saveLoginUser(jobUserConverter.sourceToTarget(jobUserEntity), ifRemember);
+        LoginUserUtil.saveLoginUser(jobUserConverter.sourceToTarget(jobUserEntity), ifRemember);
         return null;
     }
 
     @Override
     public String logout() {
-        loginUserHelper.removeLoginUser();
+        LoginUserUtil.removeLoginUser();
         return null;
     }
 
@@ -80,7 +78,7 @@ public class JobUserServiceImpl implements JobUserService {
 
     @Override
     public void updateUser(JobUser jobUser) {
-        JobUser loginUser = loginUserHelper.getLoginUser();
+        JobUser loginUser = LoginUserUtil.getLoginUser();
         if (loginUser.getUsername().equals(jobUser.getUsername())) {
             throw new JobException("禁止操作当前登录账号");
         }
@@ -93,7 +91,7 @@ public class JobUserServiceImpl implements JobUserService {
 
     @Override
     public void removeUser(Long id) {
-        JobUser loginUser = loginUserHelper.getLoginUser();
+        JobUser loginUser = LoginUserUtil.getLoginUser();
         if (loginUser.getId().equals(id)) {
             throw new JobException("禁止操作当前登录账号");
         }
@@ -102,7 +100,7 @@ public class JobUserServiceImpl implements JobUserService {
 
     @Override
     public void changePassword(String password) {
-        JobUser loginUser = loginUserHelper.getLoginUser();
+        JobUser loginUser = LoginUserUtil.getLoginUser();
         loginUser.setPassword(password);
         JobUserEntity jobUserEntity = jobUserRepository.getOne(loginUser.getId());
         if (!ObjectUtils.isEmpty(jobUserEntity)) {

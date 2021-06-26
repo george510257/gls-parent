@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.model;
 
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 import lombok.Data;
 
 import java.util.Date;
@@ -19,7 +19,7 @@ public class JobLogGlue {
      */
     private Long jobId;
     /**
-     * GLUE类型	#com.gls.job.core.api.model.enums.GlueType
+     * GLUE类型	#com.gls.job.core.constants.GlueType
      */
     private GlueType glueType;
     private String glueSource;

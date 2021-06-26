@@ -1,7 +1,7 @@
 package com.gls.job.core.api.model;
 
-import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.ExecutorBlockStrategy;
+import com.gls.job.core.constants.GlueType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,14 +1,12 @@
-package com.gls.job.admin.web.controller.interceptor;
+package com.gls.job.admin.core.servlet;
 
-import com.gls.job.admin.web.controller.annotation.PermissionLimit;
-import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.core.constants.JobConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,9 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class PermissionInterceptor implements AsyncHandlerInterceptor {
-
-    @Resource
-    private LoginUserHelper loginUserHelper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -41,7 +36,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
         }
 
         if (needLogin) {
-            JobUser loginUser = loginUserHelper.getLoginUser();
+            JobUser loginUser = LoginUserUtil.getLoginUser();
             if (loginUser == null) {
                 response.setStatus(302);
                 response.setHeader("location", request.getContextPath() + "/toLogin");

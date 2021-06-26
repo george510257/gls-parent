@@ -1,9 +1,8 @@
-package com.gls.job.admin.web.controller.helper;
+package com.gls.job.admin.core.util;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.admin.web.model.JobUser;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,18 +17,17 @@ import java.util.Objects;
 /**
  * @author george
  */
-@Component
-public class LoginUserHelper {
+public class LoginUserUtil {
 
     private static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 
-    public void saveLoginUser(JobUser jobUser, boolean ifRemember) {
+    public static void saveLoginUser(JobUser jobUser, boolean ifRemember) {
         getRequest().setAttribute(LOGIN_IDENTITY_KEY, jobUser);
         String loginToken = makeToken(jobUser);
         setCookie(LOGIN_IDENTITY_KEY, loginToken, ifRemember);
     }
 
-    public JobUser getLoginUser() {
+    public static JobUser getLoginUser() {
         JobUser jobUser = (JobUser) getRequest().getAttribute(LOGIN_IDENTITY_KEY);
         if (!ObjectUtils.isEmpty(jobUser)) {
             return jobUser;
@@ -39,24 +37,24 @@ public class LoginUserHelper {
         return jobUser;
     }
 
-    public void removeLoginUser() {
+    public static void removeLoginUser() {
         removeCookie(LOGIN_IDENTITY_KEY);
     }
 
-    public HttpServletRequest getRequest() {
+    public static HttpServletRequest getRequest() {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 
-    public HttpServletResponse getResponse() {
+    public static HttpServletResponse getResponse() {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 
-    public void setCookie(String key, String value, boolean ifRemember) {
+    public static void setCookie(String key, String value, boolean ifRemember) {
         int age = ifRemember ? Integer.MAX_VALUE : -1;
         ServletUtil.addCookie(getResponse(), key, value, age);
     }
 
-    public String getCookieValue(String key) {
+    public static String getCookieValue(String key) {
         Cookie cookie = ServletUtil.getCookie(getRequest(), key);
         if (cookie != null) {
             return cookie.getValue();
@@ -64,19 +62,20 @@ public class LoginUserHelper {
         return null;
     }
 
-    public void removeCookie(String key) {
+    public static void removeCookie(String key) {
         Cookie cookie = ServletUtil.getCookie(getRequest(), key);
         if (cookie != null) {
             ServletUtil.addCookie(getResponse(), key, "", 0);
         }
     }
 
-    private String makeToken(JobUser jobUser) {
+    private static String makeToken(JobUser jobUser) {
         String tokenJson = JsonUtil.writeValueAsString(jobUser);
+        assert tokenJson != null;
         return new BigInteger(tokenJson.getBytes()).toString(16);
     }
 
-    private JobUser parseToken(String cookieToken) {
+    private static JobUser parseToken(String cookieToken) {
         if (StringUtils.hasText(cookieToken)) {
             String tokenJson = new String(new BigInteger(cookieToken, 16).toByteArray());
             return JsonUtil.readValue(tokenJson, JobUser.class);
@@ -84,7 +83,7 @@ public class LoginUserHelper {
         return null;
     }
 
-    public boolean validPermission(Long jobGroupId) {
+    public static boolean validPermission(Long jobGroupId) {
         JobUser jobUser = getLoginUser();
         if (jobUser.getRole() == 1) {
             return true;

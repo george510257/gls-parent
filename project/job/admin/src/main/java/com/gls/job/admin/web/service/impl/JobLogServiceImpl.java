@@ -4,10 +4,10 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.JsonUtil;
+import com.gls.job.admin.constants.JobAdminProperties;
+import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
-import com.gls.job.admin.core.constants.JobAdminProperties;
-import com.gls.job.admin.core.enums.TriggerType;
-import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
@@ -67,8 +67,6 @@ public class JobLogServiceImpl implements JobLogService {
     private JobAlarmHolder jobAlarmHolder;
     @Resource
     private JobAdminProperties jobAdminProperties;
-    @Resource
-    private LoginUserHelper loginUserHelper;
     @Resource
     private ExecutorApiHolder executorApiHolder;
 
@@ -159,7 +157,7 @@ public class JobLogServiceImpl implements JobLogService {
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             throw new JobException("任务ID不存在");
         }
-        if (!loginUserHelper.validPermission(jobInfoEntity.getJobGroup().getId())) {
+        if (!LoginUserUtil.validPermission(jobInfoEntity.getJobGroup().getId())) {
             throw new JobException("权限拦截");
         }
         maps.put("jobInfo", jobInfoConverter.sourceToTarget(jobInfoEntity));
@@ -173,7 +171,7 @@ public class JobLogServiceImpl implements JobLogService {
 
     @Override
     public Map<String, Object> pageList(Long jobGroup, Long jobId, int logStatus, String filterTime, int start, int length) {
-        if (!loginUserHelper.validPermission(jobGroup)) {
+        if (!LoginUserUtil.validPermission(jobGroup)) {
             throw new JobException("权限拦截");
         }
 
@@ -225,12 +223,12 @@ public class JobLogServiceImpl implements JobLogService {
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             throw new JobException("任务ID存在");
         }
-        if (Result.SUCCESS_CODE != jobLogEntity.getTriggerCode()) {
+        if (!Result.SUCCESS_CODE.equals(jobLogEntity.getTriggerCode())) {
             throw new JobException("调度失败，无法终止日志");
         }
         try {
             Result<String> result = executorApiHolder.load(jobLogEntity.getExecutorAddress()).kill(new KillModel(logId));
-            if (Result.SUCCESS_CODE == result.getCode()) {
+            if (Result.SUCCESS_CODE.equals(result.getCode())) {
                 jobLogEntity.setHandleCode(Result.FAIL_CODE);
                 jobLogEntity.setHandleMsg("人为操作，主动终止:" + result.getMessage());
                 jobLogEntity.setHandleTime(new Date());

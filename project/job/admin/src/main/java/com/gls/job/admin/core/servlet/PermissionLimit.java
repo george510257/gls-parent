@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.controller.annotation;
+package com.gls.job.admin.core.servlet;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

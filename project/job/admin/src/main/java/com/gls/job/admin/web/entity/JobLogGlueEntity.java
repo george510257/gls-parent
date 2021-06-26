@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.entity;
 
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 import com.gls.starter.data.jpa.annotations.Comment;
 import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;

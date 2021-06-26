@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.constants;
+package com.gls.job.admin.constants;
 
 import com.gls.framework.core.constants.FrameworkConstants;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.ring;
+package com.gls.job.admin.core.support;
 
 import com.gls.job.core.base.BaseHolder;
 import org.springframework.stereotype.Component;

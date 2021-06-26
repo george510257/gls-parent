@@ -1,8 +1,8 @@
 package com.gls.job.admin.core.alarm.impl;
 
 import com.gls.framework.api.result.Result;
+import com.gls.job.admin.constants.JobAdminProperties;
 import com.gls.job.admin.core.alarm.JobAlarm;
-import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
@@ -68,10 +68,10 @@ public class EmailJobAlarm implements JobAlarm {
 
             // alarmContent
             String alarmContent = "Alarm Job LogId=" + jobLog.getId();
-            if (jobLog.getTriggerCode() != Result.SUCCESS_CODE) {
+            if (!jobLog.getTriggerCode().equals(Result.SUCCESS_CODE)) {
                 alarmContent += "<br>TriggerMsg=<br>" + jobLog.getTriggerMsg();
             }
-            if (jobLog.getHandleCode() > 0 && jobLog.getHandleCode() != Result.SUCCESS_CODE) {
+            if (jobLog.getHandleCode() > 0 && !jobLog.getHandleCode().equals(Result.SUCCESS_CODE)) {
                 alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
             }
 

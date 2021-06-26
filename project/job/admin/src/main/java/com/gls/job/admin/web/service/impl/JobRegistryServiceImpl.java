@@ -7,8 +7,8 @@ import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobRegistryRepository;
 import com.gls.job.admin.web.service.JobRegistryService;
 import com.gls.job.core.api.model.RegistryModel;
-import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.constants.JobConstants;
+import com.gls.job.core.constants.RegistryType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 

@@ -4,15 +4,11 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.StringUtil;
-import com.gls.job.admin.core.constants.JobAdminProperties;
-import com.gls.job.admin.core.cron.CronExpression;
-import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
-import com.gls.job.admin.core.enums.MisfireStrategy;
-import com.gls.job.admin.core.enums.ScheduleType;
-import com.gls.job.admin.core.enums.TriggerType;
-import com.gls.job.admin.core.ring.RingDataHolder;
+import com.gls.job.admin.constants.*;
 import com.gls.job.admin.core.route.ExecutorRouterHolder;
-import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.core.support.CronExpression;
+import com.gls.job.admin.core.support.RingDataHolder;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
@@ -27,9 +23,9 @@ import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
-import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
+import com.gls.job.core.constants.ExecutorBlockStrategy;
+import com.gls.job.core.constants.GlueType;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
@@ -67,8 +63,6 @@ public class JobInfoServiceImpl implements JobInfoService {
     private ExecutorApiHolder executorApiHolder;
     @Resource
     private JobAdminProperties jobAdminProperties;
-    @Resource
-    private LoginUserHelper loginUserHelper;
     @Resource
     private JobInfoConverter jobInfoConverter;
 
@@ -151,20 +145,20 @@ public class JobInfoServiceImpl implements JobInfoService {
         for (JobInfoEntity jobInfoEntity : jobInfoEntities) {
             if (nowTime > jobInfoEntity.getTriggerNextTime().getTime() + JobConstants.PRE_READ_MS) {
                 // 2.1、trigger-expire > 5s：pass && make next-trigger-time
-                log.warn(">>>>>>>>>>> xxl-job, schedule misfire, jobId = " + jobInfoEntity.getId());
+                log.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfoEntity.getId());
 
                 // 1、misfire match
                 if (MisfireStrategy.FIRE_ONCE_NOW.equals(jobInfoEntity.getMisfireStrategy())) {
                     // FIRE_ONCE_NOW 》 trigger
                     jobAsyncService.asyncTrigger(jobInfoEntity.getId(), TriggerType.MISFIRE, -1, null, null, null);
-                    log.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
+                    log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
                 }
                 // 2、fresh next
                 refreshNextValidTime(jobInfoEntity, new Date());
             } else if (nowTime > jobInfoEntity.getTriggerNextTime().getTime()) {
                 // 1、trigger
                 jobAsyncService.asyncTrigger(jobInfoEntity.getId(), TriggerType.CRON, -1, null, null, null);
-                log.debug(">>>>>>>>>>> xxl-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
+                log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
 
                 // 2、fresh next
                 refreshNextValidTime(jobInfoEntity, new Date());
@@ -348,12 +342,12 @@ public class JobInfoServiceImpl implements JobInfoService {
     public List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
         List<JobGroup> jobGroupList = new ArrayList<>();
         if (!ObjectUtils.isEmpty(allList)) {
-            JobUser jobUser = loginUserHelper.getLoginUser();
+            JobUser jobUser = LoginUserUtil.getLoginUser();
             if (jobUser.getRole() == 1) {
                 jobGroupList = allList;
             } else {
                 for (JobGroup jobGroup : allList) {
-                    if (loginUserHelper.validPermission(jobGroup.getId())) {
+                    if (LoginUserUtil.validPermission(jobGroup.getId())) {
                         jobGroupList.add(jobGroup);
                     }
                 }
@@ -371,7 +365,7 @@ public class JobInfoServiceImpl implements JobInfoService {
         }
         ringItemData.add(id);
 
-        log.debug(">>>>>>>>>>> xxl-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
+        log.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
     }
 
     private void refreshNextValidTime(JobInfoEntity jobInfoEntity, Date fromTime) throws ParseException {
@@ -383,7 +377,7 @@ public class JobInfoServiceImpl implements JobInfoService {
             jobInfoEntity.setTriggerStatus(false);
             jobInfoEntity.setTriggerLastTime(null);
             jobInfoEntity.setTriggerNextTime(null);
-            log.warn(">>>>>>>>>>> xxl-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
+            log.warn(">>>>>>>>>>> gls-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
                     jobInfoEntity.getId(), jobInfoEntity.getScheduleType(), jobInfoEntity.getScheduleConf());
         }
     }

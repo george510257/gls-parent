@@ -1,10 +1,10 @@
 package com.gls.job.admin.web.entity;
 
-import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
-import com.gls.job.admin.core.enums.MisfireStrategy;
-import com.gls.job.admin.core.enums.ScheduleType;
-import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.admin.constants.ExecutorRouteStrategy;
+import com.gls.job.admin.constants.MisfireStrategy;
+import com.gls.job.admin.constants.ScheduleType;
+import com.gls.job.core.constants.ExecutorBlockStrategy;
+import com.gls.job.core.constants.GlueType;
 import com.gls.starter.data.jpa.annotations.Comment;
 import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;

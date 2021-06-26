@@ -1,6 +1,6 @@
-package com.gls.job.admin.core.config;
+package com.gls.job.admin.config;
 
-import com.gls.job.admin.core.constants.JobAdminProperties;
+import com.gls.job.admin.constants.JobAdminProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package com.gls.job.admin.core.enums;
+package com.gls.job.admin.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

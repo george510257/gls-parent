@@ -19,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "DAILY_TIME_INTERVAL_TRIGGER")
 @Comment("每日时间间隔触发器信息表")
-public class DailyTimeIntervalTriggerEntity extends TriggerEntity {
+public class DailyTimeIntervalTriggerEntity extends BaseTriggerEntity {
 
     @Comment("间隔时间")
     private Integer intervalTime = 1;

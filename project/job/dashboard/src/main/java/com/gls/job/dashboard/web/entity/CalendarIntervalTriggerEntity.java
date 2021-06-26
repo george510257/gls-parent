@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CALENDAR_INTERVAL_TRIGGER")
 @Comment("日历间隔触发器信息表")
-public class CalendarIntervalTriggerEntity extends TriggerEntity {
+public class CalendarIntervalTriggerEntity extends BaseTriggerEntity {
 
     @Comment("间隔时间")
     private Integer intervalTime = 1;

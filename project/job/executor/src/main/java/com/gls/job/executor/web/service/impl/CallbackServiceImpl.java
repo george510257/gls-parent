@@ -54,7 +54,7 @@ public class CallbackServiceImpl implements CallbackService {
 //        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
         try {
             Result<String> callbackResult = adminApi.callback(callbackModels);
-            if (callbackResult != null && Result.SUCCESS_CODE == callbackResult.getCode()) {
+            if (callbackResult != null && Result.SUCCESS_CODE.equals(callbackResult.getCode())) {
                 callbackLog(callbackModels, "<br>----------- gls-job job callback finish.");
                 callbackRet = true;
 //                    break;

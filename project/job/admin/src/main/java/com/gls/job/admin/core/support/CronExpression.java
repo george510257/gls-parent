@@ -15,7 +15,7 @@
  *
  */
 
-package com.gls.job.admin.core.cron;
+package com.gls.job.admin.core.support;
 
 import java.io.Serializable;
 import java.text.ParseException;

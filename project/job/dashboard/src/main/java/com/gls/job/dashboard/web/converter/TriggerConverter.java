@@ -1,8 +1,8 @@
 package com.gls.job.dashboard.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
+import com.gls.job.dashboard.web.entity.BaseTriggerEntity;
 import com.gls.job.dashboard.web.entity.JobDetailEntity;
-import com.gls.job.dashboard.web.entity.TriggerEntity;
 import com.gls.job.dashboard.web.entity.enums.MisfireInstruction;
 import com.gls.job.dashboard.web.repository.JobDetailRepository;
 import org.quartz.JobDataMap;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author george
  */
-public class TriggerConverter<Entity extends TriggerEntity, Trigger extends AbstractTrigger> implements BaseConverter<Entity, Trigger> {
+public class TriggerConverter<Entity extends BaseTriggerEntity, Trigger extends AbstractTrigger> implements BaseConverter<Entity, Trigger> {
 
     @Resource
     private JobDetailRepository jobDetailRepository;

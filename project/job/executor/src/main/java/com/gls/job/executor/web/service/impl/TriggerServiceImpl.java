@@ -1,8 +1,8 @@
 package com.gls.job.executor.web.service.impl;
 
 import com.gls.job.core.api.model.TriggerModel;
-import com.gls.job.core.api.model.enums.ExecutorBlockStrategy;
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.ExecutorBlockStrategy;
+import com.gls.job.core.constants.GlueType;
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.JobHandlerHolder;
 import com.gls.job.executor.core.handler.builder.GlueBuilder;

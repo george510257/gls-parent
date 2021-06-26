@@ -1,6 +1,6 @@
 package com.gls.job.executor.web.repository;
 
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 
 import java.util.Date;
 

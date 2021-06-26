@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
-import com.gls.job.admin.web.controller.annotation.PermissionLimit;
+import com.gls.job.admin.core.servlet.PermissionLimit;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.service.JobGroupService;

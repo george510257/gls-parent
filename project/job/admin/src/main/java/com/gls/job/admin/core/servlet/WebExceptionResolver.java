@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.controller.resolver;
+package com.gls.job.admin.core.servlet;
 
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.JsonUtil;

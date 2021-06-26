@@ -2,8 +2,8 @@ package com.gls.job.executor.web.service.impl;
 
 import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.RegistryModel;
-import com.gls.job.core.api.model.enums.RegistryType;
 import com.gls.job.core.api.rpc.AdminApi;
+import com.gls.job.core.constants.RegistryType;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class RegistryServiceImpl implements RegistryService {
 //        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
         try {
             Result<String> registryResult = adminApi.registry(registryModel);
-            if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
+            if (registryResult != null && Result.SUCCESS_CODE.equals(registryResult.getCode())) {
                 registryResult = Result.SUCCESS;
                 log.debug(">>>>>>>>>>> gls-job registry success, registryModel:{}, registryResult:{}", registryModel, registryResult);
 //                    break;
@@ -49,7 +49,7 @@ public class RegistryServiceImpl implements RegistryService {
 //        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
         try {
             Result<String> registryResult = adminApi.registryRemove(registryModel);
-            if (registryResult != null && Result.SUCCESS_CODE == registryResult.getCode()) {
+            if (registryResult != null && Result.SUCCESS_CODE.equals(registryResult.getCode())) {
                 registryResult = Result.SUCCESS;
                 log.info(">>>>>>>>>>> gls-job registry-remove success, registryModel:{}, registryResult:{}", registryModel, registryResult);
 //                    break;

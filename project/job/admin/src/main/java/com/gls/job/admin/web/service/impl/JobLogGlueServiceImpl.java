@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
-import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.converter.JobLogGlueConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
@@ -8,7 +8,7 @@ import com.gls.job.admin.web.entity.JobLogGlueEntity;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.service.JobLogGlueService;
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 import com.gls.job.core.exception.JobException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -32,8 +32,6 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
     private JobInfoConverter jobInfoConverter;
     @Resource
     private JobLogGlueConverter jobLogGlueConverter;
-    @Resource
-    private LoginUserHelper loginUserHelper;
 
     @Override
     public Map<String, Object> getIndex(Long jobId) {
@@ -45,7 +43,7 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
         if (GlueType.BEAN.equals(jobInfoEntity.getGlueType())) {
             throw new JobException("该任务非GLUE模式");
         }
-        boolean validPermission = loginUserHelper.validPermission(jobInfoEntity.getJobGroup().getId());
+        boolean validPermission = LoginUserUtil.validPermission(jobInfoEntity.getJobGroup().getId());
         if (!validPermission) {
             throw new JobException("权限拦截");
         }

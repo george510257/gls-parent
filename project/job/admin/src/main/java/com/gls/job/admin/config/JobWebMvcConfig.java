@@ -1,5 +1,7 @@
-package com.gls.job.admin.web.controller.interceptor;
+package com.gls.job.admin.config;
 
+import com.gls.job.admin.core.servlet.CookieInterceptor;
+import com.gls.job.admin.core.servlet.PermissionInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

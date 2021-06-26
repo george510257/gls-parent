@@ -20,7 +20,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @MappedSuperclass
-public abstract class TriggerEntity extends BaseEntity {
+public abstract class BaseTriggerEntity extends BaseEntity {
 
     @Comment("触发器组")
     private String groupName = "DEFAULT";

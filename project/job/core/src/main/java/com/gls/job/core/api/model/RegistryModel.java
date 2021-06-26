@@ -1,6 +1,6 @@
 package com.gls.job.core.api.model;
 
-import com.gls.job.core.api.model.enums.RegistryType;
+import com.gls.job.core.constants.RegistryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

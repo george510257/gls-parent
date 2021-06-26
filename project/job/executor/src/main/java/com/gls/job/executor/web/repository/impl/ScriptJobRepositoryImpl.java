@@ -1,7 +1,7 @@
 package com.gls.job.executor.web.repository.impl;
 
 import cn.hutool.core.io.FileUtil;
-import com.gls.job.core.api.model.enums.GlueType;
+import com.gls.job.core.constants.GlueType;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.ScriptJobRepository;
 import lombok.extern.slf4j.Slf4j;

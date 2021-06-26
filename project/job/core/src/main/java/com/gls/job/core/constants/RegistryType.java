@@ -1,4 +1,4 @@
-package com.gls.job.core.api.model.enums;
+package com.gls.job.core.constants;
 
 /**
  * @author george

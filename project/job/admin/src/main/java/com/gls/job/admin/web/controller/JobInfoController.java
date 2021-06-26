@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.util.StringUtil;
-import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobInfoService;

@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.controller.interceptor;
+package com.gls.job.admin.core.servlet;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
@@ -22,7 +22,7 @@ public class CookieInterceptor implements AsyncHandlerInterceptor {
 
         // cookie
         if (modelAndView != null && request.getCookies() != null && request.getCookies().length > 0) {
-            HashMap<String, Cookie> cookieMap = new HashMap<String, Cookie>();
+            HashMap<String, Cookie> cookieMap = new HashMap<>();
             for (Cookie ck : request.getCookies()) {
                 cookieMap.put(ck.getName(), ck);
             }

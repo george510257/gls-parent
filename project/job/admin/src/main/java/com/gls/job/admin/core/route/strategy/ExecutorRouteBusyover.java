@@ -30,7 +30,7 @@ public class ExecutorRouteBusyover implements ExecutorRouter {
                 ExecutorApi executorApi = executorApiHolder.load(address);
                 Result<String> result = executorApi.idleBeat(new IdleBeatModel(jobId));
                 // beat success
-                if (Result.SUCCESS_CODE == result.getCode()) {
+                if (Result.SUCCESS_CODE.equals(result.getCode())) {
                     return address;
                 }
             }

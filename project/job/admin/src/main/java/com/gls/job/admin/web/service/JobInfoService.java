@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 
