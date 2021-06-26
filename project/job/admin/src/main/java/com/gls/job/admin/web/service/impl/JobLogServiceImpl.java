@@ -1,22 +1,33 @@
 package com.gls.job.admin.web.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
-import com.gls.framework.core.util.StringUtil;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.web.controller.helper.LoginUserHelper;
+import com.gls.job.admin.web.converter.JobInfoConverter;
+import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.admin.web.entity.JobLogReportEntity;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.JobGroupService;
+import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
-import com.gls.job.core.api.model.CallbackModel;
-import com.gls.job.core.api.model.Result;
+import com.gls.job.core.api.model.*;
+import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -35,13 +46,27 @@ public class JobLogServiceImpl implements JobLogService {
     @Resource
     private JobAsyncService jobAsyncService;
     @Resource
+    private JobGroupService jobGroupService;
+    @Resource
+    private JobInfoService jobInfoService;
+    @Resource
+    private JobInfoRepository jobInfoRepository;
+    @Resource
     private JobLogRepository jobLogRepository;
     @Resource
     private JobLogReportRepository jobLogReportRepository;
     @Resource
+    private JobInfoConverter jobInfoConverter;
+    @Resource
+    private JobLogConverter jobLogConverter;
+    @Resource
     private JobAlarmHolder jobAlarmHolder;
     @Resource
     private JobAdminProperties jobAdminProperties;
+    @Resource
+    private LoginUserHelper loginUserHelper;
+    @Resource
+    private ExecutorApiHolder executorApiHolder;
 
     @Override
     public void callback(List<CallbackModel> callbackModels) {
@@ -118,6 +143,139 @@ public class JobLogServiceImpl implements JobLogService {
         return cleanJobLog(lastCleanLogTime);
     }
 
+    @Override
+    public Map<String, Object> getIndexMap(Long jobId) {
+        Map<String, Object> maps = new HashMap<>();
+        // 执行器列表
+        List<JobGroup> jobGroupList = jobGroupService.getAllList();
+        maps.put("jobGroupList", jobInfoService.getJobGroupListByRole(jobGroupList));
+
+        // 任务
+        JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
+        if (ObjectUtils.isEmpty(jobInfoEntity)) {
+            throw new JobException("任务ID不存在");
+        }
+        if (!loginUserHelper.validPermission(jobInfoEntity.getJobGroup().getId())) {
+            throw new JobException("权限拦截");
+        }
+        maps.put("jobInfo", jobInfoConverter.sourceToTarget(jobInfoEntity));
+        return maps;
+    }
+
+    @Override
+    public List<JobInfo> getJobsByGroup(Long jobGroupId) {
+        return jobInfoConverter.sourceToTargetList(jobInfoRepository.getByJobGroupId(jobGroupId));
+    }
+
+    @Override
+    public Map<String, Object> pageList(Long jobGroup, Long jobId, int logStatus, String filterTime, int start, int length) {
+        if (!loginUserHelper.validPermission(jobGroup)) {
+            throw new JobException("权限拦截");
+        }
+
+        // parse param
+        Date triggerTimeStart = null;
+        Date triggerTimeEnd = null;
+        if (filterTime != null && filterTime.trim().length() > 0) {
+            String[] temp = filterTime.split(" - ");
+            if (temp.length == 2) {
+                triggerTimeStart = DateUtil.parseDateTime(temp[0]);
+                triggerTimeEnd = DateUtil.parseDateTime(temp[1]);
+            }
+        }
+        Page<JobLogEntity> page = jobLogRepository.getPage(jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus, start, length);
+
+        // package result
+        Map<String, Object> maps = new HashMap<>();
+        // 总记录数
+        maps.put("recordsTotal", page.getTotalElements());
+        // 过滤后的总记录数
+        maps.put("recordsFiltered", page.getTotalElements());
+        // 分页列表
+        maps.put("data", jobLogConverter.sourceToTargetList(page.getContent()));
+        return maps;
+    }
+
+    @Override
+    public JobLog logDetail(Long logId) {
+        return jobLogConverter.sourceToTarget(jobLogRepository.getOne(logId));
+    }
+
+    @Override
+    public LogResultModel logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
+        Result<LogResultModel> logResult = executorApiHolder.load(executorAddress).log(new LogModel(Convert.toDate(triggerTime), logId, fromLineNum));
+
+        if (logResult.getContent() != null && logResult.getContent().getFromLineNum() > logResult.getContent().getToLineNum()) {
+            JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
+            if (jobLogEntity.getHandleCode() > 0) {
+                logResult.getContent().setIsEnd(true);
+            }
+        }
+        return logResult.getContent();
+    }
+
+    @Override
+    public void logKill(Long logId) {
+        JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
+        JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
+        if (ObjectUtils.isEmpty(jobInfoEntity)) {
+            throw new JobException("任务ID存在");
+        }
+        if (Result.SUCCESS_CODE != jobLogEntity.getTriggerCode()) {
+            throw new JobException("调度失败，无法终止日志");
+        }
+        try {
+            Result<String> result = executorApiHolder.load(jobLogEntity.getExecutorAddress()).kill(new KillModel(logId));
+            if (Result.SUCCESS_CODE == result.getCode()) {
+                jobLogEntity.setHandleCode(Result.FAIL_CODE);
+                jobLogEntity.setHandleMsg("人为操作，主动终止:" + result.getMsg());
+                jobLogEntity.setHandleTime(new Date());
+                updateHandleInfoAndFinish(jobLogEntity);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new JobException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void clearLog(Long groupId, Long jobId, Integer type) {
+        Date clearBeforeTime = null;
+        int start = 0;
+        if (type == 1) {
+            // 清理一个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -1);
+        } else if (type == 2) {
+            // 清理三个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -3);
+        } else if (type == 3) {
+            // 清理六个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -6);
+        } else if (type == 4) {
+            // 清理一年之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -12);
+        } else if (type == 5) {
+            // 清理一千条以前日志数据
+            start = 1000;
+        } else if (type == 6) {
+            // 清理一万条以前日志数据
+            start = 10000;
+        } else if (type == 7) {
+            // 清理三万条以前日志数据
+            start = 30000;
+        } else if (type == 8) {
+            // 清理十万条以前日志数据
+            start = 100000;
+        } else if (type == 9) {
+            // 清理所有日志数据
+            start = 0;
+        } else {
+            throw new JobException("清理类型参数异常");
+        }
+        List<JobLogEntity> jobLogEntities = jobLogRepository.getPage(groupId, jobId, null, clearBeforeTime, null, 2, start).getContent();
+        jobLogRepository.deleteAll(jobLogEntities);
+    }
+
     private long cleanJobLog(long lastCleanLogTime) {
         // 2、log-clean: switch open & once each day
         if (jobAdminProperties.getLogRetentionDays() > 0 && System.currentTimeMillis() - lastCleanLogTime > 24 * 60 * 60 * 1000) {
@@ -133,8 +291,8 @@ public class JobLogServiceImpl implements JobLogService {
 
             // clean expired log
 
-            jobLogRepository.getPage(null, null, clearBeforeTime, null, null, 0, 1000)
-                    .get().forEach(jobLogEntity -> jobLogRepository.delete(jobLogEntity));
+            List<JobLogEntity> jobLogEntities = jobLogRepository.getPage(null, null, clearBeforeTime, null, null, 0, 1000).getContent();
+            jobLogRepository.deleteAll(jobLogEntities);
 
             // update clean time
             lastCleanLogTime = System.currentTimeMillis();
@@ -170,7 +328,7 @@ public class JobLogServiceImpl implements JobLogService {
         }
 
         Map<String, Long> result = jobLogRepository.getLogReport(todayFrom, todayTo);
-        log.info("result: {}", StringUtil.toString(result));
+        log.info("result: {}", JsonUtil.writeValueAsString(result));
         if (!ObjectUtils.isEmpty(result)) {
             Long triggerDayCount = result.get("triggerDayCount");
             Long triggerDayCountRunning = result.get("triggerDayCountRunning");

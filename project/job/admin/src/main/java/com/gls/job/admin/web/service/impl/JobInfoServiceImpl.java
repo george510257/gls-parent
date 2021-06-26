@@ -344,7 +344,8 @@ public class JobInfoServiceImpl implements JobInfoService {
         }
     }
 
-    private List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
+    @Override
+    public List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
         List<JobGroup> jobGroupList = new ArrayList<>();
         if (!ObjectUtils.isEmpty(allList)) {
             JobUser jobUser = loginUserHelper.getLoginUser();

@@ -1,6 +1,7 @@
 package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.core.enums.TriggerType;
+import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 
 import java.text.ParseException;
@@ -102,4 +103,12 @@ public interface JobInfoService {
      * @return
      */
     List<String> nextTriggerTime(String scheduleType, String scheduleConf);
+
+    /**
+     * getJobGroupListByRole
+     *
+     * @param allList
+     * @return
+     */
+    List<JobGroup> getJobGroupListByRole(List<JobGroup> allList);
 }

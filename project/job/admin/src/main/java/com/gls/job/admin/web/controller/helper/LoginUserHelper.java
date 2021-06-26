@@ -1,14 +1,15 @@
 package com.gls.job.admin.web.controller.helper;
 
-import com.alibaba.fastjson.JSON;
+import cn.hutool.extra.servlet.ServletUtil;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.admin.web.model.JobUser;
-import com.gls.job.core.util.CookieUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
@@ -25,11 +26,7 @@ public class LoginUserHelper {
     public void saveLoginUser(JobUser jobUser, boolean ifRemember) {
         getRequest().setAttribute(LOGIN_IDENTITY_KEY, jobUser);
         String loginToken = makeToken(jobUser);
-        CookieUtil.set(getResponse(), LOGIN_IDENTITY_KEY, loginToken, ifRemember);
-    }
-
-    public void removeLoginUser() {
-        CookieUtil.remove(getRequest(), getResponse(), LOGIN_IDENTITY_KEY);
+        setCookie(LOGIN_IDENTITY_KEY, loginToken, ifRemember);
     }
 
     public JobUser getLoginUser() {
@@ -37,28 +34,52 @@ public class LoginUserHelper {
         if (!ObjectUtils.isEmpty(jobUser)) {
             return jobUser;
         }
-        String cookieToken = CookieUtil.getValue(getRequest(), LOGIN_IDENTITY_KEY);
+        String cookieToken = getCookieValue(LOGIN_IDENTITY_KEY);
         jobUser = parseToken(cookieToken);
         return jobUser;
     }
 
-    private HttpServletRequest getRequest() {
+    public void removeLoginUser() {
+        removeCookie(LOGIN_IDENTITY_KEY);
+    }
+
+    public HttpServletRequest getRequest() {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 
-    private HttpServletResponse getResponse() {
+    public HttpServletResponse getResponse() {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 
+    public void setCookie(String key, String value, boolean ifRemember) {
+        int age = ifRemember ? Integer.MAX_VALUE : -1;
+        ServletUtil.addCookie(getResponse(), key, value, age);
+    }
+
+    public String getCookieValue(String key) {
+        Cookie cookie = ServletUtil.getCookie(getRequest(), key);
+        if (cookie != null) {
+            return cookie.getValue();
+        }
+        return null;
+    }
+
+    public void removeCookie(String key) {
+        Cookie cookie = ServletUtil.getCookie(getRequest(), key);
+        if (cookie != null) {
+            ServletUtil.addCookie(getResponse(), key, "", 0);
+        }
+    }
+
     private String makeToken(JobUser jobUser) {
-        String tokenJson = JSON.toJSONString(jobUser);
+        String tokenJson = JsonUtil.writeValueAsString(jobUser);
         return new BigInteger(tokenJson.getBytes()).toString(16);
     }
 
     private JobUser parseToken(String cookieToken) {
         if (StringUtils.hasText(cookieToken)) {
             String tokenJson = new String(new BigInteger(cookieToken, 16).toByteArray());
-            return JSON.parseObject(tokenJson, JobUser.class);
+            return JsonUtil.readValue(tokenJson, JobUser.class);
         }
         return null;
     }

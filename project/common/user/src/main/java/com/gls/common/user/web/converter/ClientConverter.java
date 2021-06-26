@@ -3,10 +3,12 @@ package com.gls.common.user.web.converter;
 import com.gls.common.user.api.model.ClientModel;
 import com.gls.common.user.web.entity.ClientEntity;
 import com.gls.framework.core.base.BaseConverter;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.framework.core.util.StringUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @author george
@@ -30,7 +32,7 @@ public class ClientConverter implements BaseConverter<ClientEntity, ClientModel>
         clientModel.setRoles(roleConverter.sourceToTargetList(clientEntity.getRoles()));
         clientModel.setAccessTokenValiditySeconds(clientEntity.getAccessTokenValiditySeconds());
         clientModel.setRefreshTokenValiditySeconds(clientEntity.getRefreshTokenValiditySeconds());
-        clientModel.setAdditionalInformation(StringUtil.toMap(clientEntity.getAdditionalInformation()));
+        clientModel.setAdditionalInformation(JsonUtil.readValue(clientEntity.getAdditionalInformation(), Map.class, String.class, Object.class));
         return clientModel;
     }
 
@@ -46,7 +48,7 @@ public class ClientConverter implements BaseConverter<ClientEntity, ClientModel>
         clientEntity.setRoles(roleConverter.targetToSourceList(clientModel.getRoles()));
         clientEntity.setAccessTokenValiditySeconds(clientModel.getAccessTokenValiditySeconds());
         clientEntity.setRefreshTokenValiditySeconds(clientModel.getRefreshTokenValiditySeconds());
-        clientEntity.setAdditionalInformation(StringUtil.toString(clientModel.getAdditionalInformation()));
+        clientEntity.setAdditionalInformation(JsonUtil.writeValueAsString(clientModel.getAdditionalInformation()));
         clientEntity.setId(clientModel.getId());
         return clientEntity;
     }
