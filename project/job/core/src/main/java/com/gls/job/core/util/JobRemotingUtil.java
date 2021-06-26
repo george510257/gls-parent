@@ -1,6 +1,6 @@
 package com.gls.job.core.util;
 
-import com.gls.framework.core.utils.JacksonUtil;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.core.api.model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +94,7 @@ public class JobRemotingUtil {
 
             // write requestBody
             if (requestObj != null) {
-                String requestBody = JacksonUtil.writeValueAsString(requestObj);
+                String requestBody = JsonUtil.writeValueAsString(requestObj);
 
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
                 dataOutputStream.write(requestBody.getBytes(StandardCharsets.UTF_8));
@@ -118,7 +118,7 @@ public class JobRemotingUtil {
 
             // parse returnT
             try {
-                return JacksonUtil.readValue(resultJson, Result.class, returnTagClassOfT);
+                return JsonUtil.readValue(resultJson, Result.class, returnTagClassOfT);
             } catch (Exception e) {
                 logger.error("gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
                 return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").");

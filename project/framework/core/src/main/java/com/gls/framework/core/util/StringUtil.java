@@ -1,4 +1,4 @@
-package com.gls.framework.core.utils;
+package com.gls.framework.core.util;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * @author george
  */
-public class CollectionUtils {
+public class StringUtil {
 
     public static List<String> toList(String s) {
         if (s == null || s.isEmpty()) {

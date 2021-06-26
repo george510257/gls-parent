@@ -1,4 +1,4 @@
-package com.gls.framework.core.utils;
+package com.gls.framework.core.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author xuxueli 2015-9-25 18:02:56
  */
 @Slf4j
-public class JacksonUtil {
+public class JsonUtil {
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**

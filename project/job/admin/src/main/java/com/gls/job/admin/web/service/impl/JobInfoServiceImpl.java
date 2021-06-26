@@ -2,7 +2,7 @@ package com.gls.job.admin.web.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
-import com.gls.framework.core.utils.CollectionUtils;
+import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.cron.CronExpression;
 import com.gls.job.admin.core.enums.ExecutorRouteStrategy;
@@ -432,7 +432,7 @@ public class JobInfoServiceImpl implements JobInfoService {
         triggerMsgBuilder.append("任务触发类型：").append(triggerType.getTitle());
         triggerMsgBuilder.append("<br>调度机器：").append(NetUtil.getLocalhostStr());
         triggerMsgBuilder.append("<br>执行器-注册方式：").append(jobInfoEntity.getJobGroup().getAddressType() ? "自动注册" : "手动录入");
-        triggerMsgBuilder.append("<br>执行器-地址列表：").append(CollectionUtils.toString(jobInfoEntity.getJobGroup().getAddressList()));
+        triggerMsgBuilder.append("<br>执行器-地址列表：").append(StringUtil.toString(jobInfoEntity.getJobGroup().getAddressList()));
         triggerMsgBuilder.append("<br>路由策略：").append(jobInfoEntity.getExecutorRouteStrategy().getTitle());
         if (shardingParam != null) {
             triggerMsgBuilder.append("(").append(shardingParam).append(")");

@@ -1,5 +1,6 @@
 package com.gls.starter.data.jpa.generator;
 
+import cn.hutool.core.lang.Snowflake;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.MappingException;
@@ -16,11 +17,11 @@ import java.util.Properties;
  * @author george
  */
 @Slf4j
-public class SnowflakeIdentifierGenerator implements Configurable, IdentifierGenerator {
+public class SnowflakeGenerator implements Configurable, IdentifierGenerator {
 
     public static final String NAME = "snowflakeIdentifierGenerator";
 
-    public static final String STRATEGY = "com.gls.starter.data.jpa.generator.SnowflakeIdentifierGenerator";
+    public static final String STRATEGY = "com.gls.starter.data.jpa.generator.SnowflakeGenerator";
 
     /**
      * 工作机器ID(0~31)
@@ -32,11 +33,11 @@ public class SnowflakeIdentifierGenerator implements Configurable, IdentifierGen
      */
     public static final String DATA_CENTER_ID_NAME = "dataCenterId";
 
-    private static SnowflakeIdWorker snowflakeIdWorker;
+    private static Snowflake snowflake;
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
-        long id = snowflakeIdWorker.nextId();
+        long id = snowflake.nextId();
         log.info("id:" + id);
         return id;
     }
@@ -50,6 +51,6 @@ public class SnowflakeIdentifierGenerator implements Configurable, IdentifierGen
         });
         long workerId = Long.parseLong(params.getProperty(WORKER_ID_NAME));
         long dataCenterId = Long.parseLong(params.getProperty(DATA_CENTER_ID_NAME));
-        snowflakeIdWorker = new SnowflakeIdWorker(workerId, dataCenterId);
+        snowflake = new Snowflake(workerId, dataCenterId);
     }
 }

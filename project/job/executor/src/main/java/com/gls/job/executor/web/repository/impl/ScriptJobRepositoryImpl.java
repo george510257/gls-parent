@@ -1,6 +1,6 @@
 package com.gls.job.executor.web.repository.impl;
 
-import com.gls.framework.core.utils.FileUtils;
+import cn.hutool.core.io.FileUtil;
 import com.gls.job.core.api.model.enums.GlueType;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.ScriptJobRepository;
@@ -41,10 +41,10 @@ public class ScriptJobRepositoryImpl implements ScriptJobRepository {
     }
 
     private void deleteOldScriptJob(Long jobId) {
-        List<String> fileNames = FileUtils.findFiles(jobExecutorProperties.getGlueSrcPath());
+        List<String> fileNames = FileUtil.listFileNames(jobExecutorProperties.getGlueSrcPath());
         fileNames.forEach(fileName -> {
             if (fileName.startsWith(getBaseFileName().replace("{jobId}", jobId.toString()).replace("_{updateTime}{suffix}", ""))) {
-                FileUtils.deleteFile(fileName);
+                FileUtil.del(fileName);
             }
         });
     }

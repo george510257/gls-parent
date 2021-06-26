@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.controller.resolver;
 
-import com.gls.framework.core.utils.JacksonUtil;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.core.api.model.Result;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
         if (isJson) {
             try {
                 response.setContentType("application/json;charset=utf-8");
-                response.getWriter().print(JacksonUtil.writeValueAsString(errorResult));
+                response.getWriter().print(JsonUtil.writeValueAsString(errorResult));
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }

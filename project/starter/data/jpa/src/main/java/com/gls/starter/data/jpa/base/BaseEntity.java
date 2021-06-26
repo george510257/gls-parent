@@ -1,7 +1,7 @@
 package com.gls.starter.data.jpa.base;
 
 import com.gls.starter.data.jpa.annotations.Comment;
-import com.gls.starter.data.jpa.generator.SnowflakeIdentifierGenerator;
+import com.gls.starter.data.jpa.generator.SnowflakeGenerator;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -28,11 +28,11 @@ import java.sql.Timestamp;
 public abstract class BaseEntity implements Serializable {
 
     @Id
-    @GeneratedValue(generator = SnowflakeIdentifierGenerator.NAME)
-    @GenericGenerator(name = SnowflakeIdentifierGenerator.NAME, strategy = SnowflakeIdentifierGenerator.STRATEGY,
+    @GeneratedValue(generator = SnowflakeGenerator.NAME)
+    @GenericGenerator(name = SnowflakeGenerator.NAME, strategy = SnowflakeGenerator.STRATEGY,
             parameters = {
-                    @Parameter(name = SnowflakeIdentifierGenerator.WORKER_ID_NAME, value = "1"),
-                    @Parameter(name = SnowflakeIdentifierGenerator.DATA_CENTER_ID_NAME, value = "1")
+                    @Parameter(name = SnowflakeGenerator.WORKER_ID_NAME, value = "1"),
+                    @Parameter(name = SnowflakeGenerator.DATA_CENTER_ID_NAME, value = "1")
             })
     @Comment("主键 ID")
     private Long id;

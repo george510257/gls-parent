@@ -1,4 +1,4 @@
-package com.gls.framework.core.utils;
+package com.gls.framework.core.util;
 
 import org.springframework.util.AntPathMatcher;
 
@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author george
  */
-public class UrlUtils {
+public class UrlUtil {
 
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
 

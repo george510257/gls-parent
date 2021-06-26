@@ -3,7 +3,7 @@ package com.gls.common.user.web.converter;
 import com.gls.common.user.api.model.ClientModel;
 import com.gls.common.user.web.entity.ClientEntity;
 import com.gls.framework.core.base.BaseConverter;
-import com.gls.framework.core.utils.CollectionUtils;
+import com.gls.framework.core.util.StringUtil;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -22,15 +22,15 @@ public class ClientConverter implements BaseConverter<ClientEntity, ClientModel>
         clientModel.setId(clientEntity.getId());
         clientModel.setClientId(clientEntity.getClientId());
         clientModel.setClientSecret(clientEntity.getClientSecret());
-        clientModel.setScope(CollectionUtils.toList(clientEntity.getScope()));
-        clientModel.setResourceIds(CollectionUtils.toList(clientEntity.getResourceIds()));
-        clientModel.setAuthorizedGrantTypes(CollectionUtils.toList(clientEntity.getAuthorizedGrantTypes()));
-        clientModel.setRegisteredRedirectUris(CollectionUtils.toList(clientEntity.getRegisteredRedirectUris()));
-        clientModel.setAutoApproveScopes(CollectionUtils.toList(clientEntity.getAutoApproveScopes()));
+        clientModel.setScope(StringUtil.toList(clientEntity.getScope()));
+        clientModel.setResourceIds(StringUtil.toList(clientEntity.getResourceIds()));
+        clientModel.setAuthorizedGrantTypes(StringUtil.toList(clientEntity.getAuthorizedGrantTypes()));
+        clientModel.setRegisteredRedirectUris(StringUtil.toList(clientEntity.getRegisteredRedirectUris()));
+        clientModel.setAutoApproveScopes(StringUtil.toList(clientEntity.getAutoApproveScopes()));
         clientModel.setRoles(roleConverter.sourceToTargetList(clientEntity.getRoles()));
         clientModel.setAccessTokenValiditySeconds(clientEntity.getAccessTokenValiditySeconds());
         clientModel.setRefreshTokenValiditySeconds(clientEntity.getRefreshTokenValiditySeconds());
-        clientModel.setAdditionalInformation(CollectionUtils.toMap(clientEntity.getAdditionalInformation()));
+        clientModel.setAdditionalInformation(StringUtil.toMap(clientEntity.getAdditionalInformation()));
         return clientModel;
     }
 
@@ -38,15 +38,15 @@ public class ClientConverter implements BaseConverter<ClientEntity, ClientModel>
     public ClientEntity copyTargetToSource(ClientModel clientModel, ClientEntity clientEntity) {
         clientEntity.setClientId(clientModel.getClientId());
         clientEntity.setClientSecret(clientModel.getClientSecret());
-        clientEntity.setScope(CollectionUtils.toString(clientModel.getScope()));
-        clientEntity.setResourceIds(CollectionUtils.toString(clientModel.getResourceIds()));
-        clientEntity.setAuthorizedGrantTypes(CollectionUtils.toString(clientModel.getAuthorizedGrantTypes()));
-        clientEntity.setRegisteredRedirectUris(CollectionUtils.toString(clientModel.getRegisteredRedirectUris()));
-        clientEntity.setAutoApproveScopes(CollectionUtils.toString(clientModel.getAutoApproveScopes()));
+        clientEntity.setScope(StringUtil.toString(clientModel.getScope()));
+        clientEntity.setResourceIds(StringUtil.toString(clientModel.getResourceIds()));
+        clientEntity.setAuthorizedGrantTypes(StringUtil.toString(clientModel.getAuthorizedGrantTypes()));
+        clientEntity.setRegisteredRedirectUris(StringUtil.toString(clientModel.getRegisteredRedirectUris()));
+        clientEntity.setAutoApproveScopes(StringUtil.toString(clientModel.getAutoApproveScopes()));
         clientEntity.setRoles(roleConverter.targetToSourceList(clientModel.getRoles()));
         clientEntity.setAccessTokenValiditySeconds(clientModel.getAccessTokenValiditySeconds());
         clientEntity.setRefreshTokenValiditySeconds(clientModel.getRefreshTokenValiditySeconds());
-        clientEntity.setAdditionalInformation(CollectionUtils.toString(clientModel.getAdditionalInformation()));
+        clientEntity.setAdditionalInformation(StringUtil.toString(clientModel.getAdditionalInformation()));
         clientEntity.setId(clientModel.getId());
         return clientEntity;
     }

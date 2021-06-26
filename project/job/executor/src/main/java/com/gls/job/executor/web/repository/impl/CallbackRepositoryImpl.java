@@ -1,7 +1,7 @@
 package com.gls.job.executor.web.repository.impl;
 
-import com.gls.framework.core.utils.FileUtils;
-import com.gls.framework.core.utils.JacksonUtil;
+import cn.hutool.core.io.FileUtil;
+import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.CallbackRepository;
@@ -29,7 +29,7 @@ public class CallbackRepositoryImpl implements CallbackRepository {
     @Override
     public void save(List<CallbackModel> callbackModels) {
         String fileName = getBaseFileName().replace("{x}", String.valueOf(System.currentTimeMillis()));
-        byte[] callbackModelsBytes = JacksonUtil.writeValueAsBytes(callbackModels);
+        byte[] callbackModelsBytes = JsonUtil.writeValueAsBytes(callbackModels);
         try {
             IOUtils.write(callbackModelsBytes, new FileOutputStream(fileName));
         } catch (IOException e) {
@@ -40,13 +40,13 @@ public class CallbackRepositoryImpl implements CallbackRepository {
     @Override
     public List<CallbackModel> getAll() {
         List<CallbackModel> callbackModels = new ArrayList<>();
-        List<String> fileNames = FileUtils.findFiles(jobExecutorProperties.getCallbackLogPath());
+        List<String> fileNames = FileUtil.listFileNames(jobExecutorProperties.getCallbackLogPath());
         if (!ObjectUtils.isEmpty(fileNames)) {
             for (String fileName : fileNames) {
-                byte[] callbackModelsBytes = FileUtils.readFile(fileName);
-                List<CallbackModel> callbackModelList = JacksonUtil.readValue(callbackModelsBytes, List.class, CallbackModel.class);
+                byte[] callbackModelsBytes = FileUtil.readBytes(fileName);
+                List<CallbackModel> callbackModelList = JsonUtil.readValue(callbackModelsBytes, List.class, CallbackModel.class);
                 callbackModels.addAll(callbackModelList);
-                FileUtils.deleteFile(fileName);
+                FileUtil.del(fileName);
             }
         }
         return callbackModels;

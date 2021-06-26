@@ -1,6 +1,6 @@
 package com.gls.security.captcha.web.service.impl;
 
-import com.gls.framework.core.utils.UrlUtils;
+import com.gls.framework.core.util.UrlUtil;
 import com.gls.security.captcha.exception.CaptchaException;
 import com.gls.security.captcha.web.converter.CaptchaConverter;
 import com.gls.security.captcha.web.model.CaptchaModel;
@@ -63,7 +63,7 @@ public abstract class BaseCaptchaService<C extends CaptchaModel> implements Capt
     @Override
     public boolean isValidate() {
         String requestUrl = ServletHelper.getRequest().getRequestURI();
-        return UrlUtils.urlsContains(requestUrl, getUrls());
+        return UrlUtil.urlsContains(requestUrl, getUrls());
     }
 
     /**

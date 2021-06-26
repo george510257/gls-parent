@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import com.gls.framework.core.utils.CollectionUtils;
+import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.constants.JobAdminProperties;
 import com.gls.job.admin.core.enums.TriggerType;
@@ -170,7 +170,7 @@ public class JobLogServiceImpl implements JobLogService {
         }
 
         Map<String, Long> result = jobLogRepository.getLogReport(todayFrom, todayTo);
-        log.info("result: {}", CollectionUtils.toString(result));
+        log.info("result: {}", StringUtil.toString(result));
         if (!ObjectUtils.isEmpty(result)) {
             Long triggerDayCount = result.get("triggerDayCount");
             Long triggerDayCountRunning = result.get("triggerDayCountRunning");

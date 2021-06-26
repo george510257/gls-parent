@@ -1,6 +1,6 @@
 package com.gls.security.core.web.service.impl;
 
-import com.gls.framework.core.utils.UrlUtils;
+import com.gls.framework.core.util.UrlUtil;
 import com.gls.security.core.web.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         // 读取用户所拥有权限的所有URL
-        return UrlUtils.urlsContains(requestUrl, getUrls(userDetails));
+        return UrlUtil.urlsContains(requestUrl, getUrls(userDetails));
     }
 
     private Set<String> getUrls(UserDetails userDetails) {

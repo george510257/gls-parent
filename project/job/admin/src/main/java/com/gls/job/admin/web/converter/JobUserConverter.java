@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
-import com.gls.framework.core.utils.CollectionUtils;
+import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.web.entity.JobUserEntity;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.repository.JobGroupRepository;
@@ -28,7 +28,7 @@ public class JobUserConverter implements BaseConverter<JobUserEntity, JobUser> {
         jobUser.setUsername(jobUserEntity.getUsername());
         jobUser.setPassword("");
         jobUser.setRole(jobUserEntity.getRole());
-        jobUser.setPermission(CollectionUtils.toString(jobUserEntity.getJobGroups().stream().map(jobGroupEntity -> jobGroupEntity.getId().toString()).collect(Collectors.toList())));
+        jobUser.setPermission(StringUtil.toString(jobUserEntity.getJobGroups().stream().map(jobGroupEntity -> jobGroupEntity.getId().toString()).collect(Collectors.toList())));
         return jobUser;
     }
 
@@ -39,7 +39,7 @@ public class JobUserConverter implements BaseConverter<JobUserEntity, JobUser> {
             jobUserEntity.setPassword(DigestUtils.md5DigestAsHex(jobUser.getPassword().getBytes(StandardCharsets.UTF_8)));
         }
         jobUserEntity.setRole(jobUser.getRole());
-        jobUserEntity.setJobGroups(CollectionUtils.toList(jobUser.getPermission()).stream().map(jobGroupId -> jobGroupRepository.getOne(Long.parseLong(jobGroupId))).collect(Collectors.toList()));
+        jobUserEntity.setJobGroups(StringUtil.toList(jobUser.getPermission()).stream().map(jobGroupId -> jobGroupRepository.getOne(Long.parseLong(jobGroupId))).collect(Collectors.toList()));
         jobUserEntity.setId(jobUser.getId());
         return jobUserEntity;
     }

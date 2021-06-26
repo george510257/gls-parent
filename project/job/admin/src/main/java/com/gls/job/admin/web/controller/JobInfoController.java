@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.controller;
 
-import com.gls.framework.core.utils.CollectionUtils;
+import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.core.enums.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.service.JobAsyncService;
@@ -101,7 +101,7 @@ public class JobInfoController {
     @PostMapping("/trigger")
     public Result<String> trigger(Long jobInfoId, String executorParam, String addressList) {
         try {
-            jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, CollectionUtils.toList(addressList));
+            jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
             return Result.SUCCESS;
         } catch (JobException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
