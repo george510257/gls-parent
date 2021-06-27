@@ -18,13 +18,10 @@ import java.util.Set;
  */
 @Service
 public class SmsCaptchaService extends BaseCaptchaService<SmsCaptchaModel> {
-
     @Resource
     private SmsCaptchaSender smsCaptchaSender;
-
     @Resource
     private CaptchaProperties captchaProperties;
-
     @Resource
     private SecurityProperties securityProperties;
 

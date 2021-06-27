@@ -13,7 +13,6 @@ import java.util.Optional;
  * @author george
  */
 public interface JobLogReportRepository extends BaseEntityRepository<JobLogReportEntity> {
-
     /**
      * get By TriggerDay Between
      *

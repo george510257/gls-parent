@@ -20,26 +20,22 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Component
 public class ExecutorRouteLRU implements ExecutorRouter {
-
     private static final ConcurrentMap<Long, LinkedHashMap<String, String>> JOB_LRU_MAP = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
 
     @Override
     public String route(Long jobId, List<String> addressList) {
-
         // cache clear
         if (System.currentTimeMillis() > CACHE_VALID_TIME) {
             JOB_LRU_MAP.clear();
             CACHE_VALID_TIME = System.currentTimeMillis() + 1000 * 60 * 60 * 24;
         }
-
         // init lru
         LinkedHashMap<String, String> lruItem = JOB_LRU_MAP.get(jobId);
         if (lruItem == null) {
             lruItem = new LinkedHashMap<>(16, 0.75f, true);
             JOB_LRU_MAP.putIfAbsent(jobId, lruItem);
         }
-
         // put new
         for (String address : addressList) {
             if (!lruItem.containsKey(address)) {
@@ -58,7 +54,6 @@ public class ExecutorRouteLRU implements ExecutorRouter {
                 lruItem.remove(delKey);
             }
         }
-
         // load
         String eldestKey = lruItem.entrySet().iterator().next().getKey();
         return lruItem.get(eldestKey);

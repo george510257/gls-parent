@@ -18,10 +18,8 @@ import javax.persistence.Table;
 @Table(name = "SIMPLE_TRIGGER")
 @Comment("简单触发器信息表")
 public class SimpleTriggerEntity extends BaseTriggerEntity {
-
     @Comment("间隔时间")
     private Long intervalTime = 0L;
-
     @Comment("重复次数")
     private Integer repeatCount = 0;
 }

@@ -14,7 +14,6 @@ import java.util.Optional;
  */
 @NoRepositoryBean
 public interface BaseRepository<T, ID> extends JpaRepositoryImplementation<T, ID> {
-
     /**
      * find one by example
      *

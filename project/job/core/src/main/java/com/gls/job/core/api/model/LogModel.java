@@ -14,9 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogModel implements Serializable {
-
     private Date logDateTime;
     private Long logId;
     private Integer fromLineNum;
-
 }

@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,23 +21,6 @@ import java.util.List;
  */
 @Slf4j
 public class ScriptHelper {
-
-    /**
-     * make script file
-     *
-     * @param scriptFileName
-     * @param content
-     * @throws IOException
-     */
-    public static void markScriptFile(String scriptFileName, String content) throws IOException {
-        // make file,   filePath/glueSource/666-123456789.py
-        try (FileOutputStream fileOutputStream = new FileOutputStream(scriptFileName)) {
-            fileOutputStream.write(content.getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
     /**
      * 脚本执行，日志文件实时输出
      *
@@ -50,14 +32,12 @@ public class ScriptHelper {
      * @throws IOException
      */
     public static int execToFile(String command, String scriptFile, String logFile, String... params) throws IOException {
-
         FileOutputStream fileOutputStream = null;
         Thread inputThread = null;
         Thread errThread = null;
         try {
             // file
             fileOutputStream = new FileOutputStream(logFile, true);
-
             // command
             List<String> cmdarray = new ArrayList<>();
             cmdarray.add(command);
@@ -66,10 +46,8 @@ public class ScriptHelper {
                 cmdarray.addAll(Arrays.asList(params));
             }
             String[] cmdarrayFinal = cmdarray.toArray(new String[0]);
-
             // process-exec
             final Process process = Runtime.getRuntime().exec(cmdarrayFinal);
-
             // log-thread
             final FileOutputStream finalFileOutputStream = fileOutputStream;
             inputThread = new Thread(() -> {
@@ -88,14 +66,12 @@ public class ScriptHelper {
             });
             inputThread.start();
             errThread.start();
-
             // process-wait
-            int exitValue = process.waitFor();      // exit code: 0=success, 1=error
-
+            int exitValue = process.waitFor();
+            // exit code: 0=success, 1=error
             // log-thread join
             inputThread.join();
             errThread.join();
-
             return exitValue;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -107,7 +83,6 @@ public class ScriptHelper {
                 } catch (IOException e) {
                     log.error(e.getMessage(), e);
                 }
-
             }
             if (inputThread != null && inputThread.isAlive()) {
                 inputThread.interrupt();
@@ -117,65 +92,4 @@ public class ScriptHelper {
             }
         }
     }
-
-    /**
-     * 脚本执行，日志文件实时输出
-     *
-     * 优点：支持将目标数据实时输出到指定日志文件中去
-     * 缺点：
-     *      标准输出和错误输出优先级固定，可能和脚本中顺序不一致
-     *      Java无法实时获取
-     *
-     *      <!-- commons-exec -->
-     * 		<dependency>
-     * 			<groupId>org.apache.commons</groupId>
-     * 			<artifactId>commons-exec</artifactId>
-     * 			<version>${commons-exec.version}</version>
-     * 		</dependency>
-     *
-     * @param command
-     * @param scriptFile
-     * @param logFile
-     * @param params
-     * @return
-     * @throws IOException
-     */
-    /*public static int execToFileB(String command, String scriptFile, String logFile, String... params) throws IOException {
-        // 标准输出：print （null if watchdog timeout）
-        // 错误输出：logging + 异常 （still exists if watchdog timeout）
-        // 标准输入
-
-        FileOutputStream fileOutputStream = null;   //
-        try {
-            fileOutputStream = new FileOutputStream(logFile, true);
-            PumpStreamHandler streamHandler = new PumpStreamHandler(fileOutputStream, fileOutputStream, null);
-
-            // command
-            CommandLine commandline = new CommandLine(command);
-            commandline.addArgument(scriptFile);
-            if (params!=null && params.length>0) {
-                commandline.addArguments(params);
-            }
-
-            // exec
-            DefaultExecutor exec = new DefaultExecutor();
-            exec.setExitValues(null);
-            exec.setStreamHandler(streamHandler);
-            int exitValue = exec.execute(commandline);  // exit code: 0=success, 1=error
-            return exitValue;
-        } catch (Exception e) {
-            JobLogger.log(e);
-            return -1;
-        } finally {
-            if (fileOutputStream != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    JobLogger.log(e);
-                }
-
-            }
-        }
-    }*/
-
 }

@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
  */
 @Data
 public class CaptchaModel implements Serializable {
-
     private String code;
-
     private LocalDateTime expireTime;
 }

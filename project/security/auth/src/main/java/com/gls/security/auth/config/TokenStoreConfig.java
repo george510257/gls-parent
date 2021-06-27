@@ -23,14 +23,11 @@ import java.security.KeyPair;
  */
 @Configuration
 public class TokenStoreConfig {
-
     @Configuration
     @ConditionalOnProperty(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".tokenStore", name = "type", havingValue = "redis", matchIfMissing = true)
     public static class RedisTokenStoreConfig {
-
         @Resource
         private RedisConnectionFactory redisConnectionFactory;
-
         @Resource
         private GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer;
 
@@ -46,7 +43,6 @@ public class TokenStoreConfig {
     @Configuration
     @ConditionalOnProperty(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".tokenStore", name = "type", havingValue = "jwt")
     public static class JwtTokenStoreConfig {
-
         @Resource
         private SecurityProperties securityProperties;
 

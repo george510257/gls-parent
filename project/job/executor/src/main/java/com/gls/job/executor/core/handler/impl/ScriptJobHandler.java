@@ -18,12 +18,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class ScriptJobHandler implements JobHandler {
-
     private final String scriptFileName;
     private final Date glueUpdateTime;
     private final GlueType glueType;
-
-    private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
+    private final JobContextHolder jobContextHolder;
 
     @Override
     public void execute() throws Exception {
@@ -31,29 +29,22 @@ public class ScriptJobHandler implements JobHandler {
             jobContextHolder.handleFail("glueType[" + glueType + "] invalid.");
             return;
         }
-
         // cmd
         String cmd = glueType.getCmd();
-
         // log file
         String logFileName = jobContextHolder.get().getJobLogFileName();
-
         // script params：0=param、1=分片序号、2=分片总数
         String[] scriptParams = new String[3];
         scriptParams[0] = jobContextHolder.get().getJobParam();
         scriptParams[1] = String.valueOf(jobContextHolder.get().getShardIndex());
         scriptParams[2] = String.valueOf(jobContextHolder.get().getShardTotal());
-
         // invoke
         log.info("----------- script file:" + scriptFileName + " -----------");
         int exitValue = ScriptHelper.execToFile(cmd, scriptFileName, logFileName, scriptParams);
-
         if (exitValue == 0) {
             jobContextHolder.handleSuccess();
         } else {
             jobContextHolder.handleFail("script exit value(" + exitValue + ") is failed");
         }
-
     }
-
 }

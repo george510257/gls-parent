@@ -20,19 +20,15 @@ import java.io.OutputStream;
 @RestController
 @RequestMapping("/file")
 public class FileController {
-
     private static final String FILE_FOLDER = "G:\\temp";
 
     @PostMapping
     public FileModel upload(MultipartFile file) throws Exception {
         FileModel fileModel = new FileModel();
-
         log.info("file name: {}", file.getName());
         log.info("original file name: {}", file.getOriginalFilename());
         log.info("file size: {}", file.getSize());
-
         File localFile = new File(FILE_FOLDER, System.currentTimeMillis() + ".txt");
-
         file.transferTo(localFile);
         fileModel.setPath(localFile.getAbsolutePath());
         return fileModel;
@@ -40,16 +36,12 @@ public class FileController {
 
     @GetMapping("/{id}")
     public void download(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
         try (InputStream inputStream = new FileInputStream(new File(FILE_FOLDER, id + ".txt"));
              OutputStream outputStream = response.getOutputStream();) {
-
             response.setContentType("application/x-download");
             response.addHeader("Content-Disposition", "attachment;filename=test.txt");
-
             IOUtils.copy(inputStream, outputStream);
             outputStream.flush();
         }
-
     }
 }

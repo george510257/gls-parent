@@ -9,14 +9,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AdminApiHolder extends BaseHolder<String, AdminApi> {
-
     @Override
     protected void delete(AdminApi oldValue, String reason) {
-
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
     }
 }

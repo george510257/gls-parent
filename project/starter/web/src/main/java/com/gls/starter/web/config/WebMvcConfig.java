@@ -17,7 +17,6 @@ import java.util.List;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer, ApplicationContextAware {
-
     private ApplicationContext applicationContext;
 
     @Override

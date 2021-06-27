@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RoleConverter implements BaseConverter<RoleEntity, RoleModel> {
-
     @Override
     public RoleModel copySourceToTarget(RoleEntity roleEntity, RoleModel roleModel) {
         roleModel.setId(roleEntity.getId());

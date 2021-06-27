@@ -13,7 +13,6 @@ import java.io.IOException;
  * @author george
  */
 public class Oauth2AccessTokenSerializer extends StdSerializer<OAuth2AccessToken> {
-
     private static final OAuth2AccessTokenJackson2Serializer SERIALIZER = new OAuth2AccessTokenJackson2Serializer();
 
     public Oauth2AccessTokenSerializer() {

@@ -8,7 +8,6 @@ import java.util.List;
  * @author george
  */
 public class StringUtil {
-
     public static List<String> toList(String s) {
         if (s == null || s.isEmpty()) {
             return Collections.emptyList();

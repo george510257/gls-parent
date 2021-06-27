@@ -26,7 +26,6 @@ import java.sql.Timestamp;
 @MappedSuperclass
 @Data
 public abstract class BaseEntity implements Serializable {
-
     @Id
     @GeneratedValue(generator = SnowflakeGenerator.NAME)
     @GenericGenerator(name = SnowflakeGenerator.NAME, strategy = SnowflakeGenerator.STRATEGY,
@@ -36,35 +35,26 @@ public abstract class BaseEntity implements Serializable {
             })
     @Comment("主键 ID")
     private Long id;
-
     @Comment("名称")
     private String name;
-
     @Version
     @Comment("版本信息")
     private Timestamp timeVersion;
-
     @Comment("逻辑删除标志 true:已删除; false:未删除")
     private Boolean deleteFlg = false;
-
     @Comment("租户ID")
     private Long tenantId;
-
     @Comment("应用ID")
     private Long appId;
-
     @CreatedBy
     @Comment("创建用户ID")
     private Long createdUserId;
-
     @CreatedDate
     @Comment("创建时间")
     private Timestamp createdDate;
-
     @LastModifiedBy
     @Comment("最后修改用户ID")
     private Long updateUserId;
-
     @LastModifiedDate
     @Comment("最后修改时间")
     private Timestamp updateDate;

@@ -18,10 +18,8 @@ import javax.annotation.Resource;
  */
 @Component
 public class CaptchaConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> implements PermitAllProvider {
-
     @Resource
     private CaptchaServiceHolder captchaServiceHolder;
-
     @Resource
     private AuthenticationFailureHandler failureHandler;
 

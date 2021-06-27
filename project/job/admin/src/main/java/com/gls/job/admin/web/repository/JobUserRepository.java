@@ -8,7 +8,6 @@ import com.gls.starter.data.jpa.base.BaseEntityRepository;
  * @author george
  */
 public interface JobUserRepository extends BaseEntityRepository<JobUserEntity>, JobUserCustomRepository {
-
     /**
      * get By Username
      *

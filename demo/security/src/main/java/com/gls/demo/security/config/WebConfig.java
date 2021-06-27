@@ -18,7 +18,6 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     @Resource
     private TimeInterceptor timeInterceptor;
 

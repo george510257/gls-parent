@@ -12,5 +12,4 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 @EnableConfigurationProperties(value = JobExecutorProperties.class)
 public class JobExecutorConfig {
-
 }

@@ -8,7 +8,6 @@ import java.util.List;
  * @author george
  */
 public interface ClientApi {
-
     /**
      * 获取客户端对象
      *

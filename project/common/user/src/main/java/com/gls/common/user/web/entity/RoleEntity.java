@@ -18,7 +18,6 @@ import javax.persistence.Entity;
 @Data
 @Comment("角色信息表")
 public class RoleEntity extends BaseEntity {
-
     @Column(unique = true)
     @Comment("角色标识")
     private String role;

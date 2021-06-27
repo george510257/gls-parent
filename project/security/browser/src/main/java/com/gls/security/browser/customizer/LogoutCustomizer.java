@@ -14,10 +14,8 @@ import javax.annotation.Resource;
  */
 @Component
 public class LogoutCustomizer implements Customizer<LogoutConfigurer<HttpSecurity>> {
-
     @Resource
     private SecurityProperties securityProperties;
-
     @Resource
     private LogoutSuccessHandler logoutSuccessHandler;
 

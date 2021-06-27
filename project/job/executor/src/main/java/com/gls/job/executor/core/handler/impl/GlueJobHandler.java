@@ -16,7 +16,6 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class GlueJobHandler implements JobHandler {
-
     private final JobHandler jobHandler;
     private final Date glueUpdateTime;
 

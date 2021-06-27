@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
  * @author george
  */
 public interface JobUserCustomRepository {
-
     /**
      * get Page
      *

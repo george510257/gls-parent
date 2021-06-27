@@ -17,22 +17,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TriggerModel implements Serializable {
-
     private Long jobId;
-
     private String executorHandler;
     private String executorParams;
     private ExecutorBlockStrategy executorBlockStrategy;
     private Integer executorTimeout;
-
     private Long logId;
     private Date logDateTime;
-
     private GlueType glueType;
     private String glueSource;
     private Date glueUpdateTime;
-
     private Integer broadcastIndex;
     private Integer broadcastTotal;
-
 }

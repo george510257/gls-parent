@@ -18,21 +18,16 @@ import java.util.Properties;
  */
 @Slf4j
 public class SnowflakeGenerator implements Configurable, IdentifierGenerator {
-
     public static final String NAME = "snowflakeIdentifierGenerator";
-
     public static final String STRATEGY = "com.gls.starter.data.jpa.generator.SnowflakeGenerator";
-
     /**
      * 工作机器ID(0~31)
      */
     public static final String WORKER_ID_NAME = "workerId";
-
     /**
      * 数据中心ID(0~31)
      */
     public static final String DATA_CENTER_ID_NAME = "dataCenterId";
-
     private static Snowflake snowflake;
 
     @Override

@@ -19,7 +19,6 @@ import java.util.Random;
  */
 @AllArgsConstructor
 public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
-
     private static final int RANDOM_MAX_1 = 155;
     private static final int RANDOM_MAX_2 = 255;
     private final CaptchaProperties captchaProperties;
@@ -28,11 +27,9 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
     public ImagesCaptchaModel generate() {
         CaptchaProperties.Images images = captchaProperties.getImages();
         ImagesCaptchaModel imagesCaptcha = new ImagesCaptchaModel();
-
         int width = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "width", images.getWidth());
         int height = ServletRequestUtils.getIntParameter(ServletHelper.getRequest(), "height", images.getHeight());
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
         Graphics g = image.getGraphics();
         Random random = new Random();
         g.setColor(getRandColor(200, 250));
@@ -46,7 +43,6 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
             int yl = random.nextInt(12);
             g.drawLine(x, y, x + xl, y + yl);
         }
-
         StringBuilder sRand = new StringBuilder();
         for (int i = 0; i < images.getLength(); i++) {
             String rand = String.valueOf(random.nextInt(10));
@@ -54,13 +50,10 @@ public class DefaultImagesCaptchaGenerator implements ImagesCaptchaGenerator {
             g.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
             g.drawString(rand, 13 * i + 6, 16);
         }
-
         g.dispose();
-
         imagesCaptcha.setImages(image);
         imagesCaptcha.setCode(sRand.toString());
         imagesCaptcha.setExpireTime(LocalDateTime.now().plusSeconds(images.getExpireIn()));
-
         return imagesCaptcha;
     }
 

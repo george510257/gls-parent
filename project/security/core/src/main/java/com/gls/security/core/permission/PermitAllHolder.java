@@ -10,7 +10,6 @@ import java.util.Map;
  * @author george
  */
 public class PermitAllHolder {
-
     private final Map<String, HttpMethod> requestMatchers = new HashMap<>();
 
     public void addPermitAll(HttpMethod method, String... antPatterns) {

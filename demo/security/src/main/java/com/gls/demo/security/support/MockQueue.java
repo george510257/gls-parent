@@ -12,9 +12,7 @@ import java.util.concurrent.*;
 @Slf4j
 @Component
 public class MockQueue {
-
     private String placeOrder;
-
     private String completeOrder;
 
     public String getPlaceOrder() {
@@ -45,5 +43,4 @@ public class MockQueue {
     public void setCompleteOrder(String completeOrder) {
         this.completeOrder = completeOrder;
     }
-
 }

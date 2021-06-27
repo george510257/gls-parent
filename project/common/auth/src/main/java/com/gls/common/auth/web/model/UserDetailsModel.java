@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsModel implements UserDetails {
-
     private UserModel userModel;
 
     @JsonIgnore

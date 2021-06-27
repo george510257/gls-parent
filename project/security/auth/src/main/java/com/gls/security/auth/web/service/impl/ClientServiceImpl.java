@@ -16,7 +16,6 @@ import java.util.Collections;
 @Slf4j
 @AllArgsConstructor
 public class ClientServiceImpl implements ClientService {
-
     private final PasswordEncoder passwordEncoder;
 
     @Override

@@ -15,13 +15,10 @@ import javax.annotation.Resource;
  */
 @Component
 public class SessionManagementCustomizer implements Customizer<SessionManagementConfigurer<HttpSecurity>> {
-
     @Resource
     private InvalidSessionStrategy invalidSessionStrategy;
-
     @Resource
     private SessionInformationExpiredStrategy expiredSessionStrategy;
-
     @Resource
     private SecurityProperties securityProperties;
 

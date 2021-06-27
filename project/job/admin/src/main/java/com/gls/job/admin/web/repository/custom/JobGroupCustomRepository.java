@@ -9,7 +9,6 @@ import java.util.List;
  * @author george
  */
 public interface JobGroupCustomRepository {
-
     /**
      * get All
      *

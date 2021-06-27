@@ -4,9 +4,7 @@ package com.gls.framework.core.exception;
  * @author george
  */
 public class DefaultException extends Exception {
-
     private String code;
-
     private String message;
 
     public DefaultException(String code, String message) {

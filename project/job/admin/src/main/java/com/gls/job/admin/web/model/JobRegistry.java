@@ -10,11 +10,9 @@ import java.util.Date;
  */
 @Data
 public class JobRegistry {
-
     private Long id;
     private String registryGroup;
     private String registryKey;
     private String registryValue;
     private Date updateTime;
-
 }

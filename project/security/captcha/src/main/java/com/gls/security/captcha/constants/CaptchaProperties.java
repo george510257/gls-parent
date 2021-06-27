@@ -13,7 +13,6 @@ import java.util.Set;
 @Data
 @ConfigurationProperties(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".captcha")
 public class CaptchaProperties {
-
     /**
      * 验证图片验证码时，http请求中默认的携带图片验证码信息的参数的名称
      */
@@ -26,20 +25,14 @@ public class CaptchaProperties {
      * 发送短信验证码 或 验证短信验证码时，传递手机号的参数的名称
      */
     private static final String DEFAULT_PARAMETER_NAME_MOBILE = "mobile";
-
     private String repositoryType = "redis";
-
     private String deviceIdParameter = "deviceId";
-
     private Images images = new Images();
-
     private Sms sms = new Sms();
 
     @Data
     public static class Images {
-
         private String codeParameter = DEFAULT_PARAMETER_NAME_CODE_IMAGE;
-
         /**
          * 图片宽
          */
@@ -48,17 +41,14 @@ public class CaptchaProperties {
          * 图片高
          */
         private int height = 32;
-
         /**
          * 验证码长度
          */
         private int length = 5;
-
         /**
          * 字体大小
          */
         private int fontSize = 30;
-
         /**
          * 过期时间
          */
@@ -71,11 +61,8 @@ public class CaptchaProperties {
 
     @Data
     public static class Sms {
-
         private String mobileParameter = DEFAULT_PARAMETER_NAME_MOBILE;
-
         private String codeParameter = DEFAULT_PARAMETER_NAME_CODE_SMS;
-
         /**
          * 验证码长度
          */

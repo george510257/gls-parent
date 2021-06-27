@@ -9,13 +9,9 @@ import java.util.Date;
  */
 @Data
 public class JobLogReport {
-
     private Long id;
-
     private Date triggerDay;
-
     private Long runningCount;
     private Long sucCount;
     private Long failCount;
-
 }

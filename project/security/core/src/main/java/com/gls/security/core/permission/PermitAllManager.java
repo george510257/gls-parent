@@ -12,9 +12,7 @@ import java.util.Map;
  */
 @Component
 public class PermitAllManager {
-
     private final PermitAllHolder holder = new PermitAllHolder();
-
     @Resource
     private List<PermitAllProvider> permitAllProviders;
 

@@ -9,7 +9,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author george
  */
 public abstract class BaseQueueHolder<V> {
-
     private final LinkedBlockingQueue<V> queue = new LinkedBlockingQueue<>();
 
     public boolean push(V value) {

@@ -21,10 +21,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/info")
 public class JobInfoController {
-
     @Resource
     private JobAsyncService jobAsyncService;
-
     @Resource
     private JobInfoService jobInfoService;
 

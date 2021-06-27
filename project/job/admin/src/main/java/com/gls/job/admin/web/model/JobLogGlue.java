@@ -12,7 +12,6 @@ import java.util.Date;
  */
 @Data
 public class JobLogGlue {
-
     private Long id;
     /**
      * 任务主键ID
@@ -26,5 +25,4 @@ public class JobLogGlue {
     private String glueRemark;
     private Date addTime;
     private Date updateTime;
-
 }

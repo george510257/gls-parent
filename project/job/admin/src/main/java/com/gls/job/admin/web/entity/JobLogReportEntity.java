@@ -18,9 +18,7 @@ import java.util.Date;
 @Data
 @Comment("任务日志统计信息表")
 public class JobLogReportEntity extends BaseEntity {
-
     private Date triggerDay;
-
     private Long runningCount;
     private Long sucCount;
     private Long failCount;

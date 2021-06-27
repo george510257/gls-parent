@@ -9,17 +9,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MisfireStrategy {
-
     /**
      * do nothing
      */
     DO_NOTHING("忽略"),
-
     /**
      * fire once now
      */
     FIRE_ONCE_NOW("立即执行一次");
-
     private final String title;
-
 }

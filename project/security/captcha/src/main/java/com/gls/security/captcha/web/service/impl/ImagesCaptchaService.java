@@ -17,13 +17,10 @@ import java.util.Set;
  */
 @Service
 public class ImagesCaptchaService extends BaseCaptchaService<ImagesCaptchaModel> {
-
     @Resource
     private ImagesCaptchaGenerator imagesCaptchaGenerator;
-
     @Resource
     private CaptchaProperties captchaProperties;
-
     @Resource
     private SecurityProperties securityProperties;
 

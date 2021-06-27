@@ -19,7 +19,6 @@ import java.io.IOException;
 @Slf4j
 @AllArgsConstructor
 public class CaptchaFilter extends OncePerRequestFilter {
-
     private final CaptchaServiceHolder captchaServiceHolder;
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
@@ -36,5 +35,4 @@ public class CaptchaFilter extends OncePerRequestFilter {
             authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
         }
     }
-
 }

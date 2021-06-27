@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping(SecurityConstants.DEFAULT_CAPTCHA_URL_PREFIX)
 public class CaptchaController {
-
     @Resource
     private CaptchaServiceHolder captchaServiceHolder;
 
@@ -25,5 +24,4 @@ public class CaptchaController {
     public void createCode(@PathVariable String type) throws Exception {
         captchaServiceHolder.findCaptchaService(type).create();
     }
-
 }

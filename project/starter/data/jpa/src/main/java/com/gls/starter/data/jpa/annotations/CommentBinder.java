@@ -10,7 +10,6 @@ import org.hibernate.mapping.Table;
  * @author george
  */
 public class CommentBinder {
-
     public static void setTableComment(Table table, XClass xclass) {
         Comment comment = xclass.getAnnotation(Comment.class);
         if (comment != null) {
@@ -27,5 +26,4 @@ public class CommentBinder {
             }
         }
     }
-
 }

@@ -22,5 +22,4 @@ public class SimpleTriggerConverter extends TriggerConverter<SimpleTriggerEntity
         entity.setRepeatCount(trigger.getRepeatCount());
         return super.copyTargetToSource(trigger, entity);
     }
-
 }

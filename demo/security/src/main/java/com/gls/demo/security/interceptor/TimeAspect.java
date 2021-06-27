@@ -15,26 +15,17 @@ import java.util.Arrays;
 @Aspect
 @Component
 public class TimeAspect {
-
     @Around("execution(* com.gls.demo.security.web.controller.UserController.*(..))")
     public Object handleControllerMethod(ProceedingJoinPoint pjp) throws Throwable {
-
         log.info("TimeAspect start");
-
         Arrays.stream(pjp.getArgs()).forEach(o -> {
             log.info("arg class name is {}", o.getClass().getName());
             log.info("arg is {}", o);
         });
-
         long start = System.currentTimeMillis();
-
         Object object = pjp.proceed();
-
         log.info("TimeAspect 耗时:" + (System.currentTimeMillis() - start));
-
         log.info("TimeAspect end");
-
         return object;
     }
-
 }

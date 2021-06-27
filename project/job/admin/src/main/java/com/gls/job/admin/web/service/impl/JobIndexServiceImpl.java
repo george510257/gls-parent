@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Service("jobIndexService")
 public class JobIndexServiceImpl implements JobIndexService {
-
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
@@ -33,16 +32,13 @@ public class JobIndexServiceImpl implements JobIndexService {
         // jobInfoCount
         long jobInfoCount = jobInfoRepository.count();
         dashboardInfo.put("jobInfoCount", jobInfoCount);
-
         Map<String, Long> reportTotal = jobLogReportRepository.getReportTotal();
         // jobLogCount
         long jobLogCount = reportTotal.get("runningCount") + reportTotal.get("sucCount") + reportTotal.get("failCount");
         dashboardInfo.put("jobLogCount", jobLogCount);
-
         // jobLogSuccessCount
         long jobLogSuccessCount = reportTotal.get("sucCount");
         dashboardInfo.put("jobLogSuccessCount", jobLogSuccessCount);
-
         // executorCount
         long executorCount = getExecutorCount();
         dashboardInfo.put("executorCount", executorCount);
@@ -59,9 +55,7 @@ public class JobIndexServiceImpl implements JobIndexService {
         AtomicLong triggerCountRunningTotal = new AtomicLong();
         AtomicLong triggerCountSucTotal = new AtomicLong();
         AtomicLong triggerCountFailTotal = new AtomicLong();
-
         List<JobLogReportEntity> jobLogReportEntities = jobLogReportRepository.getByTriggerDayBetween(startDate, endDate);
-
         if (ObjectUtils.isEmpty(jobLogReportEntities)) {
             for (int i = -6; i <= 0; i++) {
                 triggerDayList.add(DateUtil.formatDate(DateUtil.offsetDay(new Date(), i)));
@@ -75,24 +69,20 @@ public class JobIndexServiceImpl implements JobIndexService {
                 long triggerDayCountRunning = jobLogReportEntity.getRunningCount();
                 long triggerDayCountSuc = jobLogReportEntity.getSucCount();
                 long triggerDayCountFail = jobLogReportEntity.getFailCount();
-
                 triggerDayList.add(day);
                 triggerDayCountRunningList.add(triggerDayCountRunning);
                 triggerDayCountSucList.add(triggerDayCountSuc);
                 triggerDayCountFailList.add(triggerDayCountFail);
-
                 triggerCountRunningTotal.addAndGet(triggerDayCountRunning);
                 triggerCountSucTotal.addAndGet(triggerDayCountSuc);
                 triggerCountFailTotal.addAndGet(triggerDayCountFail);
             }
         }
-
         Map<String, Object> result = new HashMap<>(7);
         result.put("triggerDayList", triggerDayList);
         result.put("triggerDayCountRunningList", triggerDayCountRunningList);
         result.put("triggerDayCountSucList", triggerDayCountSucList);
         result.put("triggerDayCountFailList", triggerDayCountFailList);
-
         result.put("triggerCountRunningTotal", triggerCountRunningTotal.get());
         result.put("triggerCountSucTotal", triggerCountSucTotal.get());
         result.put("triggerCountFailTotal", triggerCountFailTotal.get());

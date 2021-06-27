@@ -47,10 +47,8 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
         if (!validPermission) {
             throw new JobException("权限拦截");
         }
-
         Map<String, Object> map = new HashMap<>(3);
         map.put("GlueType", GlueType.values());
-
         map.put("jobInfo", jobInfoConverter.sourceToTarget(jobInfoEntity));
         map.put("jobLogGlues", jobLogGlueConverter.sourceToTargetList(jobLogGlueEntities));
         return map;
@@ -66,14 +64,12 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
         jobInfoEntity.setGlueRemark(glueRemark);
         jobInfoEntity.setGlueUpdateTime(new Date());
         jobInfoRepository.save(jobInfoEntity);
-
         JobLogGlueEntity jobLogGlueEntity = new JobLogGlueEntity();
         jobLogGlueEntity.setJobInfo(jobInfoEntity);
         jobLogGlueEntity.setGlueType(jobInfoEntity.getGlueType());
         jobLogGlueEntity.setGlueSource(glueSource);
         jobLogGlueEntity.setGlueRemark(glueRemark);
         jobLogGlueRepository.save(jobLogGlueEntity);
-
         jobLogGlueRepository.deleteOldJobLogGlue(jobId, 30);
     }
 }

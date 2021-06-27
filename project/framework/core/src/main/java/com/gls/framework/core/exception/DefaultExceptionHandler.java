@@ -18,7 +18,6 @@ import org.springframework.web.client.HttpClientErrorException;
 @Slf4j
 @ControllerAdvice(basePackages = FrameworkConstants.BASE_PACKAGE)
 public class DefaultExceptionHandler {
-
     public static SentinelClientHttpResponse handleException(HttpRequest request, byte[] body, ClientHttpRequestExecution execution, BlockException ex) {
         log.error(ex.getMessage(), ex);
         return new SentinelClientHttpResponse("RestTemplate FallBack Msg");

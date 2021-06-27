@@ -9,7 +9,6 @@ import java.util.Date;
  * @author george
  */
 public interface JobLogCustomRepository {
-
     /**
      * get Page
      *
@@ -23,5 +22,4 @@ public interface JobLogCustomRepository {
      * @return
      */
     Page<JobLogEntity> getPage(Long jobGroupId, Long jobInfoId, Date triggerTimeFrom, Date triggerTimeTo, Integer logStatus, int page, int size);
-
 }

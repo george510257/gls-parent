@@ -14,7 +14,6 @@ import java.sql.Timestamp;
  */
 @Component
 public class JobLogGlueConverter implements BaseConverter<JobLogGlueEntity, JobLogGlue> {
-
     @Resource
     private JobInfoRepository jobInfoRepository;
 

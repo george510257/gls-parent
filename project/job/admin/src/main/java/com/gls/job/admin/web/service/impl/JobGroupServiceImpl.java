@@ -23,7 +23,6 @@ import java.util.Map;
  */
 @Service("jobGroupService")
 public class JobGroupServiceImpl implements JobGroupService {
-
     @Resource
     private JobGroupRepository jobGroupRepository;
     @Resource
@@ -40,9 +39,7 @@ public class JobGroupServiceImpl implements JobGroupService {
 
     @Override
     public Map<String, Object> getPageList(String appname, String title, int start, int length) {
-
         Page<JobGroupEntity> jobGroupEntityPage = jobGroupRepository.getPage(appname, title, start, length);
-
         Map<String, Object> maps = new HashMap<>(3);
         // 总记录数
         maps.put("recordsTotal", jobGroupEntityPage.getTotalElements());
@@ -97,5 +94,4 @@ public class JobGroupServiceImpl implements JobGroupService {
         }
         return jobGroupConverter.sourceToTarget(jobGroupEntity);
     }
-
 }

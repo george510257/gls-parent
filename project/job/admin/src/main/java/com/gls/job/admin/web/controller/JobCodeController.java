@@ -18,7 +18,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/code")
 public class JobCodeController {
-
     @Resource
     private JobLogGlueService jobLogGlueService;
 

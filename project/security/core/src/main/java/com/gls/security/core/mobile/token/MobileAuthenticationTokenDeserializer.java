@@ -17,7 +17,6 @@ import java.util.List;
  * @author george
  */
 public class MobileAuthenticationTokenDeserializer extends JsonDeserializer<MobileAuthenticationToken> {
-
     @Override
     public MobileAuthenticationToken deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         MobileAuthenticationToken token = null;

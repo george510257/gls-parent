@@ -40,7 +40,6 @@ public class JobRemotingUtil {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
             SSLSocketFactory newFactory = sc.getSocketFactory();
-
             connection.setSSLSocketFactory(newFactory);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -66,14 +65,12 @@ public class JobRemotingUtil {
             // connection
             URL realUrl = new URL(url);
             connection = (HttpURLConnection) realUrl.openConnection();
-
             // trust-https
             boolean useHttps = url.startsWith("https");
             if (useHttps) {
                 HttpsURLConnection https = (HttpsURLConnection) connection;
                 trustAllHosts(https);
             }
-
             // connection setting
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
@@ -84,29 +81,23 @@ public class JobRemotingUtil {
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
-
             if (accessToken != null && accessToken.trim().length() > 0) {
                 connection.setRequestProperty(GLS_JOB_ACCESS_TOKEN, accessToken);
             }
-
             // do connection
             connection.connect();
-
             // write requestBody
             if (requestObj != null) {
                 String requestBody = JsonUtil.writeValueAsString(requestObj);
-
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
                 dataOutputStream.write(requestBody.getBytes(StandardCharsets.UTF_8));
                 dataOutputStream.flush();
                 dataOutputStream.close();
             }
-
             int statusCode = connection.getResponseCode();
             if (statusCode != 200) {
                 return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting fail, StatusCode(" + statusCode + ") invalid. for url : " + url);
             }
-
             // result
             bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
             StringBuilder result = new StringBuilder();
@@ -115,7 +106,6 @@ public class JobRemotingUtil {
                 result.append(line);
             }
             String resultJson = result.toString();
-
             // parse returnT
             try {
                 return JsonUtil.readValue(resultJson, Result.class, returnTagClassOfT);
@@ -123,7 +113,6 @@ public class JobRemotingUtil {
                 logger.error("gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").", e);
                 return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting (url=" + url + ") response content invalid(" + resultJson + ").");
             }
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return new Result<String>(Result.FAIL_CODE, "gls-rpc remoting error(" + e.getMessage() + "), for url : " + url);
@@ -140,5 +129,4 @@ public class JobRemotingUtil {
             }
         }
     }
-
 }

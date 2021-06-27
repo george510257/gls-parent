@@ -15,7 +15,6 @@ import java.util.List;
  */
 @DubboService
 public class AdminRpcService implements AdminApi {
-
     @Resource
     private JobAsyncService jobAsyncService;
 
@@ -36,5 +35,4 @@ public class AdminRpcService implements AdminApi {
         jobAsyncService.asyncRegistryRemove(registryModel);
         return Result.SUCCESS;
     }
-
 }

@@ -16,7 +16,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/index")
 public class IndexController {
-
     @Resource
     private JobIndexService jobIndexService;
 
@@ -31,5 +30,4 @@ public class IndexController {
         Map<String, Object> chartInfo = jobIndexService.getChartInfo(startDate, endDate);
         return new Result<>(chartInfo);
     }
-
 }

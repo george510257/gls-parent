@@ -7,7 +7,6 @@ import com.gls.starter.data.jpa.base.BaseEntityRepository;
  * @author george
  */
 public interface ClientRepository extends BaseEntityRepository<ClientEntity> {
-
     /**
      * 通过clientId获取Client对象
      *

@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
  */
 @Data
 public class JobUser {
-
     private Long id;
     /**
      * 账号
@@ -32,5 +31,4 @@ public class JobUser {
      * 权限：执行器ID列表，多个逗号分割
      */
     private String permission;
-
 }

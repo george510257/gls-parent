@@ -11,7 +11,6 @@ import com.gls.job.core.util.JobRemotingUtil;
  * @author xuxueli 2017-07-28 22:14:52
  */
 public class ExecutorApiClient implements ExecutorApi {
-
     private final int timeout = 3;
     private String addressUrl;
     private String accessToken;
@@ -22,7 +21,6 @@ public class ExecutorApiClient implements ExecutorApi {
     public ExecutorApiClient(String addressUrl, String accessToken) {
         this.addressUrl = addressUrl;
         this.accessToken = accessToken;
-
         // valid
         if (!this.addressUrl.endsWith("/")) {
             this.addressUrl = this.addressUrl + "/";
@@ -53,5 +51,4 @@ public class ExecutorApiClient implements ExecutorApi {
     public Result<LogResultModel> log(LogModel logModel) {
         return JobRemotingUtil.postBody(addressUrl + "log", accessToken, timeout, logModel, LogResultModel.class);
     }
-
 }

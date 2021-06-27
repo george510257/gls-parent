@@ -17,10 +17,8 @@ import javax.annotation.Resource;
 @Slf4j
 @DubboService
 public class ExecutorRpcService implements ExecutorApi {
-
     @Resource
     private TriggerService triggerService;
-
     @Resource
     private JobLogService jobLogService;
 
@@ -59,5 +57,4 @@ public class ExecutorRpcService implements ExecutorApi {
         LogResultModel logResultModel = jobLogService.readLog(logModel);
         return new Result<>(logResultModel);
     }
-
 }

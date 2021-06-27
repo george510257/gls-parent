@@ -6,7 +6,6 @@ import com.gls.job.core.api.model.TriggerModel;
  * @author george
  */
 public interface TriggerService {
-
     /**
      * idle Beat
      *
@@ -30,5 +29,4 @@ public interface TriggerService {
      * @return
      */
     String removeJobThread(Long jobId);
-
 }

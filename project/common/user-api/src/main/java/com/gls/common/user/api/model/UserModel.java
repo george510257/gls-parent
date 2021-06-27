@@ -10,7 +10,6 @@ import java.util.List;
  */
 @Data
 public class UserModel extends BaseModel {
-
     private String password;
     private String username;
     private List<RoleModel> roles;

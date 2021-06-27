@@ -14,13 +14,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JobScheduleRingThread extends BaseThread {
-
     @Resource
     private JobInfoService jobInfoService;
 
     @Override
     protected void initExecute() throws Exception {
-
     }
 
     @Override
@@ -37,5 +35,4 @@ public class JobScheduleRingThread extends BaseThread {
     protected void destroyExecute() throws Exception {
         log.info(">>>>>>>>>>> gls-job, JobScheduleHelper#ringThread stop");
     }
-
 }

@@ -15,9 +15,7 @@ import java.io.IOException;
  */
 @Slf4j
 public class DefaultInvalidSessionStrategy implements InvalidSessionStrategy {
-
     private final SecurityProperties securityProperties;
-
     private final SimpleRedirectInvalidSessionStrategy simpleRedirectInvalidSessionStrategy;
 
     public DefaultInvalidSessionStrategy(SecurityProperties securityProperties) {

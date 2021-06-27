@@ -13,7 +13,6 @@ import java.util.List;
  */
 @DubboService
 public class ClientRpcService implements ClientApi {
-
     @Resource
     private ClientService clientService;
 

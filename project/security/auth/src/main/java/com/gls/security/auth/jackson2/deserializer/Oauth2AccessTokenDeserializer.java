@@ -14,7 +14,6 @@ import java.io.IOException;
  * @author george
  */
 public class Oauth2AccessTokenDeserializer extends StdDeserializer<OAuth2AccessToken> {
-
     private static final OAuth2AccessTokenJackson2Deserializer DESERIALIZER = new OAuth2AccessTokenJackson2Deserializer();
 
     public Oauth2AccessTokenDeserializer() {

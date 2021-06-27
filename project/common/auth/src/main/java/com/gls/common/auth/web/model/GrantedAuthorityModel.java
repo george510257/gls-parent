@@ -14,7 +14,6 @@ import org.springframework.security.core.GrantedAuthority;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GrantedAuthorityModel implements GrantedAuthority {
-
     private RoleModel roleModel;
 
     @JsonIgnore

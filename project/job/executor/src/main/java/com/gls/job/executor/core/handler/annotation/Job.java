@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface Job {
-
     /**
      * jobHandler name
      */
@@ -26,5 +25,4 @@ public @interface Job {
      * destroy handler, invoked when JobThread destroy
      */
     String destroy() default "";
-
 }

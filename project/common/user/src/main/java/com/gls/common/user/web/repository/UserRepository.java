@@ -7,7 +7,6 @@ import com.gls.starter.data.jpa.base.BaseEntityRepository;
  * @author george
  */
 public interface UserRepository extends BaseEntityRepository<UserEntity> {
-
     /**
      * 通过用户名获取用户信息
      *

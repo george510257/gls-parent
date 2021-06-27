@@ -30,7 +30,6 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class AppConfig {
-
     @Resource
     private PasswordEncoder passwordEncoder;
 

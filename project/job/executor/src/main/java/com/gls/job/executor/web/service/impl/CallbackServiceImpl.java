@@ -3,13 +3,13 @@ package com.gls.job.executor.web.service.impl;
 import com.gls.framework.api.result.Result;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.rpc.AdminApi;
+import com.gls.job.core.api.rpc.holder.AdminApiHolder;
 import com.gls.job.executor.core.context.JobContext;
 import com.gls.job.executor.core.context.JobContextHolder;
 import com.gls.job.executor.core.queue.CallbackQueueHolder;
 import com.gls.job.executor.web.repository.CallbackRepository;
 import com.gls.job.executor.web.service.CallbackService;
 import com.gls.job.executor.web.service.JobLogService;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -21,16 +21,16 @@ import java.util.List;
  */
 @Service
 public class CallbackServiceImpl implements CallbackService {
-
-    private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
+    @Resource
+    private JobContextHolder jobContextHolder;
     @Resource
     private CallbackQueueHolder callbackQueueHolder;
     @Resource
     private CallbackRepository callbackRepository;
     @Resource
     private JobLogService jobLogService;
-    @DubboReference
-    private AdminApi adminApi;
+    @Resource
+    private AdminApiHolder adminApiHolder;
 
     @Override
     public void callback() {
@@ -51,20 +51,20 @@ public class CallbackServiceImpl implements CallbackService {
     private void doCallback(List<CallbackModel> callbackModels) {
         boolean callbackRet = false;
         // callback, will retry if error
-//        for (AdminApi adminApi : JobExecutor.getAdminBizList()) {
-        try {
-            Result<String> callbackResult = adminApi.callback(callbackModels);
-            if (callbackResult != null && Result.SUCCESS_CODE.equals(callbackResult.getCode())) {
-                callbackLog(callbackModels, "<br>----------- gls-job job callback finish.");
-                callbackRet = true;
-//                    break;
-            } else {
-                callbackLog(callbackModels, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
+        for (AdminApi adminApi : adminApiHolder.loadAll()) {
+            try {
+                Result<String> callbackResult = adminApi.callback(callbackModels);
+                if (callbackResult != null && Result.SUCCESS_CODE.equals(callbackResult.getCode())) {
+                    callbackLog(callbackModels, "<br>----------- gls-job job callback finish.");
+                    callbackRet = true;
+                    break;
+                } else {
+                    callbackLog(callbackModels, "<br>----------- gls-job job callback fail, callbackResult:" + callbackResult);
+                }
+            } catch (Exception e) {
+                callbackLog(callbackModels, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
             }
-        } catch (Exception e) {
-            callbackLog(callbackModels, "<br>----------- gls-job job callback error, errorMsg:" + e.getMessage());
         }
-//        }
         if (!callbackRet) {
             callbackRepository.save(callbackModels);
         }
@@ -82,5 +82,4 @@ public class CallbackServiceImpl implements CallbackService {
             jobLogService.log(logContent);
         }
     }
-
 }

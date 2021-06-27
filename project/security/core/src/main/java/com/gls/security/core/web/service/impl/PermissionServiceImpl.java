@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 @Slf4j
 @AllArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
-
     private final UserService userService;
 
     @Override

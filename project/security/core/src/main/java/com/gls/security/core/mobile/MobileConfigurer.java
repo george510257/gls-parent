@@ -20,30 +20,23 @@ import javax.annotation.Resource;
  */
 @Component
 public class MobileConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-
     @Resource
     private SecurityProperties securityProperties;
-
     @Resource
     private AuthenticationSuccessHandler successHandler;
-
     @Resource
     private AuthenticationFailureHandler failureHandler;
-
     @Resource
     private UserService userService;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
         MobileAuthenticationFilter mobileAuthenticationFilter = new MobileAuthenticationFilter(securityProperties);
         mobileAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
         mobileAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
         mobileAuthenticationFilter.setAuthenticationFailureHandler(failureHandler);
-
         MobileAuthenticationProvider mobileAuthenticationProvider = new MobileAuthenticationProvider();
         mobileAuthenticationProvider.setUserService(userService);
-
         http.authenticationProvider(mobileAuthenticationProvider)
                 .addFilterAfter(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

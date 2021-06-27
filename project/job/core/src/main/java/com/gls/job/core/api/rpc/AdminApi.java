@@ -10,7 +10,6 @@ import java.util.List;
  * @author xuxueli 2017-07-27 21:52:49
  */
 public interface AdminApi {
-
     /**
      * callback
      *
@@ -34,5 +33,4 @@ public interface AdminApi {
      * @return
      */
     Result<String> registryRemove(RegistryModel registryModel);
-
 }

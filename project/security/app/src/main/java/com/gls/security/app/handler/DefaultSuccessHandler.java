@@ -14,7 +14,6 @@ import java.io.IOException;
  */
 @Slf4j
 public class DefaultSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
         log.info("登录成功");

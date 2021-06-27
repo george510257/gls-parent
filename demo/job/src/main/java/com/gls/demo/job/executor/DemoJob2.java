@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DemoJob2 {
-
     @Job(value = "demoJob2", init = "init", destroy = "destroy")
     public void execute() throws Exception {
         log.info("DemoJob2 -- execute");

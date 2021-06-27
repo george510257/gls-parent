@@ -21,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
     @GetMapping("/hello")
     public String hello() {
         return "hello spring security";
@@ -31,13 +30,10 @@ public class UserController {
     @JsonView(UserModel.UserSimpleView.class)
     public List<UserModel> query(UserQueryConditionModel condition,
                                  @PageableDefault(page = 2, size = 17, sort = "username,asc") Pageable pageable) {
-
         log.info("condition: " + condition.toString());
-
         log.info("PageSize: " + pageable.getPageSize());
         log.info("PageNumber: " + pageable.getPageNumber());
         log.info("Sort: " + pageable.getSort());
-
         List<UserModel> list = new ArrayList<>();
         list.add(new UserModel());
         list.add(new UserModel());
@@ -57,23 +53,19 @@ public class UserController {
 
     @PostMapping
     public UserModel create(@Valid @RequestBody UserModel user, BindingResult errors) {
-
         if (errors.hasErrors()) {
             errors.getAllErrors().forEach(objectError -> log.error(objectError.getDefaultMessage()));
         }
-
         log.info("id: {}", user.getId());
         log.info("username: {}", user.getUsername());
         log.info("password: {}", user.getPassword());
         log.info("birthday: {}", user.getBirthday());
-
         user.setId(1L);
         return user;
     }
 
     @PutMapping("/{id:\\d+}")
     public UserModel update(@Valid @RequestBody UserModel user, BindingResult errors) {
-
         if (errors.hasErrors()) {
             errors.getAllErrors().forEach(objectError -> {
                 FieldError fieldError = (FieldError) objectError;
@@ -81,12 +73,10 @@ public class UserController {
                 log.error(message);
             });
         }
-
         log.info("id: {}", user.getId());
         log.info("username: {}", user.getUsername());
         log.info("password: {}", user.getPassword());
         log.info("birthday: {}", user.getBirthday());
-
         user.setId(1L);
         return user;
     }

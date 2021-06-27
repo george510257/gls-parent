@@ -15,7 +15,6 @@ import java.util.*;
  */
 @Service
 public class QuartzServiceImpl implements QuartzService {
-
     @Resource
     private Scheduler scheduler;
 
@@ -66,7 +65,6 @@ public class QuartzServiceImpl implements QuartzService {
         trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).build();
         // 重启触发器
         scheduler.rescheduleJob(triggerKey, trigger);
-
     }
 
     @Override

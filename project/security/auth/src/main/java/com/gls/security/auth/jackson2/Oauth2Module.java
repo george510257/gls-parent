@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
  * @author george
  */
 public class Oauth2Module extends SimpleModule {
-
     public Oauth2Module() {
         super(Oauth2Module.class.getName(), new Version(1, 0, 0, null, null, null));
     }

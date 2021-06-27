@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
 @Data
 @AllArgsConstructor
 public class MethodJobHandler implements JobHandler {
-
     private final Object target;
     private final Method method;
     private final Method initMethod;

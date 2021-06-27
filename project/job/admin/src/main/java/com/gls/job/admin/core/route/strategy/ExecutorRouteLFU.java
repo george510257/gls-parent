@@ -18,19 +18,16 @@ import java.util.concurrent.ConcurrentMap;
  */
 @Component
 public class ExecutorRouteLFU implements ExecutorRouter {
-
     private static final ConcurrentMap<Long, HashMap<String, Integer>> JOB_LFU_MAP = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
 
     @Override
     public String route(Long jobId, List<String> addressList) {
-
         // cache clear
         if (System.currentTimeMillis() > CACHE_VALID_TIME) {
             JOB_LFU_MAP.clear();
             CACHE_VALID_TIME = System.currentTimeMillis() + 1000 * 60 * 60 * 24;
         }
-
         // lfu item init
         HashMap<String, Integer> lfuItemMap = JOB_LFU_MAP.get(jobId);
         // Key排序可以用TreeMap+构造入参Compare；Value排序暂时只能通过ArrayList；
@@ -39,7 +36,6 @@ public class ExecutorRouteLFU implements ExecutorRouter {
             JOB_LFU_MAP.putIfAbsent(jobId, lfuItemMap);
             // 避免重复覆盖
         }
-
         // put new
         for (String address : addressList) {
             if (!lfuItemMap.containsKey(address) || lfuItemMap.get(address) > 1000000) {
@@ -59,14 +55,11 @@ public class ExecutorRouteLFU implements ExecutorRouter {
                 lfuItemMap.remove(delKey);
             }
         }
-
         // load least userd count address
         List<Map.Entry<String, Integer>> lfuItemList = new ArrayList<>(lfuItemMap.entrySet());
         lfuItemList.sort(Map.Entry.comparingByValue());
-
         Map.Entry<String, Integer> addressItem = lfuItemList.get(0);
         addressItem.setValue(addressItem.getValue() + 1);
-
         return addressItem.getKey();
     }
 }

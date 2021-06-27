@@ -7,7 +7,6 @@ import javax.validation.ConstraintValidatorContext;
  * @author george
  */
 public class MyConstraintValidator implements ConstraintValidator<MyConstraint, String> {
-
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         System.out.println("value = " + value + ", context = " + context);
@@ -18,5 +17,4 @@ public class MyConstraintValidator implements ConstraintValidator<MyConstraint, 
     public void initialize(MyConstraint constraintAnnotation) {
         System.out.println("MyConstraint initialize");
     }
-
 }

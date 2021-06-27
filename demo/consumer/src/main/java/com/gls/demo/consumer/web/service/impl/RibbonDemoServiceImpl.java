@@ -19,9 +19,7 @@ import java.util.Objects;
  */
 @Service(value = "ribbonDemoService")
 public class RibbonDemoServiceImpl implements RibbonDemoService {
-
     private static final String URL = "http://" + FeignConfig.PROVIDER_APPLICATION_NAME + "/provider/demo";
-
     @Resource
     private RestTemplate restTemplate;
 

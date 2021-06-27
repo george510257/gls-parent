@@ -12,9 +12,7 @@ import java.util.Collection;
  * @author george
  */
 public class MobileAuthenticationToken extends AbstractAuthenticationToken {
-
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
     private final Object principal;
 
     public MobileAuthenticationToken(Object principal) {
@@ -45,7 +43,6 @@ public class MobileAuthenticationToken extends AbstractAuthenticationToken {
             throw new IllegalArgumentException(
                     "Cannot set this token to trusted - use constructor which takes a GrantedAuthority list instead");
         }
-
         super.setAuthenticated(false);
     }
 }

@@ -30,7 +30,6 @@ public class JobUserServiceImpl implements JobUserService {
 
     @Override
     public String login(String userName, String password, boolean ifRemember) {
-
         if (!StringUtils.hasText(userName) || !StringUtils.hasText(password)) {
             return "账号或密码为空";
         }

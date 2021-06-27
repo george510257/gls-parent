@@ -15,13 +15,10 @@ import javax.annotation.Resource;
  */
 @Component
 public class RememberMeCustomizer implements Customizer<RememberMeConfigurer<HttpSecurity>> {
-
     @Resource
     private PersistentTokenRepository tokenRepository;
-
     @Resource
     private SecurityProperties securityProperties;
-
     @Resource
     private UserService userService;
 

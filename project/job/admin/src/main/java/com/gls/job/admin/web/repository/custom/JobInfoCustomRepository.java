@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
  * @author george
  */
 public interface JobInfoCustomRepository {
-
     /**
      * get Page
      *
@@ -21,5 +20,4 @@ public interface JobInfoCustomRepository {
      * @return
      */
     Page<JobInfoEntity> getPage(Long jobGroupId, Boolean triggerStatus, String jobDesc, String executorHandler, String author, int page, int size);
-
 }

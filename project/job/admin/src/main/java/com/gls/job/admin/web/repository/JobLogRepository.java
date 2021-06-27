@@ -14,7 +14,6 @@ import java.util.Map;
  * @author george
  */
 public interface JobLogRepository extends BaseEntityRepository<JobLogEntity>, JobLogCustomRepository {
-
     /**
      * delete By JobInfoId
      *
@@ -62,5 +61,4 @@ public interface JobLogRepository extends BaseEntityRepository<JobLogEntity>, Jo
             "and  t.triggerTime <= :lostTime " +
             "and t1.id is null")
     List<JobLogEntity> getLostJobLogs(@Param("lostTime") Date lostTime);
-
 }

@@ -20,10 +20,8 @@ import javax.annotation.Resource;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class FileControllerTest {
-
     @Resource
     private WebApplicationContext webApplicationContext;
-
     private MockMvc mockMvc;
 
     @Before

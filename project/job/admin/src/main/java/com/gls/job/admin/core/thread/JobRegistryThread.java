@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JobRegistryThread extends BaseThread {
-
     @Resource
     private JobRegistryService jobRegistryService;
 

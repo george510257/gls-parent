@@ -26,22 +26,16 @@ import java.util.concurrent.TimeoutException;
  */
 @Slf4j
 public class JobThread extends BaseThread {
-
     @Getter
     private final Long jobId;
     @Getter
     private final JobHandler jobHandler;
-
     private final JobLogService jobLogService;
     private final JobThreadHolder jobThreadHolder;
-
     @Getter
     private final TriggerQueueHolder triggerQueueHolder = new TriggerQueueHolder();
-
     private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
-
     private final CallbackQueueHolder callbackQueueHolder;
-
     /**
      * if running job
      */
@@ -77,7 +71,6 @@ public class JobThread extends BaseThread {
     protected void doExecute() throws Exception {
         running = false;
         idleTimes++;
-
         TriggerModel triggerModel = null;
         try {
             // to check toStop signal, we need cycle, so wo cannot use queue.take(), instand of poll(timeout)
@@ -85,38 +78,29 @@ public class JobThread extends BaseThread {
             if (triggerModel != null) {
                 running = true;
                 idleTimes = 0;
-
                 // log filename, like "logPath/yyyy-MM-dd/9999.log"
                 String logFileName = jobLogService.getLogFileName(triggerModel.getLogDateTime(), triggerModel.getLogId());
                 JobContext jobContext = new JobContext(triggerModel.getJobId(), triggerModel.getExecutorParams(), logFileName, triggerModel.getBroadcastIndex(), triggerModel.getBroadcastTotal());
-
                 // init job context
                 jobContextHolder.set(jobContext);
-
                 // execute
                 jobLogService.log("<br>----------- gls-job job execute start -----------<br>----------- Param:" + jobContext.getJobParam());
-
                 if (triggerModel.getExecutorTimeout() > 0) {
                     // limit timeout
                     Thread futureThread = null;
                     try {
                         FutureTask<Boolean> futureTask = new FutureTask<>(() -> {
-
                             // init job context
                             jobContextHolder.set(jobContext);
-
                             jobHandler.execute();
                             return true;
                         });
                         futureThread = new Thread(futureTask);
                         futureThread.start();
-
                         Boolean tempResult = futureTask.get(triggerModel.getExecutorTimeout(), TimeUnit.SECONDS);
                     } catch (TimeoutException e) {
-
                         jobLogService.log("<br>----------- gls-job job execute timeout");
                         jobLogService.log(e);
-
                         // handle result
                         jobContextHolder.handleTimeout("job execute timeout ");
                     } finally {
@@ -126,7 +110,6 @@ public class JobThread extends BaseThread {
                     // just execute
                     jobHandler.execute();
                 }
-
                 // valid execute handle data
                 if (jobContextHolder.get().getHandleCode() <= 0) {
                     jobContextHolder.handleFail("job handle result lost.");
@@ -142,7 +125,6 @@ public class JobThread extends BaseThread {
                         + ", handleMsg = "
                         + jobContextHolder.get().getHandleMsg()
                 );
-
             } else {
                 if (idleTimes > 30) {
                     if (triggerQueueHolder.isEmpty()) {
@@ -155,14 +137,11 @@ public class JobThread extends BaseThread {
             if (this.isStop()) {
                 jobLogService.log("<br>----------- JobThread toStop, stopReason:" + this.getStopReason());
             }
-
             // handle result
             StringWriter stringWriter = new StringWriter();
             e.printStackTrace(new PrintWriter(stringWriter));
             String errorMsg = stringWriter.toString();
-
             jobContextHolder.handleFail(errorMsg);
-
             jobLogService.log("<br>----------- JobThread Exception:" + errorMsg + "<br>----------- gls-job job execute end(error) -----------");
         } finally {
             if (triggerModel != null) {
@@ -190,7 +169,6 @@ public class JobThread extends BaseThread {
 
     @Override
     protected void sleepExecute() throws Exception {
-
     }
 
     @Override
@@ -207,14 +185,12 @@ public class JobThread extends BaseThread {
                         this.getStopReason() + " [job not executed, in the job queue, killed.]"));
             }
         }
-
         // destroy
         try {
             jobHandler.destroy();
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
         }
-
         log.info(">>>>>>>>>>> gls-job JobThread stoped, hashCode:{}", Thread.currentThread());
     }
 }

@@ -10,7 +10,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExecutorRouteStrategy {
-
     /**
      *
      */
@@ -24,8 +23,6 @@ public enum ExecutorRouteStrategy {
     FAILOVER("故障转移", "executorRouteFailover"),
     BUSYOVER("忙碌转移", "executorRouteBusyover"),
     SHARDING_BROADCAST("分片广播", "");
-
     private final String title;
     private final String routerKey;
-
 }

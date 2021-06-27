@@ -22,10 +22,8 @@ import java.util.Set;
  */
 @Slf4j
 public abstract class BaseCaptchaService<C extends CaptchaModel> implements CaptchaService {
-
     @Resource
     private CaptchaRepository captchaRepository;
-
     @Resource
     private CaptchaConverter captchaConverter;
 
@@ -40,17 +38,14 @@ public abstract class BaseCaptchaService<C extends CaptchaModel> implements Capt
     public void validate() {
         String codeInRequest = getCodeInRequest();
         CaptchaModel codeInSession = captchaConverter.sourceToTarget(captchaRepository.getCaptcha(getType()));
-
         if (codeInRequest == null || "".equals(codeInRequest)) {
             throw new CaptchaException("验证码的值不能为空");
         }
         if (codeInSession == null) {
             throw new CaptchaException("验证码不存在");
         }
-
         log.info("codeInRequest: {}", codeInRequest);
         log.info("codeInSession: {}", codeInSession.getCode());
-
         if (LocalDateTime.now().isAfter(codeInSession.getExpireTime())) {
             captchaRepository.removeCaptcha(getType());
             throw new CaptchaException("验证码已过期");

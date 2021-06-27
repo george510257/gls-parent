@@ -8,7 +8,6 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
  * @author george
  */
 public class MobileModule extends SimpleModule {
-
     public MobileModule() {
         super(MobileModule.class.getName(), new Version(1, 0, 0, null, null, null));
     }

@@ -14,7 +14,6 @@ import java.util.TimeZone;
 @Slf4j
 @Component
 public class CronTriggerConverter extends TriggerConverter<CronTriggerEntity, CronTriggerImpl> {
-
     @Override
     public CronTriggerImpl copySourceToTarget(CronTriggerEntity entity, CronTriggerImpl trigger) {
         try {
@@ -32,5 +31,4 @@ public class CronTriggerConverter extends TriggerConverter<CronTriggerEntity, Cr
         entity.setTimeZone(trigger.getTimeZone().getID());
         return super.copyTargetToSource(trigger, entity);
     }
-
 }

@@ -13,7 +13,6 @@ import javax.annotation.Resource;
  */
 @Component
 public class JobThreadHolder extends BaseHolder<Long, JobThread> {
-
     @Resource
     public CallbackQueueHolder callbackQueueHolder;
     @Resource

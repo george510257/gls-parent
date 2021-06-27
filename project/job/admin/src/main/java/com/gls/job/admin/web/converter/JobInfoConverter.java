@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
-
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource

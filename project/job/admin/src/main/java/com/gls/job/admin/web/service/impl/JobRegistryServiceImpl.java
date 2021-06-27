@@ -21,7 +21,6 @@ import java.util.*;
  */
 @Service("jobRegistryService")
 public class JobRegistryServiceImpl implements JobRegistryService {
-
     @Resource
     private JobRegistryRepository jobRegistryRepository;
     @Resource
@@ -57,10 +56,8 @@ public class JobRegistryServiceImpl implements JobRegistryService {
         Date date = DateUtil.offsetSecond(new Date(), -JobConstants.DEAD_TIMEOUT);
         // remove dead address (admin/executor)
         removeOld(date);
-
         // fresh online address (admin/executor)
         Map<String, List<String>> appAddressMap = freshOnline(date);
-
         jobGroupEntities.forEach(jobGroupEntity -> {
             List<String> registryList = appAddressMap.get(jobGroupEntity.getAppname());
             jobGroupEntity.setAddressList(registryList);
@@ -81,7 +78,6 @@ public class JobRegistryServiceImpl implements JobRegistryService {
                 if (RegistryType.EXECUTOR.equals(jobRegistryEntity.getRegistryGroup())) {
                     String appname = jobRegistryEntity.getRegistryKey();
                     List<String> registryList = appAddressMap.getOrDefault(appname, new ArrayList<>());
-
                     if (!registryList.contains(jobRegistryEntity.getRegistryValue())) {
                         registryList.add(jobRegistryEntity.getRegistryValue());
                     }

@@ -11,7 +11,6 @@ import java.util.List;
  * @author george
  */
 public interface JobLogGlueRepository extends BaseEntityRepository<JobLogGlueEntity> {
-
     /**
      * get By JobInfoId
      *

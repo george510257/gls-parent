@@ -6,7 +6,6 @@ import org.springframework.security.core.Authentication;
  * @author george
  */
 public interface PermissionService {
-
     /**
      * 判断权限
      *

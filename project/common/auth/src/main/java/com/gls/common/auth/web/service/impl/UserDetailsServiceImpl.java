@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service(value = "userService")
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     @DubboReference
     private UserApi userApi;
 

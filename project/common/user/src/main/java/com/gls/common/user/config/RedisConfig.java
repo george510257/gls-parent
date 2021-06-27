@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 @Configuration
 @EnableCaching
 public class RedisConfig {
-
     @Resource
     private RedisConnectionFactory redisConnectionFactory;
 

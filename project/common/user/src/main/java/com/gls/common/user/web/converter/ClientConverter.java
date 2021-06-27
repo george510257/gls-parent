@@ -15,7 +15,6 @@ import java.util.Map;
  */
 @Component
 public class ClientConverter implements BaseConverter<ClientEntity, ClientModel> {
-
     @Resource
     private RoleConverter roleConverter;
 

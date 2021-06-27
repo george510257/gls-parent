@@ -19,16 +19,12 @@ import java.util.List;
 @Data
 @Comment("用户信息表")
 public class JobUserEntity extends BaseEntity {
-
     @Comment("账号")
     private String username;
-
     @Comment("密码")
     private String password;
-
     @Comment("角色：0-普通用户、1-管理员")
     private Integer role;
-
     @Comment("权限：执行器ID列表")
     @ManyToMany
     private List<JobGroupEntity> jobGroups;

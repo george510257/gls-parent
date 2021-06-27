@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
  * @author george
  */
 public class ImagesCaptchaTokenGranter extends BaseCaptchaTokenGranter<ImagesCaptchaService> {
-
     private static final String GRANT_TYPE = "images_captcha";
 
     public ImagesCaptchaTokenGranter(ImagesCaptchaService service, AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory) {

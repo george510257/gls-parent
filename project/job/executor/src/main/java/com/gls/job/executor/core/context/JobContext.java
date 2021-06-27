@@ -11,18 +11,15 @@ import lombok.Data;
  */
 @Data
 public class JobContext {
-
     /**
      * job id
      */
     private final Long jobId;
-
     // ---------------------- for log ----------------------
     /**
      * job param
      */
     private final String jobParam;
-
     // ---------------------- for shard ----------------------
     /**
      * job log filename
@@ -32,7 +29,6 @@ public class JobContext {
      * shard index
      */
     private final int shardIndex;
-
     // ---------------------- for handle ----------------------
     /**
      * shard total

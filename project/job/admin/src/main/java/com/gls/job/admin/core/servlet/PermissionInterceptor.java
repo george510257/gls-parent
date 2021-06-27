@@ -17,14 +17,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class PermissionInterceptor implements AsyncHandlerInterceptor {
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-
         // if need login
         boolean needLogin = true;
         boolean needAdminister = false;
@@ -34,7 +31,6 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
             needLogin = permission.limit();
             needAdminister = permission.administer();
         }
-
         if (needLogin) {
             JobUser loginUser = LoginUserUtil.getLoginUser();
             if (loginUser == null) {
@@ -47,8 +43,6 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
             }
             request.setAttribute(JobConstants.LOGIN_IDENTITY_KEY, loginUser);
         }
-
         return true;
     }
-
 }

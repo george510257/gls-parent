@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
  */
 @Service(value = "clientService")
 public class ClientDetailsServiceImpl implements ClientDetailsService {
-
     @DubboReference
     private ClientApi clientApi;
 
@@ -21,5 +20,4 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         return new ClientDetailsModel(clientApi.loadClientByClientId(clientId));
     }
-
 }

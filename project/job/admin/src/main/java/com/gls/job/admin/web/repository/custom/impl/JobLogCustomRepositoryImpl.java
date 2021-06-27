@@ -24,7 +24,6 @@ import java.util.List;
 @Slf4j
 @Repository("jobLogCustomRepository")
 public class JobLogCustomRepositoryImpl extends BaseRepositoryImpl<JobLogEntity, Long> implements JobLogCustomRepository {
-
     public JobLogCustomRepositoryImpl(EntityManager em) {
         super(JobLogEntity.class, em);
     }

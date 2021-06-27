@@ -10,14 +10,11 @@ import java.util.List;
  */
 @Component
 public class RingDataHolder extends BaseHolder<Integer, List<Long>> {
-
     @Override
     protected void delete(List<Long> oldValue, String reason) {
-
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
     }
 }

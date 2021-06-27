@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 @Repository
 public class ScriptJobRepositoryImpl implements ScriptJobRepository {
-
     @Resource
     private JobExecutorProperties jobExecutorProperties;
 

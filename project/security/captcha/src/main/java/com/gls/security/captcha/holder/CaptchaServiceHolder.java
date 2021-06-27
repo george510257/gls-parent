@@ -16,7 +16,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class CaptchaServiceHolder {
-
     @Resource
     private Map<String, CaptchaService> captchaServices;
 

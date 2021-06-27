@@ -12,7 +12,6 @@ import java.util.List;
  */
 @Async
 public interface JobAsyncService {
-
     /**
      * trigger
      *

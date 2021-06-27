@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/consumer/ribbon/demo")
 public class RibbonDemoController {
-
     @Resource
     private RibbonDemoService ribbonDemoService;
 

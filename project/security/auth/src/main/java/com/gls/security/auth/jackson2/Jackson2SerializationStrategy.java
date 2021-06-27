@@ -7,7 +7,6 @@ import org.springframework.security.oauth2.provider.token.store.redis.StandardSt
  * @author george
  */
 public class Jackson2SerializationStrategy extends StandardStringSerializationStrategy {
-
     private static GenericJackson2JsonRedisSerializer jsonRedisSerializer;
 
     public Jackson2SerializationStrategy(GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer) {

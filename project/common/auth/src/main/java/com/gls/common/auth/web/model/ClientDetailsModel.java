@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientDetailsModel implements ClientDetails {
-
     private ClientModel clientModel;
 
     @JsonIgnore

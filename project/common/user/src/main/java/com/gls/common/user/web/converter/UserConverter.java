@@ -12,7 +12,6 @@ import javax.annotation.Resource;
  */
 @Component
 public class UserConverter implements BaseConverter<UserEntity, UserModel> {
-
     @Resource
     private RoleConverter roleConverter;
 

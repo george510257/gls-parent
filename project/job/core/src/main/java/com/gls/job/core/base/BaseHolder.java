@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBean {
-
     private final Map<K, V> map = new ConcurrentHashMap<>();
 
     public void regist(Map<K, V> map) {
@@ -61,5 +60,4 @@ public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBe
     public void destroy() throws Exception {
         removeAll("");
     }
-
 }

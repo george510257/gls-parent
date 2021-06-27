@@ -1,7 +1,6 @@
 package com.gls.job.executor.core.thread;
 
 import com.gls.job.core.base.BaseThread;
-import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.service.JobLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,6 @@ import java.util.concurrent.TimeUnit;
 public class JobLogCleanThread extends BaseThread {
     @Resource
     private JobLogService jobLogService;
-    @Resource
-    private JobExecutorProperties jobExecutorProperties;
 
     @Override
     protected void initExecute() throws Exception {
@@ -28,7 +25,7 @@ public class JobLogCleanThread extends BaseThread {
     @Override
     protected void doExecute() throws Exception {
         log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread doExecute.");
-        jobLogService.logFileClean(jobExecutorProperties.getLogRetentionDays());
+        jobLogService.logFileClean();
     }
 
     @Override

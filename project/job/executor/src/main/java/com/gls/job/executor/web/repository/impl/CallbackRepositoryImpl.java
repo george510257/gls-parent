@@ -22,7 +22,6 @@ import java.util.List;
 @Slf4j
 @Repository
 public class CallbackRepositoryImpl implements CallbackRepository {
-
     @Resource
     private JobExecutorProperties jobExecutorProperties;
 

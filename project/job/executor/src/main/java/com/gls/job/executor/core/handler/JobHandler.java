@@ -6,7 +6,6 @@ package com.gls.job.executor.core.handler;
  * @author xuxueli 2015-12-19 19:06:38
  */
 public interface JobHandler {
-
     /**
      * execute handler, invoked when executor receives a scheduling request
      *
@@ -31,5 +30,4 @@ public interface JobHandler {
     default void destroy() throws Exception {
         // do something
     }
-
 }

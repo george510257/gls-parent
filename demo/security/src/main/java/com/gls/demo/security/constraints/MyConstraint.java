@@ -19,7 +19,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = MyConstraintValidator.class)
 public @interface MyConstraint {
-
     String message() default "{javax.validation.constraints.MyConstraint.message}";
 
     Class<?>[] groups() default {};
@@ -32,7 +31,6 @@ public @interface MyConstraint {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-
         MyConstraint[] value();
     }
 }

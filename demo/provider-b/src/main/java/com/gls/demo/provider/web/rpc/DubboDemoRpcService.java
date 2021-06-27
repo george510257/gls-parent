@@ -16,7 +16,6 @@ import java.util.Map;
 @Slf4j
 @DubboService(group = "gls-demo-provider-b")
 public class DubboDemoRpcService implements DubboDemoApi {
-
     private static final Map<Integer, DemoModel> DEMO_MODEL_MAP = new HashMap<>();
 
     @Override

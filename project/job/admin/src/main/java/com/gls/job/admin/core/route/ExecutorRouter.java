@@ -7,7 +7,6 @@ import java.util.List;
  * @date 17/3/10
  */
 public interface ExecutorRouter {
-
     /**
      * route address
      *
@@ -16,5 +15,4 @@ public interface ExecutorRouter {
      * @return
      */
     String route(Long jobId, List<String> addressList);
-
 }

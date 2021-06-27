@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/consumer/dubbo/demo")
 public class DubboDemoController {
-
     @Resource
     private RpcServiceHelper rpcServiceHelper;
 

@@ -12,7 +12,6 @@ import java.util.Set;
  * @author george
  */
 public class TriggerQueueHolder extends BaseQueueHolder<TriggerModel> {
-
     private final Set<Long> logIds = Collections.synchronizedSet(new HashSet<>());
 
     @Override

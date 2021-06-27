@@ -7,7 +7,6 @@ import com.gls.starter.data.jpa.base.BaseEntityRepository;
  * @author george
  */
 public interface RoleRepository extends BaseEntityRepository<RoleEntity> {
-
     /**
      * 通过role获取Role对象
      *

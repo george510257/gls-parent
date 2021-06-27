@@ -15,13 +15,10 @@ import javax.annotation.Resource;
  */
 @Component
 public class FormLoginCustomizer implements Customizer<FormLoginConfigurer<HttpSecurity>> {
-
     @Resource
     private AuthenticationSuccessHandler successHandler;
-
     @Resource
     private AuthenticationFailureHandler failureHandler;
-
     @Resource
     private SecurityProperties securityProperties;
 

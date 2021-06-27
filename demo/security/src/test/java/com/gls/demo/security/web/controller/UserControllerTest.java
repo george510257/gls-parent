@@ -22,10 +22,8 @@ import java.util.Date;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserControllerTest {
-
     @Resource
     private WebApplicationContext webApplicationContext;
-
     private MockMvc mockMvc;
 
     @Before
@@ -57,7 +55,6 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("tom"))
                 .andReturn().getResponse().getContentAsString();
-
         log.info(result);
     }
 
@@ -70,7 +67,6 @@ public class UserControllerTest {
 
     @Test
     public void createSuccess() throws Exception {
-
         Date date = new Date();
         log.info(String.valueOf(date.getTime()));
         String content = "{\"username\":\"tom\",\"password\":null,\"birthday\":" + date.getTime() + "}";
@@ -80,13 +76,11 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
-
         log.info(result);
     }
 
     @Test
     public void updateSuccess() throws Exception {
-
         Date date = new Date(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         log.info(String.valueOf(date.getTime()));
         String content = "{\"id\":\"1\", \"username\":\"tom\",\"password\":null,\"birthday\":" + date.getTime() + "}";
@@ -96,7 +90,6 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
                 .andReturn().getResponse().getContentAsString();
-
         log.info(result);
     }
 

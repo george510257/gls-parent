@@ -14,7 +14,6 @@ import java.util.List;
  * @author xuxueli 2017-07-28 22:14:52
  */
 public class AdminApiClient implements AdminApi {
-
     private final int timeout = 3;
     private String addressUrl;
     private String accessToken;
@@ -25,7 +24,6 @@ public class AdminApiClient implements AdminApi {
     public AdminApiClient(String addressUrl, String accessToken) {
         this.addressUrl = addressUrl;
         this.accessToken = accessToken;
-
         // valid
         if (!this.addressUrl.endsWith("/")) {
             this.addressUrl = this.addressUrl + "/";
@@ -46,5 +44,4 @@ public class AdminApiClient implements AdminApi {
     public Result<String> registryRemove(RegistryModel registryModel) {
         return JobRemotingUtil.postBody(addressUrl + "api/registryRemove", accessToken, timeout, registryModel, String.class);
     }
-
 }

@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class CaptchaEntity {
-
     private String code;
-
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime expireTime;

@@ -13,7 +13,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PermissionLimit {
-
     /**
      * 登录拦截 (默认拦截)
      */
@@ -25,5 +24,4 @@ public @interface PermissionLimit {
      * @return
      */
     boolean administer() default false;
-
 }

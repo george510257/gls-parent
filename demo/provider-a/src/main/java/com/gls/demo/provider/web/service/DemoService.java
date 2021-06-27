@@ -8,7 +8,6 @@ import java.util.List;
  * @author george
  */
 public interface DemoService {
-
     /**
      * demo 查询请求
      *

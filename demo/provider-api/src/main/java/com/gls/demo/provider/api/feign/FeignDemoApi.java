@@ -10,7 +10,6 @@ import java.util.List;
  */
 @RequestMapping(value = "/provider/demoRemote")
 public interface FeignDemoApi {
-
     /**
      * demo 查询请求
      *

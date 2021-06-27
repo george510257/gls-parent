@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 @EnableConfigurationProperties(CaptchaProperties.class)
 public class SecurityCaptchaConfig {
-
     @Bean
     @ConditionalOnMissingBean(ImagesCaptchaGenerator.class)
     public ImagesCaptchaGenerator imagesCaptchaGenerator(CaptchaProperties captchaProperties) {
@@ -40,7 +39,6 @@ public class SecurityCaptchaConfig {
     @Configuration
     @ConditionalOnProperty(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".captcha", name = "repository-type", havingValue = "redis", matchIfMissing = true)
     public static class RedisCaptchaRepositoryConfig {
-
         @Bean
         @ConditionalOnMissingBean(CaptchaRepository.class)
         public CaptchaRepository captchaRepository(RedisHelper redisHelper, CaptchaProperties captchaProperties) {
@@ -51,12 +49,10 @@ public class SecurityCaptchaConfig {
     @Configuration
     @ConditionalOnProperty(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".captcha", name = "repository-type", havingValue = "session")
     public static class SessionCaptchaRepositoryConfig {
-
         @Bean
         @ConditionalOnMissingBean(CaptchaRepository.class)
         public CaptchaRepository captchaRepository() {
             return new SessionCaptchaRepository();
         }
-
     }
 }

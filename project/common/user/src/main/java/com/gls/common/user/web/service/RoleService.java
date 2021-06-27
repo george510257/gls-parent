@@ -8,7 +8,6 @@ import java.util.List;
  * @author george
  */
 public interface RoleService {
-
     /**
      * 加载角色信息
      *

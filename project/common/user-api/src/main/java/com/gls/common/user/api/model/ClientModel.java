@@ -13,7 +13,6 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ClientModel extends BaseModel {
-
     private String clientId;
     private String clientSecret;
     private List<String> scope;
@@ -25,5 +24,4 @@ public class ClientModel extends BaseModel {
     private Integer accessTokenValiditySeconds;
     private Integer refreshTokenValiditySeconds;
     private Map<String, Object> additionalInformation;
-
 }

@@ -7,7 +7,6 @@ import java.util.Map;
  * @author george
  */
 public interface JobIndexService {
-
     /**
      * get Dashboard Info
      *

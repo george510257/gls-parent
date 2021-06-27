@@ -14,9 +14,7 @@ import java.util.Properties;
  * @author george
  */
 public class YamlPropertySourceFactory extends DefaultPropertySourceFactory {
-
     private static final String YML_SUFFIX = ".yml";
-
     private static final String YAML_SUFFIX = ".yaml";
 
     @Override

@@ -6,7 +6,6 @@ import com.gls.security.captcha.web.entity.CaptchaEntity;
  * @author george
  */
 public interface CaptchaRepository {
-
     /**
      * 保存验证码
      *

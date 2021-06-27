@@ -14,9 +14,7 @@ import java.io.IOException;
  */
 @Slf4j
 public class DefaultExpiredSessionStrategy implements SessionInformationExpiredStrategy {
-
     private final SecurityProperties securityProperties;
-
     private final SimpleRedirectSessionInformationExpiredStrategy simpleRedirectSessionInformationExpiredStrategy;
 
     public DefaultExpiredSessionStrategy(SecurityProperties securityProperties) {

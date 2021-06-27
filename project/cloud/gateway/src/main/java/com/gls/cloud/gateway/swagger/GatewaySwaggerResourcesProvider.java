@@ -20,14 +20,11 @@ import java.util.Map;
 @Primary
 @Slf4j
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
-
     public static final String API_URI = "/v3/api-docs";
     private static final Map<String, SwaggerResource> SWAGGER_RESOURCES = new HashMap<>();
     private final RouteDefinitionLocator routeLocator;
-
     @Value("${spring.cloud.gateway.discovery.locator.route-id-prefix}")
     private String routeIdPrefix;
-
     @Value("${spring.application.name}")
     private String gatewayName;
 
@@ -39,10 +36,8 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
     private void loadSwaggerResources() {
         // 从DiscoveryClientRouteDefinitionLocator 中取出routes，构造成swaggerResource
         routeLocator.getRouteDefinitions().subscribe(routeDefinition -> {
-
             String name = routeDefinition.getId().substring(routeIdPrefix.length());
             String location = routeDefinition.getPredicates().get(0).getArgs().get("pattern").replace("/**", API_URI);
-
             if (name.startsWith(routeIdPrefix)) {
                 SWAGGER_RESOURCES.put(name, swaggerResource(name, location));
             }

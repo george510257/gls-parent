@@ -7,12 +7,8 @@ import lombok.Data;
  */
 @Data
 public class SocialProperties {
-
     private String authorizationRequestBaseUri;
-
     private String authorizationResponseBaseUri;
-
     private String loginPage;
-
     private String loginProcessingUrl;
 }

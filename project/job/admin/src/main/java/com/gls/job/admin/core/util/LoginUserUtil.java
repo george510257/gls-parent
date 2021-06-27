@@ -18,7 +18,6 @@ import java.util.Objects;
  * @author george
  */
 public class LoginUserUtil {
-
     private static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 
     public static void saveLoginUser(JobUser jobUser, boolean ifRemember) {

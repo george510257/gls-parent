@@ -13,7 +13,6 @@ import java.util.List;
  * @author george
  */
 public interface JobInfoRepository extends BaseEntityRepository<JobInfoEntity>, JobInfoCustomRepository {
-
     /**
      * get By JobGroupId
      *
@@ -35,5 +34,4 @@ public interface JobInfoRepository extends BaseEntityRepository<JobInfoEntity>, 
             "order by t.id asc " +
             "limit :size", nativeQuery = true)
     List<JobInfoEntity> getScheduleJob(@Param("triggerNextTime") Date triggerNextTime, @Param("size") int size);
-
 }

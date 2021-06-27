@@ -15,11 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CallbackModel implements Serializable {
-
     private Long logId;
     private Date logDateTime;
-
     private Integer handleCode;
     private String handleMsg;
-
 }

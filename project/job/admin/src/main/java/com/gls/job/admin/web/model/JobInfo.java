@@ -17,12 +17,10 @@ import java.util.Date;
  */
 @Data
 public class JobInfo {
-
     /**
      * 主键ID
      */
     private Long id;
-
     /**
      * 执行器主键ID
      */
@@ -30,44 +28,36 @@ public class JobInfo {
     private Long jobGroup;
     @NotBlank
     private String jobDesc;
-
     private Date addTime;
     private Date updateTime;
-
     /**
      * 负责人
      */
     @NotBlank
     private String author;
-
     /**
      * 报警邮件
      */
     private String alarmEmail;
-
     /**
      * 调度类型
      */
     @NotBlank
     private ScheduleType scheduleType;
-
     /**
      * 调度配置，值含义取决于调度类型
      */
     private String scheduleConf;
-
     /**
      * 调度过期策略
      */
     @NotBlank
     private MisfireStrategy misfireStrategy;
-
     /**
      * 执行器路由策略
      */
     @NotBlank
     private ExecutorRouteStrategy executorRouteStrategy;
-
     /**
      * 执行器，任务Handler名称
      */
@@ -110,7 +100,6 @@ public class JobInfo {
      * 子任务ID，多个逗号分隔
      */
     private String childJobId;
-
     /**
      * 调度状态：0-停止，1-运行
      */
@@ -123,5 +112,4 @@ public class JobInfo {
      * 下次调度时间
      */
     private long triggerNextTime;
-
 }

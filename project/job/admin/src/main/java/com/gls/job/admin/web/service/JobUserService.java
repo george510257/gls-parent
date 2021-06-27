@@ -8,7 +8,6 @@ import java.util.Map;
  * @author georg2
  */
 public interface JobUserService {
-
     /**
      * login
      *

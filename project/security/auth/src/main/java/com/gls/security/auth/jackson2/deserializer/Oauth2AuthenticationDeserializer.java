@@ -17,18 +17,14 @@ import java.io.IOException;
  * @author george
  */
 public class Oauth2AuthenticationDeserializer extends JsonDeserializer<OAuth2Authentication> {
-
     @Override
     public OAuth2Authentication deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-
         ObjectMapper objectMapper = (ObjectMapper) p.getCodec();
         JsonNode jsonNode = objectMapper.readTree(p);
-
         // storedRequest
         JsonNode storedRequestJsonNode = jsonNode.get("storedRequest");
         OAuth2Request storedRequest = objectMapper.readValue(storedRequestJsonNode.traverse(objectMapper), new TypeReference<OAuth2Request>() {
         });
-
         // userAuthentication
         JsonNode userAuthenticationJsonNode = jsonNode.get("userAuthentication");
         Authentication userAuthentication = null;
@@ -36,9 +32,7 @@ public class Oauth2AuthenticationDeserializer extends JsonDeserializer<OAuth2Aut
             userAuthentication = objectMapper.readValue(userAuthenticationJsonNode.traverse(objectMapper), new TypeReference<Authentication>() {
             });
         }
-
         OAuth2Authentication auth2Authentication = new OAuth2Authentication(storedRequest, userAuthentication);
-
         // details
         JsonNode detailsJsonNode = jsonNode.get("details");
         if (detailsJsonNode != null && !detailsJsonNode.isMissingNode()) {

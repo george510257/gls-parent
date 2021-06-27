@@ -9,7 +9,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  */
 @NoRepositoryBean
 public interface TriggerRepository<Trigger extends BaseTriggerEntity> extends BaseEntityRepository<Trigger> {
-
     /**
      * 通过name和group获取entity对象
      *

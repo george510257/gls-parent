@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class JobLogReportConverter implements BaseConverter<JobLogReportEntity, JobLogReport> {
-
     @Override
     public JobLogReport copySourceToTarget(JobLogReportEntity jobLogReportEntity, JobLogReport jobLogReport) {
         jobLogReport.setId(jobLogReportEntity.getId());

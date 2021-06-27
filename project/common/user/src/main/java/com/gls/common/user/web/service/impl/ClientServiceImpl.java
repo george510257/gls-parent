@@ -24,19 +24,14 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 @CacheConfig(cacheNames = "client")
 public class ClientServiceImpl implements ClientService {
-
     @Resource
     private ClientModel defaultClientModel;
-
     @Resource
     private PasswordEncoder passwordEncoder;
-
     @Resource
     private RoleService roleService;
-
     @Resource
     private ClientRepository clientRepository;
-
     @Resource
     private ClientConverter clientConverter;
 

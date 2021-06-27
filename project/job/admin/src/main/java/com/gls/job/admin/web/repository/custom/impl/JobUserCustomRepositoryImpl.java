@@ -22,7 +22,6 @@ import java.util.List;
  */
 @Repository("jobUserCustomRepository")
 public class JobUserCustomRepositoryImpl extends BaseRepositoryImpl<JobUserEntity, Long> implements JobUserCustomRepository {
-
     public JobUserCustomRepositoryImpl(EntityManager em) {
         super(JobUserEntity.class, em);
     }

@@ -26,7 +26,6 @@ import java.util.Set;
 @Slf4j
 @Component
 public class EmailJobAlarm implements JobAlarm {
-
     @Resource
     private JavaMailSender mailSender;
     @Resource
@@ -58,14 +57,11 @@ public class EmailJobAlarm implements JobAlarm {
 
     @Override
     public boolean doAlarm(JobLogEntity jobLog) {
-
         JobInfoEntity jobInfo = jobLog.getJobInfo();
         JobGroupEntity jobGroup = jobInfo.getJobGroup();
         boolean alarmResult = true;
-
         // send monitor email
         if (jobInfo.getAlarmEmail() != null && jobInfo.getAlarmEmail().trim().length() > 0) {
-
             // alarmContent
             String alarmContent = "Alarm Job LogId=" + jobLog.getId();
             if (!jobLog.getTriggerCode().equals(Result.SUCCESS_CODE)) {
@@ -74,7 +70,6 @@ public class EmailJobAlarm implements JobAlarm {
             if (jobLog.getHandleCode() > 0 && !jobLog.getHandleCode().equals(Result.SUCCESS_CODE)) {
                 alarmContent += "<br>HandleCode=" + jobLog.getHandleMsg();
             }
-
             // email info
             String personal = "分布式任务调度平台GLS-JOB";
             String title = "任务调度中心监控报警";
@@ -83,31 +78,23 @@ public class EmailJobAlarm implements JobAlarm {
                     jobInfo.getId(),
                     jobInfo.getJobDesc(),
                     alarmContent);
-
             Set<String> emailSet = new HashSet<>(Arrays.asList(jobInfo.getAlarmEmail().split(",")));
             for (String email : emailSet) {
-
                 // make mail
                 try {
                     MimeMessage mimeMessage = mailSender.createMimeMessage();
-
                     MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
                     helper.setFrom(jobAdminProperties.getEmailFrom(), personal);
                     helper.setTo(email);
                     helper.setSubject(title);
                     helper.setText(content, true);
-
                     mailSender.send(mimeMessage);
                 } catch (Exception e) {
                     log.error(">>>>>>>>>>> gls-job, job fail alarm email send error, JobLogId:{}", jobLog.getId(), e);
-
                     alarmResult = false;
                 }
-
             }
         }
-
         return alarmResult;
     }
-
 }

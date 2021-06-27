@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup> {
-
     @Override
     public JobGroup copySourceToTarget(JobGroupEntity jobGroupEntity, JobGroup jobGroup) {
         jobGroup.setId(jobGroupEntity.getId());

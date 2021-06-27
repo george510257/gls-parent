@@ -15,13 +15,11 @@ import java.util.Map;
  */
 @Component
 public class AuthorizeRequestsCustomizer implements Customizer<ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry> {
-
     @Resource
     private PermitAllManager permitAllManager;
 
     @Override
     public void customize(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry) {
-
         Map<String, HttpMethod> permitAllRequestMatchers = permitAllManager.getPermitAllRequestMatchers();
         permitAllRequestMatchers.forEach((key, value) -> {
             if (value != null) {
@@ -32,5 +30,4 @@ public class AuthorizeRequestsCustomizer implements Customizer<ExpressionUrlAuth
         });
         registry.anyRequest().access("@permissionService.hasPermission(authentication)");
     }
-
 }

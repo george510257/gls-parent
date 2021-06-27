@@ -16,10 +16,8 @@ import java.util.HashMap;
  */
 @Component
 public class CookieInterceptor implements AsyncHandlerInterceptor {
-
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
         // cookie
         if (modelAndView != null && request.getCookies() != null && request.getCookies().length > 0) {
             HashMap<String, Cookie> cookieMap = new HashMap<>();
@@ -28,7 +26,5 @@ public class CookieInterceptor implements AsyncHandlerInterceptor {
             }
             modelAndView.addObject("cookieMap", cookieMap);
         }
-
     }
-
 }

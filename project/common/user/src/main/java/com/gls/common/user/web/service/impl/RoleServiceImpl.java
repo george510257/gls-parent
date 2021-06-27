@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Service(value = "roleService")
 @Transactional(rollbackFor = Exception.class)
 public class RoleServiceImpl implements RoleService {
-
     @Resource
     private RoleRepository roleRepository;
 

@@ -10,7 +10,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum GlueType {
-
     /**
      *
      */
@@ -21,10 +20,8 @@ public enum GlueType {
     GLUE_PHP("GLUE(PHP)", true, "php", ".php"),
     GLUE_NODEJS("GLUE(Nodejs)", true, "node", ".js"),
     GLUE_POWERSHELL("GLUE(PowerShell)", true, "powershell", ".ps1");
-
     private final String desc;
     private final boolean isScript;
     private final String cmd;
     private final String suffix;
-
 }

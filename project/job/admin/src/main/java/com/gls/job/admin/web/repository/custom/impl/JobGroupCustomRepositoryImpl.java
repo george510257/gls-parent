@@ -21,7 +21,6 @@ import java.util.List;
  */
 @Repository("jobGroupCustomRepository")
 public class JobGroupCustomRepositoryImpl extends BaseRepositoryImpl<JobGroupEntity, Long> implements JobGroupCustomRepository {
-
     public JobGroupCustomRepositoryImpl(EntityManager em) {
         super(JobGroupEntity.class, em);
     }

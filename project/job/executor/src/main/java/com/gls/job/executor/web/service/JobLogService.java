@@ -9,13 +9,10 @@ import java.util.Date;
  * @author george
  */
 public interface JobLogService {
-
     /**
      * logFileClean
-     *
-     * @param logRetentionDays
      */
-    void logFileClean(int logRetentionDays);
+    void logFileClean();
 
     /**
      * read Log

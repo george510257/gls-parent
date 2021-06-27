@@ -13,7 +13,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Component
 public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
-
     @Resource
     private Map<String, JobAlarm> jobAlarmMap;
 
@@ -33,7 +32,6 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
 
     @Override
     protected void delete(JobAlarm oldValue, String reason) {
-
     }
 
     @Override

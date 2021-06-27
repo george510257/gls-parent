@@ -13,7 +13,6 @@ import java.util.Map;
  */
 @Component
 public class DaemonHolder extends BaseHolder<String, Daemon<? extends BaseThread>> {
-
     @Resource
     private Map<String, BaseThread> daemonThreads;
 

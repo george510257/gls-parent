@@ -14,10 +14,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LogResultModel implements Serializable {
-
     private Integer fromLineNum;
     private Integer toLineNum;
     private String logContent;
     private Boolean isEnd;
-
 }

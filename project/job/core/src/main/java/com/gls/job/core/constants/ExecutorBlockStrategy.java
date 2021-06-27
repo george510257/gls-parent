@@ -10,7 +10,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ExecutorBlockStrategy {
-
     /**
      *
      */
@@ -18,7 +17,5 @@ public enum ExecutorBlockStrategy {
     /*CONCURRENT_EXECUTION("并行"),*/
     DISCARD_LATER("丢弃后续调度"),
     COVER_EARLY("覆盖之前调度");
-
     private final String title;
-
 }

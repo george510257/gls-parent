@@ -6,7 +6,6 @@ package com.gls.security.captcha.web.service;
  * @author george
  */
 public interface CaptchaService {
-
     /**
      * 创建校验码
      *
@@ -25,5 +24,4 @@ public interface CaptchaService {
      * @return
      */
     boolean isValidate();
-
 }

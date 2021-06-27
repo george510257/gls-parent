@@ -18,7 +18,6 @@ import java.util.Properties;
 @Slf4j
 @AllArgsConstructor
 public class KaptchaImagesCaptchaGenerator implements ImagesCaptchaGenerator {
-
     private final CaptchaProperties captchaProperties;
 
     @Override
@@ -67,7 +66,6 @@ public class KaptchaImagesCaptchaGenerator implements ImagesCaptchaGenerator {
         properties.setProperty("kaptcha.background.clear.to", "white");
         // 文字间隔
         properties.setProperty("kaptcha.textproducer.char.space", "4");
-
         Config config = new Config(properties);
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         defaultKaptcha.setConfig(config);

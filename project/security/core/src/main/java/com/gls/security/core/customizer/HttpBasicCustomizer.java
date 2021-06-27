@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class HttpBasicCustomizer implements Customizer<HttpBasicConfigurer<HttpSecurity>> {
-
     @Override
     public void customize(HttpBasicConfigurer<HttpSecurity> httpBasicConfigurer) {
-
     }
 }

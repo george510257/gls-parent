@@ -11,13 +11,11 @@ import java.util.Map;
  */
 @Component
 public class ExecutorRouterHolder extends BaseHolder<String, ExecutorRouter> {
-
     @Resource
     private Map<String, ExecutorRouter> executorRouterMap;
 
     @Override
     protected void delete(ExecutorRouter oldValue, String reason) {
-
     }
 
     @Override

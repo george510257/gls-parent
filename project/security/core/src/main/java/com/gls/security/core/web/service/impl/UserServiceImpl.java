@@ -20,11 +20,8 @@ import java.util.Set;
 @Slf4j
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private static final String ADMIN_USERNAME = "admin";
-
     private static final String ADMIN_GRANTED_AUTHORITY = "admin";
-
     private final PasswordEncoder passwordEncoder;
 
     @Override

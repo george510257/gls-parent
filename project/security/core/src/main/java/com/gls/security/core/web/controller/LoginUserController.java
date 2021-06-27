@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/loginUser")
 public class LoginUserController {
-
     @Resource
     private UserService userService;
 

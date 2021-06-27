@@ -12,7 +12,6 @@ import java.util.Map;
  * @author george
  */
 public interface JobLogService {
-
     /**
      * callback
      *

@@ -6,7 +6,6 @@ import com.gls.job.admin.web.entity.JobLogEntity;
  * @author xuxueli 2020-01-19
  */
 public interface JobAlarm {
-
     /**
      * do Alarm
      *
@@ -14,5 +13,4 @@ public interface JobAlarm {
      * @return
      */
     boolean doAlarm(JobLogEntity jobLogEntity);
-
 }

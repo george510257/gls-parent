@@ -28,25 +28,18 @@ import java.util.Collections;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
     @Resource
     private AuthenticationManager authenticationManager;
-
     @Resource
     private ClientService clientService;
-
     @Resource
     private UserService userService;
-
     @Resource
     private TokenStore tokenStore;
-
     @Autowired(required = false)
     private JwtAccessTokenConverter jwtAccessTokenConverter;
-
     @Resource
     private ImagesCaptchaService imagesCaptchaService;
-
     @Resource
     private SmsCaptchaService smsCaptchaService;
 
@@ -69,12 +62,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 //指定token存储位置
                 .tokenStore(tokenStore);
-
         if (jwtAccessTokenConverter != null) {
             //配置JwtAccessToken转换器
             endpoints.tokenEnhancer(jwtAccessTokenConverter);
         }
-
         endpoints.tokenGranter(getTokenGranter(endpoints));
     }
 

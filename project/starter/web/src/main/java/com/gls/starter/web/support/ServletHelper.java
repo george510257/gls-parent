@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
  * @author george
  */
 public class ServletHelper {
-
     public static ServletWebRequest loadServletWebRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert servletRequestAttributes != null;

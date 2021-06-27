@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResp
  */
 @SuppressWarnings("AlibabaClassNamingShouldBeCamel")
 public class OAuth2LoginModule extends SimpleModule {
-
     public OAuth2LoginModule() {
         super(OAuth2LoginModule.class.getName(), new Version(1, 0, 0, null, null, null));
     }

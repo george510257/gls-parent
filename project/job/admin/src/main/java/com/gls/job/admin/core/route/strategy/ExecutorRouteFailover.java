@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class ExecutorRouteFailover implements ExecutorRouter {
-
     @Resource
     private ExecutorApiHolder executorApiHolder;
 
@@ -37,6 +36,5 @@ public class ExecutorRouteFailover implements ExecutorRouter {
             log.error(e.getMessage(), e);
         }
         return null;
-
     }
 }

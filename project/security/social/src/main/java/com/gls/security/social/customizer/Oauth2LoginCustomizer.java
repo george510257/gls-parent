@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Oauth2LoginCustomizer implements Customizer<OAuth2LoginConfigurer<HttpSecurity>> {
-
     @Override
     public void customize(OAuth2LoginConfigurer<HttpSecurity> oAuth2LoginConfigurer) {
     }

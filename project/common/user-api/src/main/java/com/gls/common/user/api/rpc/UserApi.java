@@ -6,7 +6,6 @@ import com.gls.common.user.api.model.UserModel;
  * @author george
  */
 public interface UserApi {
-
     /**
      * 修改用户密码
      *
@@ -23,5 +22,4 @@ public interface UserApi {
      * @return 用户信息
      */
     UserModel loadUserByUsername(String username);
-
 }

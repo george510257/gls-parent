@@ -11,7 +11,6 @@ import java.util.TimeZone;
  */
 @Component
 public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarIntervalTriggerEntity, CalendarIntervalTriggerImpl> {
-
     @Override
     public CalendarIntervalTriggerImpl copySourceToTarget(CalendarIntervalTriggerEntity entity, CalendarIntervalTriggerImpl trigger) {
         trigger.setRepeatIntervalUnit(entity.getIntervalUnit());
@@ -31,5 +30,4 @@ public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarI
         entity.setSkipDay(trigger.isSkipDayIfHourDoesNotExist());
         return super.copyTargetToSource(trigger, entity);
     }
-
 }

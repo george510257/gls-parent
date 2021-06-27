@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/log")
 public class JobLogController {
-
     @Resource
     private JobLogService jobLogService;
 

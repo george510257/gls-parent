@@ -13,7 +13,6 @@ import javax.annotation.Resource;
  */
 @Component
 public class JobLogConverter implements BaseConverter<JobLogEntity, JobLog> {
-
     @Resource
     private JobInfoRepository jobInfoRepository;
 

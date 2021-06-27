@@ -14,7 +14,6 @@ import org.quartz.impl.triggers.*;
 @Getter
 @AllArgsConstructor
 public enum MisfireInstruction {
-
     /**
      * CalendarInterval
      */
@@ -22,7 +21,6 @@ public enum MisfireInstruction {
     CALENDAR_INTERVAL_IGNORE_MISFIRE_POLICY(CalendarIntervalTriggerImpl.class, CalendarIntervalTrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY),
     CALENDAR_INTERVAL_DO_NOTHING(CalendarIntervalTriggerImpl.class, CalendarIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING),
     CALENDAR_INTERVAL_FIRE_ONCE_NOW(CalendarIntervalTriggerImpl.class, CalendarIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW),
-
     /**
      * Cron
      */
@@ -30,7 +28,6 @@ public enum MisfireInstruction {
     CRON_IGNORE_MISFIRE_POLICY(CronTriggerImpl.class, CronTrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY),
     CRON_DO_NOTHING(CronTriggerImpl.class, CronTrigger.MISFIRE_INSTRUCTION_DO_NOTHING),
     CRON_FIRE_ONCE_NOW(CronTriggerImpl.class, CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW),
-
     /**
      * DailyTimeInterval
      */
@@ -38,7 +35,6 @@ public enum MisfireInstruction {
     DAILY_TIME_INTERVAL_IGNORE_MISFIRE_POLICY(DailyTimeIntervalTriggerImpl.class, DailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY),
     DAILY_TIME_INTERVAL_DO_NOTHING(DailyTimeIntervalTriggerImpl.class, DailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_DO_NOTHING),
     DAILY_TIME_INTERVAL_FIRE_ONCE_NOW(DailyTimeIntervalTriggerImpl.class, DailyTimeIntervalTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW),
-
     /**
      * Simple
      */
@@ -50,8 +46,6 @@ public enum MisfireInstruction {
     SIMPLE_RESCHEDULE_NEXT_WITH_REMAINING_COUNT(SimpleTriggerImpl.class, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT),
     SIMPLE_RESCHEDULE_NEXT_WITH_EXISTING_COUNT(SimpleTriggerImpl.class, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_EXISTING_COUNT),
     ;
-
     private final Class<? extends AbstractTrigger> typeClass;
     private final int code;
-
 }

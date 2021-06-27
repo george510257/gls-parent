@@ -15,7 +15,6 @@ import java.util.concurrent.*;
 @Slf4j
 @Component
 public class QueueListener implements ApplicationListener<ContextRefreshedEvent> {
-
     @Resource
     private MockQueue mockQueue;
 
@@ -38,7 +37,6 @@ public class QueueListener implements ApplicationListener<ContextRefreshedEvent>
                         e.printStackTrace();
                     }
                 }
-
             }
         });
         singleThreadPool.shutdown();

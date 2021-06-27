@@ -10,9 +10,7 @@ import org.springframework.context.ApplicationContext;
  * @author george
  */
 public class RpcServiceHelper {
-
     private final ApplicationContext applicationContext;
-
     private final RegistryConfig registryConfig;
 
     public RpcServiceHelper(ApplicationContext applicationContext, RegistryConfig registryConfig) {

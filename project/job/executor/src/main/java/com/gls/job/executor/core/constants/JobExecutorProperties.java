@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = JobExecutorProperties.PREFIX, ignoreInvalidFields = true)
 public class JobExecutorProperties {
-
     public static final String PREFIX = FrameworkConstants.BASE_PROPERTIES_PREFIX + ".job.executor";
-
     private String adminAddresses;
     private String accessToken;
     private String appname;

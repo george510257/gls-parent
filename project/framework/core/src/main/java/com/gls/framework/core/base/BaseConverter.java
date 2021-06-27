@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * @author george
  */
 public interface BaseConverter<Source, Target> {
-
     //====sourceToTarget====
 
     /**
@@ -83,7 +82,6 @@ public interface BaseConverter<Source, Target> {
      * @return
      */
     Target copySourceToTarget(Source source, Target target);
-
     //====targetToSource====
 
     /**
@@ -154,5 +152,4 @@ public interface BaseConverter<Source, Target> {
      * @return
      */
     Source copyTargetToSource(Target target, Source source);
-
 }

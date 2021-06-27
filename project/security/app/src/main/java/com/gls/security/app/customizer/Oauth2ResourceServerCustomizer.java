@@ -14,7 +14,6 @@ import javax.annotation.Resource;
  */
 @Component
 public class Oauth2ResourceServerCustomizer implements Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> {
-
     @Resource
     private SecurityProperties securityProperties;
 
@@ -26,6 +25,5 @@ public class Oauth2ResourceServerCustomizer implements Customizer<OAuth2Resource
         } else {
             oAuth2ResourceServerConfigurer.jwt();
         }
-
     }
 }

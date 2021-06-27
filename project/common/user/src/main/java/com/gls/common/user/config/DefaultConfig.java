@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableConfigurationProperties(UserDefaultProperties.class)
 public class DefaultConfig {
-
     @Resource
     private UserDefaultProperties userDefaultProperties;
 

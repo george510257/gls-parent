@@ -16,7 +16,6 @@ import java.util.Map;
 @Slf4j
 @Service(value = "demoService")
 public class DemoServiceImpl implements DemoService {
-
     private static final Map<Integer, DemoModel> DEMO_MODEL_MAP = new HashMap<>();
 
     @Override

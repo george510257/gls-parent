@@ -13,7 +13,6 @@ import java.util.List;
  */
 @DubboService(group = "gls-demo-provider-a")
 public class DubboDemoRpcService implements DubboDemoApi {
-
     @Resource
     private DemoService demoService;
 

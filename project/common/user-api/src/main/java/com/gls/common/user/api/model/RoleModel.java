@@ -10,6 +10,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class RoleModel extends BaseModel {
-
     private String role;
 }

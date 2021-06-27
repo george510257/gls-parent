@@ -25,20 +25,17 @@ import java.util.List;
 @Slf4j
 @ControllerAdvice(basePackages = FrameworkConstants.BASE_PACKAGE)
 public class ResultHandler implements ResponseBodyAdvice<Object> {
-
     @Resource
     private ResultProperties resultProperties;
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         List<String> resultMethods = resultProperties.getMethods();
-
         Method method = returnType.getMethod();
         assert method != null;
         String className = method.getDeclaringClass().getName();
         String methodName = method.getName();
         String name = className + "#" + methodName;
-
         for (String resultMethod : resultMethods) {
             if (name.startsWith(resultMethod)) {
                 return true;
@@ -63,7 +60,6 @@ public class ResultHandler implements ResponseBodyAdvice<Object> {
         } else {
             result = new Result(body);
         }
-
         if (log.isDebugEnabled()) {
             log.debug("result: {}", JSON.toJSONString(result));
         }
@@ -72,5 +68,4 @@ public class ResultHandler implements ResponseBodyAdvice<Object> {
         }
         return result;
     }
-
 }

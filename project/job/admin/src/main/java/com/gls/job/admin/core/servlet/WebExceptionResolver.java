@@ -22,15 +22,12 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class WebExceptionResolver implements HandlerExceptionResolver {
-
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response, Object handler, Exception ex) {
-
         if (!(ex instanceof JobException)) {
             log.error("WebExceptionResolver:{}", ex);
         }
-
         // if json
         boolean isJson = false;
         if (handler instanceof HandlerMethod) {
@@ -40,10 +37,8 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
                 isJson = true;
             }
         }
-
         // error result
         Result<String> errorResult = new Result<String>(Result.FAIL_CODE, ex.toString().replaceAll("\n", "<br/>"));
-
         // response
         ModelAndView mv = new ModelAndView();
         if (isJson) {
@@ -55,11 +50,9 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
             }
             return mv;
         } else {
-
             mv.addObject("exceptionMsg", errorResult.getMessage());
             mv.setViewName("/common/common.exception");
             return mv;
         }
     }
-
 }

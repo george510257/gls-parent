@@ -18,19 +18,15 @@ import java.util.concurrent.Callable;
 @RestController
 @RequestMapping("/async")
 public class AsyncController {
-
     @Resource
     private MockQueue mockQueue;
 
     @RequestMapping("/orderDeferredResult")
     public DeferredResult<String> orderDeferredResult() throws Exception {
         DeferredResult<String> result = new DeferredResult<>();
-
         log.info("主线程开始");
-
         String orderNumber = RandomStringUtils.randomNumeric(8);
         mockQueue.setPlaceOrder(orderNumber);
-
         DeferredResultHolder.addDeferredResult(orderNumber, result);
         return result;
     }

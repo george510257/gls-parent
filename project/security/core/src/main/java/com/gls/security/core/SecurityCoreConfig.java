@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ComponentScan
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityCoreConfig {
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();

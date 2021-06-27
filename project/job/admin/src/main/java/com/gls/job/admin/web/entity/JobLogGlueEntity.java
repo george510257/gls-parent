@@ -21,14 +21,11 @@ import javax.persistence.ManyToOne;
 @Data
 @Comment("Glue版本信息表")
 public class JobLogGlueEntity extends BaseEntity {
-
     @ManyToOne
     private JobInfoEntity jobInfo;
-
     @Comment("GLUE类型")
     @Enumerated(EnumType.STRING)
     private GlueType glueType;
     private String glueSource;
     private String glueRemark;
-
 }

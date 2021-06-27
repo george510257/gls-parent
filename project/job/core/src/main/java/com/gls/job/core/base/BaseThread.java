@@ -33,13 +33,11 @@ public abstract class BaseThread extends Thread {
         }
         // execute
         while (!stop) {
-
             try {
                 doExecute();
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
-
             try {
                 if (!stop) {
                     sleepExecute();
@@ -48,7 +46,6 @@ public abstract class BaseThread extends Thread {
                 log.error(e.getMessage(), e);
             }
         }
-
         // destroy
         try {
             destroyExecute();

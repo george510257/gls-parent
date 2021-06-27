@@ -8,7 +8,6 @@ import com.gls.job.core.api.model.*;
  * @date 17/3/1
  */
 public interface ExecutorApi {
-
     /**
      * beat
      *
@@ -47,5 +46,4 @@ public interface ExecutorApi {
      * @return
      */
     Result<LogResultModel> log(LogModel logModel);
-
 }

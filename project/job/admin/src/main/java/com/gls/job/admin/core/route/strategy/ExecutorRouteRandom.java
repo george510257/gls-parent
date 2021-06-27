@@ -12,12 +12,10 @@ import java.util.Random;
  */
 @Component
 public class ExecutorRouteRandom implements ExecutorRouter {
-
     private static final Random LOCAL_RANDOM = new Random();
 
     @Override
     public String route(Long jobId, List<String> addressList) {
         return addressList.get(LOCAL_RANDOM.nextInt(addressList.size()));
     }
-
 }

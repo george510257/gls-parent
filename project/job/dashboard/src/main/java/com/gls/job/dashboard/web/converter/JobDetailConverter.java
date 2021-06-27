@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  */
 @Component
 public class JobDetailConverter implements BaseConverter<JobDetailEntity, JobDetailImpl> {
-
     @Override
     public JobDetailImpl copySourceToTarget(JobDetailEntity jobDetailEntity, JobDetailImpl jobDetail) {
         jobDetail.setKey(new JobKey(jobDetailEntity.getName(), jobDetailEntity.getGroupName()));
@@ -42,7 +41,6 @@ public class JobDetailConverter implements BaseConverter<JobDetailEntity, JobDet
 
     private Map<String, String> getJobDataMap(JobDataMap jobDataMap) {
         return jobDataMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().toString()));
-
     }
 
     private Class<? extends Job> getJobClass(String jobClassName) {

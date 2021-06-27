@@ -4,7 +4,6 @@ package com.gls.job.core.base;
  * @author george
  */
 public abstract class BaseThreadLocalHolder<T> {
-
     private final InheritableThreadLocal<T> inheritableThreadLocal = new InheritableThreadLocal<>();
 
     public T get() {

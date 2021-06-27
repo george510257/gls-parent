@@ -10,7 +10,6 @@ import java.util.List;
  * @author george
  */
 public interface JobGroupRepository extends BaseEntityRepository<JobGroupEntity>, JobGroupCustomRepository {
-
     /**
      * find By AddressType Order By Appname Asc Title Asc Id Asc
      *
@@ -18,5 +17,4 @@ public interface JobGroupRepository extends BaseEntityRepository<JobGroupEntity>
      * @return
      */
     List<JobGroupEntity> getByAddressTypeOrderByAppnameAscTitleAscIdAsc(Boolean addressType);
-
 }

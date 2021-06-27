@@ -21,23 +21,17 @@ import java.util.Map;
 @Table(name = "JOB_DETAIL")
 @Comment("任务信息表")
 public class JobDetailEntity extends BaseEntity {
-
     @Comment("任务组")
     private String groupName = "DEFAULT";
-
     @Comment("描述")
     private String description;
-
     @Comment("任务类名")
     private String jobClassName;
-
     @Comment("任务参数")
     @ElementCollection
     private Map<String, String> jobDataMap;
-
     @Comment("是否应保持存储状态")
     private Boolean durability = false;
-
     @Comment("是否支持重试")
     private Boolean shouldRecover = false;
 }

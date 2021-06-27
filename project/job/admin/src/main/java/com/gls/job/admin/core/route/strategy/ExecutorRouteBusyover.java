@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class ExecutorRouteBusyover implements ExecutorRouter {
-
     @Resource
     private ExecutorApiHolder executorApiHolder;
 

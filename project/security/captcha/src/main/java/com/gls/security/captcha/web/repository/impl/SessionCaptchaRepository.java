@@ -12,7 +12,6 @@ import java.util.Locale;
  * @author george
  */
 public class SessionCaptchaRepository implements CaptchaRepository {
-
     private static final String SESSION_KEY_PREFIX = "SESSION_KEY_FOR_CODE_";
 
     @Override
@@ -33,5 +32,4 @@ public class SessionCaptchaRepository implements CaptchaRepository {
     private String getSessionKey(String type) {
         return SESSION_KEY_PREFIX + type.toUpperCase(Locale.ROOT);
     }
-
 }

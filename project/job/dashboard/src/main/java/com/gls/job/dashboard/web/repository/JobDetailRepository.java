@@ -7,7 +7,6 @@ import com.gls.starter.data.jpa.base.BaseEntityRepository;
  * @author george
  */
 public interface JobDetailRepository extends BaseEntityRepository<JobDetailEntity> {
-
     /**
      * 通过name和group获取entity对象
      *

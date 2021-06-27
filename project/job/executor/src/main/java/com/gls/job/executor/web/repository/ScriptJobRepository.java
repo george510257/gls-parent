@@ -8,7 +8,6 @@ import java.util.Date;
  * @author georg
  */
 public interface ScriptJobRepository {
-
     /**
      * 保存文件路径
      *

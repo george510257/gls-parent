@@ -14,10 +14,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JobLogReportThread extends BaseThread {
-
     @Resource
     private JobLogService jobLogService;
-
     private long lastCleanLogTime;
 
     @Override

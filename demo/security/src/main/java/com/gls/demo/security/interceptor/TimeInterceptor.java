@@ -15,18 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Component
 public class TimeInterceptor implements HandlerInterceptor {
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("TimeInterceptor preHandle");
-
         log.info("handler: {}", handler.getClass().getName());
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             log.info(handlerMethod.getBean().getClass().getName());
             log.info(handlerMethod.getMethod().getName());
         }
-
         request.setAttribute("startTime", System.currentTimeMillis());
         return true;
     }

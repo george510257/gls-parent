@@ -12,7 +12,6 @@ import javax.annotation.Resource;
  */
 @DubboService
 public class UserRpcService implements UserApi {
-
     @Resource
     private UserService userService;
 

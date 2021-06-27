@@ -11,6 +11,5 @@ import java.awt.image.BufferedImage;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ImagesCaptchaModel extends CaptchaModel {
-
     private transient BufferedImage images;
 }

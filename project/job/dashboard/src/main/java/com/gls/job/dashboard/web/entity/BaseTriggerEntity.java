@@ -21,30 +21,21 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 public abstract class BaseTriggerEntity extends BaseEntity {
-
     @Comment("触发器组")
     private String groupName = "DEFAULT";
-
     @Comment("描述")
     private String description;
-
     @Comment("开始时间")
     private Date startTime = new Date();
-
     @Comment("结束时间")
     private Date endTime;
-
     @Comment("")
     private Integer priority = 5;
-
     @Comment("")
     private String calendarName;
-
     @OneToOne
     private JobDetailEntity jobDetail;
-
     @Comment("失败说明")
     @Enumerated(EnumType.STRING)
     private MisfireInstruction misfireInstruction;
-
 }

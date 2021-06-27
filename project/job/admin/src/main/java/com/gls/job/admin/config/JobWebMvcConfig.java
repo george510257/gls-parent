@@ -15,7 +15,6 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class JobWebMvcConfig implements WebMvcConfigurer {
-
     @Resource
     private PermissionInterceptor permissionInterceptor;
     @Resource
@@ -26,5 +25,4 @@ public class JobWebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(permissionInterceptor).addPathPatterns("/**");
         registry.addInterceptor(cookieInterceptor).addPathPatterns("/**");
     }
-
 }

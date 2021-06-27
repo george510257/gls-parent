@@ -10,7 +10,6 @@ import java.util.List;
  * @author george
  */
 public class FeignDemoApiImpl implements FeignDemoApi {
-
     private final DemoModel ERROR_MODEL = new DemoModel(0, "error");
 
     @Override
@@ -35,6 +34,5 @@ public class FeignDemoApiImpl implements FeignDemoApi {
 
     @Override
     public void delete(Integer id) {
-
     }
 }

@@ -15,6 +15,5 @@ import java.util.List;
 @Component
 @ConfigurationProperties(prefix = FrameworkConstants.RESULT_PROPERTIES_PREFIX, ignoreInvalidFields = true)
 public class ResultProperties {
-
     private List<String> methods = new ArrayList<>();
 }

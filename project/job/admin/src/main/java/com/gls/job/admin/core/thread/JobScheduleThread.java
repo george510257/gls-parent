@@ -15,10 +15,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class JobScheduleThread extends BaseThread {
-
     @Resource
     private JobInfoService jobInfoService;
-
     private boolean preReadSuc;
     private long start;
 
@@ -46,6 +44,5 @@ public class JobScheduleThread extends BaseThread {
 
     @Override
     protected void destroyExecute() throws Exception {
-
     }
 }

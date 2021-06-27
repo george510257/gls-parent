@@ -19,13 +19,10 @@ import java.util.List;
 @Data
 @Comment("执行器信息表")
 public class JobGroupEntity extends BaseEntity {
-
     private String appname;
     private String title;
-
     @Comment("执行器地址类型：true=自动注册、false=手动录入")
     private Boolean addressType;
-
     @Comment("执行器地址列表")
     @ElementCollection
     private List<String> addressList;

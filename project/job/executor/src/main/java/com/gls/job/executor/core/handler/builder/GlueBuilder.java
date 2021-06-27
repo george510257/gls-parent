@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Component
 public class GlueBuilder {
-
     /**
      * groovy class loader
      */
@@ -64,7 +63,6 @@ public class GlueBuilder {
             // md5
             byte[] md5 = MessageDigest.getInstance("MD5").digest(codeSource.getBytes());
             String md5Str = new BigInteger(1, md5).toString(16);
-
             Class<?> clazz = classConcurrentHashMap.get(md5Str);
             if (clazz == null) {
                 clazz = groovyClassLoader.parseClass(codeSource);
@@ -85,20 +83,16 @@ public class GlueBuilder {
         if (instance == null) {
             return;
         }
-
         if (applicationContext == null) {
             return;
         }
-
         Field[] fields = instance.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
-
             Object fieldBean = null;
             // with bean-id, bean could be found by both @Resource and @Autowired, or bean could only be found by @Autowired
-
             if (AnnotationUtils.getAnnotation(field, Resource.class) != null) {
                 try {
                     Resource resource = AnnotationUtils.getAnnotation(field, Resource.class);
@@ -120,7 +114,6 @@ public class GlueBuilder {
                     fieldBean = applicationContext.getBean(field.getType());
                 }
             }
-
             if (fieldBean != null) {
                 field.setAccessible(true);
                 try {
@@ -131,5 +124,4 @@ public class GlueBuilder {
             }
         }
     }
-
 }

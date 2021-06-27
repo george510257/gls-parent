@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RedisHelper {
-
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     // =============================common============================
@@ -564,5 +563,4 @@ public class RedisHelper {
             return 0;
         }
     }
-
 }

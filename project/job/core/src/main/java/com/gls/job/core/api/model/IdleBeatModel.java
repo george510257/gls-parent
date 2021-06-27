@@ -13,7 +13,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IdleBeatModel implements Serializable {
-
     private Long jobId;
-
 }

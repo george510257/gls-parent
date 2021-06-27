@@ -24,17 +24,16 @@ import java.util.List;
 @Slf4j
 @Repository
 public class JobLogRepositoryImpl implements JobLogRepository {
-
     @Resource
     private JobExecutorProperties jobExecutorProperties;
 
     @Override
-    public void logFileClean(int logRetentionDays) {
+    public void logFileClean() {
         List<String> fileNames = FileUtil.listFileNames(jobExecutorProperties.getLogBasePath());
         fileNames.forEach(fileName -> {
             String name = fileName.replace(jobExecutorProperties.getLogBasePath().concat("/"), "");
             Date date = DateUtil.parseDate(name);
-            if (DateUtil.offsetDay(date, logRetentionDays + 1).getTime() < System.currentTimeMillis()) {
+            if (DateUtil.offsetDay(date, jobExecutorProperties.getLogRetentionDays() + 1).getTime() < System.currentTimeMillis()) {
                 FileUtil.del(fileName);
             }
         });

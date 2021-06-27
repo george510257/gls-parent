@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Component
 public class LoginUserHolder {
-
     @Resource
     private UserService userService;
 

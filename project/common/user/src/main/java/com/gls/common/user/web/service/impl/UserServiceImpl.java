@@ -23,19 +23,14 @@ import javax.annotation.Resource;
 @Transactional(rollbackFor = Exception.class)
 @CacheConfig(cacheNames = "user")
 public class UserServiceImpl implements UserService {
-
     @Resource
     private UserModel defaultUserModel;
-
     @Resource
     private PasswordEncoder passwordEncoder;
-
     @Resource
     private RoleService roleService;
-
     @Resource
     private UserRepository userRepository;
-
     @Resource
     private UserConverter userConverter;
 

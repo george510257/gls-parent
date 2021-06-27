@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @AllArgsConstructor
 public class RedisCaptchaRepository implements CaptchaRepository {
-
     private final RedisHelper redisHelper;
-
     private final CaptchaProperties captchaProperties;
 
     @Override

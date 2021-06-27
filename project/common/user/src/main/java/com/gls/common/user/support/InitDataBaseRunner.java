@@ -15,10 +15,8 @@ import javax.annotation.Resource;
 @Slf4j
 @Component
 public class InitDataBaseRunner implements ApplicationRunner {
-
     @Resource
     private UserService userService;
-
     @Resource
     private ClientService clientService;
 
@@ -26,7 +24,6 @@ public class InitDataBaseRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("初始化user信息--saveDefaultUser");
         userService.saveDefaultUser();
-
         log.info("初始化client信息--saveDefaultClient");
         clientService.saveDefaultClient();
     }

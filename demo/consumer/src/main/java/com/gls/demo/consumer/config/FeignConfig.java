@@ -21,19 +21,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Configuration
 @EnableFeignClients(basePackages = FeignConfig.FEIGN_BASE_PACKAGES)
 public class FeignConfig {
-
     public static final String FEIGN_BASE_PACKAGES = "com.gls.demo.consumer.web.service";
-
     public static final String PROVIDER_APPLICATION_NAME = "gls-demo-provider-a";
 
     @Bean
     public WebMvcRegistrations feignWebRegistrations() {
         return new WebMvcRegistrations() {
-
             @Override
             public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
                 return new RequestMappingHandlerMapping() {
-
                     @Override
                     protected boolean isHandler(Class<?> beanType) {
                         return super.isHandler(beanType)

@@ -18,10 +18,8 @@ import javax.persistence.Table;
 @Table(name = "CRON_TRIGGER")
 @Comment("Cron触发器信息表")
 public class CronTriggerEntity extends BaseTriggerEntity {
-
     @Comment("Cron表达式")
     private String cronExpression;
-
     @Comment("时区")
     private String timeZone;
 }

@@ -10,7 +10,6 @@ import java.util.Map;
  * @author george
  */
 public interface QuartzService {
-
     /**
      * 增加一个job
      *
@@ -97,5 +96,4 @@ public interface QuartzService {
      * @throws SchedulerException 定时任务异常
      */
     List<Map<String, Object>> queryRunJob() throws SchedulerException;
-
 }

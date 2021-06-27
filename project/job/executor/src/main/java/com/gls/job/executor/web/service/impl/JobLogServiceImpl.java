@@ -23,14 +23,14 @@ import java.util.Date;
 @Slf4j
 @Service
 public class JobLogServiceImpl implements JobLogService {
-
-    private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
+    @Resource
+    private JobContextHolder jobContextHolder;
     @Resource
     private JobLogRepository jobLogRepository;
 
     @Override
-    public void logFileClean(int logRetentionDays) {
-        jobLogRepository.logFileClean(logRetentionDays);
+    public void logFileClean() {
+        jobLogRepository.logFileClean();
     }
 
     @Override

@@ -13,8 +13,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DemoModel implements Serializable {
-
     private Integer id;
-
     private String name;
 }

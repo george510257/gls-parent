@@ -6,7 +6,6 @@ import org.springframework.security.core.AuthenticationException;
  * @author georg
  */
 public class CaptchaException extends AuthenticationException {
-
     public CaptchaException(String msg, Throwable t) {
         super(msg, t);
     }

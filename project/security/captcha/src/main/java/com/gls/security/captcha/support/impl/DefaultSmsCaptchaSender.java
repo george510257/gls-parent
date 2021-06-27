@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DefaultSmsCaptchaSender implements SmsCaptchaSender {
-
     @Override
     public void send(String mobile, String code) {
         log.warn("请配置真实的短信验证码发送器(SmsCodeSender)");

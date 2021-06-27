@@ -17,13 +17,10 @@ import javax.annotation.Resource;
 @Configuration
 @ComponentScan
 public class DataRedisConfig {
-
     @Resource
     private RedisConnectionFactory redisConnectionFactory;
-
     @Autowired(required = false)
     private StringRedisSerializer stringRedisSerializer;
-
     @Autowired(required = false)
     private GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer;
 
@@ -31,19 +28,16 @@ public class DataRedisConfig {
     public RedisTemplate<Object, Object> redisTemplate() {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-
         if (stringRedisSerializer == null) {
             stringRedisSerializer = new StringRedisSerializer();
         }
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-
         if (genericJackson2JsonRedisSerializer == null) {
             genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
         }
         redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
         redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }

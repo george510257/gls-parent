@@ -15,7 +15,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Component
 public class ExecutorRouteRound implements ExecutorRouter {
-
     private static final ConcurrentMap<Long, AtomicInteger> ROUTE_COUNT_EACH_JOB = new ConcurrentHashMap<>();
     private static long CACHE_VALID_TIME = 0;
 
@@ -25,7 +24,6 @@ public class ExecutorRouteRound implements ExecutorRouter {
             ROUTE_COUNT_EACH_JOB.clear();
             CACHE_VALID_TIME = System.currentTimeMillis() + 1000 * 60 * 60 * 24;
         }
-
         AtomicInteger count = ROUTE_COUNT_EACH_JOB.get(jobId);
         if (count == null || count.get() > 1000000) {
             // 初始化时主动Random一次，缓解首次压力
@@ -42,5 +40,4 @@ public class ExecutorRouteRound implements ExecutorRouter {
     public String route(Long jobId, List<String> addressList) {
         return addressList.get(count(jobId) % addressList.size());
     }
-
 }

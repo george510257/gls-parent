@@ -11,10 +11,8 @@ import java.util.List;
  */
 @Component
 public class ExecutorRouteLast implements ExecutorRouter {
-
     @Override
     public String route(Long jobId, List<String> addressList) {
         return addressList.get(addressList.size() - 1);
     }
-
 }

@@ -14,9 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistryModel implements Serializable {
-
     private RegistryType registryGroup;
     private String registryKey;
     private String registryValue;
-
 }

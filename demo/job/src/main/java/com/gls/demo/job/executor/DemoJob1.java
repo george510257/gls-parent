@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DemoJob1 implements JobHandler {
-
     @Override
     public void execute() throws Exception {
         log.info("DemoJob1 -- execute");

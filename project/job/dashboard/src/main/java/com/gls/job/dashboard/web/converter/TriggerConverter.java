@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  * @author george
  */
 public class TriggerConverter<Entity extends BaseTriggerEntity, Trigger extends AbstractTrigger> implements BaseConverter<Entity, Trigger> {
-
     @Resource
     private JobDetailRepository jobDetailRepository;
 
@@ -58,7 +57,6 @@ public class TriggerConverter<Entity extends BaseTriggerEntity, Trigger extends 
         return Arrays.stream(MisfireInstruction.values()).filter(misfireInstruction ->
                 type.equals(misfireInstruction.getTypeClass()) && misfireInstruction.getCode() == code
         ).collect(Collectors.toList()).get(0);
-
     }
 
     private int getMisfireInstruction(MisfireInstruction misfireInstruction) {

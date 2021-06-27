@@ -3,6 +3,7 @@ package com.gls.job.executor.web.service.impl;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.constants.ExecutorBlockStrategy;
 import com.gls.job.core.constants.GlueType;
+import com.gls.job.executor.core.context.JobContextHolder;
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.JobHandlerHolder;
 import com.gls.job.executor.core.handler.builder.GlueBuilder;
@@ -27,10 +28,10 @@ public class TriggerServiceImpl implements TriggerService {
     private JobThreadHolder jobThreadHolder;
     @Resource
     private JobHandlerHolder jobHandlerHolder;
-
+    @Resource
+    private JobContextHolder jobContextHolder;
     @Resource
     private GlueBuilder glueBuilder;
-
     @Resource
     private ScriptJobRepository scriptJobRepository;
 
@@ -105,7 +106,7 @@ public class TriggerServiceImpl implements TriggerService {
 
     private ScriptJobHandler loadScriptJobHandler(Long jobId, Date glueUpdateTime, String glueSource, GlueType glueType) {
         String scriptFileName = scriptJobRepository.saveScriptJob(jobId, glueUpdateTime, glueSource, glueType);
-        return new ScriptJobHandler(scriptFileName, glueUpdateTime, glueType);
+        return new ScriptJobHandler(scriptFileName, glueUpdateTime, glueType, jobContextHolder);
     }
 
     private GlueJobHandler loadGlueJobHandler(String glueSource, Date glueUpdateTime) throws Exception {

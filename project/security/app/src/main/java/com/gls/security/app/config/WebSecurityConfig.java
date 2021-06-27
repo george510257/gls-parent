@@ -25,28 +25,20 @@ import javax.annotation.Resource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Resource
     private FormLoginCustomizer formLoginCustomizer;
-
     @Resource
     private HttpBasicCustomizer httpBasicCustomizer;
-
     @Resource
     private AuthorizeRequestsCustomizer authorizeRequestsCustomizer;
-
     @Resource
     private CsrfCustomizer csrfCustomizer;
-
     @Resource
     private Oauth2ResourceServerCustomizer oauth2ResourceServerCustomizer;
-
     @Resource
     private CaptchaConfigurer captchaConfigurer;
-
     @Resource
     private MobileConfigurer mobileConfigurer;
-
     @Resource
     private Oauth2LoginCustomizer oauth2LoginCustomizer;
 

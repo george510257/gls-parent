@@ -19,7 +19,6 @@ import java.util.Map;
  * @author george
  */
 public class SmsCaptchaTokenGranter extends BaseCaptchaTokenGranter<SmsCaptchaService> {
-
     private static final String GRANT_TYPE = "sms_captcha";
     private final AuthenticationManager authenticationManager;
 
@@ -48,7 +47,6 @@ public class SmsCaptchaTokenGranter extends BaseCaptchaTokenGranter<SmsCaptchaSe
         if (userAuth == null || !userAuth.isAuthenticated()) {
             throw new InvalidGrantException("Could not authenticate user: " + mobile);
         }
-
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
     }

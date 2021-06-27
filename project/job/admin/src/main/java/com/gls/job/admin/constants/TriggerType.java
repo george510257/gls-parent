@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TriggerType {
-
     /**
      *
      */
@@ -21,7 +20,5 @@ public enum TriggerType {
     PARENT("父任务触发"),
     API("API触发"),
     MISFIRE("调度过期补偿");
-
     private final String title;
-
 }

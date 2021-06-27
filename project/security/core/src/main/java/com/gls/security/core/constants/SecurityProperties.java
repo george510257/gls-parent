@@ -13,7 +13,6 @@ import java.util.Set;
 @Data
 @ConfigurationProperties(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX)
 public class SecurityProperties {
-
     /**
      * 默认的用户名密码登录请求处理url
      */
@@ -50,38 +49,27 @@ public class SecurityProperties {
      * 获取第三方用户信息的url
      */
     private static final String DEFAULT_SOCIAL_USER_INFO_URL = "/social/user";
-
     private FormLogin formLogin = new FormLogin();
-
     private Session session = new Session();
-
     private Logout logout = new Logout();
-
     private RememberMe rememberMe = new RememberMe();
-
     private TokenStore tokenStore = new TokenStore();
-
     private Mobile mobile = new Mobile();
 
     @Data
     public static class FormLogin {
-
         private String loginPage = DEFAULT_SIGN_IN_PAGE_URL;
-
         private String loginProcessingUrl = DEFAULT_SIGN_IN_PROCESSING_URL_FORM;
     }
 
     @Data
     public static class Mobile {
-
         private String mobileParameter = DEFAULT_PARAMETER_NAME_MOBILE;
-
         private String loginProcessingUrl = DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE;
     }
 
     @Data
     public static class Session {
-
         /**
          * 同一个用户在系统中的最大session数，默认1
          */
@@ -98,16 +86,12 @@ public class SecurityProperties {
 
     @Data
     public static class Logout {
-
         private String logoutUrl = "/signOut";
-
         private Set<String> deleteCookies = new HashSet<>(Collections.singleton("JSESSIONID"));
-
     }
 
     @Data
     public static class RememberMe {
-
         /**
          * '记住我'功能的有效时间，默认1小时
          */
@@ -116,22 +100,15 @@ public class SecurityProperties {
 
     @Data
     public static class TokenStore {
-
         private String type = SecurityConstants.DEFAULT_TOKEN_STORE_TYPE;
-
         private Jwt jwt = new Jwt();
     }
 
     @Data
     public static class Jwt {
-
         private String keyStoreFile = "glseven.jks";
-
         private String keyStorePassword = "iflytek123";
-
         private String keyAlias = "glseven-jwt";
-
         private String keyPassword = "glseven123";
-
     }
 }

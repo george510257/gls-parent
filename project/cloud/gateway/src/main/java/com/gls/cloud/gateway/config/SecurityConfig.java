@@ -13,7 +13,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
-
     private static final String API_DOC_PATH = "/*/v3/api-docs";
     private static final String AUTH_SERVER_PATH = "/gls-common-auth/oauth/token";
     @Value("${springfox.documentation.swagger-ui.base-url}")
@@ -29,15 +28,11 @@ public class SecurityConfig {
                 .anyExchange()
                 .authenticated()
                 .and()
-
                 .csrf().disable()
-
                 .oauth2ResourceServer()
                 .jwt()
                 .and()
                 .and()
-
                 .build();
     }
-
 }

@@ -13,7 +13,6 @@ import java.sql.Timestamp;
  */
 @Component
 public class JobRegistryConverter implements BaseConverter<JobRegistryEntity, JobRegistry> {
-
     @Override
     public JobRegistry copySourceToTarget(JobRegistryEntity jobRegistryEntity, JobRegistry jobRegistry) {
         jobRegistry.setId(jobRegistryEntity.getId());

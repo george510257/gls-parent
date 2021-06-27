@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CaptchaConverter implements BaseConverter<CaptchaEntity, CaptchaModel> {
-
     @Override
     public CaptchaModel copySourceToTarget(CaptchaEntity captchaEntity, CaptchaModel captchaModel) {
         captchaModel.setCode(captchaEntity.getCode());

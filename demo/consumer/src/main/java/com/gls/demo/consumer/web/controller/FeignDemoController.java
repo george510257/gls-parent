@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/consumer/feign/demo")
 public class FeignDemoController {
-
     @Resource
     private FeignDemoService feignDemoService;
 

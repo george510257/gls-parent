@@ -9,7 +9,6 @@ import java.util.Map;
  * @author george
  */
 public interface JobGroupService {
-
     /**
      * getAllList
      *

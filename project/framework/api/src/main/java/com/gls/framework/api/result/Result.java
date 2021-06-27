@@ -13,13 +13,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result<Model> implements Serializable {
-
     public static final Integer SUCCESS_CODE = 200;
     public static final Integer FAIL_CODE = 500;
-
     public static final Result<String> SUCCESS = new Result<>(null);
     public static final Result<String> FAIL = new Result<>(FAIL_CODE, null);
-
     private Integer code;
     private String message;
     private Model model;

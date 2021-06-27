@@ -156,35 +156,30 @@ public class EntityBinder {
                     ? (hibAnn == null ? false : hibAnn.dynamicInsert())
                     : dynamicInsertAnn.value();
         }
-
         {
             final DynamicUpdate dynamicUpdateAnn = annotatedClass.getAnnotation(DynamicUpdate.class);
             this.dynamicUpdate = dynamicUpdateAnn == null
                     ? (hibAnn == null ? false : hibAnn.dynamicUpdate())
                     : dynamicUpdateAnn.value();
         }
-
         {
             final SelectBeforeUpdate selectBeforeUpdateAnn = annotatedClass.getAnnotation(SelectBeforeUpdate.class);
             this.selectBeforeUpdate = selectBeforeUpdateAnn == null
                     ? (hibAnn == null ? false : hibAnn.selectBeforeUpdate())
                     : selectBeforeUpdateAnn.value();
         }
-
         {
             final OptimisticLocking optimisticLockingAnn = annotatedClass.getAnnotation(OptimisticLocking.class);
             this.optimisticLockType = optimisticLockingAnn == null
                     ? (hibAnn == null ? OptimisticLockType.VERSION : hibAnn.optimisticLock())
                     : optimisticLockingAnn.type();
         }
-
         {
             final Polymorphism polymorphismAnn = annotatedClass.getAnnotation(Polymorphism.class);
             this.polymorphismType = polymorphismAnn == null
                     ? (hibAnn == null ? PolymorphismType.IMPLICIT : hibAnn.polymorphism())
                     : polymorphismAnn.type();
         }
-
         if (hibAnn != null) {
             // used later in bind for logging
             explicitHibernateEntityAnnotation = true;
@@ -227,14 +222,12 @@ public class EntityBinder {
         //persistentClass.setDynamic(false); //no longer needed with the Entity name refactoring?
         persistentClass.setEntityName(annotatedClass.getName());
         bindDiscriminatorValue();
-
         persistentClass.setLazy(lazy);
         if (proxyClass != null) {
             persistentClass.setProxyInterfaceName(proxyClass.getName());
         }
         persistentClass.setDynamicInsert(dynamicInsert);
         persistentClass.setDynamicUpdate(dynamicUpdate);
-
         if (persistentClass instanceof RootClass) {
             RootClass rootClass = (RootClass) persistentClass;
             boolean mutable = true;
@@ -250,25 +243,19 @@ public class EntityBinder {
             }
             rootClass.setMutable(mutable);
             rootClass.setExplicitPolymorphism(isExplicitPolymorphism(polymorphismType));
-
             if (StringHelper.isNotEmpty(where)) {
                 rootClass.setWhere(where);
             }
-
             if (cacheConcurrentStrategy != null) {
                 rootClass.setCacheConcurrencyStrategy(cacheConcurrentStrategy);
                 rootClass.setCacheRegionName(cacheRegion);
                 rootClass.setLazyPropertiesCacheable(cacheLazyProperty);
             }
-
             rootClass.setNaturalIdCacheRegionName(naturalIdCacheRegion);
-
             boolean forceDiscriminatorInSelects = forceDiscriminator == null
                     ? context.getBuildingOptions().shouldImplicitlyForceDiscriminatorInSelect()
                     : forceDiscriminator;
-
             rootClass.setForceDiscriminator(forceDiscriminatorInSelects);
-
             if (insertableDiscriminator != null) {
                 rootClass.setDiscriminatorInsertable(insertableDiscriminator);
             }
@@ -280,12 +267,9 @@ public class EntityBinder {
                 LOG.immutableAnnotationOnNonRoot(annotatedClass.getName());
             }
         }
-
         persistentClass.setCached(isCached);
-
         persistentClass.setOptimisticLockStyle(getVersioning(optimisticLockType));
         persistentClass.setSelectBeforeUpdate(selectBeforeUpdate);
-
         //set persister if needed
         Persister persisterAnn = annotatedClass.getAnnotation(Persister.class);
         Class persister = null;
@@ -304,21 +288,17 @@ public class EntityBinder {
         if (persister != null) {
             persistentClass.setEntityPersisterClass(persister);
         }
-
         persistentClass.setBatchSize(batchSize);
-
         //SQL overriding
         SQLInsert sqlInsert = annotatedClass.getAnnotation(SQLInsert.class);
         SQLUpdate sqlUpdate = annotatedClass.getAnnotation(SQLUpdate.class);
         SQLDelete sqlDelete = annotatedClass.getAnnotation(SQLDelete.class);
         SQLDeleteAll sqlDeleteAll = annotatedClass.getAnnotation(SQLDeleteAll.class);
         Loader loader = annotatedClass.getAnnotation(Loader.class);
-
         if (sqlInsert != null) {
             persistentClass.setCustomSQLInsert(sqlInsert.sql().trim(), sqlInsert.callable(),
                     ExecuteUpdateResultCheckStyle.fromExternalName(sqlInsert.check().toString().toLowerCase(Locale.ROOT))
             );
-
         }
         if (sqlUpdate != null) {
             persistentClass.setCustomSQLUpdate(sqlUpdate.sql(), sqlUpdate.callable(),
@@ -338,11 +318,9 @@ public class EntityBinder {
         if (loader != null) {
             persistentClass.setLoaderName(loader.namedQuery());
         }
-
         final JdbcEnvironment jdbcEnvironment = context.getMetadataCollector().getDatabase().getJdbcEnvironment();
         if (annotatedClass.isAnnotationPresent(Synchronize.class)) {
             Synchronize synchronizedWith = annotatedClass.getAnnotation(Synchronize.class);
-
             String[] tables = synchronizedWith.value();
             for (String table : tables) {
                 persistentClass.addSynchronizedTable(
@@ -353,12 +331,10 @@ public class EntityBinder {
                 );
             }
         }
-
         if (annotatedClass.isAnnotationPresent(Subselect.class)) {
             Subselect subselect = annotatedClass.getAnnotation(Subselect.class);
             this.subselect = subselect.value();
         }
-
         //tuplizers
         if (annotatedClass.isAnnotationPresent(Tuplizers.class)) {
             for (Tuplizer tuplizer : annotatedClass.getAnnotation(Tuplizers.class).value()) {
@@ -373,7 +349,6 @@ public class EntityBinder {
             //todo tuplizer.entityModeType
             persistentClass.addTuplizer(mode, tuplizer.impl().getName());
         }
-
         for (Filter filter : filters) {
             String filterName = filter.name();
             String cond = filter.condition();
@@ -399,7 +374,6 @@ public class EntityBinder {
         } catch (MappingException me) {
             throw new AnnotationException("Use of the same entity name twice: " + name, me);
         }
-
         processNamedEntityGraphs();
     }
 
@@ -514,21 +488,17 @@ public class EntityBinder {
             MetadataBuildingContext context) {
         final Cache explicitCacheAnn = clazzToProcess.getAnnotation(Cache.class);
         final Cacheable explicitCacheableAnn = clazzToProcess.getAnnotation(Cacheable.class);
-
         isCached = false;
         cacheConcurrentStrategy = null;
         cacheRegion = null;
         cacheLazyProperty = true;
-
         if (persistentClass instanceof RootClass) {
             Cache effectiveCacheAnn = explicitCacheAnn;
-
             if (explicitCacheAnn != null) {
                 // preserve legacy behavior of circumventing SharedCacheMode when Hibernate's @Cache is used.
                 isCached = true;
             } else {
                 effectiveCacheAnn = buildCacheMock(clazzToProcess.getName(), context);
-
                 switch (sharedCacheMode) {
                     case ALL: {
                         // all entities should be cached
@@ -554,7 +524,6 @@ public class EntityBinder {
                     }
                 }
             }
-
             cacheConcurrentStrategy = resolveCacheConcurrencyStrategy(effectiveCacheAnn.usage());
             cacheRegion = effectiveCacheAnn.region();
             switch (effectiveCacheAnn.include().toLowerCase(Locale.ROOT)) {
@@ -611,9 +580,7 @@ public class EntityBinder {
                 }
             }
         }
-
         naturalIdCacheRegion = null;
-
         final NaturalIdCache naturalIdCacheAnn = clazzToProcess.getAnnotation(NaturalIdCache.class);
         if (naturalIdCacheAnn != null) {
             if (BinderHelper.isEmptyAnnotationValue(naturalIdCacheAnn.region())) {
@@ -636,7 +603,6 @@ public class EntityBinder {
                             persistentClass.getEntityName() + "]"
             );
         }
-
         context.getMetadataCollector().addEntityTableXref(
                 persistentClass.getEntityName(),
                 context.getMetadataCollector().getDatabase().toIdentifier(
@@ -661,14 +627,12 @@ public class EntityBinder {
                 persistentClass.getEntityName(),
                 name
         );
-
         final Identifier logicalName;
         if (StringHelper.isNotEmpty(tableName)) {
             logicalName = namingStrategyHelper.handleExplicitName(tableName, context);
         } else {
             logicalName = namingStrategyHelper.determineImplicitName(context);
         }
-
         final Table table = TableBinder.buildAndFillTable(
                 schema,
                 catalog,
@@ -693,7 +657,6 @@ public class EntityBinder {
                 table,
                 denormalizedSuperTableXref
         );
-
         if (persistentClass instanceof TableOwner) {
             LOG.debugf("Bind entity %s on table %s", persistentClass.getEntityName(), table.getName());
             ((TableOwner) persistentClass).setTable(table);
@@ -709,7 +672,6 @@ public class EntityBinder {
          */
         Iterator joins = secondaryTables.values().iterator();
         Iterator joinColumns = secondaryTableJoins.values().iterator();
-
         while (joins.hasNext()) {
             Object uncastedColumn = joinColumns.next();
             Join join = (Join) joins.next();
@@ -778,7 +740,6 @@ public class EntityBinder {
                 }
             }
         }
-
         for (Ejb3JoinColumn joinColumn : ejb3JoinColumns) {
             joinColumn.forceNotNull();
         }
@@ -798,7 +759,6 @@ public class EntityBinder {
 
     private void setFKNameIfDefined(Join join) {
         // just awful..
-
         org.hibernate.annotations.Table matchingTable = findMatchingComplimentTableAnnotation(join);
         if (matchingTable != null && !BinderHelper.isEmptyAnnotationValue(matchingTable.foreignKey().name())) {
             ((SimpleValue) join.getKey()).setForeignKeyName(matchingTable.foreignKey().name());
@@ -819,12 +779,10 @@ public class EntityBinder {
 
     private SecondaryTable findMatchingSecondaryTable(Join join) {
         final String nameToMatch = join.getTable().getQuotedName();
-
         SecondaryTable secondaryTable = annotatedClass.getAnnotation(SecondaryTable.class);
         if (secondaryTable != null && nameToMatch.equals(secondaryTable.name())) {
             return secondaryTable;
         }
-
         SecondaryTables secondaryTables = annotatedClass.getAnnotation(SecondaryTables.class);
         if (secondaryTables != null) {
             for (SecondaryTable secondaryTablesEntry : secondaryTables.value()) {
@@ -833,7 +791,6 @@ public class EntityBinder {
                 }
             }
         }
-
         return null;
     }
 
@@ -885,12 +842,10 @@ public class EntityBinder {
         // A non null propertyHolder means than we process the Pk creation without delay
         Join join = new Join();
         join.setPersistentClass(persistentClass);
-
         final String schema;
         final String catalog;
         final Object joinColumns;
         final List<UniqueConstraintHolder> uniqueConstraintHolders;
-
         final QualifiedTableName logicalName;
         if (secondaryTable != null) {
             schema = secondaryTable.schema();
@@ -923,7 +878,6 @@ public class EntityBinder {
         } else {
             throw new AssertionFailure("Both JoinTable and SecondaryTable are null");
         }
-
         final Table table = TableBinder.buildAndFillTable(
                 schema,
                 catalog,
@@ -936,18 +890,14 @@ public class EntityBinder {
                 null,
                 null
         );
-
         final InFlightMetadataCollector.EntityTableXref tableXref = context.getMetadataCollector().getEntityTableXref(persistentClass.getEntityName());
         assert tableXref != null : "Could not locate EntityTableXref for entity [" + persistentClass.getEntityName() + "]";
         tableXref.addSecondaryTable(logicalName, join);
-
         if (secondaryTable != null) {
             TableBinder.addIndexes(table, secondaryTable.indexes(), context);
         }
-
         //no check constraints available on joins
         join.setTable(table);
-
         //somehow keep joins() for later.
         //Has to do the work later because it needs persistentClass id!
         LOG.debugf("Adding secondary table to entity %s -> %s", persistentClass.getEntityName(), join.getTable().getName());
@@ -987,14 +937,12 @@ public class EntityBinder {
             //perhaps not quite per-spec, but a Good Thing anyway
             join.setOptional(true);
         }
-
         if (noDelayInPkColumnCreation) {
             createPrimaryColumnsToSecondaryTable(joinColumns, propertyHolder, join);
         } else {
             secondaryTables.put(table.getQuotedName(), join);
             secondaryTableJoins.put(table.getQuotedName(), joinColumns);
         }
-
         return join;
     }
 
@@ -1093,32 +1041,26 @@ public class EntityBinder {
 
     public AccessType getExplicitAccessType(XAnnotatedElement element) {
         AccessType accessType = null;
-
         AccessType hibernateAccessType = null;
         AccessType jpaAccessType = null;
-
         org.hibernate.annotations.AccessType accessTypeAnnotation = element.getAnnotation(org.hibernate.annotations.AccessType.class);
         if (accessTypeAnnotation != null) {
             hibernateAccessType = AccessType.getAccessStrategy(accessTypeAnnotation.value());
         }
-
         Access access = element.getAnnotation(Access.class);
         if (access != null) {
             jpaAccessType = AccessType.getAccessStrategy(access.value());
         }
-
         if (hibernateAccessType != null && jpaAccessType != null && hibernateAccessType != jpaAccessType) {
             throw new MappingException(
                     "Found @Access and @AccessType with conflicting values on a property in class " + annotatedClass.toString()
             );
         }
-
         if (hibernateAccessType != null) {
             accessType = hibernateAccessType;
         } else if (jpaAccessType != null) {
             accessType = jpaAccessType;
         }
-
         return accessType;
     }
 

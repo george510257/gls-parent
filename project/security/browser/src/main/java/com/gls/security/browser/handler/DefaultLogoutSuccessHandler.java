@@ -14,7 +14,6 @@ import java.io.IOException;
  */
 @Slf4j
 public class DefaultLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
-
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("推出成功");

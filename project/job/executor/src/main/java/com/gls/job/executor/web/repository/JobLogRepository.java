@@ -8,13 +8,10 @@ import java.util.Date;
  * @author george
  */
 public interface JobLogRepository {
-
     /**
      * logFileClean
-     *
-     * @param logRetentionDays
      */
-    void logFileClean(int logRetentionDays);
+    void logFileClean();
 
     /**
      * readLog

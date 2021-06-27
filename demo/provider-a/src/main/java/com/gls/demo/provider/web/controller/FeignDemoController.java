@@ -15,7 +15,6 @@ import java.util.List;
 @Slf4j
 @RestController
 public class FeignDemoController implements FeignDemoApi {
-
     @Resource
     private DemoService demoService;
 

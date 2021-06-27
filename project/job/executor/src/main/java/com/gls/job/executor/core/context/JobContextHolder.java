@@ -2,21 +2,13 @@ package com.gls.job.executor.core.context;
 
 import com.gls.job.core.base.BaseThreadLocalHolder;
 import com.gls.job.core.constants.JobConstants;
+import org.springframework.stereotype.Component;
 
 /**
  * @author george
  */
+@Component
 public class JobContextHolder extends BaseThreadLocalHolder<JobContext> {
-
-    private static final JobContextHolder INSTANCE = new JobContextHolder();
-
-    private JobContextHolder() {
-    }
-
-    public static JobContextHolder getInstance() {
-        return INSTANCE;
-    }
-
     /**
      * handle success
      *
@@ -86,7 +78,6 @@ public class JobContextHolder extends BaseThreadLocalHolder<JobContext> {
         if (jobContext == null) {
             return false;
         }
-
         jobContext.setHandleCode(handleCode);
         if (handleMsg != null) {
             jobContext.setHandleMsg(handleMsg);

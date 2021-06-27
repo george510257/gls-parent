@@ -44,7 +44,6 @@ import java.util.*;
 @Slf4j
 @Service("jobInfoService")
 public class JobInfoServiceImpl implements JobInfoService {
-
     @Resource
     private JobAsyncService jobAsyncService;
     @Resource
@@ -103,9 +102,7 @@ public class JobInfoServiceImpl implements JobInfoService {
             jobInfoEntity.setExecutorParam(executorParam);
         }
         int finalFailRetryCount = failRetryCount >= 0 ? failRetryCount : jobInfoEntity.getExecutorFailRetryCount();
-
         JobGroupEntity jobGroupEntity = jobInfoEntity.getJobGroup();
-
         // cover addressList
         if (!ObjectUtils.isEmpty(addressList)) {
             jobGroupEntity.setAddressType(false);
@@ -116,7 +113,6 @@ public class JobInfoServiceImpl implements JobInfoService {
         if (StringUtils.hasText(executorShardingParam)) {
             shardingParam = Arrays.stream(executorShardingParam.split("/")).mapToInt(Integer::parseInt).toArray();
         }
-
         if (ExecutorRouteStrategy.SHARDING_BROADCAST.equals(jobInfoEntity.getExecutorRouteStrategy())
                 && !ObjectUtils.isEmpty(jobGroupEntity.getAddressList())
                 && ObjectUtils.isEmpty(shardingParam)) {
@@ -140,13 +136,11 @@ public class JobInfoServiceImpl implements JobInfoService {
         if (ObjectUtils.isEmpty(jobInfoEntities)) {
             return false;
         }
-
         // 2.push time-ring
         for (JobInfoEntity jobInfoEntity : jobInfoEntities) {
             if (nowTime > jobInfoEntity.getTriggerNextTime().getTime() + JobConstants.PRE_READ_MS) {
                 // 2.1、trigger-expire > 5s：pass && make next-trigger-time
                 log.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfoEntity.getId());
-
                 // 1、misfire match
                 if (MisfireStrategy.FIRE_ONCE_NOW.equals(jobInfoEntity.getMisfireStrategy())) {
                     // FIRE_ONCE_NOW 》 trigger
@@ -159,35 +153,25 @@ public class JobInfoServiceImpl implements JobInfoService {
                 // 1、trigger
                 jobAsyncService.asyncTrigger(jobInfoEntity.getId(), TriggerType.CRON, -1, null, null, null);
                 log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfoEntity.getId());
-
                 // 2、fresh next
                 refreshNextValidTime(jobInfoEntity, new Date());
-
                 // next-trigger-time in 5s, pre-read again
                 if (jobInfoEntity.getTriggerStatus() && nowTime + JobConstants.PRE_READ_MS > jobInfoEntity.getTriggerNextTime().getTime()) {
-
                     // 1、make ring second
                     int ringSecond = (int) ((jobInfoEntity.getTriggerNextTime().getTime() / 1000) % 60);
-
                     // 2、push time ring
                     pushTimeRing(ringSecond, jobInfoEntity.getId());
-
                     // 3、fresh next
                     refreshNextValidTime(jobInfoEntity, jobInfoEntity.getTriggerNextTime());
-
                 }
             } else {
                 // 2.3、trigger-pre-read：time-ring trigger && make next-trigger-time
-
                 // 1、make ring second
                 int ringSecond = (int) ((jobInfoEntity.getTriggerNextTime().getTime() / 1000) % 60);
-
                 // 2、push time ring
                 pushTimeRing(ringSecond, jobInfoEntity.getId());
-
                 // 3、fresh next
                 refreshNextValidTime(jobInfoEntity, jobInfoEntity.getTriggerNextTime());
-
             }
             jobInfoRepository.save(jobInfoEntity);
         }
@@ -284,7 +268,6 @@ public class JobInfoServiceImpl implements JobInfoService {
         JobInfoEntity jobInfoEntity = new JobInfoEntity();
         jobInfoEntity.setScheduleType(ScheduleType.valueOf(scheduleType));
         jobInfoEntity.setScheduleConf(scheduleConf);
-
         List<String> result = new ArrayList<>();
         Date lastTime = new Date();
         try {
@@ -364,7 +347,6 @@ public class JobInfoServiceImpl implements JobInfoService {
             ringDataHolder.regist(ringSecond, ringItemData, "");
         }
         ringItemData.add(id);
-
         log.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
     }
 
@@ -395,22 +377,16 @@ public class JobInfoServiceImpl implements JobInfoService {
     private void processTrigger(JobInfoEntity jobInfoEntity, int finalFailRetryCount, TriggerType triggerType, int index, int total) {
         // param
         String shardingParam = ExecutorRouteStrategy.SHARDING_BROADCAST.equals(jobInfoEntity.getExecutorRouteStrategy()) ? String.valueOf(index).concat("/").concat(String.valueOf(total)) : null;
-
         // 1、save log-id
         JobLogEntity jobLogEntity = createJobLogEntity(jobInfoEntity);
-
         // 2、init trigger-param
         TriggerModel triggerModel = createTriggerModel(jobLogEntity, index, total);
-
         // 3、init address
         String address = getAddress(jobInfoEntity, index);
-
         // 4、trigger remote executor
         Result<String> result = runExecutor(triggerModel, address);
-
         // 5、collection trigger info
         String triggerMsg = getTriggerMsg(jobInfoEntity, triggerType, shardingParam, finalFailRetryCount, result);
-
         // 6、save log trigger-info
         jobLogEntity.setExecutorAddress(address);
         jobLogEntity.setExecutorHandler(jobInfoEntity.getExecutorHandler());
@@ -435,7 +411,6 @@ public class JobInfoServiceImpl implements JobInfoService {
         triggerMsgBuilder.append("<br>阻塞处理策略：").append(jobInfoEntity.getExecutorBlockStrategy().getTitle());
         triggerMsgBuilder.append("<br>任务超时时间：").append(jobInfoEntity.getExecutorTimeout());
         triggerMsgBuilder.append("<br>失败重试次数：").append(finalFailRetryCount);
-
         triggerMsgBuilder.append("<br><br><span style=\"color:#00c0ef;\" > >>>>>>>>>>>触发调度<<<<<<<<<<< </span><br>").append(result);
         return triggerMsgBuilder.toString();
     }

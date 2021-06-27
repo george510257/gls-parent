@@ -19,13 +19,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author george
  */
 public class MobileAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
     private static final String HTTP_METHOD_POST = "POST";
-
     @Getter
     @Setter
     private String mobileParameter;
-
     @Getter
     @Setter
     private boolean postOnly = true;
@@ -37,23 +34,16 @@ public class MobileAuthenticationFilter extends AbstractAuthenticationProcessing
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
         if (postOnly && !HTTP_METHOD_POST.equals(request.getMethod())) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-
         String mobile = obtainMobile(request);
-
         if (mobile == null) {
             mobile = "";
         }
-
         mobile = mobile.trim();
-
         MobileAuthenticationToken authRequest = new MobileAuthenticationToken(mobile);
-
         setDetails(request, authRequest);
-
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 

@@ -20,10 +20,8 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
-
     @Resource
     private ApplicationContext applicationContext;
-
     @Resource
     private Map<String, JobHandler> jobHandlers;
 

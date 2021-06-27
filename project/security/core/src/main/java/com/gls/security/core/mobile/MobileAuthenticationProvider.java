@@ -18,24 +18,18 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author george
  */
 public class MobileAuthenticationProvider implements AuthenticationProvider {
-
     @Getter
     @Setter
     private UserService userService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
         MobileAuthenticationToken authenticationToken = (MobileAuthenticationToken) authentication;
-
         UserDetails userDetails = userService.loadUserByUsername((String) authenticationToken.getPrincipal());
-
         if (userDetails == null) {
             throw new InternalAuthenticationServiceException("无法获取用户信息");
         }
-
         MobileAuthenticationToken authenticationResult = new MobileAuthenticationToken(userDetails, userDetails.getAuthorities());
-
         authenticationResult.setDetails(authenticationToken.getDetails());
         return authenticationResult;
     }

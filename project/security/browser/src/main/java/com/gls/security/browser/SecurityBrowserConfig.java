@@ -40,7 +40,6 @@ import javax.annotation.Resource;
 @ComponentScan
 @EnableRedisHttpSession
 public class SecurityBrowserConfig {
-
     @Resource
     private SecurityProperties securityProperties;
 
