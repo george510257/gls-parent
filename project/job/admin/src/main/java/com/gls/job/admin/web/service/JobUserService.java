@@ -1,13 +1,12 @@
 package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.web.model.JobUser;
-
-import java.util.Map;
+import com.gls.job.admin.web.model.query.QueryJobUser;
 
 /**
  * @author georg2
  */
-public interface JobUserService {
+public interface JobUserService extends JobService<JobUser, QueryJobUser> {
     /**
      * login
      *
@@ -24,39 +23,6 @@ public interface JobUserService {
      * @return
      */
     String logout();
-
-    /**
-     * getPageList
-     *
-     * @param username
-     * @param role
-     * @param start
-     * @param length
-     * @return
-     */
-    Map<String, Object> getPageList(String username, int role, int start, int length);
-
-    /**
-     * addUser
-     *
-     * @param jobUser
-     * @return
-     */
-    void addUser(JobUser jobUser);
-
-    /**
-     * updateUser
-     *
-     * @param jobUser
-     */
-    void updateUser(JobUser jobUser);
-
-    /**
-     * removeUser
-     *
-     * @param id
-     */
-    void removeUser(Long id);
 
     /**
      * changePassword

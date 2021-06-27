@@ -1,6 +1,7 @@
 package com.gls.job.executor.core.thread;
 
 import com.gls.job.core.base.BaseHolder;
+import com.gls.job.executor.core.context.JobContextHolder;
 import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.queue.CallbackQueueHolder;
 import com.gls.job.executor.web.service.JobLogService;
@@ -14,12 +15,14 @@ import javax.annotation.Resource;
 @Component
 public class JobThreadHolder extends BaseHolder<Long, JobThread> {
     @Resource
-    public CallbackQueueHolder callbackQueueHolder;
+    private CallbackQueueHolder callbackQueueHolder;
+    @Resource
+    private JobContextHolder jobContextHolder;
     @Resource
     private JobLogService jobLogService;
 
     public JobThread registByJobHandler(Long key, JobHandler handler, String reason) {
-        JobThread value = new JobThread(key, handler, jobLogService, this, callbackQueueHolder);
+        JobThread value = new JobThread(key, handler, jobLogService, this, jobContextHolder, callbackQueueHolder);
         value.start();
         regist(key, value, reason);
         return value;

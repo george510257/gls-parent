@@ -2,18 +2,24 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
 import com.gls.job.admin.core.servlet.PermissionLimit;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
+import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobUserService;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,8 +68,15 @@ public class UserController {
     public Result<Map<String, Object>> pageList(String username, int role,
                                                 @RequestParam(required = false, defaultValue = "0") int start,
                                                 @RequestParam(required = false, defaultValue = "10") int length) {
-        Map<String, Object> content = jobUserService.getPageList(username, role, start, length);
-        return new Result<>(content);
+        Page<JobUser> page = jobUserService.getPage(new QueryJobUser(username, role), PageRequest.of(start, length, Sort.by(Sort.Direction.ASC, "username")));
+        Map<String, Object> map = new HashMap<>(3);
+        // 总记录数
+        map.put("recordsTotal", page.getTotalElements());
+        // 过滤后的总记录数
+        map.put("recordsFiltered", page.getTotalElements());
+        // 分页列表
+        map.put("data", page.getContent());
+        return new Result<>(map);
     }
 
     @PermissionLimit(administer = true)
@@ -74,7 +87,7 @@ public class UserController {
             return new Result<>(Result.FAIL_CODE, result.getAllErrors().get(0).getDefaultMessage());
         }
         try {
-            jobUserService.addUser(jobUser);
+            jobUserService.add(jobUser);
         } catch (JobException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
@@ -88,8 +101,12 @@ public class UserController {
             result.getAllErrors().forEach(objectError -> log.warn(objectError.getDefaultMessage()));
             return new Result<>(Result.FAIL_CODE, result.getAllErrors().get(0).getDefaultMessage());
         }
+        JobUser loginUser = LoginUserUtil.getLoginUser();
+        if (loginUser.getUsername().equals(jobUser.getUsername())) {
+            return new Result<>(Result.FAIL_CODE, "禁止操作当前登录账号");
+        }
         try {
-            jobUserService.updateUser(jobUser);
+            jobUserService.update(jobUser);
         } catch (JobException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
@@ -99,8 +116,12 @@ public class UserController {
     @PermissionLimit(administer = true)
     @PostMapping("/remove")
     public Result<String> removeUser(Long id) {
+        JobUser loginUser = LoginUserUtil.getLoginUser();
+        if (loginUser.getId().equals(id)) {
+            return new Result<>(Result.FAIL_CODE, "禁止操作当前登录账号");
+        }
         try {
-            jobUserService.removeUser(id);
+            jobUserService.remove(id);
         } catch (JobException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }

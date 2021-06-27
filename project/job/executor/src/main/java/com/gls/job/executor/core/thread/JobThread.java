@@ -34,7 +34,7 @@ public class JobThread extends BaseThread {
     private final JobThreadHolder jobThreadHolder;
     @Getter
     private final TriggerQueueHolder triggerQueueHolder = new TriggerQueueHolder();
-    private final JobContextHolder jobContextHolder = JobContextHolder.getInstance();
+    private final JobContextHolder jobContextHolder;
     private final CallbackQueueHolder callbackQueueHolder;
     /**
      * if running job
@@ -45,11 +45,12 @@ public class JobThread extends BaseThread {
      */
     private int idleTimes = 0;
 
-    public JobThread(Long jobId, JobHandler jobHandler, JobLogService jobLogService, JobThreadHolder jobThreadHolder, CallbackQueueHolder callbackQueueHolder) {
+    public JobThread(Long jobId, JobHandler jobHandler, JobLogService jobLogService, JobThreadHolder jobThreadHolder, JobContextHolder jobContextHolder, CallbackQueueHolder callbackQueueHolder) {
         this.jobId = jobId;
         this.jobHandler = jobHandler;
         this.jobLogService = jobLogService;
         this.jobThreadHolder = jobThreadHolder;
+        this.jobContextHolder = jobContextHolder;
         this.callbackQueueHolder = callbackQueueHolder;
     }
 
