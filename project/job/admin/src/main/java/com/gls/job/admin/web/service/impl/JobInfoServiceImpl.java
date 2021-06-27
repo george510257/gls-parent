@@ -286,6 +286,24 @@ public class JobInfoServiceImpl implements JobInfoService {
         return result;
     }
 
+    @Override
+    public List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
+        List<JobGroup> jobGroupList = new ArrayList<>();
+        if (!ObjectUtils.isEmpty(allList)) {
+            JobUser jobUser = LoginUserUtil.getLoginUser();
+            if (jobUser.getRole() == 1) {
+                jobGroupList = allList;
+            } else {
+                for (JobGroup jobGroup : allList) {
+                    if (LoginUserUtil.validPermission(jobGroup.getId())) {
+                        jobGroupList.add(jobGroup);
+                    }
+                }
+            }
+        }
+        return jobGroupList;
+    }
+
     private void validJobInfoEntity(JobInfo jobInfo) {
         // JobGroup
         if (ObjectUtils.isEmpty(jobInfo.getJobGroup())) {
@@ -319,24 +337,6 @@ public class JobInfoServiceImpl implements JobInfoService {
                 jobInfo.setGlueSource(jobInfo.getGlueSource().replaceAll("\r", ""));
             }
         }
-    }
-
-    @Override
-    public List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
-        List<JobGroup> jobGroupList = new ArrayList<>();
-        if (!ObjectUtils.isEmpty(allList)) {
-            JobUser jobUser = LoginUserUtil.getLoginUser();
-            if (jobUser.getRole() == 1) {
-                jobGroupList = allList;
-            } else {
-                for (JobGroup jobGroup : allList) {
-                    if (LoginUserUtil.validPermission(jobGroup.getId())) {
-                        jobGroupList.add(jobGroup);
-                    }
-                }
-            }
-        }
-        return jobGroupList;
     }
 
     private void pushTimeRing(int ringSecond, Long id) {

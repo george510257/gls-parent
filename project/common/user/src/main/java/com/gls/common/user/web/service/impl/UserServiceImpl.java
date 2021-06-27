@@ -35,17 +35,17 @@ public class UserServiceImpl implements UserService {
     private UserConverter userConverter;
 
     @Override
-    @Cacheable(key = "#root.methodName+'['+#username+']'")
-    public UserModel loadUserByUsername(String username) {
-        UserEntity user = userRepository.getOneByUsername(username);
-        return userConverter.sourceToTarget(user);
-    }
-
-    @Override
     public UserModel updatePassword(UserModel userModel, String newPassword) {
         UserEntity user = userRepository.getOneByUsername(userModel.getUsername());
         user.setPassword(passwordEncoder.encode(newPassword));
         user = userRepository.save(user);
+        return userConverter.sourceToTarget(user);
+    }
+
+    @Override
+    @Cacheable(key = "#root.methodName+'['+#username+']'")
+    public UserModel loadUserByUsername(String username) {
+        UserEntity user = userRepository.getOneByUsername(username);
         return userConverter.sourceToTarget(user);
     }
 

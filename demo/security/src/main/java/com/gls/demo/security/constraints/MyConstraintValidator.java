@@ -8,13 +8,13 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class MyConstraintValidator implements ConstraintValidator<MyConstraint, String> {
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        System.out.println("value = " + value + ", context = " + context);
-        return false;
+    public void initialize(MyConstraint constraintAnnotation) {
+        System.out.println("MyConstraint initialize");
     }
 
     @Override
-    public void initialize(MyConstraint constraintAnnotation) {
-        System.out.println("MyConstraint initialize");
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        System.out.println("value = " + value + ", context = " + context);
+        return false;
     }
 }

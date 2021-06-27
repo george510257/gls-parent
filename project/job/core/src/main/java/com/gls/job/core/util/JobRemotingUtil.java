@@ -21,16 +21,16 @@ public class JobRemotingUtil {
     public static final String GLS_JOB_ACCESS_TOKEN = "GLS-JOB-ACCESS-TOKEN";
     private static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{new X509TrustManager() {
         @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[]{};
-        }
-
-        @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) {
         }
 
         @Override
         public void checkServerTrusted(X509Certificate[] chain, String authType) {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[]{};
         }
     }};
     private static final Logger logger = LoggerFactory.getLogger(JobRemotingUtil.class);

@@ -385,21 +385,6 @@ public final class CronExpression implements Serializable, Cloneable {
         this.timeZone = timeZone;
     }
 
-    /**
-     * Returns the string representation of the <CODE>CronExpression</CODE>
-     *
-     * @return a string representation of the <CODE>CronExpression</CODE>
-     */
-    @Override
-    public String toString() {
-        return cronExpression;
-    }
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    // Expression Parsing Functions
-    //
-    ////////////////////////////////////////////////////////////////////////////
-
     protected void buildExpression(String expression) throws ParseException {
         expressionParsed = true;
         try {
@@ -472,6 +457,11 @@ public final class CronExpression implements Serializable, Cloneable {
                     + e.toString() + ")", 0);
         }
     }
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    // Expression Parsing Functions
+    //
+    ////////////////////////////////////////////////////////////////////////////
 
     protected int storeExpressionVals(int pos, String s, int type)
             throws ParseException {
@@ -972,7 +962,7 @@ public final class CronExpression implements Serializable, Cloneable {
             }
         }
         // if the end of the range is before the start, then we need to overflow into
-        // the next day, month etc. This is done by adding the maximum amount for that 
+        // the next day, month etc. This is done by adding the maximum amount for that
         // type, and using modulus max to determine the value being added.
         int max = -1;
         if (stopAt < startAt) {
@@ -1077,11 +1067,6 @@ public final class CronExpression implements Serializable, Cloneable {
         }
         return integer;
     }
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    // Computation Functions
-    //
-    ////////////////////////////////////////////////////////////////////////////
 
     public Date getTimeAfter(Date afterTime) {
         // Computation is based on Gregorian year only.
@@ -1443,6 +1428,11 @@ public final class CronExpression implements Serializable, Cloneable {
         } // while( !done )
         return cl.getTime();
     }
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    // Computation Functions
+    //
+    ////////////////////////////////////////////////////////////////////////////
 
     /**
      * Advance the calendar to the particular hour paying particular attention
@@ -1525,6 +1515,16 @@ public final class CronExpression implements Serializable, Cloneable {
     @Deprecated
     public Object clone() {
         return new CronExpression(this);
+    }
+
+    /**
+     * Returns the string representation of the <CODE>CronExpression</CODE>
+     *
+     * @return a string representation of the <CODE>CronExpression</CODE>
+     */
+    @Override
+    public String toString() {
+        return cronExpression;
     }
 }
 

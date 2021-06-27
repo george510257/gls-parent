@@ -42,6 +42,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     private Oauth2LoginCustomizer oauth2LoginCustomizer;
 
+    @Bean(name = "authenticationManager")
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(authorizeRequestsCustomizer)
@@ -52,16 +63,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2ResourceServer(oauth2ResourceServerCustomizer)
                 .apply(captchaConfigurer).and()
                 .apply(mobileConfigurer).and();
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
-    }
-
-    @Bean(name = "authenticationManager")
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 }
