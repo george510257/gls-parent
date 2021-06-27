@@ -5,12 +5,9 @@ import com.gls.job.core.constants.GlueType;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.ScriptJobRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -31,11 +28,7 @@ public class ScriptJobRepositoryImpl implements ScriptJobRepository {
                 .replace("{jobId}", jobId.toString())
                 .replace("{updateTime}", glueUpdateTime.toString())
                 .replace("{suffix}", glueType.getSuffix());
-        try {
-            IOUtils.write(glueSource.getBytes(StandardCharsets.UTF_8), new FileOutputStream(scriptFileName));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
+        FileUtil.writeString(glueSource, scriptFileName, StandardCharsets.UTF_8);
         return scriptFileName;
     }
 

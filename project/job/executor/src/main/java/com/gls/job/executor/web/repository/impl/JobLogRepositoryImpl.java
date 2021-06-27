@@ -6,14 +6,10 @@ import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.executor.core.constants.JobExecutorProperties;
 import com.gls.job.executor.web.repository.JobLogRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -41,17 +37,15 @@ public class JobLogRepositoryImpl implements JobLogRepository {
 
     @Override
     public LogResultModel readLog(String logFileName, Integer fromLineNum) {
-        try {
-            List<String> data = IOUtils.readLines(new InputStreamReader(new FileInputStream(logFileName), StandardCharsets.UTF_8));
-            StringBuilder logContent = new StringBuilder();
-            for (int i = fromLineNum; i < data.size(); i++) {
-                logContent.append(data.get(i)).append("\n");
-            }
-            return new LogResultModel(fromLineNum, data.size(), logContent.toString(), false);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
+        List<String> data = FileUtil.readLines(logFileName, StandardCharsets.UTF_8);
+        if (ObjectUtils.isEmpty(data)) {
+            return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not found", true);
         }
-        return new LogResultModel(fromLineNum, 0, "readLog fail, logFile not found", true);
+        StringBuilder logContent = new StringBuilder();
+        for (int i = fromLineNum; i < data.size(); i++) {
+            logContent.append(data.get(i)).append("\n");
+        }
+        return new LogResultModel(fromLineNum, data.size(), logContent.toString(), false);
     }
 
     @Override
@@ -61,11 +55,7 @@ public class JobLogRepositoryImpl implements JobLogRepository {
 
     @Override
     public void saveLog(String logFileName, String appendLog) {
-        try {
-            IOUtils.write(appendLog.concat("\n").getBytes(StandardCharsets.UTF_8), new FileOutputStream(logFileName));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
+        FileUtil.writeString(appendLog.concat("\n"), logFileName, StandardCharsets.UTF_8);
     }
 
     private String getBaseFileName() {

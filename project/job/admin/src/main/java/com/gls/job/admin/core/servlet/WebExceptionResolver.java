@@ -1,7 +1,7 @@
 package com.gls.job.admin.core.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gls.framework.api.result.Result;
-import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,6 +10,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,6 +23,9 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class WebExceptionResolver implements HandlerExceptionResolver {
+    @Resource
+    private ObjectMapper objectMapper;
+
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response, Object handler, Exception ex) {
@@ -38,13 +42,13 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
             }
         }
         // error result
-        Result<String> errorResult = new Result<String>(Result.FAIL_CODE, ex.toString().replaceAll("\n", "<br/>"));
+        Result<String> errorResult = new Result<>(Result.FAIL_CODE, ex.toString().replaceAll("\n", "<br/>"));
         // response
         ModelAndView mv = new ModelAndView();
         if (isJson) {
             try {
                 response.setContentType("application/json;charset=utf-8");
-                response.getWriter().print(JsonUtil.writeValueAsString(errorResult));
+                response.getWriter().print(objectMapper.writeValueAsString(errorResult));
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
             }
