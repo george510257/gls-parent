@@ -1,5 +1,6 @@
 package com.gls.job.executor.web.service.impl;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.constants.ExecutorBlockStrategy;
 import com.gls.job.core.constants.GlueType;
@@ -58,7 +59,7 @@ public class TriggerServiceImpl implements TriggerService {
             if (ExecutorBlockStrategy.DISCARD_LATER.equals(triggerModel.getExecutorBlockStrategy())) {
                 // discard when running
                 if (jobThread.isRunningOrHasQueue()) {
-                    throw new Exception("block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
+                    throw new GlsException("block strategy effect：" + ExecutorBlockStrategy.DISCARD_LATER.getTitle());
                 }
             } else if (ExecutorBlockStrategy.COVER_EARLY.equals(triggerModel.getExecutorBlockStrategy())) {
                 // kill running jobThread
@@ -91,7 +92,7 @@ public class TriggerServiceImpl implements TriggerService {
         if (GlueType.BEAN.equals(glueType)) {
             jobHandler = jobHandlerHolder.load(triggerModel.getExecutorHandler());
             if (ObjectUtils.isEmpty(jobHandler)) {
-                throw new Exception("job handler [" + triggerModel.getExecutorHandler() + "] not found.");
+                throw new GlsException("job handler [" + triggerModel.getExecutorHandler() + "] not found.");
             }
         } else if (GlueType.GLUE_GROOVY.equals(glueType)) {
             jobHandler = loadGlueJobHandler(triggerModel.getGlueSource(), triggerModel.getGlueUpdateTime());
@@ -99,7 +100,7 @@ public class TriggerServiceImpl implements TriggerService {
             jobHandler = loadScriptJobHandler(triggerModel.getJobId(), triggerModel.getGlueUpdateTime(), triggerModel.getGlueSource(), triggerModel.getGlueType());
         }
         if (ObjectUtils.isEmpty(jobHandler)) {
-            throw new Exception("glueType[" + triggerModel.getGlueType() + "] is not valid.");
+            throw new GlsException("glueType[" + triggerModel.getGlueType() + "] is not valid.");
         }
         return jobHandler;
     }

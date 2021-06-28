@@ -1,5 +1,6 @@
 package com.gls.starter.data.redis.support;
 
+import com.gls.framework.core.exception.GlsException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -138,7 +139,7 @@ public class RedisHelper {
      */
     public long incr(String key, long delta) {
         if (delta < 0) {
-            throw new RuntimeException("递增因子必须大于0");
+            throw new GlsException("递增因子必须大于0");
         }
         return redisTemplate.opsForValue().increment(key, delta);
     }
@@ -152,7 +153,7 @@ public class RedisHelper {
      */
     public long decr(String key, long delta) {
         if (delta < 0) {
-            throw new RuntimeException("递减因子必须大于0");
+            throw new GlsException("递减因子必须大于0");
         }
         return redisTemplate.opsForValue().increment(key, -delta);
     }

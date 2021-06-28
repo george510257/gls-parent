@@ -1,5 +1,6 @@
 package com.gls.job.executor.core.handler.builder;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.executor.core.handler.JobHandler;
 import groovy.lang.GroovyClassLoader;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +51,12 @@ public class GlueBuilder {
                     this.injectService(instance);
                     return (JobHandler) instance;
                 } else {
-                    throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, "
+                    throw new GlsException(">>>>>>>>>>> gls-glue, loadNewInstance error, "
                             + "cannot convert from instance[" + instance.getClass() + "] to JobHandler");
                 }
             }
         }
-        throw new IllegalArgumentException(">>>>>>>>>>> gls-glue, loadNewInstance error, instance is null");
+        throw new GlsException(">>>>>>>>>>> gls-glue, loadNewInstance error, instance is null");
     }
 
     private Class<?> getCodeSourceClass(String codeSource) {
