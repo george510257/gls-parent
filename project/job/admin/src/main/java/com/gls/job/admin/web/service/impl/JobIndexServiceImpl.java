@@ -91,7 +91,7 @@ public class JobIndexServiceImpl implements JobIndexService {
 
     private long getExecutorCount() {
         Set<String> addressSet = new HashSet<>();
-        for (JobGroupEntity jobGroupEntity : jobGroupRepository.getAllList()) {
+        for (JobGroupEntity jobGroupEntity : jobGroupRepository.findAll()) {
             List<String> addressList = jobGroupEntity.getAddressList();
             addressSet.addAll(addressList);
         }

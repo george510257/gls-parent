@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 /**
  * @author george
  */
@@ -17,6 +19,19 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, Model, QueryMod
     public BaseServiceImpl(BaseEntityRepository<Entity> repository, BaseConverter<Entity, Model> converter) {
         this.repository = repository;
         this.converter = converter;
+    }
+
+    @Override
+    public List<Model> getAll() {
+        return converter.sourceToTargetList(repository.findAll());
+    }
+
+    @Override
+    public Model getById(Long id) {
+        if (ObjectUtils.isEmpty(id)) {
+            throw new GlsException("id不可以为null");
+        }
+        return converter.sourceToTarget(repository.getOne(id));
     }
 
     @Override

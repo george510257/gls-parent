@@ -5,76 +5,39 @@ import com.gls.job.admin.web.converter.JobGroupConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.query.QueryJobGroup;
 import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.service.JobGroupService;
-import com.gls.job.admin.web.service.JobRegistryService;
-import org.springframework.data.domain.Page;
+import com.gls.starter.data.jpa.base.BaseServiceImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author george
  */
 @Service("jobGroupService")
-public class JobGroupServiceImpl implements JobGroupService {
-    @Resource
-    private JobGroupRepository jobGroupRepository;
-    @Resource
-    private JobGroupConverter jobGroupConverter;
-    @Resource
-    private JobRegistryService jobRegistryService;
+public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupEntity, JobGroup, QueryJobGroup> implements JobGroupService {
+    private final JobGroupRepository jobGroupRepository;
+    private final JobGroupConverter jobGroupConverter;
     @Resource
     private JobInfoRepository jobInfoRepository;
 
-    @Override
-    public List<JobGroup> getAllList() {
-        return jobGroupConverter.sourceToTargetList(jobGroupRepository.getAllList());
+    public JobGroupServiceImpl(JobGroupRepository jobGroupRepository, JobGroupConverter jobGroupConverter) {
+        super(jobGroupRepository, jobGroupConverter);
+        this.jobGroupRepository = jobGroupRepository;
+        this.jobGroupConverter = jobGroupConverter;
     }
 
     @Override
-    public Map<String, Object> getPageList(String appname, String title, int start, int length) {
-        Page<JobGroupEntity> jobGroupEntityPage = jobGroupRepository.getPage(appname, title, start, length);
-        Map<String, Object> maps = new HashMap<>(3);
-        // 总记录数
-        maps.put("recordsTotal", jobGroupEntityPage.getTotalElements());
-        // 过滤后的总记录数
-        maps.put("recordsFiltered", jobGroupEntityPage.getTotalElements());
-        // 分页列表
-        maps.put("data", jobGroupConverter.sourceToTargetList(jobGroupEntityPage.getContent()));
-        return maps;
-    }
-
-    @Override
-    public void addJobGroup(JobGroup jobGroup) {
-        if (ObjectUtils.isEmpty(jobGroup.getId())) {
-            JobGroupEntity jobGroupEntity = jobGroupConverter.targetToSource(jobGroup);
-            if (jobGroupEntity.getAddressType()) {
-                jobGroupEntity.setAddressList(jobRegistryService.getAddressList(jobGroup.getAppname()));
-            }
-            jobGroupRepository.save(jobGroupEntity);
-        }
-    }
-
-    @Override
-    public void updateJobGroup(JobGroup jobGroup) {
-        JobGroupEntity jobGroupEntity = jobGroupRepository.getOne(jobGroup.getId());
-        if (!ObjectUtils.isEmpty(jobGroupEntity)) {
-            jobGroupEntity = jobGroupConverter.copyTargetToSource(jobGroup, jobGroupEntity);
-            if (jobGroupEntity.getAddressType()) {
-                jobGroupEntity.setAddressList(jobRegistryService.getAddressList(jobGroup.getAppname()));
-            }
-            jobGroupRepository.save(jobGroupEntity);
-        }
-    }
-
-    @Override
-    public void removeJobGroup(Long id) {
+    public void remove(Long id) {
         List<JobInfoEntity> jobInfoEntities = jobInfoRepository.getByJobGroupId(id);
         if (!ObjectUtils.isEmpty(jobInfoEntities)) {
             throw new GlsException("拒绝删除，该执行器使用中");
@@ -83,15 +46,20 @@ public class JobGroupServiceImpl implements JobGroupService {
         if (size == 1) {
             throw new GlsException("拒绝删除, 系统至少保留一个执行器");
         }
-        jobGroupRepository.deleteById(id);
+        super.remove(id);
     }
 
     @Override
-    public JobGroup loadJobGroupById(Long id) {
-        JobGroupEntity jobGroupEntity = jobGroupRepository.getOne(id);
-        if (ObjectUtils.isEmpty(jobGroupEntity)) {
-            throw new GlsException("执行器" + id + "不存在!");
-        }
-        return jobGroupConverter.sourceToTarget(jobGroupEntity);
+    protected Specification<JobGroupEntity> getSpec(QueryJobGroup queryJobGroup) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (StringUtils.hasText(queryJobGroup.getAppname())) {
+                predicates.add(criteriaBuilder.like(root.get("appname"), "%" + queryJobGroup.getAppname() + "%"));
+            }
+            if (StringUtils.hasText(queryJobGroup.getTitle())) {
+                predicates.add(criteriaBuilder.like(root.get("title"), "%" + queryJobGroup.getTitle() + "%"));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[2]));
+        };
     }
 }

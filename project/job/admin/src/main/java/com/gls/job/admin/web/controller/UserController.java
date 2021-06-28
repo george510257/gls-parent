@@ -59,7 +59,7 @@ public class UserController {
     @PermissionLimit(administer = true)
     @GetMapping("/group")
     public Result<List<JobGroup>> group() {
-        List<JobGroup> jobGroupList = jobGroupService.getAllList();
+        List<JobGroup> jobGroupList = jobGroupService.getAll();
         return new Result<>(jobGroupList);
     }
 

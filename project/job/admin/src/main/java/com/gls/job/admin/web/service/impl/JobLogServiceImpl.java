@@ -154,7 +154,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
     public Map<String, Object> getIndexMap(Long jobId) {
         Map<String, Object> maps = new HashMap<>();
         // 执行器列表
-        List<JobGroup> jobGroupList = jobGroupService.getAllList();
+        List<JobGroup> jobGroupList = jobGroupService.getAll();
         maps.put("jobGroupList", jobInfoService.getJobGroupListByRole(jobGroupList));
         // 任务
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);

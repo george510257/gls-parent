@@ -4,13 +4,19 @@ import com.gls.framework.core.base.BaseConverter;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.service.JobRegistryService;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author george
  */
 @Component
 public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup> {
+    @Resource
+    private JobRegistryService jobRegistryService;
+
     @Override
     public JobGroup copySourceToTarget(JobGroupEntity jobGroupEntity, JobGroup jobGroup) {
         jobGroup.setId(jobGroupEntity.getId());
@@ -27,7 +33,11 @@ public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup
         jobGroupEntity.setAppname(jobGroup.getAppname());
         jobGroupEntity.setTitle(jobGroup.getTitle());
         jobGroupEntity.setAddressType(jobGroup.getAddressType() == 0);
-        jobGroupEntity.setAddressList(StringUtil.toList(jobGroup.getAddressList()));
+        if (jobGroup.getAddressType() == 0) {
+            jobGroupEntity.setAddressList(jobRegistryService.getAddressList(jobGroup.getAppname()));
+        } else {
+            jobGroupEntity.setAddressList(StringUtil.toList(jobGroup.getAddressList()));
+        }
         jobGroupEntity.setId(jobGroup.getId());
         return jobGroupEntity;
     }

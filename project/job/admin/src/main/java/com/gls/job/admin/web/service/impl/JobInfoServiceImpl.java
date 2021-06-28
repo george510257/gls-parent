@@ -186,7 +186,7 @@ public class JobInfoServiceImpl implements JobInfoService {
         maps.put("ExecutorBlockStrategy", ExecutorBlockStrategy.values());
         maps.put("ScheduleType", ScheduleType.values());
         maps.put("MisfireStrategy", MisfireStrategy.values());
-        List<JobGroup> allList = jobGroupService.getAllList();
+        List<JobGroup> allList = jobGroupService.getAll();
         maps.put("JobGroupList", getJobGroupListByRole(allList));
         maps.put("jobGroup", jobGroupId);
         return maps;
