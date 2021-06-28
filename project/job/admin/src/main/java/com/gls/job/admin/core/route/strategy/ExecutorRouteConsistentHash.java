@@ -1,5 +1,6 @@
 package com.gls.job.admin.core.route.strategy;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.core.route.ExecutorRouter;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,7 @@ public class ExecutorRouteConsistentHash implements ExecutorRouter {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("MD5 not supported", e);
+            throw new GlsException("MD5 not supported", e);
         }
         md5.reset();
         byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);

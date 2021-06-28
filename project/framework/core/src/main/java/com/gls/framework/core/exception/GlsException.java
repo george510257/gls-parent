@@ -19,6 +19,11 @@ public class GlsException extends RuntimeException {
         this.message = message;
     }
 
+    public GlsException(String message, Throwable cause) {
+        super(message, cause);
+        this.message = message;
+    }
+
     public GlsException(Integer code, String message) {
         super(message);
         this.code = code;

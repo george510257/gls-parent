@@ -306,7 +306,7 @@ import com.gls.job.core.handler.IJobHandler;
 public class DemoGlueJobHandler extends IJobHandler {
 
 	@Override
-	public void execute() throws Exception {
+	public void execute() {
 		JobHelper.log("GLS-JOB, Hello World.");
 	}
 

@@ -15,6 +15,6 @@ public class RingDataHolder extends BaseHolder<Integer, List<Long>> {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
     }
 }

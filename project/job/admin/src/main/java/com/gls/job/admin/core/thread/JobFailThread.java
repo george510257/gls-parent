@@ -18,22 +18,26 @@ public class JobFailThread extends BaseThread {
     private JobLogService jobLogService;
 
     @Override
-    protected void initExecute() throws Exception {
+    protected void initExecute() {
         log.info(">>>>>>>>>>> gls-job, JobFailThread init");
     }
 
     @Override
-    protected void doExecute() throws Exception {
+    protected void doExecute() {
         jobLogService.doJobFail();
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        TimeUnit.SECONDS.sleep(10);
+    protected void sleepExecute() {
+        try {
+            TimeUnit.SECONDS.sleep(10);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
+    protected void destroyExecute() {
         log.info(">>>>>>>>>>> gls-job, JobFailThread destroy");
     }
 }

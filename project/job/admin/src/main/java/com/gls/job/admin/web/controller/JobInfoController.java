@@ -5,9 +5,12 @@ import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,11 +39,11 @@ public class JobInfoController {
     }
 
     @PostMapping("/pageList")
-    public Result<Map<String, Object>> pageList(Long jobGroup, Boolean triggerStatus, String jobDesc, String executorHandler, String author,
-                                                @RequestParam(required = false, defaultValue = "0") int start,
-                                                @RequestParam(required = false, defaultValue = "10") int length) {
+    public Result<Page<JobInfo>> pageList(Long jobGroup, Boolean triggerStatus, String jobDesc, String executorHandler, String author,
+                                          @RequestParam(required = false, defaultValue = "0") int start,
+                                          @RequestParam(required = false, defaultValue = "10") int length) {
         try {
-            return new Result<>(jobInfoService.pageList(jobGroup, triggerStatus, jobDesc, executorHandler, author, start, length));
+            return new Result<>(jobInfoService.getPage(new QueryJobInfo(jobGroup, triggerStatus, jobDesc, executorHandler, author), PageRequest.of(start, length)));
         } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
@@ -49,7 +52,7 @@ public class JobInfoController {
     @PostMapping("/add")
     public Result<String> add(JobInfo jobInfo) {
         try {
-            jobInfoService.addJobInfo(jobInfo);
+            jobInfoService.add(jobInfo);
             return Result.SUCCESS;
         } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
@@ -59,7 +62,7 @@ public class JobInfoController {
     @PostMapping("/update")
     public Result<String> update(JobInfo jobInfo) {
         try {
-            jobInfoService.updateJobInfo(jobInfo);
+            jobInfoService.update(jobInfo);
             return Result.SUCCESS;
         } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
@@ -69,7 +72,7 @@ public class JobInfoController {
     @GetMapping("/remove")
     public Result<String> remove(Long jobInfoId) {
         try {
-            jobInfoService.removeJobInfo(jobInfoId);
+            jobInfoService.remove(jobInfoId);
             return Result.SUCCESS;
         } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());

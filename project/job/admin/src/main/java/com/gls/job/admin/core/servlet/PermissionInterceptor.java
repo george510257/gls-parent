@@ -1,5 +1,6 @@
 package com.gls.job.admin.core.servlet;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.core.constants.JobConstants;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class PermissionInterceptor implements AsyncHandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
@@ -39,7 +40,7 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
                 return false;
             }
             if (needAdminister && loginUser.getRole() != 1) {
-                throw new RuntimeException("权限拦截");
+                throw new GlsException("权限拦截");
             }
             request.setAttribute(JobConstants.LOGIN_IDENTITY_KEY, loginUser);
         }

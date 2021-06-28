@@ -3,15 +3,16 @@ package com.gls.job.admin.web.service;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
+import com.gls.job.admin.web.model.query.QueryJobInfo;
+import com.gls.starter.data.jpa.base.BaseService;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author george
  */
-public interface JobInfoService {
+public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
     /**
      * do JobSchedule Ring
      */
@@ -33,9 +34,8 @@ public interface JobInfoService {
      * do JobSchedule
      *
      * @return
-     * @throws ParseException
      */
-    boolean doJobSchedule() throws ParseException;
+    boolean doJobSchedule();
 
     /**
      * getIndexData
@@ -44,41 +44,6 @@ public interface JobInfoService {
      * @return
      */
     Map<String, Object> getIndexData(Long jobGroupId);
-
-    /**
-     * pageList
-     *
-     * @param jobGroup
-     * @param triggerStatus
-     * @param jobDesc
-     * @param executorHandler
-     * @param author
-     * @param start
-     * @param length
-     * @return
-     */
-    Map<String, Object> pageList(Long jobGroup, Boolean triggerStatus, String jobDesc, String executorHandler, String author, int start, int length);
-
-    /**
-     * addJobInfo
-     *
-     * @param jobInfo
-     */
-    void addJobInfo(JobInfo jobInfo);
-
-    /**
-     * updateJobInfo
-     *
-     * @param jobInfo
-     */
-    void updateJobInfo(JobInfo jobInfo);
-
-    /**
-     * removeJobInfo
-     *
-     * @param jobInfoId
-     */
-    void removeJobInfo(Long jobInfoId);
 
     /**
      * stopJobInfo

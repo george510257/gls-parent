@@ -18,22 +18,30 @@ public class JobCompleteThread extends BaseThread {
     private JobLogService jobLogService;
 
     @Override
-    protected void initExecute() throws Exception {
-        TimeUnit.MILLISECONDS.sleep(50);
+    protected void initExecute() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(50);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
-    protected void doExecute() throws Exception {
+    protected void doExecute() {
         jobLogService.doJobComplete();
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        TimeUnit.SECONDS.sleep(60);
+    protected void sleepExecute() {
+        try {
+            TimeUnit.SECONDS.sleep(60);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
+    protected void destroyExecute() {
         log.info(">>>>>>>>>>> gls-job, JobCompleteThread destroy");
     }
 }

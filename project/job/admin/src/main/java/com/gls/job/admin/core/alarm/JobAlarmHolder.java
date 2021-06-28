@@ -35,7 +35,7 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         regist(jobAlarmMap);
     }
 }

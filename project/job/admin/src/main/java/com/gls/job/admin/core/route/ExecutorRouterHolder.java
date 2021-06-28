@@ -19,7 +19,7 @@ public class ExecutorRouterHolder extends BaseHolder<String, ExecutorRouter> {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         regist(executorRouterMap);
     }
 }

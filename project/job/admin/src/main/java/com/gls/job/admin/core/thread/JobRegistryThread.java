@@ -19,22 +19,26 @@ public class JobRegistryThread extends BaseThread {
     private JobRegistryService jobRegistryService;
 
     @Override
-    protected void initExecute() throws Exception {
+    protected void initExecute() {
         log.info(">>>>>>>>>>> gls-job, JobRegistryThread init");
     }
 
     @Override
-    protected void doExecute() throws Exception {
+    protected void doExecute() {
         jobRegistryService.doJobRegistry();
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
+    protected void sleepExecute() {
+        try {
+            TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
+    protected void destroyExecute() {
         log.info(">>>>>>>>>>> gls-job, JobRegistryThread destroy");
     }
 }
