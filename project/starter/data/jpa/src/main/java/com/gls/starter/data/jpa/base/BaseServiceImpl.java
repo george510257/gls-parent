@@ -1,26 +1,20 @@
-package com.gls.job.admin.web.service.impl;
+package com.gls.starter.data.jpa.base;
 
 import com.gls.framework.core.base.BaseConverter;
-import com.gls.job.admin.web.service.JobService;
-import com.gls.job.core.exception.JobException;
-import com.gls.starter.data.jpa.base.BaseEntity;
-import com.gls.starter.data.jpa.base.BaseEntityRepository;
+import com.gls.framework.core.exception.GlsException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
-import java.util.List;
-
 /**
  * @author george
  */
-public abstract class JobServiceImpl<Entity extends BaseEntity, Model, QueryModel> implements JobService<Model, QueryModel> {
-    protected BaseEntityRepository<Entity> repository;
-    protected BaseConverter<Entity, Model> converter;
+public abstract class BaseServiceImpl<Entity extends BaseEntity, Model, QueryModel> implements BaseService<Model, QueryModel> {
+    private final BaseEntityRepository<Entity> repository;
+    private final BaseConverter<Entity, Model> converter;
 
-    public JobServiceImpl(BaseEntityRepository<Entity> repository, BaseConverter<Entity, Model> converter) {
+    public BaseServiceImpl(BaseEntityRepository<Entity> repository, BaseConverter<Entity, Model> converter) {
         this.repository = repository;
         this.converter = converter;
     }
@@ -28,15 +22,14 @@ public abstract class JobServiceImpl<Entity extends BaseEntity, Model, QueryMode
     @Override
     public Page<Model> getPage(QueryModel model, Pageable pageable) {
         Page<Entity> entityPage = repository.findAll(getSpec(model), pageable);
-        List<Model> modelList = converter.sourceToTargetList(entityPage.getContent());
-        return new PageImpl<>(modelList, pageable, entityPage.getTotalElements());
+        return entityPage.map(converter::sourceToTarget);
     }
 
     @Override
     public void add(Model model) {
         Entity entity = converter.targetToSource(model);
         if (!ObjectUtils.isEmpty(entity.getId())) {
-            throw new JobException("id重复");
+            throw new GlsException("id重复");
         }
         repository.save(entity);
     }

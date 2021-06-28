@@ -2,8 +2,10 @@ package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.model.query.QueryJobLog;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.LogResultModel;
+import com.gls.starter.data.jpa.base.BaseService;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Map;
 /**
  * @author george
  */
-public interface JobLogService {
+public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
     /**
      * callback
      *
@@ -52,19 +54,6 @@ public interface JobLogService {
      * @return
      */
     List<JobInfo> getJobsByGroup(Long jobGroupId);
-
-    /**
-     * pageList
-     *
-     * @param jobGroup
-     * @param jobId
-     * @param logStatus
-     * @param filterTime
-     * @param start
-     * @param length
-     * @return
-     */
-    Map<String, Object> pageList(Long jobGroup, Long jobId, int logStatus, String filterTime, int start, int length);
 
     /**
      * logDetail

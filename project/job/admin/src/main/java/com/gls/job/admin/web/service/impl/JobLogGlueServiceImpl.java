@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.converter.JobLogGlueConverter;
@@ -9,7 +10,6 @@ import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.service.JobLogGlueService;
 import com.gls.job.core.constants.GlueType;
-import com.gls.job.core.exception.JobException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -38,14 +38,14 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
         List<JobLogGlueEntity> jobLogGlueEntities = jobLogGlueRepository.getByJobInfoIdOrderByIdDesc(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new JobException("任务ID非法");
+            throw new GlsException("任务ID非法");
         }
         if (GlueType.BEAN.equals(jobInfoEntity.getGlueType())) {
-            throw new JobException("该任务非GLUE模式");
+            throw new GlsException("该任务非GLUE模式");
         }
         boolean validPermission = LoginUserUtil.validPermission(jobInfoEntity.getJobGroup().getId());
         if (!validPermission) {
-            throw new JobException("权限拦截");
+            throw new GlsException("权限拦截");
         }
         Map<String, Object> map = new HashMap<>(3);
         map.put("GlueType", GlueType.values());
@@ -58,7 +58,7 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
     public void saveGlueSource(Long jobId, String glueSource, String glueRemark) {
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new JobException("任务ID非法");
+            throw new GlsException("任务ID非法");
         }
         jobInfoEntity.setGlueSource(glueSource);
         jobInfoEntity.setGlueRemark(glueRemark);

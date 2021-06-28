@@ -1,4 +1,4 @@
-package com.gls.job.admin.web.service;
+package com.gls.starter.data.jpa.base;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
  *
  * @author george
  */
-public interface JobService<Model, QueryModel> {
+public interface BaseService<Model, QueryModel> {
     /**
      * getPage
      *

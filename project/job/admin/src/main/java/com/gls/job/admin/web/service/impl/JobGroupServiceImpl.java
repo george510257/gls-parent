@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.web.converter.JobGroupConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
@@ -8,7 +9,6 @@ import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobRegistryService;
-import com.gls.job.core.exception.JobException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -77,11 +77,11 @@ public class JobGroupServiceImpl implements JobGroupService {
     public void removeJobGroup(Long id) {
         List<JobInfoEntity> jobInfoEntities = jobInfoRepository.getByJobGroupId(id);
         if (!ObjectUtils.isEmpty(jobInfoEntities)) {
-            throw new JobException("拒绝删除，该执行器使用中");
+            throw new GlsException("拒绝删除，该执行器使用中");
         }
         long size = jobGroupRepository.count();
         if (size == 1) {
-            throw new JobException("拒绝删除, 系统至少保留一个执行器");
+            throw new GlsException("拒绝删除, 系统至少保留一个执行器");
         }
         jobGroupRepository.deleteById(id);
     }
@@ -90,7 +90,7 @@ public class JobGroupServiceImpl implements JobGroupService {
     public JobGroup loadJobGroupById(Long id) {
         JobGroupEntity jobGroupEntity = jobGroupRepository.getOne(id);
         if (ObjectUtils.isEmpty(jobGroupEntity)) {
-            throw new JobException("执行器" + id + "不存在!");
+            throw new GlsException("执行器" + id + "不存在!");
         }
         return jobGroupConverter.sourceToTarget(jobGroupEntity);
     }

@@ -1,8 +1,8 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.web.service.JobLogGlueService;
-import com.gls.job.core.exception.JobException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ public class JobCodeController {
         try {
             Map<String, Object> map = jobLogGlueService.getIndex(jobId);
             return new Result<>(map);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -42,7 +42,7 @@ public class JobCodeController {
         try {
             jobLogGlueService.saveGlueSource(jobId, glueSource, glueRemark);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }

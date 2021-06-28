@@ -7,6 +7,7 @@ import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.job.admin.web.repository.JobUserRepository;
 import com.gls.job.admin.web.service.JobUserService;
+import com.gls.starter.data.jpa.base.BaseServiceImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -21,9 +22,9 @@ import java.util.List;
  * @author george
  */
 @Service("jobUserService")
-public class JobUserServiceImpl extends JobServiceImpl<JobUserEntity, JobUser, QueryJobUser> implements JobUserService {
-    private JobUserRepository jobUserRepository;
-    private JobUserConverter jobUserConverter;
+public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, QueryJobUser> implements JobUserService {
+    private final JobUserRepository jobUserRepository;
+    private final JobUserConverter jobUserConverter;
 
     public JobUserServiceImpl(JobUserRepository jobUserRepository, JobUserConverter jobUserConverter) {
         super(jobUserRepository, jobUserConverter);

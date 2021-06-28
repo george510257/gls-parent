@@ -3,6 +3,7 @@ package com.gls.job.admin.web.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.JsonUtil;
 import com.gls.job.admin.constants.JobAdminProperties;
 import com.gls.job.admin.constants.TriggerType;
@@ -16,6 +17,7 @@ import com.gls.job.admin.web.entity.JobLogReportEntity;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
+import com.gls.job.admin.web.model.query.QueryJobLog;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
@@ -29,14 +31,17 @@ import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.exception.JobException;
+import com.gls.starter.data.jpa.base.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Predicate;
 import java.util.*;
 
 /**
@@ -44,8 +49,10 @@ import java.util.*;
  */
 @Slf4j
 @Service("jobLogService")
-public class JobLogServiceImpl implements JobLogService {
+public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, QueryJobLog> implements JobLogService {
     private static final int HANDLE_MSG_MAX_LENGTH = 15000;
+    private final JobLogRepository jobLogRepository;
+    private final JobLogConverter jobLogConverter;
     @Resource
     private JobAsyncService jobAsyncService;
     @Resource
@@ -55,19 +62,21 @@ public class JobLogServiceImpl implements JobLogService {
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobLogRepository jobLogRepository;
-    @Resource
     private JobLogReportRepository jobLogReportRepository;
     @Resource
     private JobInfoConverter jobInfoConverter;
-    @Resource
-    private JobLogConverter jobLogConverter;
     @Resource
     private JobAlarmHolder jobAlarmHolder;
     @Resource
     private JobAdminProperties jobAdminProperties;
     @Resource
     private ExecutorApiHolder executorApiHolder;
+
+    public JobLogServiceImpl(JobLogRepository jobLogRepository, JobLogConverter jobLogConverter) {
+        super(jobLogRepository, jobLogConverter);
+        this.jobLogRepository = jobLogRepository;
+        this.jobLogConverter = jobLogConverter;
+    }
 
     @Override
     public void callback(List<CallbackModel> callbackModels) {
@@ -77,10 +86,10 @@ public class JobLogServiceImpl implements JobLogService {
         callbackModels.forEach(callbackModel -> {
             JobLogEntity jobLogEntity = jobLogRepository.getOne(callbackModel.getLogId());
             if (ObjectUtils.isEmpty(jobLogEntity)) {
-                throw new JobException("log item not found.");
+                throw new GlsException("log item not found.");
             }
             if (jobLogEntity.getHandleCode() > 0) {
-                throw new JobException("log repeat callback.");
+                throw new GlsException("log repeat callback.");
             }
             StringBuilder handleMsgBuilder = new StringBuilder();
             if (StringUtils.hasText(jobLogEntity.getHandleMsg())) {
@@ -150,10 +159,10 @@ public class JobLogServiceImpl implements JobLogService {
         // 任务
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new JobException("任务ID不存在");
+            throw new GlsException("任务ID不存在");
         }
         if (!LoginUserUtil.validPermission(jobInfoEntity.getJobGroup().getId())) {
-            throw new JobException("权限拦截");
+            throw new GlsException("权限拦截");
         }
         maps.put("jobInfo", jobInfoConverter.sourceToTarget(jobInfoEntity));
         return maps;
@@ -162,33 +171,6 @@ public class JobLogServiceImpl implements JobLogService {
     @Override
     public List<JobInfo> getJobsByGroup(Long jobGroupId) {
         return jobInfoConverter.sourceToTargetList(jobInfoRepository.getByJobGroupId(jobGroupId));
-    }
-
-    @Override
-    public Map<String, Object> pageList(Long jobGroup, Long jobId, int logStatus, String filterTime, int start, int length) {
-        if (!LoginUserUtil.validPermission(jobGroup)) {
-            throw new JobException("权限拦截");
-        }
-        // parse param
-        Date triggerTimeStart = null;
-        Date triggerTimeEnd = null;
-        if (filterTime != null && filterTime.trim().length() > 0) {
-            String[] temp = filterTime.split(" - ");
-            if (temp.length == 2) {
-                triggerTimeStart = DateUtil.parseDateTime(temp[0]);
-                triggerTimeEnd = DateUtil.parseDateTime(temp[1]);
-            }
-        }
-        Page<JobLogEntity> page = jobLogRepository.getPage(jobGroup, jobId, triggerTimeStart, triggerTimeEnd, logStatus, start, length);
-        // package result
-        Map<String, Object> maps = new HashMap<>();
-        // 总记录数
-        maps.put("recordsTotal", page.getTotalElements());
-        // 过滤后的总记录数
-        maps.put("recordsFiltered", page.getTotalElements());
-        // 分页列表
-        maps.put("data", jobLogConverter.sourceToTargetList(page.getContent()));
-        return maps;
     }
 
     @Override
@@ -213,10 +195,10 @@ public class JobLogServiceImpl implements JobLogService {
         JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
         JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new JobException("任务ID存在");
+            throw new GlsException("任务ID存在");
         }
         if (!Result.SUCCESS_CODE.equals(jobLogEntity.getTriggerCode())) {
-            throw new JobException("调度失败，无法终止日志");
+            throw new GlsException("调度失败，无法终止日志");
         }
         try {
             Result<String> result = executorApiHolder.load(jobLogEntity.getExecutorAddress()).kill(new KillModel(logId));
@@ -228,7 +210,7 @@ public class JobLogServiceImpl implements JobLogService {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new JobException(e.getMessage());
+            throw new GlsException(e.getMessage());
         }
     }
 
@@ -264,10 +246,12 @@ public class JobLogServiceImpl implements JobLogService {
             // 清理所有日志数据
             start = 0;
         } else {
-            throw new JobException("清理类型参数异常");
+            throw new GlsException("清理类型参数异常");
         }
-        List<JobLogEntity> jobLogEntities = jobLogRepository.getPage(groupId, jobId, null, clearBeforeTime, null, 2, start).getContent();
-        jobLogRepository.deleteAll(jobLogEntities);
+        getPage(
+                new QueryJobLog(groupId, jobId, null, clearBeforeTime, null),
+                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime")))
+                .get().map(JobLog::getId).forEach(jobLogRepository::deleteById);
     }
 
     private long cleanJobLog(long lastCleanLogTime) {
@@ -282,8 +266,10 @@ public class JobLogServiceImpl implements JobLogService {
             expiredDay.set(Calendar.MILLISECOND, 0);
             Date clearBeforeTime = expiredDay.getTime();
             // clean expired log
-            List<JobLogEntity> jobLogEntities = jobLogRepository.getPage(null, null, clearBeforeTime, null, null, 0, 1000).getContent();
-            jobLogRepository.deleteAll(jobLogEntities);
+            getPage(
+                    new QueryJobLog(null, null, clearBeforeTime, null, null),
+                    PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "triggerTime")))
+                    .get().map(JobLog::getId).forEach(jobLogRepository::deleteById);
             // update clean time
             lastCleanLogTime = System.currentTimeMillis();
         }
@@ -361,5 +347,43 @@ public class JobLogServiceImpl implements JobLogService {
             }
         }
         jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().concat(triggerChildMsgBuilder.toString()));
+    }
+
+    @Override
+    protected Specification<JobLogEntity> getSpec(QueryJobLog queryJobLog) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (!ObjectUtils.isEmpty(queryJobLog.getJobGroupId())) {
+                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("jobGroup").get("id"), queryJobLog.getJobGroupId()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getJobInfoId())) {
+                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("id"), queryJobLog.getJobInfoId()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeFrom())) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeFrom()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeTo())) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeTo()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getLogStatus())) {
+                switch (queryJobLog.getLogStatus()) {
+                    case 1:
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 200));
+                        break;
+                    case 2:
+                        Predicate predicate1 = criteriaBuilder.not(root.get("triggerCode").in(0, 200));
+                        Predicate predicate2 = criteriaBuilder.not(root.get("handleCode").in(0, 200));
+                        predicates.add(criteriaBuilder.or(predicate1, predicate2));
+                        break;
+                    case 3:
+                        predicates.add(criteriaBuilder.equal(root.get("triggerCode"), 200));
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 0));
+                        break;
+                    default:
+                        log.info("logStatus : {}", queryJobLog.getLogStatus());
+                }
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
     }
 }

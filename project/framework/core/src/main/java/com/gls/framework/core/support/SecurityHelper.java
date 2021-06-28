@@ -1,13 +1,18 @@
 package com.gls.framework.core.support;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author george
  */
-public interface SecurityHelper {
+@Component
+public class SecurityHelper {
     /**
      * 获取登录用户ID
      *
      * @return
      */
-    Long getLoginUserId();
+    public Long getLoginUserId() {
+        return null;
+    }
 }

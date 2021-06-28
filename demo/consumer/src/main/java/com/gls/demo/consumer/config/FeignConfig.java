@@ -2,13 +2,10 @@ package com.gls.demo.consumer.config;
 
 import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.gls.framework.core.exception.DefaultExceptionHandler;
-import com.gls.framework.core.support.RpcServiceHelper;
-import org.apache.dubbo.config.RegistryConfig;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -45,10 +42,5 @@ public class FeignConfig {
     @SentinelRestTemplate(blockHandler = "handleException", blockHandlerClass = DefaultExceptionHandler.class)
     public RestTemplate restTemplate() {
         return new RestTemplate();
-    }
-
-    @Bean
-    public RpcServiceHelper rpcServiceHelper(ApplicationContext applicationContext, RegistryConfig registryConfig) {
-        return new RpcServiceHelper(applicationContext, registryConfig);
     }
 }

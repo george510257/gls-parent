@@ -1,12 +1,12 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.service.JobAsyncService;
 import com.gls.job.admin.web.service.JobInfoService;
-import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,7 @@ public class JobInfoController {
     public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "-1") Long jobGroupId) {
         try {
             return new Result<>(jobInfoService.getIndexData(jobGroupId));
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -41,7 +41,7 @@ public class JobInfoController {
                                                 @RequestParam(required = false, defaultValue = "10") int length) {
         try {
             return new Result<>(jobInfoService.pageList(jobGroup, triggerStatus, jobDesc, executorHandler, author, start, length));
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -51,7 +51,7 @@ public class JobInfoController {
         try {
             jobInfoService.addJobInfo(jobInfo);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -61,7 +61,7 @@ public class JobInfoController {
         try {
             jobInfoService.updateJobInfo(jobInfo);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -71,7 +71,7 @@ public class JobInfoController {
         try {
             jobInfoService.removeJobInfo(jobInfoId);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -81,7 +81,7 @@ public class JobInfoController {
         try {
             jobInfoService.stopJobInfo(jobInfoId);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -91,7 +91,7 @@ public class JobInfoController {
         try {
             jobInfoService.startJobInfo(jobInfoId);
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -101,7 +101,7 @@ public class JobInfoController {
         try {
             jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
             return Result.SUCCESS;
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }
@@ -111,7 +111,7 @@ public class JobInfoController {
         try {
             List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
             return new Result<>(list);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }

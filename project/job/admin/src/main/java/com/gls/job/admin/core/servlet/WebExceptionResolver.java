@@ -2,7 +2,7 @@ package com.gls.job.admin.core.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gls.framework.api.result.Result;
-import com.gls.job.core.exception.JobException;
+import com.gls.framework.core.exception.GlsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +29,7 @@ public class WebExceptionResolver implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response, Object handler, Exception ex) {
-        if (!(ex instanceof JobException)) {
+        if (!(ex instanceof GlsException)) {
             log.error("WebExceptionResolver:{}", ex);
         }
         // if json

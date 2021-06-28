@@ -5,33 +5,28 @@ import org.apache.dubbo.config.spring.ReferenceBean;
 import org.apache.dubbo.config.spring.ServiceBean;
 import org.apache.dubbo.config.utils.ReferenceConfigCache;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author george
  */
+@Component
 public class RpcServiceHelper {
-    private final ApplicationContext applicationContext;
-    private final RegistryConfig registryConfig;
+    @Resource
+    private ApplicationContext applicationContext;
+    @Resource
+    private RegistryConfig registryConfig;
 
-    public RpcServiceHelper(ApplicationContext applicationContext, RegistryConfig registryConfig) {
-        this.applicationContext = applicationContext;
-        this.registryConfig = registryConfig;
-    }
-
-    public <T> T loadService(String group, Class<T> cls) {
-        ReferenceConfigCache cache = ReferenceConfigCache.getCache();
-        ReferenceBean<T> referenceBean = new ReferenceBean<T>();
+    public <T> T getServiceByGroup(String group, Class<T> serviceClass) {
+        ReferenceBean<T> referenceBean = new ReferenceBean<>();
         referenceBean.setApplicationContext(applicationContext);
-        referenceBean.setInterface(cls);
-        referenceBean.setGroup(group);
         referenceBean.setRegistry(registryConfig);
-        try {
-            referenceBean.afterPropertiesSet();
-            return cache.get(referenceBean);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        referenceBean.setGroup(group);
+        referenceBean.setInterface(serviceClass);
+        ReferenceConfigCache cache = ReferenceConfigCache.getCache();
+        return cache.get(referenceBean);
     }
 
     public <T> void registService(String group, Class<T> cls, T t) {

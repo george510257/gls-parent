@@ -1,9 +1,9 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.service.JobGroupService;
-import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +41,7 @@ public class JobGroupController {
         }
         try {
             jobGroupService.addJobGroup(jobGroup);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -55,7 +55,7 @@ public class JobGroupController {
         }
         try {
             jobGroupService.updateJobGroup(jobGroup);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -65,7 +65,7 @@ public class JobGroupController {
     public Result<String> remove(Long id) {
         try {
             jobGroupService.removeJobGroup(id);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -75,7 +75,7 @@ public class JobGroupController {
     public Result<JobGroup> loadById(Long id) {
         try {
             return new Result<>(jobGroupService.loadJobGroupById(id));
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
     }

@@ -1,6 +1,7 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.core.servlet.PermissionLimit;
 import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.model.JobGroup;
@@ -8,7 +9,6 @@ import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobUserService;
-import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,7 +88,7 @@ public class UserController {
         }
         try {
             jobUserService.add(jobUser);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -107,7 +107,7 @@ public class UserController {
         }
         try {
             jobUserService.update(jobUser);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -122,7 +122,7 @@ public class UserController {
         }
         try {
             jobUserService.remove(id);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;
@@ -139,7 +139,7 @@ public class UserController {
         }
         try {
             jobUserService.changePassword(password);
-        } catch (JobException e) {
+        } catch (GlsException e) {
             return new Result<>(Result.FAIL_CODE, e.getMessage());
         }
         return Result.SUCCESS;

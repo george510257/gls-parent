@@ -26,7 +26,7 @@ public class DubboDemoController {
      */
     @GetMapping
     public List<DemoModel> query(DemoModel model) {
-        return rpcServiceHelper.loadService(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).query(model);
+        return rpcServiceHelper.getServiceByGroup(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).query(model);
     }
 
     /**
@@ -37,7 +37,7 @@ public class DubboDemoController {
      */
     @GetMapping(value = "/{id:\\d+}")
     public DemoModel getInfo(@PathVariable Integer id) {
-        return rpcServiceHelper.loadService(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).getInfo(id);
+        return rpcServiceHelper.getServiceByGroup(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).getInfo(id);
     }
 
     /**
@@ -48,7 +48,7 @@ public class DubboDemoController {
      */
     @PostMapping
     public DemoModel create(@RequestBody DemoModel model) {
-        return rpcServiceHelper.loadService(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).create(model);
+        return rpcServiceHelper.getServiceByGroup(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).create(model);
     }
 
     /**
@@ -59,7 +59,7 @@ public class DubboDemoController {
      */
     @PutMapping
     public DemoModel update(@RequestBody DemoModel model) {
-        return rpcServiceHelper.loadService(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).update(model);
+        return rpcServiceHelper.getServiceByGroup(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).update(model);
     }
 
     /**
@@ -69,6 +69,6 @@ public class DubboDemoController {
      */
     @DeleteMapping(value = "/{id:\\d+}")
     public void delete(@PathVariable Integer id) {
-        rpcServiceHelper.loadService(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).delete(id);
+        rpcServiceHelper.getServiceByGroup(FeignConfig.PROVIDER_APPLICATION_NAME, DubboDemoApi.class).delete(id);
     }
 }

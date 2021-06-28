@@ -3,6 +3,7 @@ package com.gls.job.admin.web.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
 import com.gls.framework.api.result.Result;
+import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.constants.*;
 import com.gls.job.admin.core.route.ExecutorRouterHolder;
@@ -27,7 +28,6 @@ import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.ExecutorBlockStrategy;
 import com.gls.job.core.constants.GlueType;
 import com.gls.job.core.constants.JobConstants;
-import com.gls.job.core.exception.JobException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -219,14 +219,14 @@ public class JobInfoServiceImpl implements JobInfoService {
         validJobInfoEntity(jobInfo);
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobInfo.getId());
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new JobException("任务ID不存在");
+            throw new GlsException("任务ID不存在");
         }
         jobInfoEntity = jobInfoConverter.copyTargetToSource(jobInfo, jobInfoEntity);
         try {
             refreshNextValidTime(jobInfoEntity, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
-            throw new JobException("调度类型非法");
+            throw new GlsException("调度类型非法");
         }
         jobInfoRepository.save(jobInfoEntity);
     }
@@ -258,7 +258,7 @@ public class JobInfoServiceImpl implements JobInfoService {
             refreshNextValidTime(jobInfoEntity, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
-            throw new JobException("调度类型非法");
+            throw new GlsException("调度类型非法");
         }
         jobInfoRepository.save(jobInfoEntity);
     }
@@ -281,7 +281,7 @@ public class JobInfoServiceImpl implements JobInfoService {
             }
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
-            throw new JobException("调度类型非法");
+            throw new GlsException("调度类型非法");
         }
         return result;
     }
@@ -307,30 +307,30 @@ public class JobInfoServiceImpl implements JobInfoService {
     private void validJobInfoEntity(JobInfo jobInfo) {
         // JobGroup
         if (ObjectUtils.isEmpty(jobInfo.getJobGroup())) {
-            throw new JobException("请选择执行器");
+            throw new GlsException("请选择执行器");
         }
         // ScheduleType
         if (jobInfo.getScheduleType() == ScheduleType.CRON) {
             if (ObjectUtils.isEmpty(jobInfo.getScheduleConf()) || CronExpression.isValidExpression(jobInfo.getScheduleConf())) {
-                throw new JobException("Cron非法");
+                throw new GlsException("Cron非法");
             }
         } else if (jobInfo.getScheduleType() == ScheduleType.FIX_RATE) {
             if (ObjectUtils.isEmpty(jobInfo.getScheduleConf())) {
-                throw new JobException("调度类型非法");
+                throw new GlsException("调度类型非法");
             }
             try {
                 int fixSecond = Integer.parseInt(jobInfo.getScheduleConf());
                 if (fixSecond < 1) {
-                    throw new JobException("调度类型非法");
+                    throw new GlsException("调度类型非法");
                 }
             } catch (Exception e) {
-                throw new JobException("调度类型非法");
+                throw new GlsException("调度类型非法");
             }
         }
         // GlueType
         if (jobInfo.getGlueType() == GlueType.BEAN) {
             if (ObjectUtils.isEmpty(jobInfo.getExecutorHandler())) {
-                throw new JobException("请填写JobHandler");
+                throw new GlsException("请填写JobHandler");
             }
         } else if (jobInfo.getGlueType() == GlueType.GLUE_SHELL) {
             if (!ObjectUtils.isEmpty(jobInfo.getGlueSource())) {
