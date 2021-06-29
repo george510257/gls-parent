@@ -11,19 +11,19 @@ public interface JobUserService extends BaseService<JobUser, QueryJobUser> {
     /**
      * login
      *
-     * @param userName
+     * @param username
      * @param password
      * @param ifRemember
      * @return
      */
-    String login(String userName, String password, boolean ifRemember);
+    void login(String username, String password, boolean ifRemember);
 
     /**
      * login
      *
      * @return
      */
-    String logout();
+    void logout();
 
     /**
      * changePassword

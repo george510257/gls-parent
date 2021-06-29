@@ -1,18 +1,18 @@
 package com.gls.job.admin.web.model;
 
+import com.gls.framework.api.model.BaseModel;
 import com.gls.job.core.constants.GlueType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
- * gls-job log for glue, used to track job code process
- *
- * @author xuxueli 2016-5-19 17:57:46
+ * @author george
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JobLogGlue {
-    private Long id;
+public class JobLogGlue extends BaseModel {
     /**
      * 任务主键ID
      */

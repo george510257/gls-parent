@@ -1,17 +1,17 @@
 package com.gls.job.admin.web.model;
 
+import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
- * gls-job log, used to track trigger process
- *
- * @author xuxueli  2015-12-19 23:19:09
+ * @author george
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JobLog {
-    private long id;
+public class JobLog extends BaseModel {
     // job info
     private Long jobGroup;
     private Long jobId;

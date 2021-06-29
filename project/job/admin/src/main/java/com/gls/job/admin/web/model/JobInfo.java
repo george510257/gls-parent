@@ -1,26 +1,23 @@
 package com.gls.job.admin.web.model;
 
+import com.gls.framework.api.model.BaseModel;
 import com.gls.job.admin.constants.ExecutorRouteStrategy;
 import com.gls.job.admin.constants.MisfireStrategy;
 import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.core.constants.ExecutorBlockStrategy;
 import com.gls.job.core.constants.GlueType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
- * gls-job info
- *
- * @author xuxueli  2016-1-12 18:25:49
+ * @author george
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JobInfo {
-    /**
-     * 主键ID
-     */
-    private Long id;
+public class JobInfo extends BaseModel {
     /**
      * 执行器主键ID
      */

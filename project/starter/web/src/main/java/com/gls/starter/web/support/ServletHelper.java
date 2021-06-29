@@ -13,20 +13,16 @@ import javax.servlet.http.HttpSession;
  */
 public class ServletHelper {
     public static ServletWebRequest loadServletWebRequest() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert servletRequestAttributes != null;
-        return new ServletWebRequest(servletRequestAttributes.getRequest(), servletRequestAttributes.getResponse());
+        return new ServletWebRequest(getRequest(), getResponse());
     }
 
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert servletRequestAttributes != null;
         return servletRequestAttributes.getRequest();
     }
 
     public static HttpServletResponse getResponse() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert servletRequestAttributes != null;
         return servletRequestAttributes.getResponse();
     }
 

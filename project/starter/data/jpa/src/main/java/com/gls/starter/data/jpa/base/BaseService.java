@@ -1,5 +1,6 @@
 package com.gls.starter.data.jpa.base;
 
+import com.gls.framework.api.model.BaseModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,7 +11,7 @@ import java.util.List;
  *
  * @author george
  */
-public interface BaseService<Model, QueryModel> {
+public interface BaseService<Model extends BaseModel, QueryModel> {
     /**
      * getAll
      *
@@ -55,4 +56,11 @@ public interface BaseService<Model, QueryModel> {
      * @param id
      */
     void remove(Long id);
+
+    /**
+     * remove all
+     *
+     * @param ids
+     */
+    void removeAll(List<Long> ids);
 }

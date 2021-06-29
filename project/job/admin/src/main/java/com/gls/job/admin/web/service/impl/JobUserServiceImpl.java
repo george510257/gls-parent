@@ -1,5 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
+import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobUserConverter;
 import com.gls.job.admin.web.entity.JobUserEntity;
@@ -33,37 +34,64 @@ public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, 
     }
 
     @Override
-    public String login(String userName, String password, boolean ifRemember) {
-        if (!StringUtils.hasText(userName) || !StringUtils.hasText(password)) {
-            return "账号或密码为空";
+    public void login(String username, String password, boolean ifRemember) {
+        if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
+            throw new GlsException("账号或密码为空");
         }
-        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(userName);
+        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(username);
         if (ObjectUtils.isEmpty(jobUserEntity)) {
-            return "账号或密码错误";
+            throw new GlsException("账号或密码错误");
         }
         String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
         if (!passwordMd5.equals(jobUserEntity.getPassword())) {
-            return "账号或密码错误";
+            throw new GlsException("账号或密码错误");
         }
         LoginUserUtil.saveLoginUser(jobUserConverter.sourceToTarget(jobUserEntity), ifRemember);
-        return null;
     }
 
     @Override
-    public String logout() {
+    public void logout() {
         LoginUserUtil.removeLoginUser();
-        return null;
     }
 
     @Override
     public void changePassword(String password) {
+        if (ObjectUtils.isEmpty(password)) {
+            throw new GlsException("密码不可为空");
+        }
+        if (password.length() > 20 || password.length() < 4) {
+            throw new GlsException("长度限制[4-20]");
+        }
         JobUser loginUser = LoginUserUtil.getLoginUser();
         loginUser.setPassword(password);
-        JobUserEntity jobUserEntity = jobUserRepository.getOne(loginUser.getId());
+        super.update(loginUser);
+    }
+
+    @Override
+    public void add(JobUser model) {
+        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(model.getUsername());
         if (!ObjectUtils.isEmpty(jobUserEntity)) {
-            jobUserEntity = jobUserConverter.copyTargetToSource(loginUser, jobUserEntity);
-            jobUserRepository.save(jobUserEntity);
+            throw new GlsException("账号重复");
         }
+        super.add(model);
+    }
+
+    @Override
+    public void update(JobUser model) {
+        JobUser loginUser = LoginUserUtil.getLoginUser();
+        if (loginUser.getUsername().equals(model.getUsername())) {
+            throw new GlsException("禁止操作当前登录账号");
+        }
+        super.update(model);
+    }
+
+    @Override
+    public void remove(Long id) {
+        JobUser loginUser = LoginUserUtil.getLoginUser();
+        if (loginUser.getId().equals(id)) {
+            throw new GlsException("禁止操作当前登录账号");
+        }
+        super.remove(id);
     }
 
     @Override

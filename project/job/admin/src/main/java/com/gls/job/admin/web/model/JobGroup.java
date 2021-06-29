@@ -1,18 +1,19 @@
 package com.gls.job.admin.web.model;
 
+import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
- * @author xuxueli
- * @date 16/9/30
+ * @author george
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class JobGroup {
-    private Long id;
+public class JobGroup extends BaseModel {
     @NotBlank
     @Size(min = 4, max = 64)
     private String appname;
