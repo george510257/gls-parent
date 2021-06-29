@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
 import com.gls.job.admin.core.servlet.PermissionLimit;
-import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.job.admin.web.service.JobGroupService;
@@ -51,8 +51,8 @@ public class UserController {
     @GetMapping("/index")
     public Result<Map<String, Object>> index() {
         Map<String, Object> map = new HashMap<>();
-        List<JobGroup> jobGroupList = jobGroupService.getAll();
-        map.put("groupList", jobGroupList);
+        List<JobGroupModel> jobGroupModelList = jobGroupService.getAll();
+        map.put("groupList", jobGroupModelList);
         return new Result<>(map);
     }
 

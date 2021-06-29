@@ -19,20 +19,17 @@ import java.util.Date;
  * @author george
  */
 @Service("jobRegistryService")
-public class JobRegistryServiceImpl extends BaseServiceImpl<JobRegistryEntity, RegistryModel, QueryJobRegistry> implements JobRegistryService {
-    private final JobRegistryRepository jobRegistryRepository;
-    private final JobRegistryConverter jobRegistryConverter;
-
-    public JobRegistryServiceImpl(JobRegistryRepository jobRegistryRepository, JobRegistryConverter jobRegistryConverter) {
-        super(jobRegistryRepository, jobRegistryConverter);
-        this.jobRegistryRepository = jobRegistryRepository;
-        this.jobRegistryConverter = jobRegistryConverter;
+public class JobRegistryServiceImpl
+        extends BaseServiceImpl<JobRegistryRepository, JobRegistryConverter, JobRegistryEntity, RegistryModel, QueryJobRegistry>
+        implements JobRegistryService {
+    public JobRegistryServiceImpl(JobRegistryRepository repository, JobRegistryConverter converter) {
+        super(repository, converter);
     }
 
     @Override
     public void doJobRegistry() {
         Date date = DateUtil.offsetSecond(new Date(), -JobConstants.DEAD_TIMEOUT);
-        jobRegistryRepository.deleteByUpdateDateBefore(date);
+        repository.deleteByUpdateDateBefore(date);
     }
 
     @Override

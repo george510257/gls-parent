@@ -14,7 +14,7 @@ import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
-import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
@@ -46,9 +46,7 @@ import java.util.*;
  */
 @Slf4j
 @Service("jobInfoService")
-public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, QueryJobInfo> implements JobInfoService {
-    private final JobInfoRepository jobInfoRepository;
-    private final JobInfoConverter jobInfoConverter;
+public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobInfoConverter, JobInfoEntity, JobInfo, QueryJobInfo> implements JobInfoService {
     @Resource
     private JobAsyncService jobAsyncService;
     @Resource
@@ -66,10 +64,8 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
     @Resource
     private JobAdminProperties jobAdminProperties;
 
-    public JobInfoServiceImpl(JobInfoRepository jobInfoRepository, JobInfoConverter jobInfoConverter) {
-        super(jobInfoRepository, jobInfoConverter);
-        this.jobInfoRepository = jobInfoRepository;
-        this.jobInfoConverter = jobInfoConverter;
+    public JobInfoServiceImpl(JobInfoRepository repository, JobInfoConverter converter) {
+        super(repository, converter);
     }
 
     @Override
@@ -100,7 +96,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
     @Override
     public void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList) {
         // load data
-        JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
+        JobInfoEntity jobInfoEntity = repository.getOne(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             log.warn(">>>>>>>>>>>> trigger fail, jobId invalid，jobId={}", jobId);
             return;
@@ -139,7 +135,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
         int preReadCount = (jobAdminProperties.getTriggerPoolFastMax() + jobAdminProperties.getTriggerPoolFastMax()) * 20;
         // 1.pre read
         long nowTime = System.currentTimeMillis();
-        List<JobInfo> jobInfos = jobInfoConverter.sourceToTargetList(jobInfoRepository.getScheduleJob(new Date(nowTime + JobConstants.PRE_READ_MS), preReadCount));
+        List<JobInfo> jobInfos = converter.sourceToTargetList(repository.getScheduleJob(new Date(nowTime + JobConstants.PRE_READ_MS), preReadCount));
         if (ObjectUtils.isEmpty(jobInfos)) {
             return false;
         }
@@ -193,7 +189,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
         maps.put("ExecutorBlockStrategy", ExecutorBlockStrategy.values());
         maps.put("ScheduleType", ScheduleType.values());
         maps.put("MisfireStrategy", MisfireStrategy.values());
-        List<JobGroup> allList = jobGroupService.getAll();
+        List<JobGroupModel> allList = jobGroupService.getAll();
         maps.put("JobGroupList", getJobGroupListByRole(allList));
         maps.put("jobGroup", jobGroupId);
         return maps;
@@ -201,11 +197,11 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
 
     @Override
     public void stopJobInfo(Long jobInfoId) {
-        JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobInfoId);
+        JobInfoEntity jobInfoEntity = repository.getOne(jobInfoId);
         jobInfoEntity.setTriggerStatus(false);
         jobInfoEntity.setTriggerLastTime(null);
         jobInfoEntity.setTriggerNextTime(null);
-        jobInfoRepository.save(jobInfoEntity);
+        repository.save(jobInfoEntity);
     }
 
     @Override
@@ -233,21 +229,21 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
     }
 
     @Override
-    public List<JobGroup> getJobGroupListByRole(List<JobGroup> allList) {
-        List<JobGroup> jobGroupList = new ArrayList<>();
+    public List<JobGroupModel> getJobGroupListByRole(List<JobGroupModel> allList) {
+        List<JobGroupModel> jobGroupModelList = new ArrayList<>();
         if (!ObjectUtils.isEmpty(allList)) {
             JobUser jobUser = LoginUserUtil.getLoginUser();
             if (jobUser.getRole() == 1) {
-                jobGroupList = allList;
+                jobGroupModelList = allList;
             } else {
-                for (JobGroup jobGroup : allList) {
-                    if (LoginUserUtil.validPermission(jobGroup.getId())) {
-                        jobGroupList.add(jobGroup);
+                for (JobGroupModel jobGroupModel : allList) {
+                    if (LoginUserUtil.validPermission(jobGroupModel.getId())) {
+                        jobGroupModelList.add(jobGroupModel);
                     }
                 }
             }
         }
-        return jobGroupList;
+        return jobGroupModelList;
     }
 
     @Override
@@ -266,11 +262,11 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
 
     @Override
     public void remove(Long jobInfoId) {
-        JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobInfoId);
+        JobInfoEntity jobInfoEntity = repository.getOne(jobInfoId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             return;
         }
-        jobInfoRepository.deleteById(jobInfoId);
+        repository.deleteById(jobInfoId);
         jobLogRepository.deleteByJobInfoId(jobInfoId);
         jobLogGlueRepository.deleteByJobInfoId(jobInfoId);
     }
@@ -299,7 +295,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoEntity, JobInfo, 
     }
 
     private void validJobInfoEntity(JobInfo jobInfo) {
-        // JobGroup
+        // JobGroupModel
         if (ObjectUtils.isEmpty(jobInfo.getJobGroup())) {
             throw new GlsException("请选择执行器");
         }

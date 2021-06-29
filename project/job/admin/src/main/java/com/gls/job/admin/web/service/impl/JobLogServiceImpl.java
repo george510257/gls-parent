@@ -14,7 +14,7 @@ import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.admin.web.entity.JobLogReportEntity;
-import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.admin.web.model.query.QueryJobLog;
@@ -49,10 +49,8 @@ import java.util.*;
  */
 @Slf4j
 @Service("jobLogService")
-public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, QueryJobLog> implements JobLogService {
+public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogConverter, JobLogEntity, JobLog, QueryJobLog> implements JobLogService {
     private static final int HANDLE_MSG_MAX_LENGTH = 15000;
-    private final JobLogRepository jobLogRepository;
-    private final JobLogConverter jobLogConverter;
     @Resource
     private JobAsyncService jobAsyncService;
     @Resource
@@ -72,10 +70,8 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
     @Resource
     private ExecutorApiHolder executorApiHolder;
 
-    public JobLogServiceImpl(JobLogRepository jobLogRepository, JobLogConverter jobLogConverter) {
-        super(jobLogRepository, jobLogConverter);
-        this.jobLogRepository = jobLogRepository;
-        this.jobLogConverter = jobLogConverter;
+    public JobLogServiceImpl(JobLogRepository repository, JobLogConverter converter) {
+        super(repository, converter);
     }
 
     @Override
@@ -84,7 +80,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
             return;
         }
         callbackModels.forEach(callbackModel -> {
-            JobLogEntity jobLogEntity = jobLogRepository.getOne(callbackModel.getLogId());
+            JobLogEntity jobLogEntity = repository.getOne(callbackModel.getLogId());
             if (ObjectUtils.isEmpty(jobLogEntity)) {
                 throw new GlsException("log item not found.");
             }
@@ -108,7 +104,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
     @Override
     public void doJobComplete() {
         Date lostTime = DateUtil.offsetMinute(new Date(), -10);
-        List<JobLogEntity> jobLogEntities = jobLogRepository.getLostJobLogs(lostTime);
+        List<JobLogEntity> jobLogEntities = repository.getLostJobLogs(lostTime);
         if (ObjectUtils.isEmpty(jobLogEntities)) {
             return;
         }
@@ -122,7 +118,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
 
     @Override
     public void doJobFail() {
-        List<JobLogEntity> jobLogEntities = jobLogRepository.getFailJobLogs(1000);
+        List<JobLogEntity> jobLogEntities = repository.getFailJobLogs(1000);
         if (ObjectUtils.isEmpty(jobLogEntities)) {
             return;
         }
@@ -137,7 +133,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
             boolean alarmResult = jobAlarmHolder.alarm(jobLogEntity);
             int newAlarmStatus = alarmResult ? 2 : 3;
             jobLogEntity.setAlarmStatus(newAlarmStatus);
-            jobLogRepository.save(jobLogEntity);
+            repository.save(jobLogEntity);
         });
     }
 
@@ -154,8 +150,8 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
     public Map<String, Object> getIndexMap(Long jobId) {
         Map<String, Object> maps = new HashMap<>();
         // 执行器列表
-        List<JobGroup> jobGroupList = jobGroupService.getAll();
-        maps.put("jobGroupList", jobInfoService.getJobGroupListByRole(jobGroupList));
+        List<JobGroupModel> jobGroupModelList = jobGroupService.getAll();
+        maps.put("jobGroupList", jobInfoService.getJobGroupListByRole(jobGroupModelList));
         // 任务
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
@@ -175,14 +171,14 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
 
     @Override
     public JobLog logDetail(Long logId) {
-        return jobLogConverter.sourceToTarget(jobLogRepository.getOne(logId));
+        return converter.sourceToTarget(repository.getOne(logId));
     }
 
     @Override
     public LogResultModel logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
         Result<LogResultModel> logResult = executorApiHolder.load(executorAddress).log(new LogModel(Convert.toDate(triggerTime), logId, fromLineNum));
         if (logResult.getModel() != null && logResult.getModel().getFromLineNum() > logResult.getModel().getToLineNum()) {
-            JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
+            JobLogEntity jobLogEntity = repository.getOne(logId);
             if (jobLogEntity.getHandleCode() > 0) {
                 logResult.getModel().setIsEnd(true);
             }
@@ -192,7 +188,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
 
     @Override
     public void logKill(Long logId) {
-        JobLogEntity jobLogEntity = jobLogRepository.getOne(logId);
+        JobLogEntity jobLogEntity = repository.getOne(logId);
         JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             throw new GlsException("任务ID存在");
@@ -251,7 +247,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
         getPage(
                 new QueryJobLog(groupId, jobId, null, clearBeforeTime, null),
                 PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime")))
-                .get().map(JobLog::getId).forEach(jobLogRepository::deleteById);
+                .get().map(JobLog::getId).forEach(repository::deleteById);
     }
 
     private long cleanJobLog(long lastCleanLogTime) {
@@ -269,7 +265,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
             getPage(
                     new QueryJobLog(null, null, clearBeforeTime, null, null),
                     PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "triggerTime")))
-                    .get().map(JobLog::getId).forEach(jobLogRepository::deleteById);
+                    .get().map(JobLog::getId).forEach(repository::deleteById);
             // update clean time
             lastCleanLogTime = System.currentTimeMillis();
         }
@@ -297,7 +293,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
         if (optional.isPresent()) {
             jobLogReportEntity = optional.get();
         }
-        Map<String, Long> result = jobLogRepository.getLogReport(todayFrom, todayTo);
+        Map<String, Long> result = repository.getLogReport(todayFrom, todayTo);
         log.info("result: {}", JsonUtil.writeValueAsString(result));
         if (!ObjectUtils.isEmpty(result)) {
             Long triggerDayCount = result.get("triggerDayCount");
@@ -326,7 +322,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogEntity, JobLog, Que
         if (jobLogEntity.getHandleMsg().length() > HANDLE_MSG_MAX_LENGTH) {
             jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().substring(0, HANDLE_MSG_MAX_LENGTH));
         }
-        jobLogRepository.save(jobLogEntity);
+        repository.save(jobLogEntity);
     }
 
     private void finishJob(JobLogEntity jobLogEntity) {

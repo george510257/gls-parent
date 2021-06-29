@@ -4,7 +4,7 @@ import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.web.converter.JobGroupConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
-import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.query.QueryJobGroup;
 import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
@@ -24,16 +24,12 @@ import java.util.List;
  * @author george
  */
 @Service("jobGroupService")
-public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupEntity, JobGroup, QueryJobGroup> implements JobGroupService {
-    private final JobGroupRepository jobGroupRepository;
-    private final JobGroupConverter jobGroupConverter;
+public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupRepository, JobGroupConverter, JobGroupEntity, JobGroupModel, QueryJobGroup> implements JobGroupService {
     @Resource
     private JobInfoRepository jobInfoRepository;
 
-    public JobGroupServiceImpl(JobGroupRepository jobGroupRepository, JobGroupConverter jobGroupConverter) {
-        super(jobGroupRepository, jobGroupConverter);
-        this.jobGroupRepository = jobGroupRepository;
-        this.jobGroupConverter = jobGroupConverter;
+    public JobGroupServiceImpl(JobGroupRepository repository, JobGroupConverter converter) {
+        super(repository, converter);
     }
 
     @Override
@@ -42,7 +38,7 @@ public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupEntity, JobGrou
         if (!ObjectUtils.isEmpty(jobInfoEntities)) {
             throw new GlsException("拒绝删除，该执行器使用中");
         }
-        long size = jobGroupRepository.count();
+        long size = repository.count();
         if (size == 1) {
             throw new GlsException("拒绝删除, 系统至少保留一个执行器");
         }

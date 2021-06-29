@@ -23,14 +23,11 @@ import java.util.List;
  * @author george
  */
 @Service("jobUserService")
-public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, QueryJobUser> implements JobUserService {
-    private final JobUserRepository jobUserRepository;
-    private final JobUserConverter jobUserConverter;
-
-    public JobUserServiceImpl(JobUserRepository jobUserRepository, JobUserConverter jobUserConverter) {
-        super(jobUserRepository, jobUserConverter);
-        this.jobUserRepository = jobUserRepository;
-        this.jobUserConverter = jobUserConverter;
+public class JobUserServiceImpl
+        extends BaseServiceImpl<JobUserRepository, JobUserConverter, JobUserEntity, JobUser, QueryJobUser>
+        implements JobUserService {
+    public JobUserServiceImpl(JobUserRepository repository, JobUserConverter converter) {
+        super(repository, converter);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, 
         if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
             throw new GlsException("账号或密码为空");
         }
-        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(username);
+        JobUserEntity jobUserEntity = repository.getByUsername(username);
         if (ObjectUtils.isEmpty(jobUserEntity)) {
             throw new GlsException("账号或密码错误");
         }
@@ -46,7 +43,7 @@ public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, 
         if (!passwordMd5.equals(jobUserEntity.getPassword())) {
             throw new GlsException("账号或密码错误");
         }
-        LoginUserUtil.saveLoginUser(jobUserConverter.sourceToTarget(jobUserEntity), ifRemember);
+        LoginUserUtil.saveLoginUser(converter.sourceToTarget(jobUserEntity), ifRemember);
     }
 
     @Override
@@ -69,7 +66,7 @@ public class JobUserServiceImpl extends BaseServiceImpl<JobUserEntity, JobUser, 
 
     @Override
     public void add(JobUser model) {
-        JobUserEntity jobUserEntity = jobUserRepository.getByUsername(model.getUsername());
+        JobUserEntity jobUserEntity = repository.getByUsername(model.getUsername());
         if (!ObjectUtils.isEmpty(jobUserEntity)) {
             throw new GlsException("账号重复");
         }

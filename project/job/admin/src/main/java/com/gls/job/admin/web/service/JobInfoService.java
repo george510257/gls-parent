@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.service;
 
 import com.gls.job.admin.constants.TriggerType;
-import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.starter.data.jpa.base.BaseService;
@@ -74,5 +74,5 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
      * @param allList
      * @return
      */
-    List<JobGroup> getJobGroupListByRole(List<JobGroup> allList);
+    List<JobGroupModel> getJobGroupListByRole(List<JobGroupModel> allList);
 }

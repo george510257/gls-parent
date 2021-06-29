@@ -13,11 +13,11 @@ import java.util.List;
 /**
  * @author george
  */
-public abstract class BaseServiceImpl<Entity extends BaseEntity, Model extends BaseModel, QueryModel> implements BaseService<Model, QueryModel> {
-    private final BaseEntityRepository<Entity> repository;
-    private final BaseConverter<Entity, Model> converter;
+public abstract class BaseServiceImpl<Repository extends BaseEntityRepository<Entity>, Converter extends BaseConverter<Entity, Model>, Entity extends BaseEntity, Model extends BaseModel, QueryModel> implements BaseService<Model, QueryModel> {
+    protected Repository repository;
+    protected Converter converter;
 
-    public BaseServiceImpl(BaseEntityRepository<Entity> repository, BaseConverter<Entity, Model> converter) {
+    public BaseServiceImpl(Repository repository, Converter converter) {
         this.repository = repository;
         this.converter = converter;
     }
