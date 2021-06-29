@@ -2,34 +2,36 @@ package com.gls.job.admin.web.converter;
 
 import com.gls.framework.core.base.BaseConverter;
 import com.gls.job.admin.web.entity.JobRegistryEntity;
-import com.gls.job.admin.web.model.JobRegistry;
-import com.gls.job.core.constants.RegistryType;
+import com.gls.job.admin.web.repository.JobGroupRepository;
+import com.gls.job.core.api.model.RegistryModel;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
+import javax.annotation.Resource;
 
 /**
  * @author george
  */
 @Component
-public class JobRegistryConverter implements BaseConverter<JobRegistryEntity, JobRegistry> {
+public class JobRegistryConverter implements BaseConverter<JobRegistryEntity, RegistryModel> {
+    @Resource
+    private JobGroupRepository jobGroupRepository;
+
     @Override
-    public JobRegistry copySourceToTarget(JobRegistryEntity jobRegistryEntity, JobRegistry jobRegistry) {
-        jobRegistry.setId(jobRegistryEntity.getId());
-        jobRegistry.setRegistryGroup(jobRegistryEntity.getRegistryGroup().name());
-        jobRegistry.setRegistryKey(jobRegistryEntity.getRegistryKey());
-        jobRegistry.setRegistryValue(jobRegistryEntity.getRegistryValue());
-        jobRegistry.setUpdateTime(jobRegistryEntity.getUpdateDate());
-        return jobRegistry;
+    public RegistryModel copySourceToTarget(JobRegistryEntity jobRegistryEntity, RegistryModel registryModel) {
+        registryModel.setId(jobRegistryEntity.getId());
+        registryModel.setRegistryGroup(jobRegistryEntity.getRegistryGroup());
+        registryModel.setRegistryKey(jobRegistryEntity.getRegistryKey());
+        registryModel.setRegistryValue(jobRegistryEntity.getRegistryValue());
+        return registryModel;
     }
 
     @Override
-    public JobRegistryEntity copyTargetToSource(JobRegistry jobRegistry, JobRegistryEntity jobRegistryEntity) {
-        jobRegistryEntity.setRegistryGroup(RegistryType.valueOf(jobRegistry.getRegistryGroup()));
-        jobRegistryEntity.setRegistryKey(jobRegistry.getRegistryKey());
-        jobRegistryEntity.setRegistryValue(jobRegistry.getRegistryValue());
-        jobRegistryEntity.setId(jobRegistry.getId());
-        jobRegistryEntity.setUpdateDate(new Timestamp(jobRegistry.getUpdateTime().getTime()));
+    public JobRegistryEntity copyTargetToSource(RegistryModel registryModel, JobRegistryEntity jobRegistryEntity) {
+        jobRegistryEntity.setJobGroup(jobGroupRepository.getByAppname(registryModel.getRegistryKey()));
+        jobRegistryEntity.setRegistryGroup(registryModel.getRegistryGroup());
+        jobRegistryEntity.setRegistryKey(registryModel.getRegistryKey());
+        jobRegistryEntity.setRegistryValue(registryModel.getRegistryValue());
+        jobRegistryEntity.setId(registryModel.getId());
         return jobRegistryEntity;
     }
 }

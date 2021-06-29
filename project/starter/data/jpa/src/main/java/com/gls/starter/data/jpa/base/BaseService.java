@@ -58,6 +58,13 @@ public interface BaseService<Model extends BaseModel, QueryModel> {
     void remove(Long id);
 
     /**
+     * remove
+     *
+     * @param model
+     */
+    void remove(Model model);
+
+    /**
      * remove all
      *
      * @param ids

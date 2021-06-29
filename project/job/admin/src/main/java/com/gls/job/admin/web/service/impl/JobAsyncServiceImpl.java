@@ -36,11 +36,11 @@ public class JobAsyncServiceImpl implements JobAsyncService {
 
     @Override
     public void asyncRegistry(RegistryModel registryModel) {
-        jobRegistryService.registry(registryModel);
+        jobRegistryService.add(registryModel);
     }
 
     @Override
     public void asyncRegistryRemove(RegistryModel registryModel) {
-        jobRegistryService.registryRemove(registryModel);
+        jobRegistryService.remove(registryModel);
     }
 }

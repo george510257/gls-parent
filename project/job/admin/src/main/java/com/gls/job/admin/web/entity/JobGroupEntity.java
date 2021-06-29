@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 /**
@@ -23,7 +24,10 @@ public class JobGroupEntity extends BaseEntity {
     private String title;
     @Comment("执行器地址类型：true=自动注册、false=手动录入")
     private Boolean addressType;
-    @Comment("执行器地址列表")
+    @Comment("执行器地址列表(手动录入)")
     @ElementCollection
     private List<String> addressList;
+    @Comment("执行器地址列表(系统注册)")
+    @OneToMany(mappedBy = "jobGroup")
+    private List<JobRegistryEntity> jobRegistries;
 }

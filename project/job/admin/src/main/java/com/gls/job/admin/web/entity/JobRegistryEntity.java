@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -18,6 +19,8 @@ import javax.persistence.Entity;
 @Data
 @Comment("注册信息表")
 public class JobRegistryEntity extends BaseEntity {
+    @ManyToOne
+    private JobGroupEntity jobGroup;
     private RegistryType registryGroup;
     private String registryKey;
     private String registryValue;

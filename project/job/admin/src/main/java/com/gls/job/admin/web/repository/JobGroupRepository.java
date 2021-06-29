@@ -3,17 +3,15 @@ package com.gls.job.admin.web.repository;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
-import java.util.List;
-
 /**
  * @author george
  */
 public interface JobGroupRepository extends BaseEntityRepository<JobGroupEntity> {
     /**
-     * find By AddressType Order By Appname Asc Title Asc Id Asc
+     * getByAppname
      *
-     * @param addressType
+     * @param appname
      * @return
      */
-    List<JobGroupEntity> getByAddressTypeOrderByAppnameAscTitleAscIdAsc(Boolean addressType);
+    JobGroupEntity getByAppname(String appname);
 }

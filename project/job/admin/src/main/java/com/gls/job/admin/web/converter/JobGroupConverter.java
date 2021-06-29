@@ -3,11 +3,13 @@ package com.gls.job.admin.web.converter;
 import com.gls.framework.core.base.BaseConverter;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.web.entity.JobGroupEntity;
+import com.gls.job.admin.web.entity.JobRegistryEntity;
 import com.gls.job.admin.web.model.JobGroup;
-import com.gls.job.admin.web.service.JobRegistryService;
+import com.gls.job.admin.web.repository.JobRegistryRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.stream.Collectors;
 
 /**
  * @author george
@@ -15,7 +17,7 @@ import javax.annotation.Resource;
 @Component
 public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup> {
     @Resource
-    private JobRegistryService jobRegistryService;
+    private JobRegistryRepository jobRegistryRepository;
 
     @Override
     public JobGroup copySourceToTarget(JobGroupEntity jobGroupEntity, JobGroup jobGroup) {
@@ -23,7 +25,12 @@ public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup
         jobGroup.setAppname(jobGroupEntity.getAppname());
         jobGroup.setTitle(jobGroupEntity.getTitle());
         jobGroup.setAddressType(jobGroupEntity.getAddressType() ? 0 : 1);
-        jobGroup.setAddressList(StringUtil.toString(jobGroupEntity.getAddressList()));
+        if (jobGroupEntity.getAddressType()) {
+            jobGroup.setAddressList(jobGroupEntity.getJobRegistries().stream()
+                    .map(JobRegistryEntity::getRegistryValue).collect(Collectors.joining(",")));
+        } else {
+            jobGroup.setAddressList(StringUtil.toString(jobGroupEntity.getAddressList()));
+        }
         jobGroup.setUpdateTime(jobGroupEntity.getUpdateDate());
         return jobGroup;
     }
@@ -34,7 +41,7 @@ public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup
         jobGroupEntity.setTitle(jobGroup.getTitle());
         jobGroupEntity.setAddressType(jobGroup.getAddressType() == 0);
         if (jobGroup.getAddressType() == 0) {
-            jobGroupEntity.setAddressList(jobRegistryService.getAddressList(jobGroup.getAppname()));
+            jobGroupEntity.setJobRegistries(jobRegistryRepository.getByRegistryKey(jobGroup.getAppname()));
         } else {
             jobGroupEntity.setAddressList(StringUtil.toList(jobGroup.getAddressList()));
         }

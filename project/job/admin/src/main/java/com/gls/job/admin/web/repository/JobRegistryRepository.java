@@ -1,7 +1,6 @@
 package com.gls.job.admin.web.repository;
 
 import com.gls.job.admin.web.entity.JobRegistryEntity;
-import com.gls.job.core.constants.RegistryType;
 import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
 import java.util.Date;
@@ -12,28 +11,17 @@ import java.util.List;
  */
 public interface JobRegistryRepository extends BaseEntityRepository<JobRegistryEntity> {
     /**
-     * get By UpdateDate After
+     * delete By UpdateDateBefore
      *
      * @param updateDate
-     * @return
      */
-    List<JobRegistryEntity> getByUpdateDateAfter(Date updateDate);
+    void deleteByUpdateDateBefore(Date updateDate);
 
     /**
-     * get By UpdateDate Before
+     * get By RegistryKey
      *
-     * @param updateDate
-     * @return
-     */
-    List<JobRegistryEntity> getByUpdateDateBefore(Date updateDate);
-
-    /**
-     * get By RegistryGroup And RegistryKey And RegistryValue
-     *
-     * @param registryGroup
      * @param registryKey
-     * @param registryValue
      * @return
      */
-    JobRegistryEntity getByRegistryGroupAndRegistryKeyAndRegistryValue(RegistryType registryGroup, String registryKey, String registryValue);
+    List<JobRegistryEntity> getByRegistryKey(String registryKey);
 }

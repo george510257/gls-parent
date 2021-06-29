@@ -1,7 +1,9 @@
 package com.gls.framework.core.util;
 
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -9,15 +11,15 @@ import java.util.List;
  */
 public class StringUtil {
     public static List<String> toList(String s) {
-        if (s == null || s.isEmpty()) {
-            return Collections.emptyList();
+        if (StringUtils.hasText(s)) {
+            return Arrays.asList(s.split(","));
         }
-        return Arrays.asList(s.split(","));
+        return null;
     }
 
     public static String toString(List<String> list) {
-        if (list == null || list.isEmpty()) {
-            return "";
+        if (ObjectUtils.isEmpty(list)) {
+            return null;
         }
         return String.join(",", list);
     }

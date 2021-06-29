@@ -70,6 +70,15 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, Model extends B
     }
 
     @Override
+    public void remove(Model model) {
+        Entity entity = converter.targetToSource(model);
+        List<Entity> entities = repository.findAll(entity);
+        if (!ObjectUtils.isEmpty(entities)) {
+            repository.deleteAll(entities);
+        }
+    }
+
+    @Override
     public void removeAll(List<Long> ids) {
         List<Entity> entities = repository.findAllById(ids);
         if (!ObjectUtils.isEmpty(entities)) {
