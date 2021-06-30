@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoJob1 implements JobHandler {
     @Override
+    public void destroy() throws Exception {
+        log.info("DemoJob1 -- destroy");
+    }
+
+    @Override
     public void execute() throws Exception {
         log.info("DemoJob1 -- execute");
     }
@@ -20,10 +25,5 @@ public class DemoJob1 implements JobHandler {
     @Override
     public void init() throws Exception {
         log.info("DemoJob1 -- init");
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        log.info("DemoJob1 -- destroy");
     }
 }

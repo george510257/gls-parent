@@ -18,6 +18,13 @@ public class MethodJobHandler implements JobHandler {
     private final Method destroyMethod;
 
     @Override
+    public void destroy() throws Exception {
+        if (destroyMethod != null) {
+            destroyMethod.invoke(target);
+        }
+    }
+
+    @Override
     public void execute() throws Exception {
         Class<?>[] paramTypes = method.getParameterTypes();
         if (paramTypes.length > 0) {
@@ -32,13 +39,6 @@ public class MethodJobHandler implements JobHandler {
     public void init() throws Exception {
         if (initMethod != null) {
             initMethod.invoke(target);
-        }
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        if (destroyMethod != null) {
-            destroyMethod.invoke(target);
         }
     }
 }

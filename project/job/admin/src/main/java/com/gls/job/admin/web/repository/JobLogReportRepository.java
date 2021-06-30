@@ -14,6 +14,14 @@ import java.util.Optional;
  */
 public interface JobLogReportRepository extends BaseEntityRepository<JobLogReportEntity> {
     /**
+     * getByTriggerDay
+     *
+     * @param triggerDay
+     * @return
+     */
+    Optional<JobLogReportEntity> getByTriggerDay(Date triggerDay);
+
+    /**
      * get By TriggerDay Between
      *
      * @param triggerDayFrom
@@ -21,14 +29,6 @@ public interface JobLogReportRepository extends BaseEntityRepository<JobLogRepor
      * @return
      */
     List<JobLogReportEntity> getByTriggerDayBetween(Date triggerDayFrom, Date triggerDayTo);
-
-    /**
-     * getByTriggerDay
-     *
-     * @param triggerDay
-     * @return
-     */
-    Optional<JobLogReportEntity> getByTriggerDay(Date triggerDay);
 
     /**
      * get Report Total

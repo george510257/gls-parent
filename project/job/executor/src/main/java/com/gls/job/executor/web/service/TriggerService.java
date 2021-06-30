@@ -15,18 +15,18 @@ public interface TriggerService {
     boolean idleBeat(Long jobId);
 
     /**
-     * run Trigger
-     *
-     * @param triggerModel
-     * @throws Exception
-     */
-    void runTrigger(TriggerModel triggerModel) throws Exception;
-
-    /**
      * remove Job Thread
      *
      * @param jobId
      * @return
      */
     String removeJobThread(Long jobId);
+
+    /**
+     * run Trigger
+     *
+     * @param triggerModel
+     * @throws Exception
+     */
+    void runTrigger(TriggerModel triggerModel) throws Exception;
 }

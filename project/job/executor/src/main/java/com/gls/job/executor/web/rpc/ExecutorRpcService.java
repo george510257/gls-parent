@@ -37,16 +37,6 @@ public class ExecutorRpcService implements ExecutorApi {
     }
 
     @Override
-    public Result<String> run(TriggerModel triggerModel) {
-        try {
-            triggerService.runTrigger(triggerModel);
-        } catch (Exception e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-        return Result.SUCCESS;
-    }
-
-    @Override
     public Result<String> kill(KillModel killModel) {
         String message = triggerService.removeJobThread(killModel.getJobId());
         return new Result<>(Result.SUCCESS_CODE, message);
@@ -56,5 +46,15 @@ public class ExecutorRpcService implements ExecutorApi {
     public Result<LogResultModel> log(LogModel logModel) {
         LogResultModel logResultModel = jobLogService.readLog(logModel);
         return new Result<>(logResultModel);
+    }
+
+    @Override
+    public Result<String> run(TriggerModel triggerModel) {
+        try {
+            triggerService.runTrigger(triggerModel);
+        } catch (Exception e) {
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+        return Result.SUCCESS;
     }
 }

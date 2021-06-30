@@ -27,16 +27,6 @@ public class CallbackRepositoryImpl implements CallbackRepository {
     private ObjectMapper objectMapper;
 
     @Override
-    public void save(List<CallbackModel> callbackModels) {
-        String fileName = getBaseFileName().replace("{x}", String.valueOf(System.currentTimeMillis()));
-        try {
-            objectMapper.writeValue(FileUtil.file(fileName), callbackModels);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    @Override
     public List<CallbackModel> getAll() {
         List<CallbackModel> callbackModels = new ArrayList<>();
         List<String> fileNames = FileUtil.listFileNames(jobExecutorProperties.getCallbackLogPath());
@@ -54,6 +44,16 @@ public class CallbackRepositoryImpl implements CallbackRepository {
             }
         }
         return callbackModels;
+    }
+
+    @Override
+    public void save(List<CallbackModel> callbackModels) {
+        String fileName = getBaseFileName().replace("{x}", String.valueOf(System.currentTimeMillis()));
+        try {
+            objectMapper.writeValue(FileUtil.file(fileName), callbackModels);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     private String getBaseFileName() {

@@ -7,6 +7,15 @@ package com.gls.job.executor.core.handler;
  */
 public interface JobHandler {
     /**
+     * destroy handler, invoked when JobThread destroy
+     *
+     * @throws Exception
+     */
+    default void destroy() throws Exception {
+        // do something
+    }
+
+    /**
      * execute handler, invoked when executor receives a scheduling request
      *
      * @throws Exception
@@ -19,15 +28,6 @@ public interface JobHandler {
      * @throws Exception
      */
     default void init() throws Exception {
-        // do something
-    }
-
-    /**
-     * destroy handler, invoked when JobThread destroy
-     *
-     * @throws Exception
-     */
-    default void destroy() throws Exception {
         // do something
     }
 }

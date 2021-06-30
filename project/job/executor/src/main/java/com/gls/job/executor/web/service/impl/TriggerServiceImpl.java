@@ -43,6 +43,16 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public String removeJobThread(Long jobId) {
+        JobThread jobThread = jobThreadHolder.load(jobId);
+        if (jobThread != null) {
+            jobThreadHolder.remove(jobId, "scheduling center kill job.");
+            return "";
+        }
+        return "job thread already killed.";
+    }
+
+    @Override
     public void runTrigger(TriggerModel triggerModel) throws Exception {
         JobThread jobThread = jobThreadHolder.load(triggerModel.getJobId());
         JobHandler newJobHandler = loadJobHandlerByTriggerModel(triggerModel);
@@ -76,14 +86,8 @@ public class TriggerServiceImpl implements TriggerService {
         jobThread.getTriggerQueueHolder().push(triggerModel);
     }
 
-    @Override
-    public String removeJobThread(Long jobId) {
-        JobThread jobThread = jobThreadHolder.load(jobId);
-        if (jobThread != null) {
-            jobThreadHolder.remove(jobId, "scheduling center kill job.");
-            return "";
-        }
-        return "job thread already killed.";
+    private GlueJobHandler loadGlueJobHandler(String glueSource, Date glueUpdateTime) throws Exception {
+        return new GlueJobHandler(glueBuilder.loadNewInstance(glueSource), glueUpdateTime);
     }
 
     private JobHandler loadJobHandlerByTriggerModel(TriggerModel triggerModel) throws Exception {
@@ -108,9 +112,5 @@ public class TriggerServiceImpl implements TriggerService {
     private ScriptJobHandler loadScriptJobHandler(Long jobId, Date glueUpdateTime, String glueSource, GlueType glueType) {
         String scriptFileName = scriptJobRepository.saveScriptJob(jobId, glueUpdateTime, glueSource, glueType);
         return new ScriptJobHandler(scriptFileName, glueUpdateTime, glueType, jobContextHolder);
-    }
-
-    private GlueJobHandler loadGlueJobHandler(String glueSource, Date glueUpdateTime) throws Exception {
-        return new GlueJobHandler(glueBuilder.loadNewInstance(glueSource), glueUpdateTime);
     }
 }

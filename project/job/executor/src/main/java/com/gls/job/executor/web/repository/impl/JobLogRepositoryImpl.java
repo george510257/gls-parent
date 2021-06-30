@@ -24,6 +24,11 @@ public class JobLogRepositoryImpl implements JobLogRepository {
     private JobExecutorProperties jobExecutorProperties;
 
     @Override
+    public String getLogFileName(Date logDateTime, Long logId) {
+        return getBaseFileName().replace("{yyyy-MM-dd}", DateUtil.formatDate(logDateTime)).replace("{logId}", logId.toString());
+    }
+
+    @Override
     public void logFileClean() {
         List<String> fileNames = FileUtil.listFileNames(jobExecutorProperties.getLogBasePath());
         fileNames.forEach(fileName -> {
@@ -46,11 +51,6 @@ public class JobLogRepositoryImpl implements JobLogRepository {
             logContent.append(data.get(i)).append("\n");
         }
         return new LogResultModel(fromLineNum, data.size(), logContent.toString(), false);
-    }
-
-    @Override
-    public String getLogFileName(Date logDateTime, Long logId) {
-        return getBaseFileName().replace("{yyyy-MM-dd}", DateUtil.formatDate(logDateTime)).replace("{logId}", logId.toString());
     }
 
     @Override

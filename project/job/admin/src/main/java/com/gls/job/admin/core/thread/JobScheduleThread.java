@@ -21,18 +21,22 @@ public class JobScheduleThread extends BaseThread {
     private long start;
 
     @Override
-    protected void initExecute() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(5000 - System.currentTimeMillis() % 1000);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+    protected void destroyExecute() {
     }
 
     @Override
     protected void doExecute() {
         start = System.currentTimeMillis();
         preReadSuc = jobInfoService.doJobSchedule();
+    }
+
+    @Override
+    protected void initExecute() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(5000 - System.currentTimeMillis() % 1000);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -48,9 +52,5 @@ public class JobScheduleThread extends BaseThread {
                 log.error(e.getMessage(), e);
             }
         }
-    }
-
-    @Override
-    protected void destroyExecute() {
     }
 }

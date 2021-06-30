@@ -7,7 +7,6 @@ import com.gls.job.admin.web.repository.JobInfoRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -24,8 +23,6 @@ public class JobLogGlueConverter implements BaseConverter<JobLogGlueEntity, JobL
         jobLogGlue.setGlueType(jobLogGlueEntity.getGlueType());
         jobLogGlue.setGlueSource(jobLogGlueEntity.getGlueSource());
         jobLogGlue.setGlueRemark(jobLogGlueEntity.getGlueRemark());
-        jobLogGlue.setAddTime(jobLogGlueEntity.getCreatedDate());
-        jobLogGlue.setUpdateTime(jobLogGlueEntity.getUpdateDate());
         return jobLogGlue;
     }
 
@@ -36,8 +33,6 @@ public class JobLogGlueConverter implements BaseConverter<JobLogGlueEntity, JobL
         jobLogGlueEntity.setGlueSource(jobLogGlue.getGlueSource());
         jobLogGlueEntity.setGlueRemark(jobLogGlue.getGlueRemark());
         jobLogGlueEntity.setId(jobLogGlue.getId());
-        jobLogGlueEntity.setCreatedDate(new Timestamp(jobLogGlue.getAddTime().getTime()));
-        jobLogGlueEntity.setUpdateDate(new Timestamp(jobLogGlue.getUpdateTime().getTime()));
         return jobLogGlueEntity;
     }
 }

@@ -6,6 +6,7 @@ import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.converter.JobLogGlueConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogGlueEntity;
+import com.gls.job.admin.web.model.JobLogGlue;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.service.JobLogGlueService;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,21 +55,9 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
     }
 
     @Override
-    public void saveGlueSource(Long jobId, String glueSource, String glueRemark) {
-        JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
-        if (ObjectUtils.isEmpty(jobInfoEntity)) {
-            throw new GlsException("任务ID非法");
-        }
-        jobInfoEntity.setGlueSource(glueSource);
-        jobInfoEntity.setGlueRemark(glueRemark);
-        jobInfoEntity.setGlueUpdateTime(new Date());
-        jobInfoRepository.save(jobInfoEntity);
-        JobLogGlueEntity jobLogGlueEntity = new JobLogGlueEntity();
-        jobLogGlueEntity.setJobInfo(jobInfoEntity);
-        jobLogGlueEntity.setGlueType(jobInfoEntity.getGlueType());
-        jobLogGlueEntity.setGlueSource(glueSource);
-        jobLogGlueEntity.setGlueRemark(glueRemark);
+    public void save(JobLogGlue jobLogGlue) {
+        JobLogGlueEntity jobLogGlueEntity = jobLogGlueConverter.targetToSource(jobLogGlue);
         jobLogGlueRepository.save(jobLogGlueEntity);
-        jobLogGlueRepository.deleteOldJobLogGlue(jobId, 30);
+        jobLogGlueRepository.deleteOldJobLogGlue(jobLogGlue.getJobId(), 30);
     }
 }

@@ -14,7 +14,6 @@ import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.admin.web.entity.JobLogReportEntity;
-import com.gls.job.admin.web.model.JobGroupModel;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.admin.web.model.query.QueryJobLog;
@@ -102,6 +101,46 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     }
 
     @Override
+    public void clearLog(Long groupId, Long jobId, Integer type) {
+        Date clearBeforeTime = null;
+        int start = 0;
+        if (type == 1) {
+            // 清理一个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -1);
+        } else if (type == 2) {
+            // 清理三个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -3);
+        } else if (type == 3) {
+            // 清理六个月之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -6);
+        } else if (type == 4) {
+            // 清理一年之前日志数据
+            clearBeforeTime = DateUtil.offsetMonth(new Date(), -12);
+        } else if (type == 5) {
+            // 清理一千条以前日志数据
+            start = 1000;
+        } else if (type == 6) {
+            // 清理一万条以前日志数据
+            start = 10000;
+        } else if (type == 7) {
+            // 清理三万条以前日志数据
+            start = 30000;
+        } else if (type == 8) {
+            // 清理十万条以前日志数据
+            start = 100000;
+        } else if (type == 9) {
+            // 清理所有日志数据
+            start = 0;
+        } else {
+            throw new GlsException("清理类型参数异常");
+        }
+        getPage(
+                new QueryJobLog(groupId, jobId, null, clearBeforeTime, null),
+                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime")))
+                .get().map(JobLog::getId).forEach(repository::deleteById);
+    }
+
+    @Override
     public void doJobComplete() {
         Date lostTime = DateUtil.offsetMinute(new Date(), -10);
         List<JobLogEntity> jobLogEntities = repository.getLostJobLogs(lostTime);
@@ -150,8 +189,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     public Map<String, Object> getIndexMap(Long jobId) {
         Map<String, Object> maps = new HashMap<>();
         // 执行器列表
-        List<JobGroupModel> jobGroupModelList = jobGroupService.getAll();
-        maps.put("jobGroupList", jobInfoService.getJobGroupListByRole(jobGroupModelList));
+        maps.put("jobGroupList", jobGroupService.getByLoginUser());
         // 任务
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
@@ -211,43 +249,41 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     }
 
     @Override
-    public void clearLog(Long groupId, Long jobId, Integer type) {
-        Date clearBeforeTime = null;
-        int start = 0;
-        if (type == 1) {
-            // 清理一个月之前日志数据
-            clearBeforeTime = DateUtil.offsetMonth(new Date(), -1);
-        } else if (type == 2) {
-            // 清理三个月之前日志数据
-            clearBeforeTime = DateUtil.offsetMonth(new Date(), -3);
-        } else if (type == 3) {
-            // 清理六个月之前日志数据
-            clearBeforeTime = DateUtil.offsetMonth(new Date(), -6);
-        } else if (type == 4) {
-            // 清理一年之前日志数据
-            clearBeforeTime = DateUtil.offsetMonth(new Date(), -12);
-        } else if (type == 5) {
-            // 清理一千条以前日志数据
-            start = 1000;
-        } else if (type == 6) {
-            // 清理一万条以前日志数据
-            start = 10000;
-        } else if (type == 7) {
-            // 清理三万条以前日志数据
-            start = 30000;
-        } else if (type == 8) {
-            // 清理十万条以前日志数据
-            start = 100000;
-        } else if (type == 9) {
-            // 清理所有日志数据
-            start = 0;
-        } else {
-            throw new GlsException("清理类型参数异常");
-        }
-        getPage(
-                new QueryJobLog(groupId, jobId, null, clearBeforeTime, null),
-                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime")))
-                .get().map(JobLog::getId).forEach(repository::deleteById);
+    protected Specification<JobLogEntity> getSpec(QueryJobLog queryJobLog) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (!ObjectUtils.isEmpty(queryJobLog.getJobGroupId())) {
+                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("jobGroup").get("id"), queryJobLog.getJobGroupId()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getJobInfoId())) {
+                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("id"), queryJobLog.getJobInfoId()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeFrom())) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeFrom()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeTo())) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeTo()));
+            }
+            if (!ObjectUtils.isEmpty(queryJobLog.getLogStatus())) {
+                switch (queryJobLog.getLogStatus()) {
+                    case 1:
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 200));
+                        break;
+                    case 2:
+                        Predicate predicate1 = criteriaBuilder.not(root.get("triggerCode").in(0, 200));
+                        Predicate predicate2 = criteriaBuilder.not(root.get("handleCode").in(0, 200));
+                        predicates.add(criteriaBuilder.or(predicate1, predicate2));
+                        break;
+                    case 3:
+                        predicates.add(criteriaBuilder.equal(root.get("triggerCode"), 200));
+                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 0));
+                        break;
+                    default:
+                        log.info("logStatus : {}", queryJobLog.getLogStatus());
+                }
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
     }
 
     private long cleanJobLog(long lastCleanLogTime) {
@@ -270,6 +306,26 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
             lastCleanLogTime = System.currentTimeMillis();
         }
         return lastCleanLogTime;
+    }
+
+    private void finishJob(JobLogEntity jobLogEntity) {
+        // JobInfoEntity
+        StringBuilder triggerChildMsgBuilder = new StringBuilder();
+        if (JobConstants.HANDLE_CODE_SUCCESS == jobLogEntity.getHandleCode()) {
+            JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
+            if (!ObjectUtils.isEmpty(jobInfoEntity)) {
+                List<JobInfoEntity> childJobInfoEntities = jobInfoEntity.getChildJobs();
+                if (!ObjectUtils.isEmpty(childJobInfoEntities)) {
+                    for (int i = 0; i < childJobInfoEntities.size(); i++) {
+                        JobInfoEntity childJobInfoEntity = childJobInfoEntities.get(i);
+                        jobAsyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
+                        triggerChildMsgBuilder.append(i).append("/").append(childJobInfoEntities.size())
+                                .append(" [任务ID=").append(childJobInfoEntity.getId()).append("], 触发成功. <br>");
+                    }
+                }
+            }
+        }
+        jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().concat(triggerChildMsgBuilder.toString()));
     }
 
     private void refreshJobLogReport(int i) {
@@ -323,63 +379,5 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
             jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().substring(0, HANDLE_MSG_MAX_LENGTH));
         }
         repository.save(jobLogEntity);
-    }
-
-    private void finishJob(JobLogEntity jobLogEntity) {
-        // JobInfoEntity
-        StringBuilder triggerChildMsgBuilder = new StringBuilder();
-        if (JobConstants.HANDLE_CODE_SUCCESS == jobLogEntity.getHandleCode()) {
-            JobInfoEntity jobInfoEntity = jobLogEntity.getJobInfo();
-            if (!ObjectUtils.isEmpty(jobInfoEntity)) {
-                List<JobInfoEntity> childJobInfoEntities = jobInfoEntity.getChildJobs();
-                if (!ObjectUtils.isEmpty(childJobInfoEntities)) {
-                    for (int i = 0; i < childJobInfoEntities.size(); i++) {
-                        JobInfoEntity childJobInfoEntity = childJobInfoEntities.get(i);
-                        jobAsyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
-                        triggerChildMsgBuilder.append(i).append("/").append(childJobInfoEntities.size())
-                                .append(" [任务ID=").append(childJobInfoEntity.getId()).append("], 触发成功. <br>");
-                    }
-                }
-            }
-        }
-        jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().concat(triggerChildMsgBuilder.toString()));
-    }
-
-    @Override
-    protected Specification<JobLogEntity> getSpec(QueryJobLog queryJobLog) {
-        return (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            if (!ObjectUtils.isEmpty(queryJobLog.getJobGroupId())) {
-                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("jobGroup").get("id"), queryJobLog.getJobGroupId()));
-            }
-            if (!ObjectUtils.isEmpty(queryJobLog.getJobInfoId())) {
-                predicates.add(criteriaBuilder.equal(root.get("jobInfo").get("id"), queryJobLog.getJobInfoId()));
-            }
-            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeFrom())) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeFrom()));
-            }
-            if (!ObjectUtils.isEmpty(queryJobLog.getTriggerTimeTo())) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("triggerTime"), queryJobLog.getTriggerTimeTo()));
-            }
-            if (!ObjectUtils.isEmpty(queryJobLog.getLogStatus())) {
-                switch (queryJobLog.getLogStatus()) {
-                    case 1:
-                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 200));
-                        break;
-                    case 2:
-                        Predicate predicate1 = criteriaBuilder.not(root.get("triggerCode").in(0, 200));
-                        Predicate predicate2 = criteriaBuilder.not(root.get("handleCode").in(0, 200));
-                        predicates.add(criteriaBuilder.or(predicate1, predicate2));
-                        break;
-                    case 3:
-                        predicates.add(criteriaBuilder.equal(root.get("triggerCode"), 200));
-                        predicates.add(criteriaBuilder.equal(root.get("handleCode"), 0));
-                        break;
-                    default:
-                        log.info("logStatus : {}", queryJobLog.getLogStatus());
-                }
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        };
     }
 }

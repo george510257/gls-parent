@@ -19,8 +19,8 @@ public class RetryCallbackThread extends BaseThread {
     private CallbackService callbackService;
 
     @Override
-    protected void initExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread init.");
+    protected void destroyExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread destroy.");
     }
 
     @Override
@@ -30,13 +30,13 @@ public class RetryCallbackThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread sleep.");
-        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
+    protected void initExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread init.");
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread destroy.");
+    protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor RetryCallbackThread thread sleep.");
+        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 }

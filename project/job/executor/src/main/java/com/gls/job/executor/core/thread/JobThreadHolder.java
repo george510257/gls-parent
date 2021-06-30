@@ -21,13 +21,6 @@ public class JobThreadHolder extends BaseHolder<Long, JobThread> {
     @Resource
     private JobLogService jobLogService;
 
-    public JobThread registByJobHandler(Long key, JobHandler handler, String reason) {
-        JobThread value = new JobThread(key, handler, jobLogService, this, jobContextHolder, callbackQueueHolder);
-        value.start();
-        regist(key, value, reason);
-        return value;
-    }
-
     @Override
     protected void delete(JobThread oldValue, String reason) {
         oldValue.toStop(reason);
@@ -35,5 +28,12 @@ public class JobThreadHolder extends BaseHolder<Long, JobThread> {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+    }
+
+    public JobThread registByJobHandler(Long key, JobHandler handler, String reason) {
+        JobThread value = new JobThread(key, handler, jobLogService, this, jobContextHolder, callbackQueueHolder);
+        value.start();
+        regist(key, value, reason);
+        return value;
     }
 }

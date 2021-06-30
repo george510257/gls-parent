@@ -16,10 +16,12 @@ import java.math.BigInteger;
 public class LoginUserUtil {
     private static final String LOGIN_IDENTITY_KEY = "GLS_JOB_LOGIN_IDENTITY";
 
-    public static void saveLoginUser(JobUser jobUser, boolean ifRemember) {
-        ServletHelper.getRequest().setAttribute(LOGIN_IDENTITY_KEY, jobUser);
-        String loginToken = makeToken(jobUser);
-        setCookie(LOGIN_IDENTITY_KEY, loginToken, ifRemember);
+    public static String getCookieValue(String key) {
+        Cookie cookie = ServletUtil.getCookie(ServletHelper.getRequest(), key);
+        if (cookie != null) {
+            return cookie.getValue();
+        }
+        return null;
     }
 
     public static JobUser getLoginUser() {
@@ -32,23 +34,6 @@ public class LoginUserUtil {
         return jobUser;
     }
 
-    public static void removeLoginUser() {
-        removeCookie(LOGIN_IDENTITY_KEY);
-    }
-
-    public static void setCookie(String key, String value, boolean ifRemember) {
-        int age = ifRemember ? Integer.MAX_VALUE : -1;
-        ServletUtil.addCookie(ServletHelper.getResponse(), key, value, age);
-    }
-
-    public static String getCookieValue(String key) {
-        Cookie cookie = ServletUtil.getCookie(ServletHelper.getRequest(), key);
-        if (cookie != null) {
-            return cookie.getValue();
-        }
-        return null;
-    }
-
     public static void removeCookie(String key) {
         Cookie cookie = ServletUtil.getCookie(ServletHelper.getRequest(), key);
         if (cookie != null) {
@@ -56,18 +41,19 @@ public class LoginUserUtil {
         }
     }
 
-    private static String makeToken(JobUser jobUser) {
-        String tokenJson = JsonUtil.writeValueAsString(jobUser);
-        assert tokenJson != null;
-        return new BigInteger(tokenJson.getBytes()).toString(16);
+    public static void removeLoginUser() {
+        removeCookie(LOGIN_IDENTITY_KEY);
     }
 
-    private static JobUser parseToken(String cookieToken) {
-        if (StringUtils.hasText(cookieToken)) {
-            String tokenJson = new String(new BigInteger(cookieToken, 16).toByteArray());
-            return JsonUtil.readValue(tokenJson, JobUser.class);
-        }
-        return null;
+    public static void saveLoginUser(JobUser jobUser, boolean ifRemember) {
+        ServletHelper.getRequest().setAttribute(LOGIN_IDENTITY_KEY, jobUser);
+        String loginToken = makeToken(jobUser);
+        setCookie(LOGIN_IDENTITY_KEY, loginToken, ifRemember);
+    }
+
+    public static void setCookie(String key, String value, boolean ifRemember) {
+        int age = ifRemember ? Integer.MAX_VALUE : -1;
+        ServletUtil.addCookie(ServletHelper.getResponse(), key, value, age);
     }
 
     public static boolean validPermission(Long jobGroupId) {
@@ -83,5 +69,19 @@ public class LoginUserUtil {
             }
         }
         return false;
+    }
+
+    private static String makeToken(JobUser jobUser) {
+        String tokenJson = JsonUtil.writeValueAsString(jobUser);
+        assert tokenJson != null;
+        return new BigInteger(tokenJson.getBytes()).toString(16);
+    }
+
+    private static JobUser parseToken(String cookieToken) {
+        if (StringUtils.hasText(cookieToken)) {
+            String tokenJson = new String(new BigInteger(cookieToken, 16).toByteArray());
+            return JsonUtil.readValue(tokenJson, JobUser.class);
+        }
+        return null;
     }
 }

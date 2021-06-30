@@ -18,12 +18,17 @@ public class JobScheduleRingThread extends BaseThread {
     private JobInfoService jobInfoService;
 
     @Override
-    protected void initExecute() {
+    protected void destroyExecute() {
+        log.info(">>>>>>>>>>> gls-job, JobScheduleHelper#ringThread stop");
     }
 
     @Override
     protected void doExecute() {
         jobInfoService.doJobScheduleRing();
+    }
+
+    @Override
+    protected void initExecute() {
     }
 
     @Override
@@ -33,10 +38,5 @@ public class JobScheduleRingThread extends BaseThread {
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
         }
-    }
-
-    @Override
-    protected void destroyExecute() {
-        log.info(">>>>>>>>>>> gls-job, JobScheduleHelper#ringThread stop");
     }
 }

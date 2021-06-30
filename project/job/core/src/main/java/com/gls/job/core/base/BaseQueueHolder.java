@@ -11,12 +11,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public abstract class BaseQueueHolder<V> {
     private final LinkedBlockingQueue<V> queue = new LinkedBlockingQueue<>();
 
-    public boolean push(V value) {
-        return queue.add(value);
-    }
-
-    public boolean push(List<V> list) {
-        return queue.addAll(list);
+    public boolean isEmpty() {
+        return queue.isEmpty();
     }
 
     public V pop() {
@@ -29,7 +25,11 @@ public abstract class BaseQueueHolder<V> {
         return list;
     }
 
-    public boolean isEmpty() {
-        return queue.isEmpty();
+    public boolean push(List<V> list) {
+        return queue.addAll(list);
+    }
+
+    public boolean push(V value) {
+        return queue.add(value);
     }
 }

@@ -15,22 +15,8 @@ public class TriggerQueueHolder extends BaseQueueHolder<TriggerModel> {
     private final Set<Long> logIds = Collections.synchronizedSet(new HashSet<>());
 
     @Override
-    public boolean push(TriggerModel value) {
-        Long logId = value.getLogId();
-        if (logIds.contains(logId)) {
-            return false;
-        }
-        logIds.add(logId);
-        return super.push(value);
-    }
-
-    @Override
-    public boolean push(List<TriggerModel> list) {
-        boolean flag = false;
-        for (TriggerModel model : list) {
-            flag = push(model);
-        }
-        return flag;
+    public boolean isEmpty() {
+        return super.isEmpty() && logIds.isEmpty();
     }
 
     @Override
@@ -52,8 +38,22 @@ public class TriggerQueueHolder extends BaseQueueHolder<TriggerModel> {
     }
 
     @Override
-    public boolean isEmpty() {
-        return super.isEmpty() && logIds.isEmpty();
+    public boolean push(List<TriggerModel> list) {
+        boolean flag = false;
+        for (TriggerModel model : list) {
+            flag = push(model);
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean push(TriggerModel value) {
+        Long logId = value.getLogId();
+        if (logIds.contains(logId)) {
+            return false;
+        }
+        logIds.add(logId);
+        return super.push(value);
     }
 
     public boolean contains(Long logId) {

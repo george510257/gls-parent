@@ -82,18 +82,6 @@ public class JobInfo extends BaseModel {
     @NotBlank
     private GlueType glueType;
     /**
-     * GLUE源代码
-     */
-    private String glueSource;
-    /**
-     * GLUE备注
-     */
-    private String glueRemark;
-    /**
-     * GLUE更新时间
-     */
-    private Date glueUpdateTime;
-    /**
      * 子任务ID，多个逗号分隔
      */
     private String childJobId;

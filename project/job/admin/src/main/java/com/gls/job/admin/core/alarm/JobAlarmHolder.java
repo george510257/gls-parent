@@ -16,6 +16,15 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
     @Resource
     private Map<String, JobAlarm> jobAlarmMap;
 
+    @Override
+    protected void delete(JobAlarm oldValue, String reason) {
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        regist(jobAlarmMap);
+    }
+
     /**
      * job alarm
      *
@@ -28,14 +37,5 @@ public class JobAlarmHolder extends BaseHolder<String, JobAlarm> {
             result.set(jobAlarm.doAlarm(jobLogEntity));
         });
         return result.get();
-    }
-
-    @Override
-    protected void delete(JobAlarm oldValue, String reason) {
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        regist(jobAlarmMap);
     }
 }

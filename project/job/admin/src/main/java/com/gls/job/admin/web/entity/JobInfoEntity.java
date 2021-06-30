@@ -57,12 +57,6 @@ public class JobInfoEntity extends BaseEntity {
     @Comment("GLUE类型")
     @Enumerated(EnumType.STRING)
     private GlueType glueType;
-    @Comment("GLUE源代码")
-    private String glueSource;
-    @Comment("GLUE备注")
-    private String glueRemark;
-    @Comment("GLUE更新时间")
-    private Date glueUpdateTime;
     @Comment("子任务ID")
     @ManyToMany
     private List<JobInfoEntity> childJobs;

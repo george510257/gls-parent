@@ -18,13 +18,18 @@ public class JobFailThread extends BaseThread {
     private JobLogService jobLogService;
 
     @Override
-    protected void initExecute() {
-        log.info(">>>>>>>>>>> gls-job, JobFailThread init");
+    protected void destroyExecute() {
+        log.info(">>>>>>>>>>> gls-job, JobFailThread destroy");
     }
 
     @Override
     protected void doExecute() {
         jobLogService.doJobFail();
+    }
+
+    @Override
+    protected void initExecute() {
+        log.info(">>>>>>>>>>> gls-job, JobFailThread init");
     }
 
     @Override
@@ -34,10 +39,5 @@ public class JobFailThread extends BaseThread {
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
         }
-    }
-
-    @Override
-    protected void destroyExecute() {
-        log.info(">>>>>>>>>>> gls-job, JobFailThread destroy");
     }
 }

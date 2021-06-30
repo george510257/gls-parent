@@ -36,16 +36,6 @@ public interface QuartzService {
     void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, String jobTime, Map<String, Object> jobData) throws SchedulerException;
 
     /**
-     * 修改 一个job的 时间表达式
-     *
-     * @param jobName      任务名称(建议唯一)
-     * @param jobGroupName 任务组名
-     * @param jobTime      时间表达式 （如：0/5 * * * * ? ）
-     * @throws SchedulerException 定时任务异常
-     */
-    void updateJob(String jobName, String jobGroupName, String jobTime) throws SchedulerException;
-
-    /**
      * 删除任务一个job
      *
      * @param jobName      任务名称
@@ -62,6 +52,22 @@ public interface QuartzService {
      * @throws SchedulerException 定时任务异常
      */
     void pauseJob(String jobName, String jobGroupName) throws SchedulerException;
+
+    /**
+     * 获取所有计划中的任务列表
+     *
+     * @return 计划中的任务列表
+     * @throws SchedulerException 定时任务异常
+     */
+    List<Map<String, Object>> queryAllJob() throws SchedulerException;
+
+    /**
+     * 获取所有正在运行的job
+     *
+     * @return 正在运行的job列表
+     * @throws SchedulerException 定时任务异常
+     */
+    List<Map<String, Object>> queryRunJob() throws SchedulerException;
 
     /**
      * 恢复一个job
@@ -82,18 +88,12 @@ public interface QuartzService {
     void runJobNow(String jobName, String jobGroupName) throws SchedulerException;
 
     /**
-     * 获取所有计划中的任务列表
+     * 修改 一个job的 时间表达式
      *
-     * @return 计划中的任务列表
+     * @param jobName      任务名称(建议唯一)
+     * @param jobGroupName 任务组名
+     * @param jobTime      时间表达式 （如：0/5 * * * * ? ）
      * @throws SchedulerException 定时任务异常
      */
-    List<Map<String, Object>> queryAllJob() throws SchedulerException;
-
-    /**
-     * 获取所有正在运行的job
-     *
-     * @return 正在运行的job列表
-     * @throws SchedulerException 定时任务异常
-     */
-    List<Map<String, Object>> queryRunJob() throws SchedulerException;
+    void updateJob(String jobName, String jobGroupName, String jobTime) throws SchedulerException;
 }

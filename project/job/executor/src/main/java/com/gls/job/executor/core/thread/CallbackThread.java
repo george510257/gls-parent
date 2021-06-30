@@ -19,8 +19,9 @@ public class CallbackThread extends BaseThread {
     private CallbackService callbackService;
 
     @Override
-    protected void initExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread init.");
+    protected void destroyExecute() throws Exception {
+        callbackService.callback();
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread destroy.");
     }
 
     @Override
@@ -30,14 +31,13 @@ public class CallbackThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread sleep.");
-        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
+    protected void initExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread init.");
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
-        callbackService.callback();
-        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread destroy.");
+    protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor CallbackThread thread sleep.");
+        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 }

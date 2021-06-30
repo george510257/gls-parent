@@ -31,40 +31,6 @@ public class JobUserServiceImpl
     }
 
     @Override
-    public void login(String username, String password, boolean ifRemember) {
-        if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
-            throw new GlsException("账号或密码为空");
-        }
-        JobUserEntity jobUserEntity = repository.getByUsername(username);
-        if (ObjectUtils.isEmpty(jobUserEntity)) {
-            throw new GlsException("账号或密码错误");
-        }
-        String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
-        if (!passwordMd5.equals(jobUserEntity.getPassword())) {
-            throw new GlsException("账号或密码错误");
-        }
-        LoginUserUtil.saveLoginUser(converter.sourceToTarget(jobUserEntity), ifRemember);
-    }
-
-    @Override
-    public void logout() {
-        LoginUserUtil.removeLoginUser();
-    }
-
-    @Override
-    public void changePassword(String password) {
-        if (ObjectUtils.isEmpty(password)) {
-            throw new GlsException("密码不可为空");
-        }
-        if (password.length() > 20 || password.length() < 4) {
-            throw new GlsException("长度限制[4-20]");
-        }
-        JobUser loginUser = LoginUserUtil.getLoginUser();
-        loginUser.setPassword(password);
-        super.update(loginUser);
-    }
-
-    @Override
     public void add(JobUser model) {
         JobUserEntity jobUserEntity = repository.getByUsername(model.getUsername());
         if (!ObjectUtils.isEmpty(jobUserEntity)) {
@@ -103,5 +69,39 @@ public class JobUserServiceImpl
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[2]));
         };
+    }
+
+    @Override
+    public void changePassword(String password) {
+        if (ObjectUtils.isEmpty(password)) {
+            throw new GlsException("密码不可为空");
+        }
+        if (password.length() > 20 || password.length() < 4) {
+            throw new GlsException("长度限制[4-20]");
+        }
+        JobUser loginUser = LoginUserUtil.getLoginUser();
+        loginUser.setPassword(password);
+        super.update(loginUser);
+    }
+
+    @Override
+    public void login(String username, String password, boolean ifRemember) {
+        if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
+            throw new GlsException("账号或密码为空");
+        }
+        JobUserEntity jobUserEntity = repository.getByUsername(username);
+        if (ObjectUtils.isEmpty(jobUserEntity)) {
+            throw new GlsException("账号或密码错误");
+        }
+        String passwordMd5 = DigestUtils.md5DigestAsHex(password.getBytes());
+        if (!passwordMd5.equals(jobUserEntity.getPassword())) {
+            throw new GlsException("账号或密码错误");
+        }
+        LoginUserUtil.saveLoginUser(converter.sourceToTarget(jobUserEntity), ifRemember);
+    }
+
+    @Override
+    public void logout() {
+        LoginUserUtil.removeLoginUser();
     }
 }

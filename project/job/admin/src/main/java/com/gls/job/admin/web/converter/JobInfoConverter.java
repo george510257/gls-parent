@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.converter;
 
+import cn.hutool.core.convert.Convert;
 import com.gls.framework.core.base.BaseConverter;
-import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.repository.JobGroupRepository;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -42,10 +43,7 @@ public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
         jobInfo.setExecutorTimeout(jobInfoEntity.getExecutorTimeout());
         jobInfo.setExecutorFailRetryCount(jobInfoEntity.getExecutorFailRetryCount());
         jobInfo.setGlueType(jobInfoEntity.getGlueType());
-        jobInfo.setGlueSource(jobInfoEntity.getGlueSource());
-        jobInfo.setGlueRemark(jobInfoEntity.getGlueRemark());
-        jobInfo.setGlueUpdateTime(jobInfoEntity.getGlueUpdateTime());
-        jobInfo.setChildJobId(StringUtil.toString(jobInfoEntity.getChildJobs().stream().map(child -> child.getId().toString()).collect(Collectors.toList())));
+        jobInfo.setChildJobId(jobInfoEntity.getChildJobs().stream().map(child -> child.getId().toString()).collect(Collectors.joining(",")));
         jobInfo.setTriggerStatus(jobInfoEntity.getTriggerStatus() ? 1 : 0);
         jobInfo.setTriggerLastTime(jobInfoEntity.getTriggerLastTime().getTime());
         jobInfo.setTriggerNextTime(jobInfoEntity.getTriggerNextTime().getTime());
@@ -68,10 +66,7 @@ public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
         jobInfoEntity.setExecutorTimeout(jobInfo.getExecutorTimeout());
         jobInfoEntity.setExecutorFailRetryCount(jobInfo.getExecutorFailRetryCount());
         jobInfoEntity.setGlueType(jobInfo.getGlueType());
-        jobInfoEntity.setGlueSource(jobInfo.getGlueSource());
-        jobInfoEntity.setGlueRemark(jobInfo.getGlueRemark());
-        jobInfoEntity.setGlueUpdateTime(jobInfo.getGlueUpdateTime());
-        jobInfoEntity.setChildJobs(StringUtil.toList(jobInfo.getChildJobId()).stream().map(jobId -> jobInfoRepository.getOne(Long.parseLong(jobId))).collect(Collectors.toList()));
+        jobInfoEntity.setChildJobs(jobInfoRepository.findAllById(Arrays.stream(jobInfo.getChildJobId().split(",")).map(Convert::toLong).collect(Collectors.toSet())));
         jobInfoEntity.setTriggerStatus(jobInfo.getTriggerStatus() == 1);
         jobInfoEntity.setTriggerLastTime(new Date(jobInfo.getTriggerLastTime()));
         jobInfoEntity.setTriggerNextTime(new Date(jobInfo.getTriggerNextTime()));

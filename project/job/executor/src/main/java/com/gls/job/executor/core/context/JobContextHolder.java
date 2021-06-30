@@ -10,25 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JobContextHolder extends BaseThreadLocalHolder<JobContext> {
     /**
-     * handle success
-     *
-     * @return
-     */
-    public boolean handleSuccess() {
-        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, null);
-    }
-
-    /**
-     * handle success with log msg
-     *
-     * @param handleMsg
-     * @return
-     */
-    public boolean handleSuccess(String handleMsg) {
-        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, handleMsg);
-    }
-
-    /**
      * handle fail
      *
      * @return
@@ -48,25 +29,6 @@ public class JobContextHolder extends BaseThreadLocalHolder<JobContext> {
     }
 
     /**
-     * handle timeout
-     *
-     * @return
-     */
-    public boolean handleTimeout() {
-        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, null);
-    }
-
-    /**
-     * handle timeout with log msg
-     *
-     * @param handleMsg
-     * @return
-     */
-    public boolean handleTimeout(String handleMsg) {
-        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, handleMsg);
-    }
-
-    /**
      * @param handleCode 200 : success
      *                   500 : fail
      *                   502 : timeout
@@ -83,5 +45,43 @@ public class JobContextHolder extends BaseThreadLocalHolder<JobContext> {
             jobContext.setHandleMsg(handleMsg);
         }
         return true;
+    }
+
+    /**
+     * handle success
+     *
+     * @return
+     */
+    public boolean handleSuccess() {
+        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, null);
+    }
+
+    /**
+     * handle success with log msg
+     *
+     * @param handleMsg
+     * @return
+     */
+    public boolean handleSuccess(String handleMsg) {
+        return handleResult(JobConstants.HANDLE_CODE_SUCCESS, handleMsg);
+    }
+
+    /**
+     * handle timeout
+     *
+     * @return
+     */
+    public boolean handleTimeout() {
+        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, null);
+    }
+
+    /**
+     * handle timeout with log msg
+     *
+     * @param handleMsg
+     * @return
+     */
+    public boolean handleTimeout(String handleMsg) {
+        return handleResult(JobConstants.HANDLE_CODE_TIMEOUT, handleMsg);
     }
 }

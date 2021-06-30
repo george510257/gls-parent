@@ -31,10 +31,11 @@ public class JobLogController {
     @Resource
     private JobLogService jobLogService;
 
-    @GetMapping("/index")
-    public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "0") Long jobId) {
+    @PostMapping("/clearLog")
+    public Result<String> clearLog(Long groupId, Long jobId, Integer type) {
         try {
-            return new Result<>(jobLogService.getIndexMap(jobId));
+            jobLogService.clearLog(groupId, jobId, type);
+            return Result.SUCCESS;
         } catch (GlsException e) {
             log.error(e.getMessage(), e);
             return new Result<>(Result.FAIL_CODE, e.getMessage());
@@ -45,6 +46,47 @@ public class JobLogController {
     public Result<List<JobInfo>> getJobsByGroup(Long jobGroupId) {
         try {
             return new Result<>(jobLogService.getJobsByGroup(jobGroupId));
+        } catch (GlsException e) {
+            log.error(e.getMessage(), e);
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+    }
+
+    @GetMapping("/index")
+    public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "0") Long jobId) {
+        try {
+            return new Result<>(jobLogService.getIndexMap(jobId));
+        } catch (GlsException e) {
+            log.error(e.getMessage(), e);
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+    }
+
+    @GetMapping("/logDetail")
+    public Result<JobLog> logDetail(Long logId) {
+        try {
+            return new Result<>(jobLogService.logDetail(logId));
+        } catch (GlsException e) {
+            log.error(e.getMessage(), e);
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+    }
+
+    @PostMapping("/logDetailCat")
+    public Result<LogResultModel> logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
+        try {
+            return new Result<>(jobLogService.logDetailCat(executorAddress, triggerTime, logId, fromLineNum));
+        } catch (GlsException e) {
+            log.error(e.getMessage(), e);
+            return new Result<>(Result.FAIL_CODE, e.getMessage());
+        }
+    }
+
+    @PostMapping("/logKill")
+    public Result<String> logKill(Long logId) {
+        try {
+            jobLogService.logKill(logId);
+            return Result.SUCCESS;
         } catch (GlsException e) {
             log.error(e.getMessage(), e);
             return new Result<>(Result.FAIL_CODE, e.getMessage());
@@ -80,47 +122,5 @@ public class JobLogController {
         // 分页列表
         maps.put("data", page.getContent());
         return new Result<>(maps);
-    }
-
-    @GetMapping("/logDetail")
-    public Result<JobLog> logDetail(Long logId) {
-        try {
-            return new Result<>(jobLogService.logDetail(logId));
-        } catch (GlsException e) {
-            log.error(e.getMessage(), e);
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @PostMapping("/logDetailCat")
-    public Result<LogResultModel> logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
-        try {
-            return new Result<>(jobLogService.logDetailCat(executorAddress, triggerTime, logId, fromLineNum));
-        } catch (GlsException e) {
-            log.error(e.getMessage(), e);
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @PostMapping("/logKill")
-    public Result<String> logKill(Long logId) {
-        try {
-            jobLogService.logKill(logId);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            log.error(e.getMessage(), e);
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @PostMapping("/clearLog")
-    public Result<String> clearLog(Long groupId, Long jobId, Integer type) {
-        try {
-            jobLogService.clearLog(groupId, jobId, type);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            log.error(e.getMessage(), e);
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
     }
 }

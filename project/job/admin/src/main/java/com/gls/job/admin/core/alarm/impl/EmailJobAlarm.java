@@ -31,30 +31,6 @@ public class EmailJobAlarm implements JobAlarm {
     @Resource
     private JobAdminProperties jobAdminProperties;
 
-    private String loadEmailJobAlarmTemplate() {
-        return "<h5>监控告警明细: </span>" +
-                "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
-                "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
-                "      <tr>\n" +
-                "         <td width=\"20%\" >执行器</td>\n" +
-                "         <td width=\"10%\" >任务ID</td>\n" +
-                "         <td width=\"20%\" >任务描述</td>\n" +
-                "         <td width=\"10%\" >告警类型</td>\n" +
-                "         <td width=\"40%\" >告警内容</td>\n" +
-                "      </tr>\n" +
-                "   </thead>\n" +
-                "   <tbody>\n" +
-                "      <tr>\n" +
-                "         <td>{0}</td>\n" +
-                "         <td>{1}</td>\n" +
-                "         <td>{2}</td>\n" +
-                "         <td>调度失败</td>\n" +
-                "         <td>{3}</td>\n" +
-                "      </tr>\n" +
-                "   </tbody>\n" +
-                "</table>";
-    }
-
     @Override
     public boolean doAlarm(JobLogEntity jobLog) {
         JobInfoEntity jobInfo = jobLog.getJobInfo();
@@ -96,5 +72,29 @@ public class EmailJobAlarm implements JobAlarm {
             }
         }
         return alarmResult;
+    }
+
+    private String loadEmailJobAlarmTemplate() {
+        return "<h5>监控告警明细: </span>" +
+                "<table border=\"1\" cellpadding=\"3\" style=\"border-collapse:collapse; width:80%;\" >\n" +
+                "   <thead style=\"font-weight: bold;color: #ffffff;background-color: #ff8c00;\" >" +
+                "      <tr>\n" +
+                "         <td width=\"20%\" >执行器</td>\n" +
+                "         <td width=\"10%\" >任务ID</td>\n" +
+                "         <td width=\"20%\" >任务描述</td>\n" +
+                "         <td width=\"10%\" >告警类型</td>\n" +
+                "         <td width=\"40%\" >告警内容</td>\n" +
+                "      </tr>\n" +
+                "   </thead>\n" +
+                "   <tbody>\n" +
+                "      <tr>\n" +
+                "         <td>{0}</td>\n" +
+                "         <td>{1}</td>\n" +
+                "         <td>{2}</td>\n" +
+                "         <td>调度失败</td>\n" +
+                "         <td>{3}</td>\n" +
+                "      </tr>\n" +
+                "   </tbody>\n" +
+                "</table>";
     }
 }

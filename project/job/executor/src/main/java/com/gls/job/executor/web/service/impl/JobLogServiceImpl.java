@@ -29,17 +29,6 @@ public class JobLogServiceImpl implements JobLogService {
     private JobLogRepository jobLogRepository;
 
     @Override
-    public void logFileClean() {
-        jobLogRepository.logFileClean();
-    }
-
-    @Override
-    public LogResultModel readLog(LogModel logModel) {
-        String logFileName = getLogFileName(logModel.getLogDateTime(), logModel.getLogId());
-        return jobLogRepository.readLog(logFileName, logModel.getFromLineNum());
-    }
-
-    @Override
     public String getLogFileName(Date logDateTime, Long logId) {
         return jobLogRepository.getLogFileName(logDateTime, logId);
     }
@@ -59,6 +48,17 @@ public class JobLogServiceImpl implements JobLogService {
         String appendLog = stringWriter.toString();
         StackTraceElement callInfo = new Throwable().getStackTrace()[1];
         return logDetail(callInfo, appendLog);
+    }
+
+    @Override
+    public void logFileClean() {
+        jobLogRepository.logFileClean();
+    }
+
+    @Override
+    public LogResultModel readLog(LogModel logModel) {
+        String logFileName = getLogFileName(logModel.getLogDateTime(), logModel.getLogId());
+        return jobLogRepository.readLog(logFileName, logModel.getFromLineNum());
     }
 
     /**

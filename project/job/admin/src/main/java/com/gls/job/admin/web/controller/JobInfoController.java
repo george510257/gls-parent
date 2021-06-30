@@ -1,19 +1,25 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
-import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.StringUtil;
+import com.gls.job.admin.constants.ExecutorRouteStrategy;
+import com.gls.job.admin.constants.MisfireStrategy;
+import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
+import com.gls.job.core.constants.ExecutorBlockStrategy;
+import com.gls.job.core.constants.GlueType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,94 +34,66 @@ public class JobInfoController {
     private JobAsyncService jobAsyncService;
     @Resource
     private JobInfoService jobInfoService;
-
-    @GetMapping("/index")
-    public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "-1") Long jobGroupId) {
-        try {
-            return new Result<>(jobInfoService.getIndexData(jobGroupId));
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @PostMapping("/pageList")
-    public Result<Page<JobInfo>> pageList(Long jobGroup, Boolean triggerStatus, String jobDesc, String executorHandler, String author,
-                                          @RequestParam(required = false, defaultValue = "0") int start,
-                                          @RequestParam(required = false, defaultValue = "10") int length) {
-        try {
-            return new Result<>(jobInfoService.getPage(new QueryJobInfo(jobGroup, triggerStatus, jobDesc, executorHandler, author), PageRequest.of(start, length)));
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
+    @Resource
+    private JobGroupService jobGroupService;
 
     @PostMapping("/add")
     public Result<String> add(JobInfo jobInfo) {
-        try {
-            jobInfoService.add(jobInfo);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
+        jobInfoService.add(jobInfo);
+        return Result.SUCCESS;
     }
 
-    @PostMapping("/update")
-    public Result<String> update(JobInfo jobInfo) {
-        try {
-            jobInfoService.update(jobInfo);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @GetMapping("/remove")
-    public Result<String> remove(Long jobInfoId) {
-        try {
-            jobInfoService.remove(jobInfoId);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @GetMapping("/stop")
-    public Result<String> stop(Long jobInfoId) {
-        try {
-            jobInfoService.stopJobInfo(jobInfoId);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @GetMapping("/start")
-    public Result<String> start(Long jobInfoId) {
-        try {
-            jobInfoService.startJobInfo(jobInfoId);
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
-    }
-
-    @PostMapping("/trigger")
-    public Result<String> trigger(Long jobInfoId, String executorParam, String addressList) {
-        try {
-            jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
-            return Result.SUCCESS;
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
+    @GetMapping("/index")
+    public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "-1") Long jobGroupId) {
+        Map<String, Object> maps = new HashMap<>();
+        maps.put("ExecutorRouteStrategy", ExecutorRouteStrategy.values());
+        maps.put("GlueType", GlueType.values());
+        maps.put("ExecutorBlockStrategy", ExecutorBlockStrategy.values());
+        maps.put("ScheduleType", ScheduleType.values());
+        maps.put("MisfireStrategy", MisfireStrategy.values());
+        maps.put("JobGroupList", jobGroupService.getByLoginUser());
+        maps.put("jobGroup", jobGroupId);
+        return new Result<>(maps);
     }
 
     @PostMapping("/nextTriggerTime")
     public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
-        try {
-            List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
-            return new Result<>(list);
-        } catch (GlsException e) {
-            return new Result<>(Result.FAIL_CODE, e.getMessage());
-        }
+        List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
+        return new Result<>(list);
+    }
+
+    @PostMapping("/pageList")
+    public Result<Page<JobInfo>> pageList(QueryJobInfo queryJobInfo, Pageable pageable) {
+        return new Result<>(jobInfoService.getPage(queryJobInfo, pageable));
+    }
+
+    @GetMapping("/remove")
+    public Result<String> remove(Long jobInfoId) {
+        jobInfoService.remove(jobInfoId);
+        return Result.SUCCESS;
+    }
+
+    @GetMapping("/start")
+    public Result<String> start(Long jobInfoId) {
+        jobInfoService.start(jobInfoId);
+        return Result.SUCCESS;
+    }
+
+    @GetMapping("/stop")
+    public Result<String> stop(Long jobInfoId) {
+        jobInfoService.stop(jobInfoId);
+        return Result.SUCCESS;
+    }
+
+    @PostMapping("/trigger")
+    public Result<String> trigger(Long jobInfoId, String executorParam, String addressList) {
+        jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
+        return Result.SUCCESS;
+    }
+
+    @PostMapping("/update")
+    public Result<String> update(JobInfo jobInfo) {
+        jobInfoService.update(jobInfo);
+        return Result.SUCCESS;
     }
 }

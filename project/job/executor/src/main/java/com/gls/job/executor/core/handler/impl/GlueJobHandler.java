@@ -20,6 +20,11 @@ public class GlueJobHandler implements JobHandler {
     private final Date glueUpdateTime;
 
     @Override
+    public void destroy() throws Exception {
+        this.jobHandler.destroy();
+    }
+
+    @Override
     public void execute() throws Exception {
         log.info("----------- glue.version:" + glueUpdateTime + " -----------");
         jobHandler.execute();
@@ -28,10 +33,5 @@ public class GlueJobHandler implements JobHandler {
     @Override
     public void init() throws Exception {
         this.jobHandler.init();
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        this.jobHandler.destroy();
     }
 }

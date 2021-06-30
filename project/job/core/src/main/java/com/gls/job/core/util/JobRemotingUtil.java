@@ -35,19 +35,6 @@ public class JobRemotingUtil {
     }};
     private static final Logger logger = LoggerFactory.getLogger(JobRemotingUtil.class);
 
-    private static void trustAllHosts(HttpsURLConnection connection) {
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
-            SSLSocketFactory newFactory = sc.getSocketFactory();
-            connection.setSSLSocketFactory(newFactory);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        connection.setHostnameVerifier((hostname, session) -> true);
-    }
-    // trust-https end
-
     /**
      * post
      *
@@ -128,5 +115,18 @@ public class JobRemotingUtil {
                 logger.error(e2.getMessage(), e2);
             }
         }
+    }
+    // trust-https end
+
+    private static void trustAllHosts(HttpsURLConnection connection) {
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
+            SSLSocketFactory newFactory = sc.getSocketFactory();
+            connection.setSSLSocketFactory(newFactory);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        connection.setHostnameVerifier((hostname, session) -> true);
     }
 }

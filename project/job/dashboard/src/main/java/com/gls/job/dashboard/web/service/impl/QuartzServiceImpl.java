@@ -18,11 +18,6 @@ public class QuartzServiceImpl implements QuartzService {
     @Resource
     private Scheduler scheduler;
 
-    @PostConstruct
-    public void startScheduler() throws SchedulerException {
-        scheduler.start();
-    }
-
     @Override
     public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime, int jobTimes, Map<String, Object> jobData) throws SchedulerException {
         // 任务名称和组构成任务key
@@ -59,15 +54,6 @@ public class QuartzServiceImpl implements QuartzService {
     }
 
     @Override
-    public void updateJob(String jobName, String jobGroupName, String jobTime) throws SchedulerException {
-        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
-        CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-        trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).build();
-        // 重启触发器
-        scheduler.rescheduleJob(triggerKey, trigger);
-    }
-
-    @Override
     public void deleteJob(String jobName, String jobGroupName) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
         scheduler.deleteJob(jobKey);
@@ -77,18 +63,6 @@ public class QuartzServiceImpl implements QuartzService {
     public void pauseJob(String jobName, String jobGroupName) throws SchedulerException {
         JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
         scheduler.pauseJob(jobKey);
-    }
-
-    @Override
-    public void resumeJob(String jobName, String jobGroupName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
-        scheduler.resumeJob(jobKey);
-    }
-
-    @Override
-    public void runJobNow(String jobName, String jobGroupName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
-        scheduler.triggerJob(jobKey);
     }
 
     @Override
@@ -116,6 +90,32 @@ public class QuartzServiceImpl implements QuartzService {
             jobList.add(getJobMap(jobKey, trigger));
         }
         return jobList;
+    }
+
+    @Override
+    public void resumeJob(String jobName, String jobGroupName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
+        scheduler.resumeJob(jobKey);
+    }
+
+    @Override
+    public void runJobNow(String jobName, String jobGroupName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
+        scheduler.triggerJob(jobKey);
+    }
+
+    @Override
+    public void updateJob(String jobName, String jobGroupName, String jobTime) throws SchedulerException {
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
+        CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+        trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(CronScheduleBuilder.cronSchedule(jobTime)).build();
+        // 重启触发器
+        scheduler.rescheduleJob(triggerKey, trigger);
+    }
+
+    @PostConstruct
+    public void startScheduler() throws SchedulerException {
+        scheduler.start();
     }
 
     private Map<String, Object> getJobMap(JobKey jobKey, Trigger trigger) throws SchedulerException {

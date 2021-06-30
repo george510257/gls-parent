@@ -25,11 +25,6 @@ public class JobAsyncServiceImpl implements JobAsyncService {
     private JobRegistryService jobRegistryService;
 
     @Override
-    public void asyncTrigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList) {
-        jobInfoService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
-    }
-
-    @Override
     public void asyncCallback(List<CallbackModel> callbackModels) {
         jobLogService.callback(callbackModels);
     }
@@ -42,5 +37,10 @@ public class JobAsyncServiceImpl implements JobAsyncService {
     @Override
     public void asyncRegistryRemove(RegistryModel registryModel) {
         jobRegistryService.remove(registryModel);
+    }
+
+    @Override
+    public void asyncTrigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList) {
+        jobInfoService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
     }
 }

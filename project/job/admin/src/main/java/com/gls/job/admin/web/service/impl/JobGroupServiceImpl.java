@@ -1,10 +1,12 @@
 package com.gls.job.admin.web.service.impl;
 
 import com.gls.framework.core.exception.GlsException;
+import com.gls.job.admin.core.util.LoginUserUtil;
 import com.gls.job.admin.web.converter.JobGroupConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
-import com.gls.job.admin.web.model.JobGroupModel;
+import com.gls.job.admin.web.model.JobGroup;
+import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobGroup;
 import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
@@ -24,7 +26,7 @@ import java.util.List;
  * @author george
  */
 @Service("jobGroupService")
-public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupRepository, JobGroupConverter, JobGroupEntity, JobGroupModel, QueryJobGroup> implements JobGroupService {
+public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupRepository, JobGroupConverter, JobGroupEntity, JobGroup, QueryJobGroup> implements JobGroupService {
     @Resource
     private JobInfoRepository jobInfoRepository;
 
@@ -57,5 +59,14 @@ public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupRepository, Job
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[2]));
         };
+    }
+
+    @Override
+    public List<JobGroup> getByLoginUser() {
+        JobUser jobUser = LoginUserUtil.getLoginUser();
+        if (jobUser.getRole().equals(1)) {
+            return converter.sourceToTargetList(repository.findAll());
+        }
+        return converter.sourceToTargetList(repository.getByRoleJobUserId(jobUser.getId()));
     }
 }

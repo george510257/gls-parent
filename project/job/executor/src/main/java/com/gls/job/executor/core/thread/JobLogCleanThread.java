@@ -18,8 +18,8 @@ public class JobLogCleanThread extends BaseThread {
     private JobLogService jobLogService;
 
     @Override
-    protected void initExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread init.");
+    protected void destroyExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread destroy.");
     }
 
     @Override
@@ -29,13 +29,13 @@ public class JobLogCleanThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread sleep.");
-        TimeUnit.DAYS.sleep(1);
+    protected void initExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread init.");
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread destroy.");
+    protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor JobLogCleanThread thread sleep.");
+        TimeUnit.DAYS.sleep(1);
     }
 }

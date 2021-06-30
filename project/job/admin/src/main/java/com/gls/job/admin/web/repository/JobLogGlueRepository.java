@@ -12,12 +12,11 @@ import java.util.List;
  */
 public interface JobLogGlueRepository extends BaseEntityRepository<JobLogGlueEntity> {
     /**
-     * get By JobInfoId
+     * delete By JobInfoId
      *
      * @param jobInfoId
-     * @return
      */
-    List<JobLogGlueEntity> getByJobInfoIdOrderByIdDesc(Long jobInfoId);
+    void deleteByJobInfoId(Long jobInfoId);
 
     /**
      * get Old JobLogGlue
@@ -37,9 +36,18 @@ public interface JobLogGlueRepository extends BaseEntityRepository<JobLogGlueEnt
     void deleteOldJobLogGlue(@Param("jobInfoId") Long jobInfoId, @Param("size") int size);
 
     /**
-     * delete By JobInfoId
+     * get By JobInfoId
      *
      * @param jobInfoId
+     * @return
      */
-    void deleteByJobInfoId(Long jobInfoId);
+    List<JobLogGlueEntity> getByJobInfoIdOrderByIdDesc(Long jobInfoId);
+
+    /**
+     * get Top By JobInfoId Order By UpdateDate Desc
+     *
+     * @param jobInfoId
+     * @return
+     */
+    JobLogGlueEntity getTopByJobInfoIdOrderByUpdateDateDesc(Long jobInfoId);
 }

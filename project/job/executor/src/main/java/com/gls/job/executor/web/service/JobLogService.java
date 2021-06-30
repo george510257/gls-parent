@@ -10,19 +10,6 @@ import java.util.Date;
  */
 public interface JobLogService {
     /**
-     * logFileClean
-     */
-    void logFileClean();
-
-    /**
-     * read Log
-     *
-     * @param logModel
-     * @return
-     */
-    LogResultModel readLog(LogModel logModel);
-
-    /**
      * get Log File Name
      *
      * @param logDateTime
@@ -47,4 +34,17 @@ public interface JobLogService {
      * @return
      */
     boolean log(Throwable e);
+
+    /**
+     * logFileClean
+     */
+    void logFileClean();
+
+    /**
+     * read Log
+     *
+     * @param logModel
+     * @return
+     */
+    LogResultModel readLog(LogModel logModel);
 }

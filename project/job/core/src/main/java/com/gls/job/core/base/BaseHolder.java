@@ -16,6 +16,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBean {
     private final Map<K, V> map = new ConcurrentHashMap<>();
 
+    @Override
+    public void destroy() throws Exception {
+        removeAll("");
+    }
+
+    public V load(K key) {
+        return map.get(key);
+    }
+
+    public List<V> loadAll() {
+        return new ArrayList<>(map.values());
+    }
+
     public void regist(Map<K, V> map) {
         map.forEach((key, value) -> {
             regist(key, value, "");
@@ -26,14 +39,6 @@ public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBe
         log.info(">>>>>>>>>>> regist {} [key:{},value:{}]", this.getClass().getSimpleName(), key, value.getClass().getSimpleName());
         V oldValue = map.put(key, value);
         delete(oldValue, reason);
-    }
-
-    public V load(K key) {
-        return map.get(key);
-    }
-
-    public List<V> loadAll() {
-        return new ArrayList<>(map.values());
     }
 
     public V remove(K key, String reason) {
@@ -55,9 +60,4 @@ public abstract class BaseHolder<K, V> implements InitializingBean, DisposableBe
      * @param reason
      */
     protected abstract void delete(V oldValue, String reason);
-
-    @Override
-    public void destroy() throws Exception {
-        removeAll("");
-    }
 }

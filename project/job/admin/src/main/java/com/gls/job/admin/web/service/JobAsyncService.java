@@ -13,18 +13,6 @@ import java.util.List;
 @Async
 public interface JobAsyncService {
     /**
-     * trigger
-     *
-     * @param jobId
-     * @param triggerType
-     * @param failRetryCount
-     * @param executorShardingParam
-     * @param executorParam
-     * @param addressList
-     */
-    void asyncTrigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList);
-
-    /**
      * callback
      *
      * @param callbackModels
@@ -44,4 +32,16 @@ public interface JobAsyncService {
      * @param registryModel
      */
     void asyncRegistryRemove(RegistryModel registryModel);
+
+    /**
+     * trigger
+     *
+     * @param jobId
+     * @param triggerType
+     * @param failRetryCount
+     * @param executorShardingParam
+     * @param executorParam
+     * @param addressList
+     */
+    void asyncTrigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList);
 }

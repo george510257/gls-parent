@@ -22,6 +22,15 @@ public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
     void callback(List<CallbackModel> callbackModels);
 
     /**
+     * clearLog
+     *
+     * @param groupId
+     * @param jobId
+     * @param type
+     */
+    void clearLog(Long groupId, Long jobId, Integer type);
+
+    /**
      * do Job Complete
      */
     void doJobComplete();
@@ -80,13 +89,4 @@ public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
      * @param logId
      */
     void logKill(Long logId);
-
-    /**
-     * clearLog
-     *
-     * @param groupId
-     * @param jobId
-     * @param type
-     */
-    void clearLog(Long groupId, Long jobId, Integer type);
 }

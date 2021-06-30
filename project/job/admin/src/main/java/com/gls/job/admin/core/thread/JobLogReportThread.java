@@ -19,13 +19,18 @@ public class JobLogReportThread extends BaseThread {
     private long lastCleanLogTime;
 
     @Override
-    protected void initExecute() {
-        lastCleanLogTime = 0;
+    protected void destroyExecute() {
+        log.info(">>>>>>>>>>> gls-job, job log report thread stop");
     }
 
     @Override
     protected void doExecute() {
         lastCleanLogTime = jobLogService.doJobLogReport(lastCleanLogTime);
+    }
+
+    @Override
+    protected void initExecute() {
+        lastCleanLogTime = 0;
     }
 
     @Override
@@ -35,10 +40,5 @@ public class JobLogReportThread extends BaseThread {
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
         }
-    }
-
-    @Override
-    protected void destroyExecute() {
-        log.info(">>>>>>>>>>> gls-job, job log report thread stop");
     }
 }

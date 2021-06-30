@@ -54,18 +54,27 @@ public class JobThread extends BaseThread {
         this.callbackQueueHolder = callbackQueueHolder;
     }
 
-    /**
-     * is running job
-     *
-     * @return
-     */
-    public boolean isRunningOrHasQueue() {
-        return running || !triggerQueueHolder.isEmpty();
-    }
-
     @Override
-    protected void initExecute() throws Exception {
-        jobHandler.init();
+    protected void destroyExecute() throws Exception {
+        // callback trigger request in queue
+        while (!triggerQueueHolder.isEmpty()) {
+            TriggerModel triggerModel = triggerQueueHolder.pop();
+            if (triggerModel != null) {
+                // is killed
+                callbackQueueHolder.push(new CallbackModel(
+                        triggerModel.getLogId(),
+                        triggerModel.getLogDateTime(),
+                        JobConstants.HANDLE_CODE_FAIL,
+                        this.getStopReason() + " [job not executed, in the job queue, killed.]"));
+            }
+        }
+        // destroy
+        try {
+            jobHandler.destroy();
+        } catch (Throwable e) {
+            log.error(e.getMessage(), e);
+        }
+        log.info(">>>>>>>>>>> gls-job JobThread stoped, hashCode:{}", Thread.currentThread());
     }
 
     @Override
@@ -169,29 +178,20 @@ public class JobThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
+    protected void initExecute() throws Exception {
+        jobHandler.init();
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
-        // callback trigger request in queue
-        while (!triggerQueueHolder.isEmpty()) {
-            TriggerModel triggerModel = triggerQueueHolder.pop();
-            if (triggerModel != null) {
-                // is killed
-                callbackQueueHolder.push(new CallbackModel(
-                        triggerModel.getLogId(),
-                        triggerModel.getLogDateTime(),
-                        JobConstants.HANDLE_CODE_FAIL,
-                        this.getStopReason() + " [job not executed, in the job queue, killed.]"));
-            }
-        }
-        // destroy
-        try {
-            jobHandler.destroy();
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
-        }
-        log.info(">>>>>>>>>>> gls-job JobThread stoped, hashCode:{}", Thread.currentThread());
+    protected void sleepExecute() throws Exception {
+    }
+
+    /**
+     * is running job
+     *
+     * @return
+     */
+    public boolean isRunningOrHasQueue() {
+        return running || !triggerQueueHolder.isEmpty();
     }
 }

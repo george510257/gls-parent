@@ -19,8 +19,9 @@ public class RegistryThread extends BaseThread {
     private RegistryService registryService;
 
     @Override
-    protected void initExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread init.");
+    protected void destroyExecute() throws Exception {
+        registryService.registryRemove();
+        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread destroy.");
     }
 
     @Override
@@ -30,14 +31,13 @@ public class RegistryThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() throws Exception {
-        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread sleep.");
-        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
+    protected void initExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread init.");
     }
 
     @Override
-    protected void destroyExecute() throws Exception {
-        registryService.registryRemove();
-        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread destroy.");
+    protected void sleepExecute() throws Exception {
+        log.info(">>>>>>>>>>> gls-job, executor RegistryThread thread sleep.");
+        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 }

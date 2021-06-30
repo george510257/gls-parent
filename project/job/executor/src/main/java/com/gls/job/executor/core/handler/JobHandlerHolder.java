@@ -25,6 +25,27 @@ public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
     @Resource
     private Map<String, JobHandler> jobHandlers;
 
+    @Override
+    protected void delete(JobHandler oldValue, String reason) {
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
+        log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
+        init(beans);
+        regist(jobHandlers);
+    }
+
+    private Method getMethod(Object bean, String methodName) {
+        try {
+            return bean.getClass().getDeclaredMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            log.error(">>>>>>>>>>> " + bean.getClass().getName() + ":" + methodName + "不存在!!", e);
+        }
+        return null;
+    }
+
     private void init(Collection<Object> beans) {
         for (Object bean : beans) {
             Map<Method, Job> methodJobs = MethodIntrospector.selectMethods(bean.getClass(),
@@ -40,26 +61,5 @@ public class JobHandlerHolder extends BaseHolder<String, JobHandler> {
                 }
             }
         }
-    }
-
-    private Method getMethod(Object bean, String methodName) {
-        try {
-            return bean.getClass().getDeclaredMethod(methodName);
-        } catch (NoSuchMethodException e) {
-            log.error(">>>>>>>>>>> " + bean.getClass().getName() + ":" + methodName + "不存在!!", e);
-        }
-        return null;
-    }
-
-    @Override
-    protected void delete(JobHandler oldValue, String reason) {
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Collection<Object> beans = applicationContext.getBeansOfType(Object.class, false, true).values();
-        log.info(">>>>>>>>>>> beans sizes: {}", beans.size());
-        init(beans);
-        regist(jobHandlers);
     }
 }

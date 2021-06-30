@@ -9,6 +9,15 @@ import java.util.Date;
  */
 public interface JobLogRepository {
     /**
+     * getLogFileName
+     *
+     * @param logDateTime
+     * @param logId
+     * @return
+     */
+    String getLogFileName(Date logDateTime, Long logId);
+
+    /**
      * logFileClean
      */
     void logFileClean();
@@ -21,15 +30,6 @@ public interface JobLogRepository {
      * @return
      */
     LogResultModel readLog(String logFileName, Integer fromLineNum);
-
-    /**
-     * getLogFileName
-     *
-     * @param logDateTime
-     * @param logId
-     * @return
-     */
-    String getLogFileName(Date logDateTime, Long logId);
 
     /**
      * saveLog

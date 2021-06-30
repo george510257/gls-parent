@@ -9,16 +9,16 @@ import java.util.List;
  */
 public interface CallbackRepository {
     /**
-     * save
-     *
-     * @param callbackModels
-     */
-    void save(List<CallbackModel> callbackModels);
-
-    /**
      * get All
      *
      * @return
      */
     List<CallbackModel> getAll();
+
+    /**
+     * save
+     *
+     * @param callbackModels
+     */
+    void save(List<CallbackModel> callbackModels);
 }

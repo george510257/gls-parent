@@ -20,13 +20,13 @@ public class IndexController {
     private JobIndexService jobIndexService;
 
     @GetMapping("/dashboard")
-    public Result<Map<String, Object>> getDashboardInfo() {
+    public Result<Map<String, Object>> dashboard() {
         Map<String, Object> dashboardInfo = jobIndexService.getDashboardInfo();
         return new Result<>(dashboardInfo);
     }
 
     @GetMapping("/chart")
-    public Result<Map<String, Object>> getChartInfo(Date startDate, Date endDate) {
+    public Result<Map<String, Object>> chart(Date startDate, Date endDate) {
         Map<String, Object> chartInfo = jobIndexService.getChartInfo(startDate, endDate);
         return new Result<>(chartInfo);
     }

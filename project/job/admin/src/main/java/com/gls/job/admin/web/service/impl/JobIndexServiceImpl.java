@@ -27,25 +27,6 @@ public class JobIndexServiceImpl implements JobIndexService {
     private JobGroupRepository jobGroupRepository;
 
     @Override
-    public Map<String, Object> getDashboardInfo() {
-        Map<String, Object> dashboardInfo = new HashMap<>(4);
-        // jobInfoCount
-        long jobInfoCount = jobInfoRepository.count();
-        dashboardInfo.put("jobInfoCount", jobInfoCount);
-        Map<String, Long> reportTotal = jobLogReportRepository.getReportTotal();
-        // jobLogCount
-        long jobLogCount = reportTotal.get("runningCount") + reportTotal.get("sucCount") + reportTotal.get("failCount");
-        dashboardInfo.put("jobLogCount", jobLogCount);
-        // jobLogSuccessCount
-        long jobLogSuccessCount = reportTotal.get("sucCount");
-        dashboardInfo.put("jobLogSuccessCount", jobLogSuccessCount);
-        // executorCount
-        long executorCount = getExecutorCount();
-        dashboardInfo.put("executorCount", executorCount);
-        return dashboardInfo;
-    }
-
-    @Override
     public Map<String, Object> getChartInfo(Date startDate, Date endDate) {
         // process
         List<String> triggerDayList = new ArrayList<>();
@@ -87,6 +68,25 @@ public class JobIndexServiceImpl implements JobIndexService {
         result.put("triggerCountSucTotal", triggerCountSucTotal.get());
         result.put("triggerCountFailTotal", triggerCountFailTotal.get());
         return result;
+    }
+
+    @Override
+    public Map<String, Object> getDashboardInfo() {
+        Map<String, Object> dashboardInfo = new HashMap<>(4);
+        // jobInfoCount
+        long jobInfoCount = jobInfoRepository.count();
+        dashboardInfo.put("jobInfoCount", jobInfoCount);
+        Map<String, Long> reportTotal = jobLogReportRepository.getReportTotal();
+        // jobLogCount
+        long jobLogCount = reportTotal.get("runningCount") + reportTotal.get("sucCount") + reportTotal.get("failCount");
+        dashboardInfo.put("jobLogCount", jobLogCount);
+        // jobLogSuccessCount
+        long jobLogSuccessCount = reportTotal.get("sucCount");
+        dashboardInfo.put("jobLogSuccessCount", jobLogSuccessCount);
+        // executorCount
+        long executorCount = getExecutorCount();
+        dashboardInfo.put("executorCount", executorCount);
+        return dashboardInfo;
     }
 
     private long getExecutorCount() {

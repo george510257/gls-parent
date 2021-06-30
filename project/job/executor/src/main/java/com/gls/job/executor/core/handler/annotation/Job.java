@@ -12,9 +12,9 @@ import java.lang.annotation.*;
 @Inherited
 public @interface Job {
     /**
-     * jobHandler name
+     * destroy handler, invoked when JobThread destroy
      */
-    String value();
+    String destroy() default "";
 
     /**
      * init handler, invoked when JobThread init
@@ -22,7 +22,7 @@ public @interface Job {
     String init() default "";
 
     /**
-     * destroy handler, invoked when JobThread destroy
+     * jobHandler name
      */
-    String destroy() default "";
+    String value();
 }

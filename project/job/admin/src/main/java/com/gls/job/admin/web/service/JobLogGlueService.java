@@ -1,5 +1,7 @@
 package com.gls.job.admin.web.service;
 
+import com.gls.job.admin.web.model.JobLogGlue;
+
 import java.util.Map;
 
 /**
@@ -15,11 +17,9 @@ public interface JobLogGlueService {
     Map<String, Object> getIndex(Long jobId);
 
     /**
-     * saveGlueSource
+     * save
      *
-     * @param jobId
-     * @param glueSource
-     * @param glueRemark
+     * @param jobLogGlue
      */
-    void saveGlueSource(Long jobId, String glueSource, String glueRemark);
+    void save(JobLogGlue jobLogGlue);
 }

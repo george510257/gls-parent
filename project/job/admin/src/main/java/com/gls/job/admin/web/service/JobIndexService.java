@@ -8,13 +8,6 @@ import java.util.Map;
  */
 public interface JobIndexService {
     /**
-     * get Dashboard Info
-     *
-     * @return
-     */
-    Map<String, Object> getDashboardInfo();
-
-    /**
      * get Chart Info
      *
      * @param startDate
@@ -22,4 +15,11 @@ public interface JobIndexService {
      * @return
      */
     Map<String, Object> getChartInfo(Date startDate, Date endDate);
+
+    /**
+     * get Dashboard Info
+     *
+     * @return
+     */
+    Map<String, Object> getDashboardInfo();
 }

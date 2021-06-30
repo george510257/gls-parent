@@ -2,7 +2,7 @@ package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
 import com.gls.job.admin.core.servlet.PermissionLimit;
-import com.gls.job.admin.web.model.JobGroupModel;
+import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.model.JobUser;
 import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.job.admin.web.service.JobGroupService;
@@ -33,6 +33,29 @@ public class UserController {
     @Resource
     private JobGroupService jobGroupService;
 
+    @PermissionLimit(administer = true)
+    @PostMapping("/add")
+    public Result<String> add(@Valid JobUser jobUser) {
+        jobUserService.add(jobUser);
+        return Result.SUCCESS;
+    }
+
+    @PermissionLimit(administer = true)
+    @PostMapping("/changePassword")
+    public Result<String> changePassword(String password) {
+        jobUserService.changePassword(password);
+        return Result.SUCCESS;
+    }
+
+    @PermissionLimit(administer = true)
+    @GetMapping("/index")
+    public Result<Map<String, Object>> index() {
+        Map<String, Object> map = new HashMap<>();
+        List<JobGroup> jobGroupList = jobGroupService.getAll();
+        map.put("groupList", jobGroupList);
+        return new Result<>(map);
+    }
+
     @PermissionLimit(limit = false)
     @PostMapping("/login")
     public Result<String> login(String username, String password, Boolean ifRemember) {
@@ -48,33 +71,10 @@ public class UserController {
     }
 
     @PermissionLimit(administer = true)
-    @GetMapping("/index")
-    public Result<Map<String, Object>> index() {
-        Map<String, Object> map = new HashMap<>();
-        List<JobGroupModel> jobGroupModelList = jobGroupService.getAll();
-        map.put("groupList", jobGroupModelList);
-        return new Result<>(map);
-    }
-
-    @PermissionLimit(administer = true)
     @GetMapping("/pageList")
     public Result<Page<JobUser>> pageList(QueryJobUser queryJobUser, Pageable pageable) {
         Page<JobUser> page = jobUserService.getPage(queryJobUser, pageable);
         return new Result<>(page);
-    }
-
-    @PermissionLimit(administer = true)
-    @PostMapping("/add")
-    public Result<String> add(@Valid JobUser jobUser) {
-        jobUserService.add(jobUser);
-        return Result.SUCCESS;
-    }
-
-    @PermissionLimit(administer = true)
-    @PostMapping("/update")
-    public Result<String> update(@Valid JobUser jobUser) {
-        jobUserService.update(jobUser);
-        return Result.SUCCESS;
     }
 
     @PermissionLimit(administer = true)
@@ -85,9 +85,9 @@ public class UserController {
     }
 
     @PermissionLimit(administer = true)
-    @PostMapping("/changePassword")
-    public Result<String> changePassword(String password) {
-        jobUserService.changePassword(password);
+    @PostMapping("/update")
+    public Result<String> update(@Valid JobUser jobUser) {
+        jobUserService.update(jobUser);
         return Result.SUCCESS;
     }
 }

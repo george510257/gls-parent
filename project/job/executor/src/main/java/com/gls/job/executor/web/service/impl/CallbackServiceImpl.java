@@ -48,6 +48,19 @@ public class CallbackServiceImpl implements CallbackService {
         }
     }
 
+    private void callbackLog(List<CallbackModel> callbackModels, String logContent) {
+        for (CallbackModel callbackModel : callbackModels) {
+            String logFileName = jobLogService.getLogFileName(callbackModel.getLogDateTime(), callbackModel.getLogId());
+            jobContextHolder.set(new JobContext(
+                    -1L,
+                    null,
+                    logFileName,
+                    -1,
+                    -1));
+            jobLogService.log(logContent);
+        }
+    }
+
     private void doCallback(List<CallbackModel> callbackModels) {
         boolean callbackRet = false;
         // callback, will retry if error
@@ -67,19 +80,6 @@ public class CallbackServiceImpl implements CallbackService {
         }
         if (!callbackRet) {
             callbackRepository.save(callbackModels);
-        }
-    }
-
-    private void callbackLog(List<CallbackModel> callbackModels, String logContent) {
-        for (CallbackModel callbackModel : callbackModels) {
-            String logFileName = jobLogService.getLogFileName(callbackModel.getLogDateTime(), callbackModel.getLogId());
-            jobContextHolder.set(new JobContext(
-                    -1L,
-                    null,
-                    logFileName,
-                    -1,
-                    -1));
-            jobLogService.log(logContent);
         }
     }
 }

@@ -5,11 +5,18 @@ import com.gls.job.admin.web.model.query.QueryJobUser;
 import com.gls.starter.data.jpa.base.BaseService;
 
 /**
- * @author georg2
+ * @author george
  */
 public interface JobUserService extends BaseService<JobUser, QueryJobUser> {
     /**
-     * login
+     * 修改密码
+     *
+     * @param password
+     */
+    void changePassword(String password);
+
+    /**
+     * 登录
      *
      * @param username
      * @param password
@@ -19,16 +26,9 @@ public interface JobUserService extends BaseService<JobUser, QueryJobUser> {
     void login(String username, String password, boolean ifRemember);
 
     /**
-     * login
+     * 登出
      *
      * @return
      */
     void logout();
-
-    /**
-     * changePassword
-     *
-     * @param password
-     */
-    void changePassword(String password);
 }

@@ -4,8 +4,9 @@ import com.gls.framework.api.model.BaseModel;
 import com.gls.job.core.constants.GlueType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
 
-import java.util.Date;
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author george
@@ -22,7 +23,7 @@ public class JobLogGlue extends BaseModel {
      */
     private GlueType glueType;
     private String glueSource;
+    @NotBlank(message = "请输入源码备注")
+    @Length(min = 4, max = 100, message = "源码备注长度限制为4~100")
     private String glueRemark;
-    private Date addTime;
-    private Date updateTime;
 }

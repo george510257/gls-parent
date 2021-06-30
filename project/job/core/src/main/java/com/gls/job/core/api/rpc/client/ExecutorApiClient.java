@@ -38,11 +38,6 @@ public class ExecutorApiClient implements ExecutorApi {
     }
 
     @Override
-    public Result<String> run(TriggerModel triggerModel) {
-        return JobRemotingUtil.postBody(addressUrl + "run", accessToken, timeout, triggerModel, String.class);
-    }
-
-    @Override
     public Result<String> kill(KillModel killModel) {
         return JobRemotingUtil.postBody(addressUrl + "kill", accessToken, timeout, killModel, String.class);
     }
@@ -50,5 +45,10 @@ public class ExecutorApiClient implements ExecutorApi {
     @Override
     public Result<LogResultModel> log(LogModel logModel) {
         return JobRemotingUtil.postBody(addressUrl + "log", accessToken, timeout, logModel, LogResultModel.class);
+    }
+
+    @Override
+    public Result<String> run(TriggerModel triggerModel) {
+        return JobRemotingUtil.postBody(addressUrl + "run", accessToken, timeout, triggerModel, String.class);
     }
 }

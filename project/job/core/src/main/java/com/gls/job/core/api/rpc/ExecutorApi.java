@@ -24,14 +24,6 @@ public interface ExecutorApi {
     Result<String> idleBeat(IdleBeatModel idleBeatModel);
 
     /**
-     * run
-     *
-     * @param triggerModel
-     * @return
-     */
-    Result<String> run(TriggerModel triggerModel);
-
-    /**
      * kill
      *
      * @param killModel
@@ -46,4 +38,12 @@ public interface ExecutorApi {
      * @return
      */
     Result<LogResultModel> log(LogModel logModel);
+
+    /**
+     * run
+     *
+     * @param triggerModel
+     * @return
+     */
+    Result<String> run(TriggerModel triggerModel);
 }

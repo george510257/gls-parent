@@ -39,10 +39,6 @@ public class JobDetailConverter implements BaseConverter<JobDetailEntity, JobDet
         return jobDetailEntity;
     }
 
-    private Map<String, String> getJobDataMap(JobDataMap jobDataMap) {
-        return jobDataMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().toString()));
-    }
-
     private Class<? extends Job> getJobClass(String jobClassName) {
         try {
             return (Class<? extends Job>) Class.forName(jobClassName);
@@ -50,5 +46,9 @@ public class JobDetailConverter implements BaseConverter<JobDetailEntity, JobDet
             e.printStackTrace();
         }
         return null;
+    }
+
+    private Map<String, String> getJobDataMap(JobDataMap jobDataMap) {
+        return jobDataMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().toString()));
     }
 }

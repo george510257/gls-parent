@@ -4,7 +4,7 @@ import com.gls.framework.core.base.BaseConverter;
 import com.gls.framework.core.util.StringUtil;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobRegistryEntity;
-import com.gls.job.admin.web.model.JobGroupModel;
+import com.gls.job.admin.web.model.JobGroup;
 import com.gls.job.admin.web.repository.JobRegistryRepository;
 import org.springframework.stereotype.Component;
 
@@ -15,36 +15,36 @@ import java.util.stream.Collectors;
  * @author george
  */
 @Component
-public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroupModel> {
+public class JobGroupConverter implements BaseConverter<JobGroupEntity, JobGroup> {
     @Resource
     private JobRegistryRepository jobRegistryRepository;
 
     @Override
-    public JobGroupModel copySourceToTarget(JobGroupEntity jobGroupEntity, JobGroupModel jobGroupModel) {
-        jobGroupModel.setId(jobGroupEntity.getId());
-        jobGroupModel.setAppname(jobGroupEntity.getAppname());
-        jobGroupModel.setTitle(jobGroupEntity.getTitle());
-        jobGroupModel.setAddressType(jobGroupEntity.getAddressType());
+    public JobGroup copySourceToTarget(JobGroupEntity jobGroupEntity, JobGroup jobGroup) {
+        jobGroup.setId(jobGroupEntity.getId());
+        jobGroup.setAppname(jobGroupEntity.getAppname());
+        jobGroup.setTitle(jobGroupEntity.getTitle());
+        jobGroup.setAddressType(jobGroupEntity.getAddressType());
         if (jobGroupEntity.getAddressType()) {
-            jobGroupModel.setAddressList(jobGroupEntity.getJobRegistries().stream()
+            jobGroup.setAddressList(jobGroupEntity.getJobRegistries().stream()
                     .map(JobRegistryEntity::getRegistryValue).collect(Collectors.joining(",")));
         } else {
-            jobGroupModel.setAddressList(StringUtil.toString(jobGroupEntity.getAddressList()));
+            jobGroup.setAddressList(StringUtil.toString(jobGroupEntity.getAddressList()));
         }
-        return jobGroupModel;
+        return jobGroup;
     }
 
     @Override
-    public JobGroupEntity copyTargetToSource(JobGroupModel jobGroupModel, JobGroupEntity jobGroupEntity) {
-        jobGroupEntity.setAppname(jobGroupModel.getAppname());
-        jobGroupEntity.setTitle(jobGroupModel.getTitle());
-        jobGroupEntity.setAddressType(jobGroupModel.getAddressType());
-        if (jobGroupModel.getAddressType()) {
-            jobGroupEntity.setJobRegistries(jobRegistryRepository.getByRegistryKey(jobGroupModel.getAppname()));
+    public JobGroupEntity copyTargetToSource(JobGroup jobGroup, JobGroupEntity jobGroupEntity) {
+        jobGroupEntity.setAppname(jobGroup.getAppname());
+        jobGroupEntity.setTitle(jobGroup.getTitle());
+        jobGroupEntity.setAddressType(jobGroup.getAddressType());
+        if (jobGroup.getAddressType()) {
+            jobGroupEntity.setJobRegistries(jobRegistryRepository.getByRegistryKey(jobGroup.getAppname()));
         } else {
-            jobGroupEntity.setAddressList(StringUtil.toList(jobGroupModel.getAddressList()));
+            jobGroupEntity.setAddressList(StringUtil.toList(jobGroup.getAddressList()));
         }
-        jobGroupEntity.setId(jobGroupModel.getId());
+        jobGroupEntity.setId(jobGroup.getId());
         return jobGroupEntity;
     }
 }
