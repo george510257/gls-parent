@@ -12,18 +12,6 @@ import java.util.List;
  */
 public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
     /**
-     * do JobSchedule
-     *
-     * @return
-     */
-    boolean doJobSchedule();
-
-    /**
-     * do JobSchedule Ring
-     */
-    void doJobScheduleRing();
-
-    /**
      * startJobInfo
      *
      * @param jobInfoId
@@ -65,4 +53,16 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
      * @return
      */
     List<String> nextTriggerTime(String scheduleType, String scheduleConf);
+
+    /**
+     * do JobSchedule
+     *
+     * @return
+     */
+    boolean doJobSchedule();
+
+    /**
+     * do JobSchedule Ring
+     */
+    void doJobScheduleRing();
 }

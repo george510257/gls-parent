@@ -53,8 +53,6 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     @Resource
     private JobGroupService jobGroupService;
     @Resource
-    private JobInfoService jobInfoService;
-    @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
     private JobLogReportRepository jobLogReportRepository;
@@ -101,7 +99,6 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     @Override
     public void clearLog(Long groupId, Long jobId, Integer type) {
         Date clearBeforeTime = null;
-        int start = 0;
         if (type == 1) {
             // 清理一个月之前日志数据
             clearBeforeTime = DateUtil.offsetMonth(new Date(), -1);
@@ -114,27 +111,9 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
         } else if (type == 4) {
             // 清理一年之前日志数据
             clearBeforeTime = DateUtil.offsetMonth(new Date(), -12);
-        } else if (type == 5) {
-            // 清理一千条以前日志数据
-            start = 1000;
-        } else if (type == 6) {
-            // 清理一万条以前日志数据
-            start = 10000;
-        } else if (type == 7) {
-            // 清理三万条以前日志数据
-            start = 30000;
-        } else if (type == 8) {
-            // 清理十万条以前日志数据
-            start = 100000;
-        } else if (type == 9) {
-            // 清理所有日志数据
-            start = 0;
-        } else {
-            throw new GlsException("清理类型参数异常");
         }
         List<JobLogEntity> jobLogEntityList = repository.findAll(
-                getSpec(new QueryJobLog(groupId, jobId, null, clearBeforeTime, null)),
-                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime"))).getContent();
+                getSpec(new QueryJobLog(groupId, jobId, null, clearBeforeTime, null)));
         repository.deleteInBatch(jobLogEntityList);
     }
 

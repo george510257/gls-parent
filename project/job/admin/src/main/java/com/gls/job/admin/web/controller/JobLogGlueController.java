@@ -28,7 +28,7 @@ public class JobLogGlueController {
 
     @PostMapping("add")
     public Result<String> save(JobLogGlue jobLogGlue) {
-        jobLogGlueService.save(jobLogGlue);
+        jobLogGlueService.add(jobLogGlue);
         return Result.SUCCESS;
     }
 }

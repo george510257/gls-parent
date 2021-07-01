@@ -11,6 +11,8 @@ import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.service.JobLogGlueService;
 import com.gls.job.core.constants.GlueType;
+import com.gls.starter.data.jpa.base.BaseServiceImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -23,20 +25,31 @@ import java.util.Map;
  * @author george
  */
 @Service("jobLogGlueService")
-public class JobLogGlueServiceImpl implements JobLogGlueService {
+public class JobLogGlueServiceImpl extends BaseServiceImpl<JobLogGlueRepository,JobLogGlueConverter,JobLogGlueEntity,JobLogGlue,Object> implements JobLogGlueService {
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobLogGlueRepository jobLogGlueRepository;
-    @Resource
     private JobInfoConverter jobInfoConverter;
-    @Resource
-    private JobLogGlueConverter jobLogGlueConverter;
+
+    public JobLogGlueServiceImpl(JobLogGlueRepository repository, JobLogGlueConverter converter) {
+        super(repository, converter);
+    }
+
+    @Override
+    public void add(JobLogGlue model) {
+        super.add(model);
+        repository.deleteOldJobLogGlue(model.getJobId(),30);
+    }
+
+    @Override
+    protected Specification<JobLogGlueEntity> getSpec(Object o) {
+        return null;
+    }
 
     @Override
     public Map<String, Object> getIndex(Long jobId) {
         JobInfoEntity jobInfoEntity = jobInfoRepository.getOne(jobId);
-        List<JobLogGlueEntity> jobLogGlueEntities = jobLogGlueRepository.getByJobInfoIdOrderByIdDesc(jobId);
+        List<JobLogGlueEntity> jobLogGlueEntities = repository.getByJobInfoIdOrderByIdDesc(jobId);
         if (ObjectUtils.isEmpty(jobInfoEntity)) {
             throw new GlsException("任务ID非法");
         }
@@ -50,14 +63,7 @@ public class JobLogGlueServiceImpl implements JobLogGlueService {
         Map<String, Object> map = new HashMap<>(3);
         map.put("GlueType", GlueType.values());
         map.put("jobInfo", jobInfoConverter.sourceToTarget(jobInfoEntity));
-        map.put("jobLogGlues", jobLogGlueConverter.sourceToTargetList(jobLogGlueEntities));
+        map.put("jobLogGlues", converter.sourceToTargetList(jobLogGlueEntities));
         return map;
-    }
-
-    @Override
-    public void save(JobLogGlue jobLogGlue) {
-        JobLogGlueEntity jobLogGlueEntity = jobLogGlueConverter.targetToSource(jobLogGlue);
-        jobLogGlueRepository.save(jobLogGlueEntity);
-        jobLogGlueRepository.deleteOldJobLogGlue(jobLogGlue.getJobId(), 30);
     }
 }
