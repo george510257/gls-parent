@@ -8,7 +8,7 @@ import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
-import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.core.constants.ExecutorBlockStrategy;
@@ -31,17 +31,11 @@ import java.util.Map;
 @RequestMapping("/info")
 public class JobInfoController {
     @Resource
-    private JobAsyncService jobAsyncService;
+    private AsyncService asyncService;
     @Resource
     private JobInfoService jobInfoService;
     @Resource
     private JobGroupService jobGroupService;
-
-    @PostMapping("/add")
-    public Result<String> add(JobInfo jobInfo) {
-        jobInfoService.add(jobInfo);
-        return Result.SUCCESS;
-    }
 
     @GetMapping("/index")
     public Result<Map<String, Object>> index(@RequestParam(required = false, defaultValue = "-1") Long jobGroupId) {
@@ -56,20 +50,26 @@ public class JobInfoController {
         return new Result<>(maps);
     }
 
-    @PostMapping("/nextTriggerTime")
-    public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
-        List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
-        return new Result<>(list);
-    }
-
     @PostMapping("/pageList")
     public Result<Page<JobInfo>> pageList(QueryJobInfo queryJobInfo, Pageable pageable) {
         return new Result<>(jobInfoService.getPage(queryJobInfo, pageable));
     }
 
+    @PostMapping("/add")
+    public Result<String> add(JobInfo jobInfo) {
+        jobInfoService.add(jobInfo);
+        return Result.SUCCESS;
+    }
+
     @GetMapping("/remove")
     public Result<String> remove(Long jobInfoId) {
         jobInfoService.remove(jobInfoId);
+        return Result.SUCCESS;
+    }
+
+    @PostMapping("/update")
+    public Result<String> update(JobInfo jobInfo) {
+        jobInfoService.update(jobInfo);
         return Result.SUCCESS;
     }
 
@@ -87,13 +87,13 @@ public class JobInfoController {
 
     @PostMapping("/trigger")
     public Result<String> trigger(Long jobInfoId, String executorParam, String addressList) {
-        jobAsyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
+        asyncService.asyncTrigger(jobInfoId, TriggerType.MANUAL, -1, null, executorParam, StringUtil.toList(addressList));
         return Result.SUCCESS;
     }
 
-    @PostMapping("/update")
-    public Result<String> update(JobInfo jobInfo) {
-        jobInfoService.update(jobInfo);
-        return Result.SUCCESS;
+    @PostMapping("/nextTriggerTime")
+    public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
+        List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
+        return new Result<>(list);
     }
 }

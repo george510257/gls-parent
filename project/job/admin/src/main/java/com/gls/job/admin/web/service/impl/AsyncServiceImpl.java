@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.constants.TriggerType;
-import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.admin.web.service.JobRegistryService;
@@ -15,8 +15,8 @@ import java.util.List;
 /**
  * @author george
  */
-@Service("jobAsyncService")
-public class JobAsyncServiceImpl implements JobAsyncService {
+@Service("asyncService")
+public class AsyncServiceImpl implements AsyncService {
     @Resource
     private JobInfoService jobInfoService;
     @Resource

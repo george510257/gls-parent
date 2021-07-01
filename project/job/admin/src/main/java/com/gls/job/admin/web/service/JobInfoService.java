@@ -24,15 +24,6 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
     void doJobScheduleRing();
 
     /**
-     * nextTriggerTime
-     *
-     * @param scheduleType
-     * @param scheduleConf
-     * @return
-     */
-    List<String> nextTriggerTime(String scheduleType, String scheduleConf);
-
-    /**
      * startJobInfo
      *
      * @param jobInfoId
@@ -47,6 +38,14 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
     void stop(Long jobInfoId);
 
     /**
+     * getByJobGroupId
+     *
+     * @param jobGroupId
+     * @return
+     */
+    List<JobInfo> getByJobGroupId(Long jobGroupId);
+
+    /**
      * trigger
      *
      * @param jobId
@@ -57,4 +56,13 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
      * @param addressList
      */
     void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList);
+
+    /**
+     * nextTriggerTime
+     *
+     * @param scheduleType
+     * @param scheduleConf
+     * @return
+     */
+    List<String> nextTriggerTime(String scheduleType, String scheduleConf);
 }

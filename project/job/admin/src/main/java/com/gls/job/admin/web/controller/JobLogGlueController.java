@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/code")
-public class JobCodeController {
+public class JobLogGlueController {
     @Resource
     private JobLogGlueService jobLogGlueService;
 

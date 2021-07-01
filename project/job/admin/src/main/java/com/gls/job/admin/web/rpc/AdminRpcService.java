@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.rpc;
 
 import com.gls.framework.api.result.Result;
-import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import com.gls.job.core.api.rpc.AdminApi;
@@ -16,23 +16,23 @@ import java.util.List;
 @DubboService
 public class AdminRpcService implements AdminApi {
     @Resource
-    private JobAsyncService jobAsyncService;
+    private AsyncService asyncService;
 
     @Override
     public Result<String> callback(List<CallbackModel> callbackModels) {
-        jobAsyncService.asyncCallback(callbackModels);
+        asyncService.asyncCallback(callbackModels);
         return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registry(RegistryModel registryModel) {
-        jobAsyncService.asyncRegistry(registryModel);
+        asyncService.asyncRegistry(registryModel);
         return Result.SUCCESS;
     }
 
     @Override
     public Result<String> registryRemove(RegistryModel registryModel) {
-        jobAsyncService.asyncRegistryRemove(registryModel);
+        asyncService.asyncRegistryRemove(registryModel);
         return Result.SUCCESS;
     }
 }

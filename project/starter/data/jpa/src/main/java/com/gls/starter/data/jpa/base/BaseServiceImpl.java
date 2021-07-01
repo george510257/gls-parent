@@ -74,7 +74,7 @@ public abstract class BaseServiceImpl<Repository extends BaseEntityRepository<En
         Entity entity = converter.targetToSource(model);
         List<Entity> entities = repository.findAll(entity);
         if (!ObjectUtils.isEmpty(entities)) {
-            repository.deleteAll(entities);
+            repository.deleteInBatch(entities);
         }
     }
 
@@ -82,7 +82,7 @@ public abstract class BaseServiceImpl<Repository extends BaseEntityRepository<En
     public void removeAll(List<Long> ids) {
         List<Entity> entities = repository.findAllById(ids);
         if (!ObjectUtils.isEmpty(entities)) {
-            repository.deleteAll(entities);
+            repository.deleteInBatch(entities);
         }
     }
 

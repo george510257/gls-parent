@@ -11,7 +11,7 @@ import java.util.List;
  * @author george
  */
 @Async
-public interface JobAsyncService {
+public interface AsyncService {
     /**
      * callback
      *

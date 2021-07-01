@@ -1,7 +1,7 @@
 package com.gls.job.admin.web.controller;
 
 import com.gls.framework.api.result.Result;
-import com.gls.job.admin.web.service.JobIndexService;
+import com.gls.job.admin.web.service.IndexService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,17 +17,17 @@ import java.util.Map;
 @RequestMapping("/index")
 public class IndexController {
     @Resource
-    private JobIndexService jobIndexService;
+    private IndexService indexService;
 
     @GetMapping("/dashboard")
     public Result<Map<String, Object>> dashboard() {
-        Map<String, Object> dashboardInfo = jobIndexService.getDashboardInfo();
+        Map<String, Object> dashboardInfo = indexService.getDashboardInfo();
         return new Result<>(dashboardInfo);
     }
 
     @GetMapping("/chart")
     public Result<Map<String, Object>> chart(Date startDate, Date endDate) {
-        Map<String, Object> chartInfo = jobIndexService.getChartInfo(startDate, endDate);
+        Map<String, Object> chartInfo = indexService.getChartInfo(startDate, endDate);
         return new Result<>(chartInfo);
     }
 }

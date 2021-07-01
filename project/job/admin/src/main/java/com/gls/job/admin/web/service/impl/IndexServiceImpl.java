@@ -6,7 +6,7 @@ import com.gls.job.admin.web.entity.JobLogReportEntity;
 import com.gls.job.admin.web.repository.JobGroupRepository;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogReportRepository;
-import com.gls.job.admin.web.service.JobIndexService;
+import com.gls.job.admin.web.service.IndexService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -17,14 +17,33 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * @author george
  */
-@Service("jobIndexService")
-public class JobIndexServiceImpl implements JobIndexService {
+@Service("indexService")
+public class IndexServiceImpl implements IndexService {
+    @Resource
+    private JobGroupRepository jobGroupRepository;
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
     private JobLogReportRepository jobLogReportRepository;
-    @Resource
-    private JobGroupRepository jobGroupRepository;
+
+    @Override
+    public Map<String, Object> getDashboardInfo() {
+        Map<String, Object> dashboardInfo = new HashMap<>(4);
+        // jobInfoCount
+        long jobInfoCount = jobInfoRepository.count();
+        dashboardInfo.put("jobInfoCount", jobInfoCount);
+        Map<String, Long> reportTotal = jobLogReportRepository.getReportTotal();
+        // jobLogCount
+        long jobLogCount = reportTotal.get("runningCount") + reportTotal.get("sucCount") + reportTotal.get("failCount");
+        dashboardInfo.put("jobLogCount", jobLogCount);
+        // jobLogSuccessCount
+        long jobLogSuccessCount = reportTotal.get("sucCount");
+        dashboardInfo.put("jobLogSuccessCount", jobLogSuccessCount);
+        // executorCount
+        long executorCount = getExecutorCount();
+        dashboardInfo.put("executorCount", executorCount);
+        return dashboardInfo;
+    }
 
     @Override
     public Map<String, Object> getChartInfo(Date startDate, Date endDate) {
@@ -68,25 +87,6 @@ public class JobIndexServiceImpl implements JobIndexService {
         result.put("triggerCountSucTotal", triggerCountSucTotal.get());
         result.put("triggerCountFailTotal", triggerCountFailTotal.get());
         return result;
-    }
-
-    @Override
-    public Map<String, Object> getDashboardInfo() {
-        Map<String, Object> dashboardInfo = new HashMap<>(4);
-        // jobInfoCount
-        long jobInfoCount = jobInfoRepository.count();
-        dashboardInfo.put("jobInfoCount", jobInfoCount);
-        Map<String, Long> reportTotal = jobLogReportRepository.getReportTotal();
-        // jobLogCount
-        long jobLogCount = reportTotal.get("runningCount") + reportTotal.get("sucCount") + reportTotal.get("failCount");
-        dashboardInfo.put("jobLogCount", jobLogCount);
-        // jobLogSuccessCount
-        long jobLogSuccessCount = reportTotal.get("sucCount");
-        dashboardInfo.put("jobLogSuccessCount", jobLogSuccessCount);
-        // executorCount
-        long executorCount = getExecutorCount();
-        dashboardInfo.put("executorCount", executorCount);
-        return dashboardInfo;
     }
 
     private long getExecutorCount() {

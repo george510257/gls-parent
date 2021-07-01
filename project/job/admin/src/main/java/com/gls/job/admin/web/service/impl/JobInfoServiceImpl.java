@@ -19,7 +19,7 @@ import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
-import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
@@ -43,7 +43,7 @@ import java.util.*;
 @Service("jobInfoService")
 public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobInfoConverter, JobInfoEntity, JobInfo, QueryJobInfo> implements JobInfoService {
     @Resource
-    private JobAsyncService jobAsyncService;
+    private AsyncService asyncService;
     @Resource
     private JobLogRepository jobLogRepository;
     @Resource
@@ -78,14 +78,14 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
                 // 1、misfire match
                 if (MisfireStrategy.FIRE_ONCE_NOW.equals(jobInfo.getMisfireStrategy())) {
                     // FIRE_ONCE_NOW 》 trigger
-                    jobAsyncService.asyncTrigger(jobInfo.getId(), TriggerType.MISFIRE, -1, null, null, null);
+                    asyncService.asyncTrigger(jobInfo.getId(), TriggerType.MISFIRE, -1, null, null, null);
                     log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
                 }
                 // 2、fresh next
                 refreshNextValidTime(jobInfo, new Date());
             } else if (nowTime > jobInfo.getTriggerNextTime()) {
                 // 1、trigger
-                jobAsyncService.asyncTrigger(jobInfo.getId(), TriggerType.CRON, -1, null, null, null);
+                asyncService.asyncTrigger(jobInfo.getId(), TriggerType.CRON, -1, null, null, null);
                 log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
                 // 2、fresh next
                 refreshNextValidTime(jobInfo, new Date());
@@ -130,29 +130,11 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
             // do trigger
             for (Long jobId : ringItemData) {
                 // do trigger
-                jobAsyncService.asyncTrigger(jobId, TriggerType.CRON, -1, null, null, null);
+                asyncService.asyncTrigger(jobId, TriggerType.CRON, -1, null, null, null);
             }
             // clear
             ringItemData.clear();
         }
-    }
-
-    @Override
-    public List<String> nextTriggerTime(String scheduleType, String scheduleConf) {
-        JobInfo jobInfo = new JobInfo();
-        jobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
-        jobInfo.setScheduleConf(scheduleConf);
-        List<String> result = new ArrayList<>();
-        Date lastTime = new Date();
-        for (int i = 0; i < 5; i++) {
-            lastTime = generateNextValidTime(jobInfo, lastTime);
-            if (lastTime != null) {
-                result.add(DateUtil.formatDateTime(lastTime));
-            } else {
-                break;
-            }
-        }
-        return result;
     }
 
     @Override
@@ -168,6 +150,11 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
         jobInfoEntity.setTriggerLastTime(null);
         jobInfoEntity.setTriggerNextTime(null);
         repository.save(jobInfoEntity);
+    }
+
+    @Override
+    public List<JobInfo> getByJobGroupId(Long jobGroupId) {
+        return converter.sourceToTargetList(repository.getByJobGroupId(jobGroupId));
     }
 
     @Override
@@ -205,6 +192,24 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
             }
             processTrigger(jobInfoEntity, finalFailRetryCount, triggerType, shardingParam[0], shardingParam[1]);
         }
+    }
+
+    @Override
+    public List<String> nextTriggerTime(String scheduleType, String scheduleConf) {
+        JobInfo jobInfo = new JobInfo();
+        jobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
+        jobInfo.setScheduleConf(scheduleConf);
+        List<String> result = new ArrayList<>();
+        Date lastTime = new Date();
+        for (int i = 0; i < 5; i++) {
+            lastTime = generateNextValidTime(jobInfo, lastTime);
+            if (lastTime != null) {
+                result.add(DateUtil.formatDateTime(lastTime));
+            } else {
+                break;
+            }
+        }
+        return result;
     }
 
     @Override

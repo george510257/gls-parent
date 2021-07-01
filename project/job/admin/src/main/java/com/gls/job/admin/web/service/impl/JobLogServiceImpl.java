@@ -1,6 +1,5 @@
 package com.gls.job.admin.web.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.exception.GlsException;
@@ -14,13 +13,12 @@ import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
 import com.gls.job.admin.web.entity.JobLogReportEntity;
-import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.admin.web.model.query.QueryJobLog;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
-import com.gls.job.admin.web.service.JobAsyncService;
+import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
@@ -51,7 +49,7 @@ import java.util.*;
 public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogConverter, JobLogEntity, JobLog, QueryJobLog> implements JobLogService {
     private static final int HANDLE_MSG_MAX_LENGTH = 15000;
     @Resource
-    private JobAsyncService jobAsyncService;
+    private AsyncService asyncService;
     @Resource
     private JobGroupService jobGroupService;
     @Resource
@@ -134,10 +132,10 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
         } else {
             throw new GlsException("清理类型参数异常");
         }
-        getPage(
-                new QueryJobLog(groupId, jobId, null, clearBeforeTime, null),
-                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime")))
-                .get().map(JobLog::getId).forEach(repository::deleteById);
+        List<JobLogEntity> jobLogEntityList = repository.findAll(
+                getSpec(new QueryJobLog(groupId, jobId, null, clearBeforeTime, null)),
+                PageRequest.of(2, start, Sort.by(Sort.Direction.DESC, "triggerTime"))).getContent();
+        repository.deleteInBatch(jobLogEntityList);
     }
 
     @Override
@@ -164,7 +162,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
         jobLogEntities.forEach(jobLogEntity -> {
             // 1、fail retry monitor
             if (jobLogEntity.getExecutorFailRetryCount() > 0) {
-                jobAsyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
+                asyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
                 String retryMsg = "<br><br><span style=\"color:#F39C12;\" > >>>>>>>>>>>失败重试触发<<<<<<<<<<< </span><br>";
                 jobLogEntity.setTriggerMsg(jobLogEntity.getTriggerMsg() + retryMsg);
             }
@@ -203,25 +201,16 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     }
 
     @Override
-    public List<JobInfo> getJobsByGroup(Long jobGroupId) {
-        return jobInfoConverter.sourceToTargetList(jobInfoRepository.getByJobGroupId(jobGroupId));
-    }
-
-    @Override
-    public JobLog logDetail(Long logId) {
-        return converter.sourceToTarget(repository.getOne(logId));
-    }
-
-    @Override
-    public LogResultModel logDetailCat(String executorAddress, Long triggerTime, Long logId, Integer fromLineNum) {
-        Result<LogResultModel> logResult = executorApiHolder.load(executorAddress).log(new LogModel(Convert.toDate(triggerTime), logId, fromLineNum));
-        if (logResult.getModel() != null && logResult.getModel().getFromLineNum() > logResult.getModel().getToLineNum()) {
-            JobLogEntity jobLogEntity = repository.getOne(logId);
+    public LogResultModel logDetailCat(LogModel logModel) {
+        JobLogEntity jobLogEntity = repository.getOne(logModel.getLogId());
+        LogResultModel logResultModel = executorApiHolder.load(jobLogEntity.getExecutorAddress()).log(logModel).getModel();
+        if (!ObjectUtils.isEmpty(logResultModel)
+                && logResultModel.getFromLineNum() > logResultModel.getToLineNum()) {
             if (jobLogEntity.getHandleCode() > 0) {
-                logResult.getModel().setIsEnd(true);
+                logResultModel.setIsEnd(true);
             }
         }
-        return logResult.getModel();
+        return logResultModel;
     }
 
     @Override
@@ -318,7 +307,7 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
                 if (!ObjectUtils.isEmpty(childJobInfoEntities)) {
                     for (int i = 0; i < childJobInfoEntities.size(); i++) {
                         JobInfoEntity childJobInfoEntity = childJobInfoEntities.get(i);
-                        jobAsyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
+                        asyncService.asyncTrigger(jobLogEntity.getJobInfo().getId(), TriggerType.RETRY, jobLogEntity.getExecutorFailRetryCount() - 1, jobLogEntity.getExecutorShardingParam(), jobLogEntity.getExecutorParam(), null);
                         triggerChildMsgBuilder.append(i).append("/").append(childJobInfoEntities.size())
                                 .append(" [任务ID=").append(childJobInfoEntity.getId()).append("], 触发成功. <br>");
                     }
