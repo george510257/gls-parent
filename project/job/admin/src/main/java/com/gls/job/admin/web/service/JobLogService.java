@@ -64,5 +64,12 @@ public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
      */
     void logKill(Long logId);
 
+    /**
+     * getLogReport
+     *
+     * @param todayFrom
+     * @param todayTo
+     * @return
+     */
     Map<String, Long> getLogReport(Date todayFrom, Date todayTo);
 }

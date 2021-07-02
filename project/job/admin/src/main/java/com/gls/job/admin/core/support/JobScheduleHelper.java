@@ -1,12 +1,15 @@
 package com.gls.job.admin.core.support;
 
+import cn.hutool.core.date.DateUtil;
 import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.admin.web.model.JobInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author george
@@ -40,5 +43,22 @@ public class JobScheduleHelper {
             return new Date(date.getTime() + Integer.parseInt(jobInfo.getScheduleConf()) * 1000L);
         }
         return null;
+    }
+
+    public static List<String> nextTriggerTime(String scheduleType, String scheduleConf, int count) {
+        JobInfo jobInfo = new JobInfo();
+        jobInfo.setScheduleType(ScheduleType.valueOf(scheduleType));
+        jobInfo.setScheduleConf(scheduleConf);
+        List<String> result = new ArrayList<>();
+        Date lastTime = new Date();
+        for (int i = 0; i < count; i++) {
+            lastTime = generateNextValidTime(jobInfo, lastTime);
+            if (lastTime != null) {
+                result.add(DateUtil.formatDateTime(lastTime));
+            } else {
+                break;
+            }
+        }
+        return result;
     }
 }

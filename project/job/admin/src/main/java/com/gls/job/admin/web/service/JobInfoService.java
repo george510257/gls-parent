@@ -1,6 +1,5 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.starter.data.jpa.base.BaseService;
@@ -35,25 +34,11 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
     List<JobInfo> getByJobGroupId(Long jobGroupId);
 
     /**
-     * trigger
+     * getScheduleJob
      *
-     * @param jobId
-     * @param triggerType
-     * @param failRetryCount
-     * @param executorShardingParam
-     * @param executorParam
-     * @param addressList
-     */
-    void trigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList);
-
-    /**
-     * nextTriggerTime
-     *
-     * @param scheduleType
-     * @param scheduleConf
+     * @param date
+     * @param preReadCount
      * @return
      */
-    List<String> nextTriggerTime(String scheduleType, String scheduleConf);
-
     List<JobInfo> getScheduleJob(Date date, int preReadCount);
 }

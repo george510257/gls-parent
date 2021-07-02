@@ -6,6 +6,7 @@ import com.gls.job.admin.constants.ExecutorRouteStrategy;
 import com.gls.job.admin.constants.MisfireStrategy;
 import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.admin.constants.TriggerType;
+import com.gls.job.admin.core.support.JobScheduleHelper;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.job.admin.web.service.AsyncService;
@@ -93,7 +94,7 @@ public class JobInfoController {
 
     @PostMapping("/nextTriggerTime")
     public Result<List<String>> nextTriggerTime(String scheduleType, String scheduleConf) {
-        List<String> list = jobInfoService.nextTriggerTime(scheduleType, scheduleConf);
+        List<String> list = JobScheduleHelper.nextTriggerTime(scheduleType, scheduleConf, 6);
         return new Result<>(list);
     }
 }

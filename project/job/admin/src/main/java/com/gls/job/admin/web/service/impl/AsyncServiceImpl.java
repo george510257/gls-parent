@@ -2,9 +2,9 @@ package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.service.AsyncService;
-import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.admin.web.service.JobRegistryService;
+import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service("asyncService")
 public class AsyncServiceImpl implements AsyncService {
     @Resource
-    private JobInfoService jobInfoService;
+    private JobTriggerService jobTriggerService;
     @Resource
     private JobLogService jobLogService;
     @Resource
@@ -41,6 +41,6 @@ public class AsyncServiceImpl implements AsyncService {
 
     @Override
     public void asyncTrigger(Long jobId, TriggerType triggerType, int failRetryCount, String executorShardingParam, String executorParam, List<String> addressList) {
-        jobInfoService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
+        jobTriggerService.trigger(jobId, triggerType, failRetryCount, executorShardingParam, executorParam, addressList);
     }
 }
