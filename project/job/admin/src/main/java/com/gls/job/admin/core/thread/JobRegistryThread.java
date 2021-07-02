@@ -34,11 +34,7 @@ public class JobRegistryThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() {
-        try {
-            TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+    protected void sleepExecute() throws Exception {
+        TimeUnit.SECONDS.sleep(JobConstants.BEAT_TIMEOUT);
     }
 }

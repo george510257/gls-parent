@@ -33,11 +33,7 @@ public class JobFailThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() {
-        try {
-            TimeUnit.SECONDS.sleep(10);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+    protected void sleepExecute() throws Exception {
+        TimeUnit.SECONDS.sleep(10);
     }
 }

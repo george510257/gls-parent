@@ -32,11 +32,7 @@ public class JobScheduleRingThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000 - System.currentTimeMillis() % 1000);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+    protected void sleepExecute() throws Exception {
+        TimeUnit.MILLISECONDS.sleep(1000 - System.currentTimeMillis() % 1000);
     }
 }

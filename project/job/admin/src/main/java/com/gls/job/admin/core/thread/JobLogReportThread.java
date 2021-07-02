@@ -34,11 +34,7 @@ public class JobLogReportThread extends BaseThread {
     }
 
     @Override
-    protected void sleepExecute() {
-        try {
-            TimeUnit.MINUTES.sleep(1);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+    protected void sleepExecute() throws Exception {
+        TimeUnit.MINUTES.sleep(1);
     }
 }
