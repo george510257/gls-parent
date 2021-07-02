@@ -20,7 +20,6 @@ import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
-import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.admin.web.service.JobLogService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.KillModel;

@@ -25,7 +25,7 @@ import java.util.Map;
  * @author george
  */
 @Service("jobLogGlueService")
-public class JobLogGlueServiceImpl extends BaseServiceImpl<JobLogGlueRepository,JobLogGlueConverter,JobLogGlueEntity,JobLogGlue,Object> implements JobLogGlueService {
+public class JobLogGlueServiceImpl extends BaseServiceImpl<JobLogGlueRepository, JobLogGlueConverter, JobLogGlueEntity, JobLogGlue, Object> implements JobLogGlueService {
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
@@ -38,7 +38,7 @@ public class JobLogGlueServiceImpl extends BaseServiceImpl<JobLogGlueRepository,
     @Override
     public void add(JobLogGlue model) {
         super.add(model);
-        repository.deleteOldJobLogGlue(model.getJobId(),30);
+        repository.deleteOldJobLogGlue(model.getJobId(), 30);
     }
 
     @Override

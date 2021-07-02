@@ -1,7 +1,6 @@
 package com.gls.job.admin.web.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.web.converter.JobRegistryConverter;
 import com.gls.job.admin.web.entity.JobRegistryEntity;
 import com.gls.job.admin.web.repository.JobRegistryRepository;
@@ -21,14 +20,14 @@ import java.util.Date;
 public class JobRegistryServiceImpl
         extends BaseServiceImpl<JobRegistryRepository, JobRegistryConverter, JobRegistryEntity, RegistryModel, Object>
         implements JobRegistryService {
+    public JobRegistryServiceImpl(JobRegistryRepository repository, JobRegistryConverter converter) {
+        super(repository, converter);
+    }
+
     @Override
     public void add(RegistryModel model) {
         remove(model);
         super.add(model);
-    }
-
-    public JobRegistryServiceImpl(JobRegistryRepository repository, JobRegistryConverter converter) {
-        super(repository, converter);
     }
 
     @Override
