@@ -3,12 +3,12 @@ package com.gls.job.admin.web.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
 import com.gls.framework.api.result.Result;
-import com.gls.framework.core.exception.GlsException;
 import com.gls.framework.core.util.StringUtil;
-import com.gls.job.admin.constants.*;
+import com.gls.job.admin.constants.ExecutorRouteStrategy;
+import com.gls.job.admin.constants.ScheduleType;
+import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.core.route.ExecutorRouterHolder;
-import com.gls.job.admin.core.support.CronExpression;
-import com.gls.job.admin.core.support.RingDataHolder;
+import com.gls.job.admin.core.support.JobScheduleHelper;
 import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.entity.JobGroupEntity;
 import com.gls.job.admin.web.entity.JobInfoEntity;
@@ -19,7 +19,6 @@ import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.job.admin.web.repository.JobInfoRepository;
 import com.gls.job.admin.web.repository.JobLogGlueRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
-import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobInfoService;
 import com.gls.job.core.api.model.TriggerModel;
 import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
@@ -33,8 +32,10 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
-import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author george
@@ -43,19 +44,13 @@ import java.util.*;
 @Service("jobInfoService")
 public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobInfoConverter, JobInfoEntity, JobInfo, QueryJobInfo> implements JobInfoService {
     @Resource
-    private AsyncService asyncService;
-    @Resource
     private JobLogRepository jobLogRepository;
     @Resource
     private JobLogGlueRepository jobLogGlueRepository;
     @Resource
-    private RingDataHolder ringDataHolder;
-    @Resource
     private ExecutorRouterHolder executorRouterHolder;
     @Resource
     private ExecutorApiHolder executorApiHolder;
-    @Resource
-    private JobAdminProperties jobAdminProperties;
 
     public JobInfoServiceImpl(JobInfoRepository repository, JobInfoConverter converter) {
         super(repository, converter);
@@ -63,7 +58,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
 
     @Override
     public void update(JobInfo model) {
-        refreshNextValidTime(model, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
+        JobScheduleHelper.refreshNextValidTime(model, new Date(System.currentTimeMillis() + JobConstants.PRE_READ_MS));
         super.update(model);
     }
 
@@ -162,7 +157,7 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
         List<String> result = new ArrayList<>();
         Date lastTime = new Date();
         for (int i = 0; i < 5; i++) {
-            lastTime = generateNextValidTime(jobInfo, lastTime);
+            lastTime = JobScheduleHelper.generateNextValidTime(jobInfo, lastTime);
             if (lastTime != null) {
                 result.add(DateUtil.formatDateTime(lastTime));
             } else {
@@ -173,79 +168,8 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
     }
 
     @Override
-    public boolean doJobSchedule() {
-        int preReadCount = (jobAdminProperties.getTriggerPoolFastMax() + jobAdminProperties.getTriggerPoolFastMax()) * 20;
-        // 1.pre read
-        long nowTime = System.currentTimeMillis();
-        List<JobInfo> jobInfos = converter.sourceToTargetList(repository.getScheduleJob(new Date(nowTime + JobConstants.PRE_READ_MS), preReadCount));
-        if (ObjectUtils.isEmpty(jobInfos)) {
-            return false;
-        }
-        // 2.push time-ring
-        for (JobInfo jobInfo : jobInfos) {
-            if (nowTime > jobInfo.getTriggerNextTime() + JobConstants.PRE_READ_MS) {
-                // 2.1、trigger-expire > 5s：pass && make next-trigger-time
-                log.warn(">>>>>>>>>>> gls-job, schedule misfire, jobId = " + jobInfo.getId());
-                // 1、misfire match
-                if (MisfireStrategy.FIRE_ONCE_NOW.equals(jobInfo.getMisfireStrategy())) {
-                    // FIRE_ONCE_NOW 》 trigger
-                    asyncService.asyncTrigger(jobInfo.getId(), TriggerType.MISFIRE, -1, null, null, null);
-                    log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
-                }
-                // 2、fresh next
-                refreshNextValidTime(jobInfo, new Date());
-            } else if (nowTime > jobInfo.getTriggerNextTime()) {
-                // 1、trigger
-                asyncService.asyncTrigger(jobInfo.getId(), TriggerType.CRON, -1, null, null, null);
-                log.debug(">>>>>>>>>>> gls-job, schedule push trigger : jobId = " + jobInfo.getId());
-                // 2、fresh next
-                refreshNextValidTime(jobInfo, new Date());
-                // next-trigger-time in 5s, pre-read again
-                if (jobInfo.getTriggerStatus() == 1 && nowTime + JobConstants.PRE_READ_MS > jobInfo.getTriggerNextTime()) {
-                    // 1、make ring second
-                    int ringSecond = (int) ((jobInfo.getTriggerNextTime() / 1000) % 60);
-                    // 2、push time ring
-                    pushTimeRing(ringSecond, jobInfo.getId());
-                    // 3、fresh next
-                    refreshNextValidTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
-                }
-            } else {
-                // 2.3、trigger-pre-read：time-ring trigger && make next-trigger-time
-                // 1、make ring second
-                int ringSecond = (int) ((jobInfo.getTriggerNextTime() / 1000) % 60);
-                // 2、push time ring
-                pushTimeRing(ringSecond, jobInfo.getId());
-                // 3、fresh next
-                refreshNextValidTime(jobInfo, new Date(jobInfo.getTriggerNextTime()));
-            }
-            update(jobInfo);
-        }
-        return true;
-    }
-
-    @Override
-    public void doJobScheduleRing() {
-        // second data
-        List<Long> ringItemData = new ArrayList<>();
-        // 避免处理耗时太长，跨过刻度，向前校验一个刻度；
-        int nowSecond = Calendar.getInstance().get(Calendar.SECOND);
-        for (int i = 0; i < 2; i++) {
-            List<Long> tmpData = ringDataHolder.remove((nowSecond + 60 - i) % 60, "");
-            if (tmpData != null) {
-                ringItemData.addAll(tmpData);
-            }
-        }
-        // ring trigger
-        log.debug(">>>>>>>>>>> gls-job, time-ring beat : " + nowSecond + " = " + Collections.singletonList(ringItemData));
-        if (ringItemData.size() > 0) {
-            // do trigger
-            for (Long jobId : ringItemData) {
-                // do trigger
-                asyncService.asyncTrigger(jobId, TriggerType.CRON, -1, null, null, null);
-            }
-            // clear
-            ringItemData.clear();
-        }
+    public List<JobInfo> getScheduleJob(Date date, int preReadCount) {
+        return converter.sourceToTargetList(repository.getScheduleJob(date, preReadCount));
     }
 
     private JobLogEntity createJobLogEntity(JobInfoEntity jobInfoEntity) {
@@ -274,21 +198,6 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
         triggerModel.setBroadcastIndex(index);
         triggerModel.setBroadcastTotal(total);
         return triggerModel;
-    }
-
-    private Date generateNextValidTime(JobInfo jobInfo, Date fromTime) {
-        ScheduleType scheduleType = jobInfo.getScheduleType();
-        if (ScheduleType.CRON == scheduleType) {
-            try {
-                return new CronExpression(jobInfo.getScheduleConf()).getNextValidTimeAfter(fromTime);
-            } catch (ParseException e) {
-                log.error(e.getMessage(), e);
-                throw new GlsException("调度类型非法");
-            }
-        } else if (ScheduleType.FIX_RATE == scheduleType) {
-            return new Date(fromTime.getTime() + Integer.parseInt(jobInfo.getScheduleConf()) * 1000L);
-        }
-        return null;
     }
 
     private String getAddress(JobInfoEntity jobInfoEntity, int index) {
@@ -342,31 +251,6 @@ public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobIn
         jobLogEntity.setTriggerCode(result.getCode());
         jobLogEntity.setTriggerMsg(triggerMsg);
         jobLogRepository.save(jobLogEntity);
-    }
-
-    private void pushTimeRing(int ringSecond, Long id) {
-        // push async ring
-        List<Long> ringItemData = ringDataHolder.load(ringSecond);
-        if (ringItemData == null) {
-            ringItemData = new ArrayList<>();
-            ringDataHolder.regist(ringSecond, ringItemData, "");
-        }
-        ringItemData.add(id);
-        log.debug(">>>>>>>>>>> gls-job, schedule push time-ring : " + ringSecond + " = " + Collections.singletonList(ringItemData));
-    }
-
-    private void refreshNextValidTime(JobInfo jobInfo, Date fromTime) {
-        Date nextValidTime = generateNextValidTime(jobInfo, fromTime);
-        if (nextValidTime != null) {
-            jobInfo.setTriggerLastTime(jobInfo.getTriggerNextTime());
-            jobInfo.setTriggerNextTime(nextValidTime.getTime());
-        } else {
-            jobInfo.setTriggerStatus(0);
-            jobInfo.setTriggerLastTime(0);
-            jobInfo.setTriggerNextTime(0);
-            log.warn(">>>>>>>>>>> gls-job, refreshNextValidTime fail for job: jobId={}, scheduleType={}, scheduleConf={}",
-                    jobInfo.getId(), jobInfo.getScheduleType(), jobInfo.getScheduleConf());
-        }
     }
 
     private Result<String> runExecutor(TriggerModel triggerModel, String address) {

@@ -3,8 +3,6 @@ package com.gls.job.admin.web.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.gls.framework.api.result.Result;
 import com.gls.framework.core.exception.GlsException;
-import com.gls.framework.core.util.JsonUtil;
-import com.gls.job.admin.constants.JobAdminProperties;
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.core.alarm.JobAlarmHolder;
 import com.gls.job.admin.core.util.LoginUserUtil;
@@ -12,11 +10,9 @@ import com.gls.job.admin.web.converter.JobInfoConverter;
 import com.gls.job.admin.web.converter.JobLogConverter;
 import com.gls.job.admin.web.entity.JobInfoEntity;
 import com.gls.job.admin.web.entity.JobLogEntity;
-import com.gls.job.admin.web.entity.JobLogReportEntity;
 import com.gls.job.admin.web.model.JobLog;
 import com.gls.job.admin.web.model.query.QueryJobLog;
 import com.gls.job.admin.web.repository.JobInfoRepository;
-import com.gls.job.admin.web.repository.JobLogReportRepository;
 import com.gls.job.admin.web.repository.JobLogRepository;
 import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobGroupService;
@@ -29,8 +25,6 @@ import com.gls.job.core.api.rpc.holder.ExecutorApiHolder;
 import com.gls.job.core.constants.JobConstants;
 import com.gls.starter.data.jpa.base.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -54,13 +48,9 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     @Resource
     private JobInfoRepository jobInfoRepository;
     @Resource
-    private JobLogReportRepository jobLogReportRepository;
-    @Resource
     private JobInfoConverter jobInfoConverter;
     @Resource
     private JobAlarmHolder jobAlarmHolder;
-    @Resource
-    private JobAdminProperties jobAdminProperties;
     @Resource
     private ExecutorApiHolder executorApiHolder;
 
@@ -153,15 +143,6 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     }
 
     @Override
-    public long doJobLogReport(long lastCleanLogTime) {
-        //refresh JobLogReport
-        for (int i = 0; i < 3; i++) {
-            refreshJobLogReport(i);
-        }
-        return cleanJobLog(lastCleanLogTime);
-    }
-
-    @Override
     public Map<String, Object> getIndexMap(Long jobId) {
         Map<String, Object> maps = new HashMap<>();
         // 执行器列表
@@ -216,6 +197,11 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
     }
 
     @Override
+    public Map<String, Long> getLogReport(Date todayFrom, Date todayTo) {
+        return repository.getLogReport(todayFrom, todayTo);
+    }
+
+    @Override
     protected Specification<JobLogEntity> getSpec(QueryJobLog queryJobLog) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -253,28 +239,6 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
         };
     }
 
-    private long cleanJobLog(long lastCleanLogTime) {
-        // 2、log-clean: switch open & once each day
-        if (jobAdminProperties.getLogRetentionDays() > 0 && System.currentTimeMillis() - lastCleanLogTime > 24 * 60 * 60 * 1000) {
-            // expire-time
-            Calendar expiredDay = Calendar.getInstance();
-            expiredDay.add(Calendar.DAY_OF_MONTH, -1 * jobAdminProperties.getLogRetentionDays());
-            expiredDay.set(Calendar.HOUR_OF_DAY, 0);
-            expiredDay.set(Calendar.MINUTE, 0);
-            expiredDay.set(Calendar.SECOND, 0);
-            expiredDay.set(Calendar.MILLISECOND, 0);
-            Date clearBeforeTime = expiredDay.getTime();
-            // clean expired log
-            getPage(
-                    new QueryJobLog(null, null, clearBeforeTime, null, null),
-                    PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC, "triggerTime")))
-                    .get().map(JobLog::getId).forEach(repository::deleteById);
-            // update clean time
-            lastCleanLogTime = System.currentTimeMillis();
-        }
-        return lastCleanLogTime;
-    }
-
     private void finishJob(JobLogEntity jobLogEntity) {
         // JobInfoEntity
         StringBuilder triggerChildMsgBuilder = new StringBuilder();
@@ -293,51 +257,6 @@ public class JobLogServiceImpl extends BaseServiceImpl<JobLogRepository, JobLogC
             }
         }
         jobLogEntity.setHandleMsg(jobLogEntity.getHandleMsg().concat(triggerChildMsgBuilder.toString()));
-    }
-
-    private void refreshJobLogReport(int i) {
-        // today
-        Calendar itemDay = Calendar.getInstance();
-        itemDay.add(Calendar.DAY_OF_MONTH, -i);
-        itemDay.set(Calendar.HOUR_OF_DAY, 0);
-        itemDay.set(Calendar.MINUTE, 0);
-        itemDay.set(Calendar.SECOND, 0);
-        itemDay.set(Calendar.MILLISECOND, 0);
-        Date todayFrom = itemDay.getTime();
-        itemDay.set(Calendar.HOUR_OF_DAY, 23);
-        itemDay.set(Calendar.MINUTE, 59);
-        itemDay.set(Calendar.SECOND, 59);
-        itemDay.set(Calendar.MILLISECOND, 999);
-        Date todayTo = itemDay.getTime();
-        // refresh log-report every minute
-        JobLogReportEntity jobLogReportEntity = new JobLogReportEntity();
-        jobLogReportEntity.setTriggerDay(todayFrom);
-        Optional<JobLogReportEntity> optional = jobLogReportRepository.getByTriggerDay(todayFrom);
-        if (optional.isPresent()) {
-            jobLogReportEntity = optional.get();
-        }
-        Map<String, Long> result = repository.getLogReport(todayFrom, todayTo);
-        log.info("result: {}", JsonUtil.writeValueAsString(result));
-        if (!ObjectUtils.isEmpty(result)) {
-            Long triggerDayCount = result.get("triggerDayCount");
-            Long triggerDayCountRunning = result.get("triggerDayCountRunning");
-            Long triggerDayCountSuc = result.get("triggerDayCountSuc");
-            if (ObjectUtils.isEmpty(triggerDayCount)) {
-                triggerDayCount = 0L;
-            }
-            if (ObjectUtils.isEmpty(triggerDayCountRunning)) {
-                triggerDayCountRunning = 0L;
-            }
-            if (ObjectUtils.isEmpty(triggerDayCountSuc)) {
-                triggerDayCountSuc = 0L;
-            }
-            Long triggerDayCountFail = triggerDayCount - triggerDayCountRunning - triggerDayCountSuc;
-            jobLogReportEntity.setRunningCount(triggerDayCountRunning);
-            jobLogReportEntity.setSucCount(triggerDayCountSuc);
-            jobLogReportEntity.setFailCount(triggerDayCountFail);
-        }
-        // do refresh
-        jobLogReportRepository.save(jobLogReportEntity);
     }
 
     private void updateHandleInfoAndFinish(JobLogEntity jobLogEntity) {

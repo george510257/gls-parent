@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.web.service.JobInfoService;
+import com.gls.job.admin.web.service.JobScheduleService;
 import com.gls.job.core.base.BaseThread;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JobScheduleRingThread extends BaseThread {
     @Resource
-    private JobInfoService jobInfoService;
+    private JobScheduleService jobScheduleService;
 
     @Override
     protected void destroyExecute() {
@@ -24,7 +24,7 @@ public class JobScheduleRingThread extends BaseThread {
 
     @Override
     protected void doExecute() {
-        jobInfoService.doJobScheduleRing();
+        jobScheduleService.ring();
     }
 
     @Override

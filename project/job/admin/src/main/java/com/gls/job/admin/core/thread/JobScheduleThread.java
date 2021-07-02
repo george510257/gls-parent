@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.web.service.JobInfoService;
+import com.gls.job.admin.web.service.JobScheduleService;
 import com.gls.job.core.base.BaseThread;
 import com.gls.job.core.constants.JobConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JobScheduleThread extends BaseThread {
     @Resource
-    private JobInfoService jobInfoService;
+    private JobScheduleService jobScheduleService;
     private boolean preReadSuc;
     private long start;
 
@@ -27,7 +27,7 @@ public class JobScheduleThread extends BaseThread {
     @Override
     protected void doExecute() {
         start = System.currentTimeMillis();
-        preReadSuc = jobInfoService.doJobSchedule();
+        preReadSuc = jobScheduleService.run();
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.gls.job.core.api.model.LogModel;
 import com.gls.job.core.api.model.LogResultModel;
 import com.gls.starter.data.jpa.base.BaseService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,14 +42,6 @@ public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
     void doJobFail();
 
     /**
-     * do Job LogReport
-     *
-     * @param lastCleanLogTime
-     * @return
-     */
-    long doJobLogReport(long lastCleanLogTime);
-
-    /**
      * getIndexMap
      *
      * @param jobId
@@ -70,4 +63,6 @@ public interface JobLogService extends BaseService<JobLog, QueryJobLog> {
      * @param logId
      */
     void logKill(Long logId);
+
+    Map<String, Long> getLogReport(Date todayFrom, Date todayTo);
 }

@@ -5,6 +5,7 @@ import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.admin.web.model.query.QueryJobInfo;
 import com.gls.starter.data.jpa.base.BaseService;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,15 +55,5 @@ public interface JobInfoService extends BaseService<JobInfo, QueryJobInfo> {
      */
     List<String> nextTriggerTime(String scheduleType, String scheduleConf);
 
-    /**
-     * do JobSchedule
-     *
-     * @return
-     */
-    boolean doJobSchedule();
-
-    /**
-     * do JobSchedule Ring
-     */
-    void doJobScheduleRing();
+    List<JobInfo> getScheduleJob(Date date, int preReadCount);
 }

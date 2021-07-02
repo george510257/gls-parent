@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.web.service.JobLogService;
+import com.gls.job.admin.web.service.JobLogReportService;
 import com.gls.job.core.base.BaseThread;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JobLogReportThread extends BaseThread {
     @Resource
-    private JobLogService jobLogService;
+    private JobLogReportService jobLogReportService;
     private long lastCleanLogTime;
 
     @Override
@@ -25,7 +25,7 @@ public class JobLogReportThread extends BaseThread {
 
     @Override
     protected void doExecute() {
-        lastCleanLogTime = jobLogService.doJobLogReport(lastCleanLogTime);
+        lastCleanLogTime = jobLogReportService.doJobLogReport(lastCleanLogTime);
     }
 
     @Override
