@@ -3,35 +3,27 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>gls-job</artifactId>
-        <groupId>com.gls.job</groupId>
+        <artifactId>gls-quality-inspection</artifactId>
+        <groupId>com.gls.quality.inspection</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gls.job.admin</groupId>
-    <artifactId>gls-job-admin</artifactId>
+    <groupId>com.gls.quality.inspection.process</groupId>
+    <artifactId>gls-quality-inspection-process</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.gls.job.core</groupId>
-            <artifactId>gls-job-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <groupId>com.gls.framework.core</groupId>
+            <artifactId>gls-framework-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.gls.starter.data.jpa</groupId>
             <artifactId>gls-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gls.starter.data.redis</groupId>
+            <artifactId>gls-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 

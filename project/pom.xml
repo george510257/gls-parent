@@ -18,6 +18,7 @@
         <module>cloud</module>
         <module>common</module>
         <module>job</module>
+        <module>quality-inspection</module>
     </modules>
 
     <dependencyManagement>
