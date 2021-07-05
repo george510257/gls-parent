@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -18,6 +19,7 @@ import javax.persistence.Entity;
 @Comment("客户端信息表")
 public class ResultTextSplitWordEntity extends BaseEntity {
     private Integer number;
-    private Integer extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     private String word;
 }

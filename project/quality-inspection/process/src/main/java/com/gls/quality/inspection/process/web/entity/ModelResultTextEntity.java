@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -18,7 +19,8 @@ import javax.persistence.Entity;
 @Comment("客户端信息表")
 public class ModelResultTextEntity extends BaseEntity {
     private Integer modelResultId;
-    private Integer extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     private Integer extractCheckAudioTextId;
     private String info;
 }

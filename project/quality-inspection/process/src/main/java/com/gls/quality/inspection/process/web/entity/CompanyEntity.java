@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 @Data
 @Comment("客户端信息表")
 public class CompanyEntity extends BaseEntity {
-    private Long id;
     private Timestamp expireTime;
     private Boolean status;
     private String nameEn;

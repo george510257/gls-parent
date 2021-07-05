@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 
 /**
@@ -18,17 +19,21 @@ import java.sql.Timestamp;
 @Data
 @Comment("客户端信息表")
 public class ExtractCheckEntity extends BaseEntity {
-    private String userId;
+    @ManyToOne
+    private UserEntity user;
     private String extractCheckName;
     private Boolean differentiateRole;
-    private Integer scoreTemplateId;
-    private Integer industryCategoryId;
+    @ManyToOne
+    private ScoreTemplateEntity scoreTemplate;
+    @ManyToOne
+    private IndustryCategoryEntity industryCategory;
     private Integer totalDuration;
     private String modelName;
     private Timestamp deadline;
     private Boolean status;
     private Integer extractCheckSchedule;
-    private Integer modelId;
+    @ManyToOne
+    private ModelEntity model;
     private String fileUrl;
     private Boolean resourceType;
     private Boolean isChecked;

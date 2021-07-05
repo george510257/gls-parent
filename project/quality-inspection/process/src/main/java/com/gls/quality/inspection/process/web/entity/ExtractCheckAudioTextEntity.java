@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 
 /**
@@ -25,6 +26,7 @@ public class ExtractCheckAudioTextEntity extends BaseEntity {
     private Boolean role;
     private Integer begin;
     private Integer end;
-    private Integer extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     private Timestamp excelTime;
 }

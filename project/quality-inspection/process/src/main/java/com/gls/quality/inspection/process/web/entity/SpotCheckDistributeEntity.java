@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,8 +18,10 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class SpotCheckDistributeEntity extends BaseEntity {
-    private Integer spotCheckId;
-    private Integer userId;
+    @ManyToOne
+    private SpotCheckEntity spotCheck;
+    @ManyToOne
+    private UserEntity user;
     private Integer distributeRate;
     private Boolean status;
 }

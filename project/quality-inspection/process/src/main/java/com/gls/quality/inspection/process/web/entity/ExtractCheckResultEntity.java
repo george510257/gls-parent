@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,12 +18,14 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class ExtractCheckResultEntity extends BaseEntity {
-    private Integer extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     private String violationsItem;
     private Double violationsScore;
     private String category;
     private String paragraph;
-    private Integer scoreItemId;
+    @ManyToOne
+    private ScoreItemsEntity scoreItems;
     private Integer scoreItemType;
     private Boolean scoreAttribute;
     private Boolean inspectionObject;

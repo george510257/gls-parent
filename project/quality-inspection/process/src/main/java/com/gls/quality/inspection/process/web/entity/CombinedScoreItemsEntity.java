@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,7 +18,8 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class CombinedScoreItemsEntity extends BaseEntity {
-    private Integer scoreTemplateId;
+    @ManyToOne
+    private ScoreTemplateEntity scoreTemplate;
     private String scoreItemsIds;
     private String displayName;
     private String scoreItemsNames;

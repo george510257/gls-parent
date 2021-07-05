@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 
 /**
@@ -19,7 +20,8 @@ import java.sql.Timestamp;
 @Comment("客户端信息表")
 public class SpotCheckEntity extends BaseEntity {
     private String spotCheckName;
-    private Integer extractCheckId;
+    @ManyToOne
+    private ExtractCheckEntity extractCheck;
     private Timestamp deadline;
     private Integer spotCheckSchedule;
     private Integer dialogueNumber;

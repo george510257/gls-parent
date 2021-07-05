@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,8 +18,10 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class TotalTestTaskEntity extends BaseEntity {
-    private Integer userId;
-    private Integer modelId;
+    @ManyToOne
+    private UserEntity user;
+    @ManyToOne
+    private ModelEntity model;
     private String testName;
     private Boolean testType;
     private Integer status;

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ public class BusinessLineEntity extends BaseEntity {
     private Integer checkType;
     private String purpose;
     private String payType;
-    private Integer modelId;
+    @ManyToOne
+    private ModelEntity model;
     private Integer count;
     private String remark;
 }

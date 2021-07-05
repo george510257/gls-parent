@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,8 +18,8 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class ModelEntity extends BaseEntity {
-    private Integer industryCategoryId;
-    private String industryCategory;
+    @ManyToOne
+    private IndustryCategoryEntity industryCategory;
     private Integer status;
     private Integer released;
     private Integer createBy;

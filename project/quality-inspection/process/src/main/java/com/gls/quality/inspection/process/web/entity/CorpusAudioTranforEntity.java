@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -17,7 +18,8 @@ import javax.persistence.Entity;
 @Data
 @Comment("客户端信息表")
 public class CorpusAudioTranforEntity extends BaseEntity {
-    private Integer corpusId;
+    @ManyToOne
+    private CorpusEntity corpus;
     private Integer lid;
     private Integer begin;
     private Integer end;

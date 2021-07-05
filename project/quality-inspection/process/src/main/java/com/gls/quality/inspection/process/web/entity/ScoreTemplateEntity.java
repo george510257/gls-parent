@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -19,8 +20,10 @@ import javax.persistence.Entity;
 public class ScoreTemplateEntity extends BaseEntity {
     private Integer templateId;
     private String modelName;
-    private Integer modelId;
-    private Integer userId;
+    @ManyToOne
+    private ModelEntity model;
+    @ManyToOne
+    private UserEntity user;
     private String templateName;
     private Integer baseScore;
     private Integer scoreItemsNumber;
