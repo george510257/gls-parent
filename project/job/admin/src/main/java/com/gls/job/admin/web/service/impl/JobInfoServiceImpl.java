@@ -28,7 +28,9 @@ import java.util.List;
  */
 @Slf4j
 @Service("jobInfoService")
-public class JobInfoServiceImpl extends BaseServiceImpl<JobInfoRepository, JobInfoConverter, JobInfoEntity, JobInfo, QueryJobInfo> implements JobInfoService {
+public class JobInfoServiceImpl
+        extends BaseServiceImpl<JobInfoRepository, JobInfoConverter, JobInfoEntity, JobInfo, QueryJobInfo>
+        implements JobInfoService {
     @Resource
     private JobLogRepository jobLogRepository;
     @Resource

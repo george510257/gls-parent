@@ -13,7 +13,7 @@ import java.util.TimeZone;
  */
 @Slf4j
 @Component
-public class CronTriggerConverter extends TriggerConverter<CronTriggerEntity, CronTriggerImpl> {
+public class CronTriggerConverter extends BaseTriggerConverter<CronTriggerEntity, CronTriggerImpl> {
     @Override
     public CronTriggerImpl copySourceToTarget(CronTriggerEntity entity, CronTriggerImpl trigger) {
         try {

@@ -10,7 +10,7 @@ import java.util.TimeZone;
  * @author george
  */
 @Component
-public class CalendarIntervalTriggerConverter extends TriggerConverter<CalendarIntervalTriggerEntity, CalendarIntervalTriggerImpl> {
+public class CalendarIntervalTriggerConverter extends BaseTriggerConverter<CalendarIntervalTriggerEntity, CalendarIntervalTriggerImpl> {
     @Override
     public CalendarIntervalTriggerImpl copySourceToTarget(CalendarIntervalTriggerEntity entity, CalendarIntervalTriggerImpl trigger) {
         trigger.setRepeatIntervalUnit(entity.getIntervalUnit());

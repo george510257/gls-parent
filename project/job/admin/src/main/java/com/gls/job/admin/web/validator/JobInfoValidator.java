@@ -1,9 +1,9 @@
 package com.gls.job.admin.web.validator;
 
 import com.gls.job.admin.constants.ScheduleType;
-import com.gls.job.admin.core.support.CronExpression;
 import com.gls.job.admin.web.model.JobInfo;
 import com.gls.job.core.constants.GlueType;
+import org.quartz.CronExpression;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.Errors;

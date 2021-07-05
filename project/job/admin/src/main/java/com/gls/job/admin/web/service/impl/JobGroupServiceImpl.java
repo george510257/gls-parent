@@ -26,7 +26,9 @@ import java.util.List;
  * @author george
  */
 @Service("jobGroupService")
-public class JobGroupServiceImpl extends BaseServiceImpl<JobGroupRepository, JobGroupConverter, JobGroupEntity, JobGroup, QueryJobGroup> implements JobGroupService {
+public class JobGroupServiceImpl
+        extends BaseServiceImpl<JobGroupRepository, JobGroupConverter, JobGroupEntity, JobGroup, QueryJobGroup>
+        implements JobGroupService {
     @Resource
     private JobInfoRepository jobInfoRepository;
 

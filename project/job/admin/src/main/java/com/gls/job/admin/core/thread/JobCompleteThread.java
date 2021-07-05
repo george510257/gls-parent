@@ -1,6 +1,6 @@
 package com.gls.job.admin.core.thread;
 
-import com.gls.job.admin.web.service.JobLogService;
+import com.gls.job.admin.web.service.JobCompleteService;
 import com.gls.job.core.base.BaseThread;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JobCompleteThread extends BaseThread {
     @Resource
-    private JobLogService jobLogService;
+    private JobCompleteService jobCompleteService;
 
     @Override
     protected void destroyExecute() throws Exception {
@@ -24,7 +24,7 @@ public class JobCompleteThread extends BaseThread {
 
     @Override
     protected void doExecute() throws Exception {
-        jobLogService.doJobComplete();
+        jobCompleteService.run();
     }
 
     @Override

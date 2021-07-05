@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @author george
  */
 @Component
-public class SimpleTriggerConverter extends TriggerConverter<SimpleTriggerEntity, SimpleTriggerImpl> {
+public class SimpleTriggerConverter extends BaseTriggerConverter<SimpleTriggerEntity, SimpleTriggerImpl> {
     @Override
     public SimpleTriggerImpl copySourceToTarget(SimpleTriggerEntity entity, SimpleTriggerImpl trigger) {
         trigger.setRepeatInterval(entity.getIntervalTime());

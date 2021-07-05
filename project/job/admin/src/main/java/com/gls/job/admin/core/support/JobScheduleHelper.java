@@ -5,6 +5,7 @@ import com.gls.framework.core.exception.GlsException;
 import com.gls.job.admin.constants.ScheduleType;
 import com.gls.job.admin.web.model.JobInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.CronExpression;
 
 import java.text.ParseException;
 import java.util.ArrayList;

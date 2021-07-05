@@ -12,7 +12,7 @@ import java.time.LocalTime;
  * @author george
  */
 @Component
-public class DailyTimeIntervalTriggerConverter extends TriggerConverter<DailyTimeIntervalTriggerEntity, DailyTimeIntervalTriggerImpl> {
+public class DailyTimeIntervalTriggerConverter extends BaseTriggerConverter<DailyTimeIntervalTriggerEntity, DailyTimeIntervalTriggerImpl> {
     @Override
     public DailyTimeIntervalTriggerImpl copySourceToTarget(DailyTimeIntervalTriggerEntity entity, DailyTimeIntervalTriggerImpl trigger) {
         trigger.setRepeatInterval(entity.getIntervalTime());

@@ -2,7 +2,7 @@ package com.gls.job.admin.web.service.impl;
 
 import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.service.AsyncService;
-import com.gls.job.admin.web.service.JobLogService;
+import com.gls.job.admin.web.service.JobCompleteService;
 import com.gls.job.admin.web.service.JobRegistryService;
 import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.CallbackModel;
@@ -20,13 +20,13 @@ public class AsyncServiceImpl implements AsyncService {
     @Resource
     private JobTriggerService jobTriggerService;
     @Resource
-    private JobLogService jobLogService;
+    private JobCompleteService jobCompleteService;
     @Resource
     private JobRegistryService jobRegistryService;
 
     @Override
     public void asyncCallback(List<CallbackModel> callbackModels) {
-        jobLogService.callback(callbackModels);
+        jobCompleteService.callback(callbackModels);
     }
 
     @Override

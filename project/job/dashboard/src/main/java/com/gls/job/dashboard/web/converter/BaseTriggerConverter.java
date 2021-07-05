@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * @author george
  */
-public class TriggerConverter<Entity extends BaseTriggerEntity, Trigger extends AbstractTrigger> implements BaseConverter<Entity, Trigger> {
+public abstract class BaseTriggerConverter<Entity extends BaseTriggerEntity, Trigger extends AbstractTrigger> implements BaseConverter<Entity, Trigger> {
     @Resource
     private JobDetailRepository jobDetailRepository;
 
