@@ -2,6 +2,7 @@ package com.gls.job.executor.core.context;
 
 import com.gls.job.core.constants.JobConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * gls-job context
@@ -10,6 +11,7 @@ import lombok.Data;
  * [Dear hj]
  */
 @Data
+@Accessors(chain = true)
 public class JobContext {
     /**
      * job id

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ExtractCheckAudioConverter implements BaseConverter<ExtractCheckAudioEntity, ExtractCheckAudioModel> {
     @Override
     public ExtractCheckAudioModel copySourceToTarget(ExtractCheckAudioEntity entity, ExtractCheckAudioModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ExtractCheckAudioEntity copyTargetToSource(ExtractCheckAudioModel model, ExtractCheckAudioEntity entity) {
+        // todo
         return entity;
     }
 }

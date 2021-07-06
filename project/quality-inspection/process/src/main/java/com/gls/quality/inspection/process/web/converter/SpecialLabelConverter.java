@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class SpecialLabelConverter implements BaseConverter<SpecialLabelEntity, SpecialLabelModel> {
     @Override
     public SpecialLabelModel copySourceToTarget(SpecialLabelEntity entity, SpecialLabelModel model) {
+        // todo
         return model;
     }
 
     @Override
     public SpecialLabelEntity copyTargetToSource(SpecialLabelModel model, SpecialLabelEntity entity) {
+        // todo
         return entity;
     }
 }

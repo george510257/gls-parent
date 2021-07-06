@@ -23,6 +23,7 @@ public class QingyunServiceImpl
 
     @Override
     protected Specification<QingyunEntity> getSpec(QueryQingyunModel queryQingyunModel) {
+        // todo
         return null;
     }
 }

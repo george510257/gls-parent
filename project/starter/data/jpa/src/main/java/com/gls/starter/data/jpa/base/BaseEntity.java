@@ -3,6 +3,7 @@ package com.gls.starter.data.jpa.base;
 import com.gls.starter.data.jpa.annotations.Comment;
 import com.gls.starter.data.jpa.generator.SnowflakeGenerator;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.data.annotation.CreatedBy;
@@ -22,6 +23,7 @@ import java.sql.Timestamp;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {

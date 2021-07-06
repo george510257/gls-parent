@@ -36,10 +36,12 @@ public class GenerateCodeService {
             generateHelper.generate(root, "QueryModel.ftl", path + "\\model\\query", "Query" + entityName + "Model.java");
             //Repository
             generateHelper.generate(root, "Repository.ftl", path + "\\repository", entityName + "Repository.java");
-            //Repository
+            //Service
             generateHelper.generate(root, "Service.ftl", path + "\\service", entityName + "Service.java");
-            //Repository
+            //ServiceImpl
             generateHelper.generate(root, "ServiceImpl.ftl", path + "\\service\\impl", entityName + "ServiceImpl.java");
+            //Validator
+            generateHelper.generate(root, "Validator.ftl", path + "\\validator", entityName + "Validator.java");
         }
     }
 

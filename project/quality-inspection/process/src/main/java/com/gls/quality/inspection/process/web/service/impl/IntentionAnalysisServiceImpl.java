@@ -23,6 +23,7 @@ public class IntentionAnalysisServiceImpl
 
     @Override
     protected Specification<IntentionAnalysisEntity> getSpec(QueryIntentionAnalysisModel queryIntentionAnalysisModel) {
+        // todo
         return null;
     }
 }

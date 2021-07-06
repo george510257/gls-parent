@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class CombinedScoreItemsConverter implements BaseConverter<CombinedScoreItemsEntity, CombinedScoreItemsModel> {
     @Override
     public CombinedScoreItemsModel copySourceToTarget(CombinedScoreItemsEntity entity, CombinedScoreItemsModel model) {
+        // todo
         return model;
     }
 
     @Override
     public CombinedScoreItemsEntity copyTargetToSource(CombinedScoreItemsModel model, CombinedScoreItemsEntity entity) {
+        // todo
         return entity;
     }
 }

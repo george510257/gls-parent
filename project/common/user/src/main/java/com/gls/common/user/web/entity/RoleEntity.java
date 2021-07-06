@@ -5,6 +5,7 @@ import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Accessors(chain = true)
 @Comment("角色信息表")
 public class RoleEntity extends BaseEntity {
     @Column(unique = true)

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class CorpusConverter implements BaseConverter<CorpusEntity, CorpusModel> {
     @Override
     public CorpusModel copySourceToTarget(CorpusEntity entity, CorpusModel model) {
+        // todo
         return model;
     }
 
     @Override
     public CorpusEntity copyTargetToSource(CorpusModel model, CorpusEntity entity) {
+        // todo
         return entity;
     }
 }

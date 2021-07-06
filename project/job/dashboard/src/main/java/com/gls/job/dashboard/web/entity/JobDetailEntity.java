@@ -5,6 +5,7 @@ import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Accessors(chain = true)
 @Table(name = "JOB_DETAIL")
 @Comment("任务信息表")
 public class JobDetailEntity extends BaseEntity {

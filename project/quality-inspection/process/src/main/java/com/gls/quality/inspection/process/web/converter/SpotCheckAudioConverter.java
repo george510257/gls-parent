@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class SpotCheckAudioConverter implements BaseConverter<SpotCheckAudioEntity, SpotCheckAudioModel> {
     @Override
     public SpotCheckAudioModel copySourceToTarget(SpotCheckAudioEntity entity, SpotCheckAudioModel model) {
+        // todo
         return model;
     }
 
     @Override
     public SpotCheckAudioEntity copyTargetToSource(SpotCheckAudioModel model, SpotCheckAudioEntity entity) {
+        // todo
         return entity;
     }
 }

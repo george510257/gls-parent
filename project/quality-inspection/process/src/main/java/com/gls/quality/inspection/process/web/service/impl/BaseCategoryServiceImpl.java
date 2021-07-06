@@ -23,6 +23,7 @@ public class BaseCategoryServiceImpl
 
     @Override
     protected Specification<BaseCategoryEntity> getSpec(QueryBaseCategoryModel queryBaseCategoryModel) {
+        // todo
         return null;
     }
 }

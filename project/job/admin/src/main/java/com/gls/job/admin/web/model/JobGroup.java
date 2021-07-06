@@ -3,6 +3,7 @@ package com.gls.job.admin.web.model;
 import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class JobGroup extends BaseModel {
     @NotBlank(message = "请输入AppName")

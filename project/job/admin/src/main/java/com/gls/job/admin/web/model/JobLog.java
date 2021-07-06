@@ -3,6 +3,7 @@ package com.gls.job.admin.web.model;
 import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class JobLog extends BaseModel {
     // job info
     private Long jobGroup;

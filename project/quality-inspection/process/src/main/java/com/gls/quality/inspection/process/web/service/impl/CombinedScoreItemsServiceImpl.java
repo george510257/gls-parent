@@ -23,6 +23,7 @@ public class CombinedScoreItemsServiceImpl
 
     @Override
     protected Specification<CombinedScoreItemsEntity> getSpec(QueryCombinedScoreItemsModel queryCombinedScoreItemsModel) {
+        // todo
         return null;
     }
 }

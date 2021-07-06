@@ -5,6 +5,7 @@ import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Accessors(chain = true)
 @Comment("用户信息表")
 public class UserEntity extends BaseEntity {
     @Column(unique = true)

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class DictionaryConverter implements BaseConverter<DictionaryEntity, DictionaryModel> {
     @Override
     public DictionaryModel copySourceToTarget(DictionaryEntity entity, DictionaryModel model) {
+        // todo
         return model;
     }
 
     @Override
     public DictionaryEntity copyTargetToSource(DictionaryModel model, DictionaryEntity entity) {
+        // todo
         return entity;
     }
 }

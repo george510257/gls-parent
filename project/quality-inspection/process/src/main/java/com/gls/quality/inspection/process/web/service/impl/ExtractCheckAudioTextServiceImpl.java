@@ -23,6 +23,7 @@ public class ExtractCheckAudioTextServiceImpl
 
     @Override
     protected Specification<ExtractCheckAudioTextEntity> getSpec(QueryExtractCheckAudioTextModel queryExtractCheckAudioTextModel) {
+        // todo
         return null;
     }
 }

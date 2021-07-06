@@ -4,6 +4,7 @@ import com.gls.framework.api.model.BaseModel;
 import com.gls.job.core.constants.GlueType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class JobLogGlue extends BaseModel {
     /**
      * 任务主键ID

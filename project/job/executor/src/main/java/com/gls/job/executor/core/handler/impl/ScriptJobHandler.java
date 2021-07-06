@@ -6,6 +6,7 @@ import com.gls.job.executor.core.handler.JobHandler;
 import com.gls.job.executor.core.handler.script.ScriptHelper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 @Slf4j
 @Data
+@Accessors(chain = true)
 @AllArgsConstructor
 public class ScriptJobHandler implements JobHandler {
     private final String scriptFileName;

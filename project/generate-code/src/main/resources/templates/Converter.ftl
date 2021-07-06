@@ -7,17 +7,19 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
-* @author george
-*/
+ * @author george
+ */
 @Component
 public class ${entityName}Converter implements BaseConverter<${entityName}Entity, ${entityName}Model> {
     @Override
     public ${entityName}Model copySourceToTarget(${entityName}Entity entity, ${entityName}Model model) {
+        // todo
         return model;
     }
 
     @Override
     public ${entityName}Entity copyTargetToSource(${entityName}Model model, ${entityName}Entity entity) {
+        // todo
         return entity;
     }
 }

@@ -23,6 +23,7 @@ public class TotalTestLogServiceImpl
 
     @Override
     protected Specification<TotalTestLogEntity> getSpec(QueryTotalTestLogModel queryTotalTestLogModel) {
+        // todo
         return null;
     }
 }

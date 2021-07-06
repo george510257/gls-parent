@@ -3,6 +3,7 @@ package com.gls.job.admin.web.model;
 import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class JobUser extends BaseModel {
     /**
      * 账号

@@ -4,6 +4,7 @@ import com.gls.starter.data.jpa.annotations.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.quartz.DateBuilder;
 
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "CALENDAR_INTERVAL_TRIGGER")
 @Comment("日历间隔触发器信息表")

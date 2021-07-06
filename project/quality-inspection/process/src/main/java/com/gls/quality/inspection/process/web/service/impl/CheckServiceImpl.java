@@ -23,6 +23,7 @@ public class CheckServiceImpl
 
     @Override
     protected Specification<CheckEntity> getSpec(QueryCheckModel queryCheckModel) {
+        // todo
         return null;
     }
 }

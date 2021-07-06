@@ -23,6 +23,7 @@ public class SpotCheckDistributeServiceImpl
 
     @Override
     protected Specification<SpotCheckDistributeEntity> getSpec(QuerySpotCheckDistributeModel querySpotCheckDistributeModel) {
+        // todo
         return null;
     }
 }

@@ -23,6 +23,7 @@ public class ConfigScoreSystemServiceImpl
 
     @Override
     protected Specification<ConfigScoreSystemEntity> getSpec(QueryConfigScoreSystemModel queryConfigScoreSystemModel) {
+        // todo
         return null;
     }
 }

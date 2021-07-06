@@ -23,6 +23,7 @@ public class LabelServiceImpl
 
     @Override
     protected Specification<LabelEntity> getSpec(QueryLabelModel queryLabelModel) {
+        // todo
         return null;
     }
 }

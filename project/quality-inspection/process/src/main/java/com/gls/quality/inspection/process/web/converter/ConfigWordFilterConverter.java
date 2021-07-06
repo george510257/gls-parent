@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ConfigWordFilterConverter implements BaseConverter<ConfigWordFilterEntity, ConfigWordFilterModel> {
     @Override
     public ConfigWordFilterModel copySourceToTarget(ConfigWordFilterEntity entity, ConfigWordFilterModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ConfigWordFilterEntity copyTargetToSource(ConfigWordFilterModel model, ConfigWordFilterEntity entity) {
+        // todo
         return entity;
     }
 }

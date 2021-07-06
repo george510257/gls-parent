@@ -23,6 +23,7 @@ public class DictionaryServiceImpl
 
     @Override
     protected Specification<DictionaryEntity> getSpec(QueryDictionaryModel queryDictionaryModel) {
+        // todo
         return null;
     }
 }

@@ -6,6 +6,7 @@ import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,6 +20,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 @MappedSuperclass
 public abstract class BaseTriggerEntity extends BaseEntity {
     @Comment("触发器组")

@@ -23,6 +23,7 @@ public class IndustryCategoryServiceImpl
 
     @Override
     protected Specification<IndustryCategoryEntity> getSpec(QueryIndustryCategoryModel queryIndustryCategoryModel) {
+        // todo
         return null;
     }
 }

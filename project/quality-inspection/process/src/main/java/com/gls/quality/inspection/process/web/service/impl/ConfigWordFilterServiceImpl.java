@@ -23,6 +23,7 @@ public class ConfigWordFilterServiceImpl
 
     @Override
     protected Specification<ConfigWordFilterEntity> getSpec(QueryConfigWordFilterModel queryConfigWordFilterModel) {
+        // todo
         return null;
     }
 }

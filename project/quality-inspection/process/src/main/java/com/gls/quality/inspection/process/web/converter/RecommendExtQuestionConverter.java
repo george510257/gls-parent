@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class RecommendExtQuestionConverter implements BaseConverter<RecommendExtQuestionEntity, RecommendExtQuestionModel> {
     @Override
     public RecommendExtQuestionModel copySourceToTarget(RecommendExtQuestionEntity entity, RecommendExtQuestionModel model) {
+        // todo
         return model;
     }
 
     @Override
     public RecommendExtQuestionEntity copyTargetToSource(RecommendExtQuestionModel model, RecommendExtQuestionEntity entity) {
+        // todo
         return entity;
     }
 }

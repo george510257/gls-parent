@@ -3,6 +3,7 @@ package com.gls.demo.security.web.model;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.gls.demo.security.constraints.MyConstraint;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
@@ -13,6 +14,7 @@ import java.util.Date;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 public class UserModel implements Serializable {
     @JsonView(UserSimpleView.class)
     private Long id;

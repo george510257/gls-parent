@@ -23,6 +23,7 @@ public class ConfigChannelServiceImpl
 
     @Override
     protected Specification<ConfigChannelEntity> getSpec(QueryConfigChannelModel queryConfigChannelModel) {
+        // todo
         return null;
     }
 }

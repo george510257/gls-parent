@@ -24,6 +24,7 @@ public class ${entityName}ServiceImpl
 
     @Override
     protected Specification<${entityName}Entity> getSpec(Query${entityName}Model query${entityName}Model) {
+        // todo
         return null;
     }
 }

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class IndustryBuzzwordsConverter implements BaseConverter<IndustryBuzzwordsEntity, IndustryBuzzwordsModel> {
     @Override
     public IndustryBuzzwordsModel copySourceToTarget(IndustryBuzzwordsEntity entity, IndustryBuzzwordsModel model) {
+        // todo
         return model;
     }
 
     @Override
     public IndustryBuzzwordsEntity copyTargetToSource(IndustryBuzzwordsModel model, IndustryBuzzwordsEntity entity) {
+        // todo
         return entity;
     }
 }

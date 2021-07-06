@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class UserConverter implements BaseConverter<UserEntity, UserModel> {
     @Override
     public UserModel copySourceToTarget(UserEntity entity, UserModel model) {
+        // todo
         return model;
     }
 
     @Override
     public UserEntity copyTargetToSource(UserModel model, UserEntity entity) {
+        // todo
         return entity;
     }
 }

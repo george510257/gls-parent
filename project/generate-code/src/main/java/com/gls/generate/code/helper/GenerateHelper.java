@@ -1,11 +1,13 @@
 package com.gls.generate.code.helper;
 
+import cn.hutool.core.io.FileUtil;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.File;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -25,20 +27,8 @@ public class GenerateHelper {
     }
 
     private void printFile(Map<String, Object> root, Template template, String filePath, String fileName) throws Exception {
-        pathJudgeExist(filePath);
-        File file = new File(filePath, fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+        Writer out = FileUtil.getWriter(new File(filePath, fileName), StandardCharsets.UTF_8, false);
         template.process(root, out);
         out.close();
-    }
-
-    private void pathJudgeExist(String filePath) {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
     }
 }

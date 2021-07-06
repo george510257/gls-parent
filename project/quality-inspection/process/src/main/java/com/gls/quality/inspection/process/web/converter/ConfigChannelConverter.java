@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ConfigChannelConverter implements BaseConverter<ConfigChannelEntity, ConfigChannelModel> {
     @Override
     public ConfigChannelModel copySourceToTarget(ConfigChannelEntity entity, ConfigChannelModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ConfigChannelEntity copyTargetToSource(ConfigChannelModel model, ConfigChannelEntity entity) {
+        // todo
         return entity;
     }
 }

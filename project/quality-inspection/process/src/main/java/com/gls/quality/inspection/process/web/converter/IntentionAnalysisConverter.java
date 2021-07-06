@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class IntentionAnalysisConverter implements BaseConverter<IntentionAnalysisEntity, IntentionAnalysisModel> {
     @Override
     public IntentionAnalysisModel copySourceToTarget(IntentionAnalysisEntity entity, IntentionAnalysisModel model) {
+        // todo
         return model;
     }
 
     @Override
     public IntentionAnalysisEntity copyTargetToSource(IntentionAnalysisModel model, IntentionAnalysisEntity entity) {
+        // todo
         return entity;
     }
 }

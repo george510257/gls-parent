@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class OperateLogDetailsConverter implements BaseConverter<OperateLogDetailsEntity, OperateLogDetailsModel> {
     @Override
     public OperateLogDetailsModel copySourceToTarget(OperateLogDetailsEntity entity, OperateLogDetailsModel model) {
+        // todo
         return model;
     }
 
     @Override
     public OperateLogDetailsEntity copyTargetToSource(OperateLogDetailsModel model, OperateLogDetailsEntity entity) {
+        // todo
         return entity;
     }
 }

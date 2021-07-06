@@ -23,6 +23,7 @@ public class SpecialLabelServiceImpl
 
     @Override
     protected Specification<SpecialLabelEntity> getSpec(QuerySpecialLabelModel querySpecialLabelModel) {
+        // todo
         return null;
     }
 }

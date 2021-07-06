@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class IndustryCategoryConverter implements BaseConverter<IndustryCategoryEntity, IndustryCategoryModel> {
     @Override
     public IndustryCategoryModel copySourceToTarget(IndustryCategoryEntity entity, IndustryCategoryModel model) {
+        // todo
         return model;
     }
 
     @Override
     public IndustryCategoryEntity copyTargetToSource(IndustryCategoryModel model, IndustryCategoryEntity entity) {
+        // todo
         return entity;
     }
 }

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class TotalTestLogConverter implements BaseConverter<TotalTestLogEntity, TotalTestLogModel> {
     @Override
     public TotalTestLogModel copySourceToTarget(TotalTestLogEntity entity, TotalTestLogModel model) {
+        // todo
         return model;
     }
 
     @Override
     public TotalTestLogEntity copyTargetToSource(TotalTestLogModel model, TotalTestLogEntity entity) {
+        // todo
         return entity;
     }
 }

@@ -23,6 +23,7 @@ public class OperateLogDetailsServiceImpl
 
     @Override
     protected Specification<OperateLogDetailsEntity> getSpec(QueryOperateLogDetailsModel queryOperateLogDetailsModel) {
+        // todo
         return null;
     }
 }

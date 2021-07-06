@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ExtractCheckConverter implements BaseConverter<ExtractCheckEntity, ExtractCheckModel> {
     @Override
     public ExtractCheckModel copySourceToTarget(ExtractCheckEntity entity, ExtractCheckModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ExtractCheckEntity copyTargetToSource(ExtractCheckModel model, ExtractCheckEntity entity) {
+        // todo
         return entity;
     }
 }

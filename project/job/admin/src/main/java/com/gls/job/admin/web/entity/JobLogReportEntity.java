@@ -5,6 +5,7 @@ import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@Accessors(chain = true)
 @Comment("任务日志统计信息表")
 public class JobLogReportEntity extends BaseEntity {
     private Date triggerDay;

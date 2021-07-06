@@ -1,11 +1,13 @@
 package com.gls.framework.core.exception;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author george
  */
 @Data
+@Accessors(chain = true)
 public class GlsException extends RuntimeException {
     private Integer code = 500;
     private String message;

@@ -23,6 +23,7 @@ public class CompanyConfigServiceImpl
 
     @Override
     protected Specification<CompanyConfigEntity> getSpec(QueryCompanyConfigModel queryCompanyConfigModel) {
+        // todo
         return null;
     }
 }

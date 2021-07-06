@@ -23,6 +23,7 @@ public class ExtractCheckServiceImpl
 
     @Override
     protected Specification<ExtractCheckEntity> getSpec(QueryExtractCheckModel queryExtractCheckModel) {
+        // todo
         return null;
     }
 }

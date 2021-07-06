@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ModelResultConverter implements BaseConverter<ModelResultEntity, ModelResultModel> {
     @Override
     public ModelResultModel copySourceToTarget(ModelResultEntity entity, ModelResultModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ModelResultEntity copyTargetToSource(ModelResultModel model, ModelResultEntity entity) {
+        // todo
         return entity;
     }
 }

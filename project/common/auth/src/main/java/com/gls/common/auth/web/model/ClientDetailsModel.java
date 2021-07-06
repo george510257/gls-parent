@@ -5,6 +5,7 @@ import com.gls.common.user.api.model.ClientModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientDetailsModel implements ClientDetails {

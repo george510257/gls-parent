@@ -2,6 +2,7 @@ package com.gls.job.executor.core.constants;
 
 import com.gls.framework.core.constants.FrameworkConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @Component
 @ConfigurationProperties(prefix = JobExecutorProperties.PREFIX, ignoreInvalidFields = true)
 public class JobExecutorProperties {

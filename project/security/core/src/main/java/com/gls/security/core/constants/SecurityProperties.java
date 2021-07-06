@@ -1,6 +1,7 @@
 package com.gls.security.core.constants;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.Set;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @ConfigurationProperties(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX)
 public class SecurityProperties {
     /**
@@ -57,18 +59,21 @@ public class SecurityProperties {
     private Mobile mobile = new Mobile();
 
     @Data
+    @Accessors(chain = true)
     public static class FormLogin {
         private String loginPage = DEFAULT_SIGN_IN_PAGE_URL;
         private String loginProcessingUrl = DEFAULT_SIGN_IN_PROCESSING_URL_FORM;
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Mobile {
         private String mobileParameter = DEFAULT_PARAMETER_NAME_MOBILE;
         private String loginProcessingUrl = DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE;
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Session {
         /**
          * 同一个用户在系统中的最大session数，默认1
@@ -85,12 +90,14 @@ public class SecurityProperties {
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Logout {
         private String logoutUrl = "/signOut";
         private Set<String> deleteCookies = new HashSet<>(Collections.singleton("JSESSIONID"));
     }
 
     @Data
+    @Accessors(chain = true)
     public static class RememberMe {
         /**
          * '记住我'功能的有效时间，默认1小时
@@ -99,12 +106,14 @@ public class SecurityProperties {
     }
 
     @Data
+    @Accessors(chain = true)
     public static class TokenStore {
         private String type = SecurityConstants.DEFAULT_TOKEN_STORE_TYPE;
         private Jwt jwt = new Jwt();
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Jwt {
         private String keyStoreFile = "glseven.jks";
         private String keyStorePassword = "iflytek123";

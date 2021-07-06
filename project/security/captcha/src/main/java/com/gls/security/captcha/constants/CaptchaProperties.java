@@ -2,6 +2,7 @@ package com.gls.security.captcha.constants;
 
 import com.gls.security.core.constants.SecurityConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @ConfigurationProperties(prefix = SecurityConstants.SECURITY_PROPERTIES_PREFIX + ".captcha")
 public class CaptchaProperties {
     /**
@@ -31,6 +33,7 @@ public class CaptchaProperties {
     private Sms sms = new Sms();
 
     @Data
+    @Accessors(chain = true)
     public static class Images {
         private String codeParameter = DEFAULT_PARAMETER_NAME_CODE_IMAGE;
         /**
@@ -60,6 +63,7 @@ public class CaptchaProperties {
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Sms {
         private String mobileParameter = DEFAULT_PARAMETER_NAME_MOBILE;
         private String codeParameter = DEFAULT_PARAMETER_NAME_CODE_SMS;

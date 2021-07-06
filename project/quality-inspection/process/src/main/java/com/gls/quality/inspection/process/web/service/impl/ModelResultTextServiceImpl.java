@@ -23,6 +23,7 @@ public class ModelResultTextServiceImpl
 
     @Override
     protected Specification<ModelResultTextEntity> getSpec(QueryModelResultTextModel queryModelResultTextModel) {
+        // todo
         return null;
     }
 }

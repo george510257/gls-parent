@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ConfigScoreSystemConverter implements BaseConverter<ConfigScoreSystemEntity, ConfigScoreSystemModel> {
     @Override
     public ConfigScoreSystemModel copySourceToTarget(ConfigScoreSystemEntity entity, ConfigScoreSystemModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ConfigScoreSystemEntity copyTargetToSource(ConfigScoreSystemModel model, ConfigScoreSystemEntity entity) {
+        // todo
         return entity;
     }
 }

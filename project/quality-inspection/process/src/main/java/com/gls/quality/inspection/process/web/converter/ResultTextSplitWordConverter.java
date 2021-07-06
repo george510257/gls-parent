@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class ResultTextSplitWordConverter implements BaseConverter<ResultTextSplitWordEntity, ResultTextSplitWordModel> {
     @Override
     public ResultTextSplitWordModel copySourceToTarget(ResultTextSplitWordEntity entity, ResultTextSplitWordModel model) {
+        // todo
         return model;
     }
 
     @Override
     public ResultTextSplitWordEntity copyTargetToSource(ResultTextSplitWordModel model, ResultTextSplitWordEntity entity) {
+        // todo
         return entity;
     }
 }

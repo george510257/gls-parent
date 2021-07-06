@@ -8,6 +8,7 @@ import com.gls.job.core.constants.ExecutorBlockStrategy;
 import com.gls.job.core.constants.GlueType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class JobInfo extends BaseModel {
     /**
      * 执行器主键ID

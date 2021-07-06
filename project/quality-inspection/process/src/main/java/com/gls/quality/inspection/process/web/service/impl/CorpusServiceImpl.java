@@ -23,6 +23,7 @@ public class CorpusServiceImpl
 
     @Override
     protected Specification<CorpusEntity> getSpec(QueryCorpusModel queryCorpusModel) {
+        // todo
         return null;
     }
 }

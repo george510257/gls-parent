@@ -4,6 +4,7 @@ import com.gls.starter.data.jpa.annotations.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "CRON_TRIGGER")
 @Comment("Cron触发器信息表")

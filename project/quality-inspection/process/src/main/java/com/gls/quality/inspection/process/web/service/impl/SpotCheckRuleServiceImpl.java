@@ -23,6 +23,7 @@ public class SpotCheckRuleServiceImpl
 
     @Override
     protected Specification<SpotCheckRuleEntity> getSpec(QuerySpotCheckRuleModel querySpotCheckRuleModel) {
+        // todo
         return null;
     }
 }

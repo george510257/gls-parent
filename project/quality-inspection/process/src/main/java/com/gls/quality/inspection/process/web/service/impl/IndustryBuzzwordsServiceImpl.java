@@ -23,6 +23,7 @@ public class IndustryBuzzwordsServiceImpl
 
     @Override
     protected Specification<IndustryBuzzwordsEntity> getSpec(QueryIndustryBuzzwordsModel queryIndustryBuzzwordsModel) {
+        // todo
         return null;
     }
 }

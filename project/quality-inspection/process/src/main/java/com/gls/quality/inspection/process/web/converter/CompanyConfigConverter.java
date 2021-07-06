@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class CompanyConfigConverter implements BaseConverter<CompanyConfigEntity, CompanyConfigModel> {
     @Override
     public CompanyConfigModel copySourceToTarget(CompanyConfigEntity entity, CompanyConfigModel model) {
+        // todo
         return model;
     }
 
     @Override
     public CompanyConfigEntity copyTargetToSource(CompanyConfigModel model, CompanyConfigEntity entity) {
+        // todo
         return entity;
     }
 }

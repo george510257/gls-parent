@@ -23,6 +23,7 @@ public class BusinessLineServiceImpl
 
     @Override
     protected Specification<BusinessLineEntity> getSpec(QueryBusinessLineModel queryBusinessLineModel) {
+        // todo
         return null;
     }
 }

@@ -23,6 +23,7 @@ public class ResultTextSplitWordCustomerServiceImpl
 
     @Override
     protected Specification<ResultTextSplitWordCustomerEntity> getSpec(QueryResultTextSplitWordCustomerModel queryResultTextSplitWordCustomerModel) {
+        // todo
         return null;
     }
 }

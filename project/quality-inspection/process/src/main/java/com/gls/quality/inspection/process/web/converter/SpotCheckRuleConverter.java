@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class SpotCheckRuleConverter implements BaseConverter<SpotCheckRuleEntity, SpotCheckRuleModel> {
     @Override
     public SpotCheckRuleModel copySourceToTarget(SpotCheckRuleEntity entity, SpotCheckRuleModel model) {
+        // todo
         return model;
     }
 
     @Override
     public SpotCheckRuleEntity copyTargetToSource(SpotCheckRuleModel model, SpotCheckRuleEntity entity) {
+        // todo
         return entity;
     }
 }

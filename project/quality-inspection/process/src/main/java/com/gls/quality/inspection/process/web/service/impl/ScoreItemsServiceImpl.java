@@ -23,6 +23,7 @@ public class ScoreItemsServiceImpl
 
     @Override
     protected Specification<ScoreItemsEntity> getSpec(QueryScoreItemsModel queryScoreItemsModel) {
+        // todo
         return null;
     }
 }

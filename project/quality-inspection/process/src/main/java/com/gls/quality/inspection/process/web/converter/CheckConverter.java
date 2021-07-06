@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class CheckConverter implements BaseConverter<CheckEntity, CheckModel> {
     @Override
     public CheckModel copySourceToTarget(CheckEntity entity, CheckModel model) {
+        // todo
         return model;
     }
 
     @Override
     public CheckEntity copyTargetToSource(CheckModel model, CheckEntity entity) {
+        // todo
         return entity;
     }
 }

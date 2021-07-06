@@ -3,7 +3,7 @@ import ${basePackageUrl}.entity.${entityName}Entity;
 import com.gls.starter.data.jpa.base.BaseEntityRepository;
 
 /**
-* @author george
-*/
+ * @author george
+ */
 public interface ${entityName}Repository extends BaseEntityRepository<${entityName}Entity> {
 }

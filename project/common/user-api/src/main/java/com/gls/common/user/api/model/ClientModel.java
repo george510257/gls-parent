@@ -3,6 +3,7 @@ package com.gls.common.user.api.model;
 import com.gls.framework.api.model.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class ClientModel extends BaseModel {
     private String clientId;
     private String clientSecret;

@@ -2,6 +2,7 @@ package com.gls.common.user.constants;
 
 import com.gls.framework.core.constants.FrameworkConstants;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
  * @author george
  */
 @Data
+@Accessors(chain = true)
 @Component
 @ConfigurationProperties(prefix = UserDefaultProperties.PREFIX, ignoreInvalidFields = true)
 public class UserDefaultProperties {
@@ -21,6 +23,7 @@ public class UserDefaultProperties {
     private Client client = new Client();
 
     @Data
+    @Accessors(chain = true)
     public static class User {
         /**
          * Default user name.
@@ -37,6 +40,7 @@ public class UserDefaultProperties {
     }
 
     @Data
+    @Accessors(chain = true)
     public static class Client {
         /**
          * OAuth2 client id.

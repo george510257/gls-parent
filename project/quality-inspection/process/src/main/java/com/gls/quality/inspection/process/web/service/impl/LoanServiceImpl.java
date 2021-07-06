@@ -23,6 +23,7 @@ public class LoanServiceImpl
 
     @Override
     protected Specification<LoanEntity> getSpec(QueryLoanModel queryLoanModel) {
+        // todo
         return null;
     }
 }

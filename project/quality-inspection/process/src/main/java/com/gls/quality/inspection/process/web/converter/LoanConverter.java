@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class LoanConverter implements BaseConverter<LoanEntity, LoanModel> {
     @Override
     public LoanModel copySourceToTarget(LoanEntity entity, LoanModel model) {
+        // todo
         return model;
     }
 
     @Override
     public LoanEntity copyTargetToSource(LoanModel model, LoanEntity entity) {
+        // todo
         return entity;
     }
 }

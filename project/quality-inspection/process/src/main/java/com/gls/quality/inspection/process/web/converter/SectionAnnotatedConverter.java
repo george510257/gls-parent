@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class SectionAnnotatedConverter implements BaseConverter<SectionAnnotatedEntity, SectionAnnotatedModel> {
     @Override
     public SectionAnnotatedModel copySourceToTarget(SectionAnnotatedEntity entity, SectionAnnotatedModel model) {
+        // todo
         return model;
     }
 
     @Override
     public SectionAnnotatedEntity copyTargetToSource(SectionAnnotatedModel model, SectionAnnotatedEntity entity) {
+        // todo
         return entity;
     }
 }
