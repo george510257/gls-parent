@@ -20,5 +20,5 @@ public class UserGroupingEntity extends BaseEntity {
     private Integer parentId;
     private Boolean display;
     private Integer level;
-    private Boolean show;
+    private Boolean isShow;
 }

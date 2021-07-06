@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
 
 /**
@@ -18,7 +19,8 @@ import java.sql.Timestamp;
 @Data
 @Comment("客户端信息表")
 public class LoanEntity extends BaseEntity {
-    private Integer checkId;
+    @ManyToOne
+    private CheckEntity check;
     private String telNumber;
     private Timestamp checkTime;
     private String checkNo;

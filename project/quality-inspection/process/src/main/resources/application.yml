@@ -9,6 +9,9 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+    hibernate:
+      naming:
+        implicit-strategy: com.gls.starter.data.jpa.hibernate.GlsImplicitNamingStrategy
   redis:
     host: 172.31.124.62
     port: 6379

@@ -18,10 +18,12 @@ import javax.persistence.ManyToOne;
 @Data
 @Comment("客户端信息表")
 public class ExtractCheckResultTextEntity extends BaseEntity {
-    private Integer extractCheckResultId;
+    @ManyToOne
+    private ExtractCheckResultEntity extractCheckResult;
     @ManyToOne
     private ExtractCheckAudioEntity extractCheckAudio;
-    private Integer extractCheckAudioTextId;
+    @ManyToOne
+    private ExtractCheckAudioTextEntity extractCheckAudioText;
     private String info;
     private Double violationsScore;
     private Boolean isError;
