@@ -1,0 +1,10 @@
+package com.gls.quality.inspection.process.web.repository;
+
+import com.gls.quality.inspection.process.web.entity.ModelResultEntity;
+import com.gls.starter.data.jpa.base.BaseEntityRepository;
+
+/**
+ * @author george
+ */
+public interface ModelResultRepository extends BaseEntityRepository<ModelResultEntity> {
+}

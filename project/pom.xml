@@ -19,6 +19,7 @@
         <module>common</module>
         <module>job</module>
         <module>quality-inspection</module>
+        <module>generate-code</module>
     </modules>
 
     <dependencyManagement>
