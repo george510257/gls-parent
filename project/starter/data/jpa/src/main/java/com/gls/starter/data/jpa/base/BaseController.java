@@ -5,6 +5,8 @@ import com.gls.framework.api.model.BaseModel;
 import com.gls.framework.api.result.Result;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,8 +14,19 @@ import javax.validation.Valid;
 /**
  * @author george
  */
-public class BaseController<Service extends BaseService<Model, QueryModel>, Model extends BaseModel, QueryModel> {
+public abstract class BaseController<Service extends BaseService<Model, QueryModel>, Model extends BaseModel, QueryModel> {
+    private final Validator validator;
     protected Service service;
+
+    public BaseController(Service service, Validator validator) {
+        this.service = service;
+        this.validator = validator;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(validator);
+    }
 
     @GetMapping
     @JsonView(BaseModel.SimpleView.class)
