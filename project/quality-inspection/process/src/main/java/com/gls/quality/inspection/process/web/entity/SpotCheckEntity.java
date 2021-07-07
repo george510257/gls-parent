@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -24,7 +24,7 @@ public class SpotCheckEntity extends BaseEntity {
     private String spotCheckName;
     @ManyToOne
     private ExtractCheckEntity extractCheck;
-    private Timestamp deadline;
+    private Date deadline;
     private Integer spotCheckSchedule;
     private Integer dialogueNumber;
     private Boolean isInvalided;

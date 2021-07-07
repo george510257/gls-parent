@@ -12,4 +12,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserPhoneAddressModel extends BaseModel {
+    private ExtractCheckAudioModel extractCheckAudio;
+    private String address;
 }

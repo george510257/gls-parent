@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpotCheckDistributeModel extends BaseModel {
+    private SpotCheckModel spotCheck;
+    private UserModel user;
+    private Integer distributeRate;
+    private Boolean status;
 }

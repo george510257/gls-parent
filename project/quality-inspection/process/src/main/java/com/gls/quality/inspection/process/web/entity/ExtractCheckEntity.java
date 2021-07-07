@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -31,7 +31,7 @@ public class ExtractCheckEntity extends BaseEntity {
     private IndustryCategoryEntity industryCategory;
     private Integer totalDuration;
     private String modelName;
-    private Timestamp deadline;
+    private Date deadline;
     private Boolean status;
     private Integer extractCheckSchedule;
     @ManyToOne
@@ -41,7 +41,7 @@ public class ExtractCheckEntity extends BaseEntity {
     private Boolean isChecked;
     private Boolean isFinished;
     private Integer extractCheckType;
-    private Timestamp startTime;
+    private Date startTime;
     private Integer baseScore;
-    private Timestamp endTime;
+    private Date endTime;
 }

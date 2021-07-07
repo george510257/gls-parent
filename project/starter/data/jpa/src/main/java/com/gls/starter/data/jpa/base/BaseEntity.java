@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * todo 1. 雪花算法配置：需要通过parameters参数设置workerId，dataCenterId。后续通过配置文件设置。
@@ -40,7 +40,7 @@ public abstract class BaseEntity implements Serializable {
     private String name;
     @Version
     @Comment("版本信息")
-    private Timestamp timeVersion;
+    private Date timeVersion;
     @Comment("逻辑删除标志 true:已删除; false:未删除")
     private Boolean deleteFlg = false;
     @Comment("租户ID")
@@ -52,11 +52,11 @@ public abstract class BaseEntity implements Serializable {
     private Long createdUserId;
     @CreatedDate
     @Comment("创建时间")
-    private Timestamp createdDate;
+    private Date createdDate;
     @LastModifiedBy
     @Comment("最后修改用户ID")
     private Long updateUserId;
     @LastModifiedDate
     @Comment("最后修改时间")
-    private Timestamp updateDate;
+    private Date updateDate;
 }

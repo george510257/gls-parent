@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpotCheckAudioModel extends BaseModel {
+    private SpotCheckModel spotCheck;
+    private ExtractCheckAudioModel extractCheckAudio;
+    private UserModel user;
+    private Boolean status;
 }

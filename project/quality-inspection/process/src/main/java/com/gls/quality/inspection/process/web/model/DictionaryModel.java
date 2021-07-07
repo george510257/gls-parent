@@ -12,4 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class DictionaryModel extends BaseModel {
+    private ModelModel model;
+    private Boolean type;
+    private String dictContent;
 }

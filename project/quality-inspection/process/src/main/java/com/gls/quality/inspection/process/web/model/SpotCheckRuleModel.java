@@ -12,4 +12,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpotCheckRuleModel extends BaseModel {
+    private SpotCheckModel spotCheck;
+    private Integer spotCheckNumber;
+    private Boolean ruleType;
+    private ScoreItemsModel scoreItems;
+    private Boolean scoreItemType;
 }

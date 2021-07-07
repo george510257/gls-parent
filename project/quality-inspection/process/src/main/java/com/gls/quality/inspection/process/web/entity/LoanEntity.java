@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -24,9 +24,9 @@ public class LoanEntity extends BaseEntity {
     @ManyToOne
     private CheckEntity check;
     private String telNumber;
-    private Timestamp checkTime;
+    private Date checkTime;
     private String checkNo;
-    private Timestamp endTime;
+    private Date endTime;
     private String faceMess;
     private String operateUser;
     private String operateName;

@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SectionAnnotatedModel extends BaseModel {
+    private CorpusModel corpus;
+    private String selection;
+    private String totalLabel;
+    private String singleLabel;
+    private String complexLabel;
+    private String extqRule;
 }

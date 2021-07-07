@@ -12,4 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class QingyunModel extends BaseModel {
+    private String dir;
+    private String fileUrl;
+    private String checkNo;
 }

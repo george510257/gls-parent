@@ -12,4 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ResultTextSplitWordCustomerModel extends BaseModel {
+    private Integer number;
+    private ExtractCheckAudioModel extractCheckAudio;
+    private String word;
 }

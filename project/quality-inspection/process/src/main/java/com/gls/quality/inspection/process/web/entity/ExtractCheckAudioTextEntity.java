@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -30,5 +30,5 @@ public class ExtractCheckAudioTextEntity extends BaseEntity {
     private Integer end;
     @ManyToOne
     private ExtractCheckAudioEntity extractCheckAudio;
-    private Timestamp excelTime;
+    private Date excelTime;
 }

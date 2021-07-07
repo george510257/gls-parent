@@ -12,4 +12,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ConfigWordFilterModel extends BaseModel {
+    private String serviceWordFilter;
+    private String customerWordFilter;
 }

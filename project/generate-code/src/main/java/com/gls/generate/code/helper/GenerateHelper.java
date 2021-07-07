@@ -1,6 +1,9 @@
 package com.gls.generate.code.helper;
 
 import cn.hutool.core.io.FileUtil;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +11,10 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +58,7 @@ public class GenerateHelper {
             root.put("basePackageUrl", basePackage);
             root.put("entityName", entityName);
             root.put("entityNameParam", toLowerCaseFirstOne(entityName));
+            root.put("columns", getEntityColumns(path + "\\entity\\" + entityFileName));
             //Converter
             generate(root, "Converter.ftl", path + "\\converter", entityName + "Converter.java");
             //Model
@@ -70,5 +76,22 @@ public class GenerateHelper {
             //Controller
             generate(root, "Controller.ftl", path + "\\controller", entityName + "Controller.java");
         }
+    }
+
+    private List<Map<String, String>> getEntityColumns(String entityFilePath) throws IOException {
+        List<Map<String, String>> columns = new ArrayList<>();
+        CompilationUnit compilationUnit = StaticJavaParser.parse(FileUtil.file(entityFilePath));
+        compilationUnit.findAll(FieldDeclaration.class).forEach(fieldDeclaration -> {
+            fieldDeclaration.getVariables().forEach(variableDeclarator -> {
+                Map<String, String> column = new HashMap<>();
+                String name = variableDeclarator.getNameAsString();
+                String type = variableDeclarator.getTypeAsString();
+                log.info("variableDeclarator: {} {}", name, type);
+                column.put("name", name);
+                column.put("type", type.replaceAll("Entity", "Model"));
+                columns.add(column);
+            });
+        });
+        return columns;
     }
 }

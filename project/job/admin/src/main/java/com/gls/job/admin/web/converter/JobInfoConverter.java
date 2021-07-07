@@ -9,7 +9,6 @@ import com.gls.job.admin.web.repository.JobInfoRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -71,8 +70,8 @@ public class JobInfoConverter implements BaseConverter<JobInfoEntity, JobInfo> {
         jobInfoEntity.setTriggerLastTime(new Date(jobInfo.getTriggerLastTime()));
         jobInfoEntity.setTriggerNextTime(new Date(jobInfo.getTriggerNextTime()));
         jobInfoEntity.setId(jobInfo.getId());
-        jobInfoEntity.setCreatedDate(new Timestamp(jobInfo.getAddTime().getTime()));
-        jobInfoEntity.setUpdateDate(new Timestamp(jobInfo.getUpdateTime().getTime()));
+        jobInfoEntity.setCreatedDate(jobInfo.getAddTime());
+        jobInfoEntity.setUpdateDate(jobInfo.getUpdateTime());
         return jobInfoEntity;
     }
 }

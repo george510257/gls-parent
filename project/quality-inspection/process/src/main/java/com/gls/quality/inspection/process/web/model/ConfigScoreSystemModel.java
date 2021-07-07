@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ConfigScoreSystemModel extends BaseModel {
+    private Boolean scoreStrategy;
+    private Boolean scoreAttribute;
+    private Integer defaultScore;
+    private Boolean scoreBaseline;
 }

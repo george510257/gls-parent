@@ -12,4 +12,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class RecommendExtQuestionModel extends BaseModel {
+    private String industryCategory;
+    private String industryCategoryIds;
+    private Integer semanticLabelId;
+    private String phrasing;
+    private String wordSet;
 }

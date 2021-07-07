@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class LabelTestDataModel extends BaseModel {
+    private ModelModel model;
+    private Integer status;
+    private Double totalLabelPassingRate;
+    private Double voiceCheckPassingRate;
+    private Double semanticLabelPassingRate;
+    private Double complexLabelPassingRate;
 }

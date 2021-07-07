@@ -12,4 +12,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class BusinessLineModel extends BaseModel {
+    private String belType;
+    private Integer checkType;
+    private String purpose;
+    private String payType;
+    private ModelModel model;
+    private Integer count;
+    private String remark;
 }

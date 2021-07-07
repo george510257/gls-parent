@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * @author george
  */
@@ -12,4 +14,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpotCheckModel extends BaseModel {
+    private String spotCheckName;
+    private ExtractCheckModel extractCheck;
+    private Date deadline;
+    private Integer spotCheckSchedule;
+    private Integer dialogueNumber;
+    private Boolean isInvalided;
+    private Boolean status;
 }

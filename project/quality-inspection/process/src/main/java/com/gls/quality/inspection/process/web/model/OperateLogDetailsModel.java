@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class OperateLogDetailsModel extends BaseModel {
+    private String module;
+    private String operateName;
+    private String logDetails;
+    private String createBy;
+    private String username;
+    private String realname;
 }

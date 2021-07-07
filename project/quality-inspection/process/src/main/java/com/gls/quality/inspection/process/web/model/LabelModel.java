@@ -12,4 +12,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class LabelModel extends BaseModel {
+    private ModelModel model;
+    private String semanticCategory;
+    private String semanticLabel;
+    private Integer semanticRole;
+    private Integer status;
+    private String extQuestion;
+    private String recommendExtQuestion;
+    private String rule;
 }

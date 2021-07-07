@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class IndustryCategoryModel extends BaseModel {
+    private Integer level;
+    private Integer parentId;
+    private Boolean display;
+    private Boolean isUsed;
 }

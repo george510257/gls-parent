@@ -12,4 +12,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ConfigInvalidAudioModel extends BaseModel {
+    private Boolean defineDurationRadio;
+    private Integer defineDurationSecond;
+    private Boolean defineResultRadio;
+    private Boolean defineRoundRadio;
+    private Integer defineRoundCount;
 }

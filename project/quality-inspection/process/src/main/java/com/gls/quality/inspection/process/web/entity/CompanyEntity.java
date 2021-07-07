@@ -8,7 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @Comment("客户端信息表")
 public class CompanyEntity extends BaseEntity {
-    private Timestamp expireTime;
+    private Date expireTime;
     private Boolean status;
     private String nameEn;
     private String approver;

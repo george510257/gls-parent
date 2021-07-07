@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class IndustryBuzzwordsModel extends BaseModel {
+    private IndustryCategoryModel industryCategory;
+    private String industryCategoryIds;
+    private String buzzwordsText;
+    private Integer buzzwordsNumber;
 }

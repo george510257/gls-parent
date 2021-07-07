@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SingleTestLogModel extends BaseModel {
+    private UserModel user;
+    private String ask;
+    private String answer;
+    private Integer role;
 }

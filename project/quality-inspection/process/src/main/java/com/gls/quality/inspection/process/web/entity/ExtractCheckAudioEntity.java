@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -40,7 +40,7 @@ public class ExtractCheckAudioEntity extends BaseEntity {
     private Double spotCheckScore;
     private Boolean isChecked;
     private Boolean isSpotChecked;
-    private Timestamp checkTime;
+    private Date checkTime;
     private String customerMobile;
     private Boolean isInvalid;
     private Integer recheckUserId;

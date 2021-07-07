@@ -18,6 +18,7 @@
         <JustAuth.version>1.16.0</JustAuth.version>
         <mybatis.version>2.1.4</mybatis.version>
         <hutool.version>5.7.2</hutool.version>
+        <javaparser.version>3.22.1</javaparser.version>
     </properties>
 
     <dependencyManagement>
@@ -139,6 +140,21 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-symbol-solver-core</artifactId>
+                <version>${javaparser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-core</artifactId>
+                <version>${javaparser.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.javaparser</groupId>
+                <artifactId>javaparser-core-serialization</artifactId>
+                <version>${javaparser.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

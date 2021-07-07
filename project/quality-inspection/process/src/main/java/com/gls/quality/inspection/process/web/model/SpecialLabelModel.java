@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class SpecialLabelModel extends BaseModel {
+    private ModelModel model;
+    private Integer type;
+    private String callIds;
+    private Integer status;
+    private String childLabel;
+    private String digest;
 }

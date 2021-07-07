@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ModelResultTextModel extends BaseModel {
+    private ModelResultModel modelResult;
+    private ExtractCheckAudioModel extractCheckAudio;
+    private ExtractCheckAudioTextModel extractCheckAudioText;
+    private String info;
 }

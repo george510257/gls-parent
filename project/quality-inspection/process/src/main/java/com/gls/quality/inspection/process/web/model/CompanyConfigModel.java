@@ -12,4 +12,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CompanyConfigModel extends BaseModel {
+    private String imgLogo;
+    private String imgCover;
+    private Boolean translateConcurrent;
+    private Boolean modelNum;
+    private Boolean adminNum;
+    private Boolean customerServiceNum;
+    private Boolean inspectorNum;
 }

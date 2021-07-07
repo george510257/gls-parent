@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 /**
  * @author george
  */
@@ -12,4 +14,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CompanyModel extends BaseModel {
+    private Date expireTime;
+    private Boolean status;
+    private String nameEn;
+    private String approver;
+    private String applicant;
+    private Integer type;
 }

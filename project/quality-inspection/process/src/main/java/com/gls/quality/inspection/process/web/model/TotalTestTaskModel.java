@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class TotalTestTaskModel extends BaseModel {
+    private UserModel user;
+    private ModelModel model;
+    private String testName;
+    private Boolean testType;
+    private Integer status;
+    private Double passRate;
 }

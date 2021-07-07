@@ -12,4 +12,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class IntentionAnalysisModel extends BaseModel {
+    private ModelModel model;
+    private String totalIntention;
+    private String content;
+    private String label;
+    private String contentDetail;
+    private Integer status;
 }

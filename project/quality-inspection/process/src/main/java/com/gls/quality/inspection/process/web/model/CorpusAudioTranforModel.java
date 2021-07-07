@@ -12,4 +12,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class CorpusAudioTranforModel extends BaseModel {
+    private CorpusModel corpus;
+    private Integer lid;
+    private Integer begin;
+    private Integer end;
+    private String onebest;
+    private Double sc;
+    private Integer spk;
 }

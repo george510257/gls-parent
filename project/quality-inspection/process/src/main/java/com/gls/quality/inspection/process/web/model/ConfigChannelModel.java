@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ConfigChannelModel extends BaseModel {
+    private Boolean doubleChannelRadio;
+    private Boolean doubleChannelDefault;
+    private Boolean singleChannelRadio;
+    private String singleChannelText;
 }

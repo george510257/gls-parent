@@ -12,4 +12,17 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ModelModel extends BaseModel {
+    private IndustryCategoryModel industryCategory;
+    private Integer status;
+    private Integer released;
+    private Integer createBy;
+    private Integer voiceTimeout;
+    private Integer voiceShutdown;
+    private Integer voiceFast;
+    private Integer voiceDb;
+    private Integer voiceInterrupt;
+    private Boolean voiceInterruptStatus;
+    private Integer labelScore;
+    private Boolean tokenModule;
+    private Boolean semanticsModule;
 }

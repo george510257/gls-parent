@@ -12,4 +12,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserGroupingModel extends BaseModel {
+    private Integer parentId;
+    private Boolean display;
+    private Integer level;
+    private Boolean isShow;
 }
