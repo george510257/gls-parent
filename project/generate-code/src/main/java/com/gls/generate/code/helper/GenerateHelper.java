@@ -94,10 +94,12 @@ public class GenerateHelper {
                 Map<String, String> column = new HashMap<>();
                 String name = variableDeclarator.getNameAsString();
                 String type = variableDeclarator.getTypeAsString();
-                log.info("variableDeclarator: {} {}", name, type);
                 column.put("name", name);
                 column.put("nameUpper", toUpperCaseFirstOne(name));
                 column.put("type", type.replaceAll("Entity", "Model"));
+                String typeEntityName = type.replaceAll("Entity", "").replaceAll("List", "").replaceAll("<", "").replaceAll(">", "");
+                column.put("typeEntityName", typeEntityName);
+                column.put("typeEntityNameLower", toLowerCaseFirstOne(typeEntityName));
                 columns.add(column);
             });
         });

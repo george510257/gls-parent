@@ -11,9 +11,9 @@ import java.util.Map;
 /**
  * @author george
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class ClientModel extends BaseModel {
     private String clientId;
     private String clientSecret;

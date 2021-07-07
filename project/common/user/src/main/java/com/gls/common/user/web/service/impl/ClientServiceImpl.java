@@ -1,17 +1,15 @@
 package com.gls.common.user.web.service.impl;
 
 import com.gls.common.user.api.model.ClientModel;
+import com.gls.common.user.api.model.query.QueryClientModel;
 import com.gls.common.user.web.converter.ClientConverter;
 import com.gls.common.user.web.entity.ClientEntity;
 import com.gls.common.user.web.repository.ClientRepository;
 import com.gls.common.user.web.service.ClientService;
-import com.gls.common.user.web.service.RoleService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
+import com.gls.starter.data.jpa.base.BaseServiceImpl;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,71 +17,63 @@ import java.util.List;
 /**
  * @author george
  */
-@Slf4j
-@Service(value = "clientService")
-@Transactional(rollbackFor = Exception.class)
-@CacheConfig(cacheNames = "client")
-public class ClientServiceImpl implements ClientService {
+@Service
+public class ClientServiceImpl
+        extends BaseServiceImpl<ClientRepository, ClientConverter, ClientEntity, ClientModel, QueryClientModel>
+        implements ClientService {
     @Resource
     private ClientModel defaultClientModel;
     @Resource
     private PasswordEncoder passwordEncoder;
-    @Resource
-    private RoleService roleService;
-    @Resource
-    private ClientRepository clientRepository;
-    @Resource
-    private ClientConverter clientConverter;
+
+    public ClientServiceImpl(ClientRepository repository, ClientConverter converter) {
+        super(repository, converter);
+    }
 
     @Override
-    @Cacheable(key = "#root.methodName+'['+#clientId+']'")
+    protected Specification<ClientEntity> getSpec(QueryClientModel queryClientModel) {
+        return null;
+    }
+
+    @Override
     public ClientModel loadClientByClientId(String clientId) {
-        ClientEntity info = clientRepository.getOneByClientId(clientId);
-        ClientModel model = clientConverter.sourceToTarget(info);
-        return model;
+        return converter.sourceToTarget(repository.getOneByClientId(clientId));
     }
 
     @Override
-    public void addClientDetails(ClientModel model) {
-        ClientEntity info = clientConverter.targetToSource(model);
-        clientRepository.save(info);
+    public void addClientDetails(ClientModel clientModel) {
+        add(clientModel);
     }
 
     @Override
-    public void updateClientDetails(ClientModel model) {
-        ClientEntity clientEntity = clientRepository.getOneByClientId(model.getClientId());
-        clientEntity = clientConverter.copyTargetToSource(model, clientEntity);
-        clientRepository.save(clientEntity);
+    public void updateClientDetails(ClientModel clientModel) {
+        ClientEntity clientEntity = repository.getOneByClientId(clientModel.getClientId());
+        converter.copyTargetToSource(clientModel, clientEntity);
+        repository.save(clientEntity);
     }
 
     @Override
     public void updateClientSecret(String clientId, String secret) {
-        ClientModel model = new ClientModel();
-        model.setClientId(clientId);
-        model.setClientSecret(passwordEncoder.encode(secret));
-        updateClientDetails(model);
+        ClientEntity clientEntity = repository.getOneByClientId(clientId);
+        clientEntity.setClientSecret(passwordEncoder.encode(secret));
+        repository.save(clientEntity);
     }
 
     @Override
     public void removeClientDetails(String clientId) {
-        clientRepository.deleteAllByClientId(clientId);
+        repository.deleteAllByClientId(clientId);
     }
 
     @Override
     public List<ClientModel> listClientDetails() {
-        List<ClientEntity> infos = clientRepository.findAll();
-        return clientConverter.sourceToTargetList(infos);
+        return getAll();
     }
 
     @Override
     public void saveDefaultClient() {
-        ClientEntity client = clientConverter.targetToSource(defaultClientModel);
-        String clientId = defaultClientModel.getClientId();
-        log.info("clientId: " + clientId);
-        clientRepository.deleteAllByClientId(clientId);
-        clientRepository.flush();
-        client.setRoles(roleService.loadRoles(client.getRoles()));
-        log.info("client: " + client.toString());
-        clientRepository.saveAndFlush(client);
+        ClientEntity clientEntity = converter.targetToSource(defaultClientModel);
+        repository.deleteAllByClientId(clientEntity.getClientId());
+        repository.flush();
+        repository.saveAndFlush(clientEntity);
     }
 }

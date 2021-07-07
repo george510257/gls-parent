@@ -15,9 +15,9 @@ public class ${entityName}Converter implements BaseConverter<${entityName}Entity
 <#if columns??>
 <#--循环生成变量-->
     <#list columns as col>
-        <#if col["nameUpper"]+"Model" == col["type"]>
-        @Resource
-        private ${col["nameUpper"]}Converter ${col["name"]}Converter;
+        <#if col["type"]?contains("Model")>
+    @Resource
+    private ${col["typeEntityName"]}Converter ${col["typeEntityNameLower"]}Converter;
         </#if>
     </#list>
 </#if>
@@ -27,8 +27,12 @@ public class ${entityName}Converter implements BaseConverter<${entityName}Entity
 <#if columns??>
 <#--循环生成变量-->
     <#list columns as col>
-        <#if col["nameUpper"]+"Model" == col["type"]>
-        ${entityNameLower}Model.set${col["nameUpper"]}(${col["name"]}Converter.sourceToTarget(${entityNameLower}Entity.get${col["nameUpper"]}()));
+        <#if col["type"]?contains("Model") >
+            <#if col["type"]?starts_with("List") >
+        ${entityNameLower}Model.set${col["nameUpper"]}(${col["typeEntityNameLower"]}Converter.sourceToTargetList(${entityNameLower}Entity.get${col["nameUpper"]}()));
+            <#else>
+        ${entityNameLower}Model.set${col["nameUpper"]}(${col["typeEntityNameLower"]}Converter.sourceToTarget(${entityNameLower}Entity.get${col["nameUpper"]}()));
+            </#if>
         <#else>
         ${entityNameLower}Model.set${col["nameUpper"]}(${entityNameLower}Entity.get${col["nameUpper"]}());
         </#if>
@@ -43,8 +47,12 @@ public class ${entityName}Converter implements BaseConverter<${entityName}Entity
 <#if columns??>
 <#--循环生成变量-->
     <#list columns as col>
-        <#if col["nameUpper"]+"Model" == col["type"]>
-        ${entityNameLower}Entity.set${col["nameUpper"]}(${col["name"]}Converter.targetToSource(${entityNameLower}Model.get${col["nameUpper"]}()));
+        <#if col["type"]?contains("Model") >
+            <#if col["type"]?starts_with("List") >
+        ${entityNameLower}Entity.set${col["nameUpper"]}(${col["typeEntityNameLower"]}Converter.targetToSourceList(${entityNameLower}Model.get${col["nameUpper"]}()));
+            <#else>
+        ${entityNameLower}Entity.set${col["nameUpper"]}(${col["typeEntityNameLower"]}Converter.targetToSource(${entityNameLower}Model.get${col["nameUpper"]}()));
+            </#if>
         <#else>
         ${entityNameLower}Entity.set${col["nameUpper"]}(${entityNameLower}Model.get${col["nameUpper"]}());
         </#if>

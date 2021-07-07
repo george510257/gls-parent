@@ -1,18 +1,11 @@
 package com.gls.common.user.web.service;
 
-import com.gls.common.user.web.entity.RoleEntity;
-
-import java.util.List;
+import com.gls.common.user.api.model.RoleModel;
+import com.gls.common.user.api.model.query.QueryRoleModel;
+import com.gls.starter.data.jpa.base.BaseService;
 
 /**
  * @author george
  */
-public interface RoleService {
-    /**
-     * 加载角色信息
-     *
-     * @param roles
-     * @return
-     */
-    List<RoleEntity> loadRoles(List<RoleEntity> roles);
+public interface RoleService extends BaseService<RoleModel, QueryRoleModel> {
 }

@@ -8,9 +8,9 @@ import lombok.experimental.Accessors;
 /**
  * @author george
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 public class RoleModel extends BaseModel {
     private String role;
 }

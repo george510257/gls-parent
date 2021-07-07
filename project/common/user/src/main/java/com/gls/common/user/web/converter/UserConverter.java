@@ -17,14 +17,14 @@ public class UserConverter implements BaseConverter<UserEntity, UserModel> {
 
     @Override
     public UserModel copySourceToTarget(UserEntity userEntity, UserModel userModel) {
-        userModel.setId(userEntity.getId());
-        userModel.setPassword(userEntity.getPassword());
         userModel.setUsername(userEntity.getUsername());
+        userModel.setPassword(userEntity.getPassword());
         userModel.setRoles(roleConverter.sourceToTargetList(userEntity.getRoles()));
         userModel.setAccountNonExpired(userEntity.getAccountNonExpired());
         userModel.setAccountNonLocked(userEntity.getAccountNonLocked());
         userModel.setCredentialsNonExpired(userEntity.getCredentialsNonExpired());
         userModel.setEnabled(userEntity.getEnabled());
+        userModel.setId(userEntity.getId());
         return userModel;
     }
 
