@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class ${entityName}Model extends BaseModel {
-    <#if columns??>
-    <#--循环生成变量-->
-        <#list columns as col>
+<#if columns??>
+<#--循环生成变量-->
+    <#list columns as col>
     private ${col["type"]} ${col["name"]};
-        </#list>
-    </#if>
+    </#list>
+</#if>
 }

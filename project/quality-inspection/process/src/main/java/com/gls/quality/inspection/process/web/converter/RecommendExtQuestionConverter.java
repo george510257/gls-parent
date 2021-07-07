@@ -11,14 +11,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecommendExtQuestionConverter implements BaseConverter<RecommendExtQuestionEntity, RecommendExtQuestionModel> {
     @Override
-    public RecommendExtQuestionModel copySourceToTarget(RecommendExtQuestionEntity entity, RecommendExtQuestionModel model) {
-        // todo
-        return model;
+    public RecommendExtQuestionModel copySourceToTarget(RecommendExtQuestionEntity recommendExtQuestionEntity, RecommendExtQuestionModel recommendExtQuestionModel) {
+        recommendExtQuestionModel.setIndustryCategory(recommendExtQuestionEntity.getIndustryCategory());
+        recommendExtQuestionModel.setIndustryCategoryIds(recommendExtQuestionEntity.getIndustryCategoryIds());
+        recommendExtQuestionModel.setSemanticLabelId(recommendExtQuestionEntity.getSemanticLabelId());
+        recommendExtQuestionModel.setPhrasing(recommendExtQuestionEntity.getPhrasing());
+        recommendExtQuestionModel.setWordSet(recommendExtQuestionEntity.getWordSet());
+        recommendExtQuestionModel.setId(recommendExtQuestionEntity.getId());
+        return recommendExtQuestionModel;
     }
 
     @Override
-    public RecommendExtQuestionEntity copyTargetToSource(RecommendExtQuestionModel model, RecommendExtQuestionEntity entity) {
-        // todo
-        return entity;
+    public RecommendExtQuestionEntity copyTargetToSource(RecommendExtQuestionModel recommendExtQuestionModel, RecommendExtQuestionEntity recommendExtQuestionEntity) {
+        recommendExtQuestionEntity.setIndustryCategory(recommendExtQuestionModel.getIndustryCategory());
+        recommendExtQuestionEntity.setIndustryCategoryIds(recommendExtQuestionModel.getIndustryCategoryIds());
+        recommendExtQuestionEntity.setSemanticLabelId(recommendExtQuestionModel.getSemanticLabelId());
+        recommendExtQuestionEntity.setPhrasing(recommendExtQuestionModel.getPhrasing());
+        recommendExtQuestionEntity.setWordSet(recommendExtQuestionModel.getWordSet());
+        recommendExtQuestionEntity.setId(recommendExtQuestionModel.getId());
+        return recommendExtQuestionEntity;
     }
 }

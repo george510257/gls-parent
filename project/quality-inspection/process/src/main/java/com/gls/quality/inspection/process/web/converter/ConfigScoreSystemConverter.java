@@ -11,14 +11,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigScoreSystemConverter implements BaseConverter<ConfigScoreSystemEntity, ConfigScoreSystemModel> {
     @Override
-    public ConfigScoreSystemModel copySourceToTarget(ConfigScoreSystemEntity entity, ConfigScoreSystemModel model) {
-        // todo
-        return model;
+    public ConfigScoreSystemModel copySourceToTarget(ConfigScoreSystemEntity configScoreSystemEntity, ConfigScoreSystemModel configScoreSystemModel) {
+        configScoreSystemModel.setScoreStrategy(configScoreSystemEntity.getScoreStrategy());
+        configScoreSystemModel.setScoreAttribute(configScoreSystemEntity.getScoreAttribute());
+        configScoreSystemModel.setDefaultScore(configScoreSystemEntity.getDefaultScore());
+        configScoreSystemModel.setScoreBaseline(configScoreSystemEntity.getScoreBaseline());
+        configScoreSystemModel.setId(configScoreSystemEntity.getId());
+        return configScoreSystemModel;
     }
 
     @Override
-    public ConfigScoreSystemEntity copyTargetToSource(ConfigScoreSystemModel model, ConfigScoreSystemEntity entity) {
-        // todo
-        return entity;
+    public ConfigScoreSystemEntity copyTargetToSource(ConfigScoreSystemModel configScoreSystemModel, ConfigScoreSystemEntity configScoreSystemEntity) {
+        configScoreSystemEntity.setScoreStrategy(configScoreSystemModel.getScoreStrategy());
+        configScoreSystemEntity.setScoreAttribute(configScoreSystemModel.getScoreAttribute());
+        configScoreSystemEntity.setDefaultScore(configScoreSystemModel.getDefaultScore());
+        configScoreSystemEntity.setScoreBaseline(configScoreSystemModel.getScoreBaseline());
+        configScoreSystemEntity.setId(configScoreSystemModel.getId());
+        return configScoreSystemEntity;
     }
 }

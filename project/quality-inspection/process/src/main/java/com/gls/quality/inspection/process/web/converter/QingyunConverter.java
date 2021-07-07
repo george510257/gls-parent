@@ -11,14 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class QingyunConverter implements BaseConverter<QingyunEntity, QingyunModel> {
     @Override
-    public QingyunModel copySourceToTarget(QingyunEntity entity, QingyunModel model) {
-        // todo
-        return model;
+    public QingyunModel copySourceToTarget(QingyunEntity qingyunEntity, QingyunModel qingyunModel) {
+        qingyunModel.setDir(qingyunEntity.getDir());
+        qingyunModel.setFileUrl(qingyunEntity.getFileUrl());
+        qingyunModel.setCheckNo(qingyunEntity.getCheckNo());
+        qingyunModel.setId(qingyunEntity.getId());
+        return qingyunModel;
     }
 
     @Override
-    public QingyunEntity copyTargetToSource(QingyunModel model, QingyunEntity entity) {
-        // todo
-        return entity;
+    public QingyunEntity copyTargetToSource(QingyunModel qingyunModel, QingyunEntity qingyunEntity) {
+        qingyunEntity.setDir(qingyunModel.getDir());
+        qingyunEntity.setFileUrl(qingyunModel.getFileUrl());
+        qingyunEntity.setCheckNo(qingyunModel.getCheckNo());
+        qingyunEntity.setId(qingyunModel.getId());
+        return qingyunEntity;
     }
 }

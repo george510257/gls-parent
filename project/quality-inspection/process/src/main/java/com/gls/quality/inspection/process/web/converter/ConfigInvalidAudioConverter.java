@@ -11,14 +11,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigInvalidAudioConverter implements BaseConverter<ConfigInvalidAudioEntity, ConfigInvalidAudioModel> {
     @Override
-    public ConfigInvalidAudioModel copySourceToTarget(ConfigInvalidAudioEntity entity, ConfigInvalidAudioModel model) {
-        // todo
-        return model;
+    public ConfigInvalidAudioModel copySourceToTarget(ConfigInvalidAudioEntity configInvalidAudioEntity, ConfigInvalidAudioModel configInvalidAudioModel) {
+        configInvalidAudioModel.setDefineDurationRadio(configInvalidAudioEntity.getDefineDurationRadio());
+        configInvalidAudioModel.setDefineDurationSecond(configInvalidAudioEntity.getDefineDurationSecond());
+        configInvalidAudioModel.setDefineResultRadio(configInvalidAudioEntity.getDefineResultRadio());
+        configInvalidAudioModel.setDefineRoundRadio(configInvalidAudioEntity.getDefineRoundRadio());
+        configInvalidAudioModel.setDefineRoundCount(configInvalidAudioEntity.getDefineRoundCount());
+        configInvalidAudioModel.setId(configInvalidAudioEntity.getId());
+        return configInvalidAudioModel;
     }
 
     @Override
-    public ConfigInvalidAudioEntity copyTargetToSource(ConfigInvalidAudioModel model, ConfigInvalidAudioEntity entity) {
-        // todo
-        return entity;
+    public ConfigInvalidAudioEntity copyTargetToSource(ConfigInvalidAudioModel configInvalidAudioModel, ConfigInvalidAudioEntity configInvalidAudioEntity) {
+        configInvalidAudioEntity.setDefineDurationRadio(configInvalidAudioModel.getDefineDurationRadio());
+        configInvalidAudioEntity.setDefineDurationSecond(configInvalidAudioModel.getDefineDurationSecond());
+        configInvalidAudioEntity.setDefineResultRadio(configInvalidAudioModel.getDefineResultRadio());
+        configInvalidAudioEntity.setDefineRoundRadio(configInvalidAudioModel.getDefineRoundRadio());
+        configInvalidAudioEntity.setDefineRoundCount(configInvalidAudioModel.getDefineRoundCount());
+        configInvalidAudioEntity.setId(configInvalidAudioModel.getId());
+        return configInvalidAudioEntity;
     }
 }

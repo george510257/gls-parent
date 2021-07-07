@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class BaseCategoryConverter implements BaseConverter<BaseCategoryEntity, BaseCategoryModel> {
     @Override
-    public BaseCategoryModel copySourceToTarget(BaseCategoryEntity entity, BaseCategoryModel model) {
-        // todo
-        return model;
+    public BaseCategoryModel copySourceToTarget(BaseCategoryEntity baseCategoryEntity, BaseCategoryModel baseCategoryModel) {
+        baseCategoryModel.setId(baseCategoryEntity.getId());
+        return baseCategoryModel;
     }
 
     @Override
-    public BaseCategoryEntity copyTargetToSource(BaseCategoryModel model, BaseCategoryEntity entity) {
-        // todo
-        return entity;
+    public BaseCategoryEntity copyTargetToSource(BaseCategoryModel baseCategoryModel, BaseCategoryEntity baseCategoryEntity) {
+        baseCategoryEntity.setId(baseCategoryModel.getId());
+        return baseCategoryEntity;
     }
 }

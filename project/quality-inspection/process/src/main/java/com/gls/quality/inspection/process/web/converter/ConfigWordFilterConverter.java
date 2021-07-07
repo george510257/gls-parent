@@ -11,14 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigWordFilterConverter implements BaseConverter<ConfigWordFilterEntity, ConfigWordFilterModel> {
     @Override
-    public ConfigWordFilterModel copySourceToTarget(ConfigWordFilterEntity entity, ConfigWordFilterModel model) {
-        // todo
-        return model;
+    public ConfigWordFilterModel copySourceToTarget(ConfigWordFilterEntity configWordFilterEntity, ConfigWordFilterModel configWordFilterModel) {
+        configWordFilterModel.setServiceWordFilter(configWordFilterEntity.getServiceWordFilter());
+        configWordFilterModel.setCustomerWordFilter(configWordFilterEntity.getCustomerWordFilter());
+        configWordFilterModel.setId(configWordFilterEntity.getId());
+        return configWordFilterModel;
     }
 
     @Override
-    public ConfigWordFilterEntity copyTargetToSource(ConfigWordFilterModel model, ConfigWordFilterEntity entity) {
-        // todo
-        return entity;
+    public ConfigWordFilterEntity copyTargetToSource(ConfigWordFilterModel configWordFilterModel, ConfigWordFilterEntity configWordFilterEntity) {
+        configWordFilterEntity.setServiceWordFilter(configWordFilterModel.getServiceWordFilter());
+        configWordFilterEntity.setCustomerWordFilter(configWordFilterModel.getCustomerWordFilter());
+        configWordFilterEntity.setId(configWordFilterModel.getId());
+        return configWordFilterEntity;
     }
 }

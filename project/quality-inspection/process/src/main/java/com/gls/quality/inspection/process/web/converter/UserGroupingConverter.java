@@ -11,14 +11,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserGroupingConverter implements BaseConverter<UserGroupingEntity, UserGroupingModel> {
     @Override
-    public UserGroupingModel copySourceToTarget(UserGroupingEntity entity, UserGroupingModel model) {
-        // todo
-        return model;
+    public UserGroupingModel copySourceToTarget(UserGroupingEntity userGroupingEntity, UserGroupingModel userGroupingModel) {
+        userGroupingModel.setParentId(userGroupingEntity.getParentId());
+        userGroupingModel.setDisplay(userGroupingEntity.getDisplay());
+        userGroupingModel.setLevel(userGroupingEntity.getLevel());
+        userGroupingModel.setIsShow(userGroupingEntity.getIsShow());
+        userGroupingModel.setId(userGroupingEntity.getId());
+        return userGroupingModel;
     }
 
     @Override
-    public UserGroupingEntity copyTargetToSource(UserGroupingModel model, UserGroupingEntity entity) {
-        // todo
-        return entity;
+    public UserGroupingEntity copyTargetToSource(UserGroupingModel userGroupingModel, UserGroupingEntity userGroupingEntity) {
+        userGroupingEntity.setParentId(userGroupingModel.getParentId());
+        userGroupingEntity.setDisplay(userGroupingModel.getDisplay());
+        userGroupingEntity.setLevel(userGroupingModel.getLevel());
+        userGroupingEntity.setIsShow(userGroupingModel.getIsShow());
+        userGroupingEntity.setId(userGroupingModel.getId());
+        return userGroupingEntity;
     }
 }

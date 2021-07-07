@@ -36,7 +36,15 @@ public class GenerateHelper {
         }
     }
 
-    public void generate(Map<String, Object> root, String templateName, String saveUrl, String entityName) throws Exception {
+    private String toUpperCaseFirstOne(String s) {
+        if (Character.isUpperCase(s.charAt(0))) {
+            return s;
+        } else {
+            return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+        }
+    }
+
+    private void generate(Map<String, Object> root, String templateName, String saveUrl, String entityName) throws Exception {
         //获取模板
         Template template = freeMarkerConfiguration.getTemplate(templateName);
         //输出文件
@@ -57,7 +65,7 @@ public class GenerateHelper {
             Map<String, Object> root = new HashMap<>();
             root.put("basePackageUrl", basePackage);
             root.put("entityName", entityName);
-            root.put("entityNameParam", toLowerCaseFirstOne(entityName));
+            root.put("entityNameLower", toLowerCaseFirstOne(entityName));
             root.put("columns", getEntityColumns(path + "\\entity\\" + entityFileName));
             //Converter
             generate(root, "Converter.ftl", path + "\\converter", entityName + "Converter.java");
@@ -88,6 +96,7 @@ public class GenerateHelper {
                 String type = variableDeclarator.getTypeAsString();
                 log.info("variableDeclarator: {} {}", name, type);
                 column.put("name", name);
+                column.put("nameUpper", toUpperCaseFirstOne(name));
                 column.put("type", type.replaceAll("Entity", "Model"));
                 columns.add(column);
             });

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/${entityNameParam}")
+@RequestMapping("/${entityNameLower}")
 public class ${entityName}Controller extends BaseController<${entityName}Service, ${entityName}Model, Query${entityName}Model> {
     public ${entityName}Controller(${entityName}Service service, ${entityName}Validator validator) {
         super(service, validator);

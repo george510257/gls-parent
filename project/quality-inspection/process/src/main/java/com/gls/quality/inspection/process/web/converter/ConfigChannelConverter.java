@@ -11,14 +11,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConfigChannelConverter implements BaseConverter<ConfigChannelEntity, ConfigChannelModel> {
     @Override
-    public ConfigChannelModel copySourceToTarget(ConfigChannelEntity entity, ConfigChannelModel model) {
-        // todo
-        return model;
+    public ConfigChannelModel copySourceToTarget(ConfigChannelEntity configChannelEntity, ConfigChannelModel configChannelModel) {
+        configChannelModel.setDoubleChannelRadio(configChannelEntity.getDoubleChannelRadio());
+        configChannelModel.setDoubleChannelDefault(configChannelEntity.getDoubleChannelDefault());
+        configChannelModel.setSingleChannelRadio(configChannelEntity.getSingleChannelRadio());
+        configChannelModel.setSingleChannelText(configChannelEntity.getSingleChannelText());
+        configChannelModel.setId(configChannelEntity.getId());
+        return configChannelModel;
     }
 
     @Override
-    public ConfigChannelEntity copyTargetToSource(ConfigChannelModel model, ConfigChannelEntity entity) {
-        // todo
-        return entity;
+    public ConfigChannelEntity copyTargetToSource(ConfigChannelModel configChannelModel, ConfigChannelEntity configChannelEntity) {
+        configChannelEntity.setDoubleChannelRadio(configChannelModel.getDoubleChannelRadio());
+        configChannelEntity.setDoubleChannelDefault(configChannelModel.getDoubleChannelDefault());
+        configChannelEntity.setSingleChannelRadio(configChannelModel.getSingleChannelRadio());
+        configChannelEntity.setSingleChannelText(configChannelModel.getSingleChannelText());
+        configChannelEntity.setId(configChannelModel.getId());
+        return configChannelEntity;
     }
 }
