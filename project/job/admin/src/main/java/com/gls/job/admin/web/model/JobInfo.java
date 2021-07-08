@@ -1,11 +1,7 @@
 package com.gls.job.admin.web.model;
 
 import com.gls.framework.api.model.BaseModel;
-import com.gls.job.admin.constants.ExecutorRouteStrategy;
-import com.gls.job.admin.constants.MisfireStrategy;
-import com.gls.job.admin.constants.ScheduleType;
-import com.gls.job.core.constants.ExecutorBlockStrategy;
-import com.gls.job.core.constants.GlueType;
+import com.gls.job.core.constants.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

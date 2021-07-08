@@ -1,12 +1,12 @@
 package com.gls.job.admin.web.service.impl;
 
-import com.gls.job.admin.constants.TriggerType;
 import com.gls.job.admin.web.service.AsyncService;
 import com.gls.job.admin.web.service.JobCompleteService;
 import com.gls.job.admin.web.service.JobRegistryService;
 import com.gls.job.admin.web.service.JobTriggerService;
 import com.gls.job.core.api.model.CallbackModel;
 import com.gls.job.core.api.model.RegistryModel;
+import com.gls.job.core.constants.TriggerType;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

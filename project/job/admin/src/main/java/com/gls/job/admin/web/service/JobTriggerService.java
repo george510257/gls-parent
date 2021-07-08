@@ -1,6 +1,6 @@
 package com.gls.job.admin.web.service;
 
-import com.gls.job.admin.constants.TriggerType;
+import com.gls.job.core.constants.TriggerType;
 
 import java.util.List;
 

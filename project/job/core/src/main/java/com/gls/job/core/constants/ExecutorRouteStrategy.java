@@ -1,4 +1,4 @@
-package com.gls.job.admin.constants;
+package com.gls.job.core.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
