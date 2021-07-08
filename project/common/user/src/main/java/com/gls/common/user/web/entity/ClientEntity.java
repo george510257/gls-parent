@@ -16,11 +16,11 @@ import java.util.Map;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("客户端信息表")
 public class ClientEntity extends BaseEntity {
     @Column(unique = true)

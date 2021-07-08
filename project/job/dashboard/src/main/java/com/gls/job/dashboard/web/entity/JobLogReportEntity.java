@@ -13,11 +13,11 @@ import java.util.Date;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("调度日志报表信息表")
 public class JobLogReportEntity extends BaseEntity {
     @Comment("调度-时间")

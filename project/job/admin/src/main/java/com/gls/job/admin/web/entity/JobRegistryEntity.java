@@ -14,11 +14,11 @@ import javax.persistence.ManyToOne;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("注册信息表")
 public class JobRegistryEntity extends BaseEntity {
     @ManyToOne

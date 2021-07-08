@@ -13,11 +13,11 @@ import javax.persistence.Entity;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("角色信息表")
 public class RoleEntity extends BaseEntity {
     @Column(unique = true)

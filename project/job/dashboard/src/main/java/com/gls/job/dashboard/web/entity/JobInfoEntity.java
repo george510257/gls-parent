@@ -16,11 +16,11 @@ import java.util.List;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("任务信息表")
 public class JobInfoEntity extends BaseEntity {
     @Comment("执行器主键ID")

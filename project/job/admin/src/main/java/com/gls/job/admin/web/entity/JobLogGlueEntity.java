@@ -16,11 +16,11 @@ import javax.persistence.ManyToOne;
 /**
  * @author george
  */
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Comment("Glue版本信息表")
 public class JobLogGlueEntity extends BaseEntity {
     @ManyToOne
