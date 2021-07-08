@@ -21,6 +21,10 @@
             <groupId>com.gls.starter.data.jpa</groupId>
             <artifactId>gls-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gls.job.core</groupId>
+            <artifactId>gls-job-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

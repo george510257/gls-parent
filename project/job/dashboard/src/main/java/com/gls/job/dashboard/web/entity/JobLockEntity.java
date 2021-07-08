@@ -1,27 +1,24 @@
 package com.gls.job.dashboard.web.entity;
 
 import com.gls.starter.data.jpa.annotations.Comment;
+import com.gls.starter.data.jpa.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 /**
  * @author george
  */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Entity
 @Data
 @Accessors(chain = true)
-@Entity
-@Table(name = "SIMPLE_TRIGGER")
-@Comment("简单触发器信息表")
-public class SimpleTriggerEntity extends BaseTriggerEntity {
-    @Comment("间隔时间")
-    private Long intervalTime = 0L;
-    @Comment("重复次数")
-    private Integer repeatCount = 0;
+@Comment("日志锁信息表")
+public class JobLockEntity extends BaseEntity {
+    @Comment("锁名称")
+    private String lockName;
 }

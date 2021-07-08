@@ -19,7 +19,7 @@ public class GenerateCodeService {
     @PostConstruct
     public void generateQualityInspection() throws Exception {
         generateHelper.runGenerateCode(
-                "com.gls.quality.inspection.process.web",
-                "E:\\code\\OpenSource\\Github\\gls-parent\\project\\quality-inspection\\process\\src\\main\\java\\com\\gls\\quality\\inspection\\process\\web");
+                "com.gls.job.dashboard.web",
+                "E:\\code\\OpenSource\\Github\\gls-parent\\project\\job\\dashboard\\src\\main\\java\\com\\gls\\job\\dashboard\\web");
     }
 }
