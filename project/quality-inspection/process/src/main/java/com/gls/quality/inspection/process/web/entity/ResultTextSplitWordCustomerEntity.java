@@ -25,7 +25,7 @@ public class ResultTextSplitWordCustomerEntity extends BaseEntity {
     private Integer number;
     @Column
     @Comment("通话id")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column
     @Comment("词语名称")
     private String word;

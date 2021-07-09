@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
 
 /**
  * @author george
@@ -23,10 +22,7 @@ import java.util.Date;
 public class SpecialLabelEntity extends BaseEntity {
     @Column
     @Comment("模型id")
-    private Integer modelId;
-    @Column(length = 20)
-    @Comment("标签名称")
-    private String name;
+    private Long modelId;
     @Column
     @Comment("标签类型 3:整通标签 4:复合标签")
     private Integer type;
@@ -42,13 +38,4 @@ public class SpecialLabelEntity extends BaseEntity {
     @Column(length = 512)
     @Comment("重点信息")
     private String digest;
-    @Column
-    @Comment("")
-    private Date createTime;
-    @Column
-    @Comment("")
-    private Date updateTime;
-    @Column
-    @Comment("")
-    private Date deleteTime;
 }

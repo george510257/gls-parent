@@ -34,7 +34,7 @@ public class BusinessLineEntity extends BaseEntity {
     private String payType;
     @Column
     @Comment("模型id")
-    private Integer modelId;
+    private Long modelId;
     @Column
     @Comment("拉取数量上限")
     private Integer count;

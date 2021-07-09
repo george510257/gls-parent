@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class ExtractCheckResultEntity extends BaseEntity {
     @Column
     @Comment("语音通话表ID")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column(length = 100)
     @Comment("违规项")
     private String violationsItem;
@@ -37,7 +37,7 @@ public class ExtractCheckResultEntity extends BaseEntity {
     private String paragraph;
     @Column
     @Comment("评分项ID")
-    private Integer scoreItemId;
+    private Long scoreItemId;
     @Column
     @Comment("评分项类型 1:评分项，2:组合评分项")
     private Integer scoreItemType;
@@ -62,9 +62,6 @@ public class ExtractCheckResultEntity extends BaseEntity {
     @Column
     @Comment("是否是漏检项 1是，0否，2整通漏检项")
     private Integer isMissed;
-    @Column
-    @Comment("逻辑删除")
-    private Integer isDeleted;
     @Column
     @Comment("是否误检 1 是，0 否")
     private Integer isError;

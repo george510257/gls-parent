@@ -37,7 +37,7 @@ public class UserEntity extends BaseEntity {
     private Integer userRole;
     @Column
     @Comment("分组id")
-    private Integer userGroupingId;
+    private Long userGroupingId;
     @Column(length = 50)
     @Comment("分组id及其所有父级id 用于前端组件使用")
     private String userGroupingIds;

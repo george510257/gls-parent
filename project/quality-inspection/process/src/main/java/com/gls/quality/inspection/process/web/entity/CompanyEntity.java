@@ -30,9 +30,6 @@ public class CompanyEntity extends BaseEntity {
     @Column(length = 45)
     @Comment("公司英文名称")
     private String nameEn;
-    @Column(unique = true, length = 45)
-    @Comment("公司名称")
-    private String name;
     @Column(length = 32)
     @Comment("审批人")
     private String approver;

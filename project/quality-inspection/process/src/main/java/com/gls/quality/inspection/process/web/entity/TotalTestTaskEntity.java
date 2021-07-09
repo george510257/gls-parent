@@ -22,10 +22,10 @@ import javax.persistence.Entity;
 public class TotalTestTaskEntity extends BaseEntity {
     @Column
     @Comment("用户id")
-    private Integer userId;
+    private Long userId;
     @Column
     @Comment("模型id")
-    private Integer modelId;
+    private Long modelId;
     @Column
     @Comment("任务名称")
     private String testName;
@@ -38,7 +38,4 @@ public class TotalTestTaskEntity extends BaseEntity {
     @Column
     @Comment("整通通过率")
     private Double passRate;
-    @Column
-    @Comment("逻辑删除 0：未删除，1：已删除")
-    private Integer isDeleted;
 }

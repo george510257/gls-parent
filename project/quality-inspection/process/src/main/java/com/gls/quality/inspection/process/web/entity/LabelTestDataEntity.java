@@ -22,10 +22,7 @@ import javax.persistence.Entity;
 public class LabelTestDataEntity extends BaseEntity {
     @Column
     @Comment("模型id")
-    private Integer modelId;
-    @Column(length = 20)
-    @Comment("测试名称")
-    private String name;
+    private Long modelId;
     @Column
     @Comment("状态")
     private Integer status;

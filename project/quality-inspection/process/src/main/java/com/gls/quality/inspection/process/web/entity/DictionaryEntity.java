@@ -22,13 +22,10 @@ import javax.persistence.Entity;
 public class DictionaryEntity extends BaseEntity {
     @Column
     @Comment("模型id 0:通用 ")
-    private Integer modelId;
+    private Long modelId;
     @Column
     @Comment("词集类型，1=>同义词 2=>同类词 3=>敏感词")
     private Integer type;
-    @Column(length = 20)
-    @Comment("词集名称")
-    private String name;
     @Column(length = 65535)
     @Comment("词集内容，词之间用`,`分割，如`宝马,奔驰,奥迪`")
     private String dictContent;

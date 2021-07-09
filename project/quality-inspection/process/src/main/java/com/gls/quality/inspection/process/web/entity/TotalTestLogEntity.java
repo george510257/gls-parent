@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class TotalTestLogEntity extends BaseEntity {
     @Column
     @Comment("整通测试任务id")
-    private Integer totalTestTaskId;
+    private Long totalTestTaskId;
     @Column(length = 65535)
     @Comment("测试内容")
     private String testContent;

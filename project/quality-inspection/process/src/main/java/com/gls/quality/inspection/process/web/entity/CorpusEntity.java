@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class CorpusEntity extends BaseEntity {
     @Column
     @Comment("模型id")
-    private Integer modelId;
+    private Long modelId;
     @Column(length = 65535)
     @Comment("语料内容")
     private String content;
@@ -43,10 +43,10 @@ public class CorpusEntity extends BaseEntity {
     private Integer audioLen;
     @Column
     @Comment("整通标签id")
-    private Integer totalLabelId;
+    private Long totalLabelId;
     @Column
     @Comment("复合标签id")
-    private Integer complexLabelId;
+    private Long complexLabelId;
     @Column(length = 3000)
     @Comment("语义标签 时间戳-语义标签id,...(1596101712-12,...)")
     private String semanticLabelList;

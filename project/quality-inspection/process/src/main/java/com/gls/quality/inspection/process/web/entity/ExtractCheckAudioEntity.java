@@ -26,7 +26,7 @@ public class ExtractCheckAudioEntity extends BaseEntity {
     private String customerServiceId;
     @Column
     @Comment("质检ID")
-    private Integer extractCheckId;
+    private Long extractCheckId;
     @Column(length = 64)
     @Comment("对话ID")
     private String dialogueId;
@@ -86,11 +86,11 @@ public class ExtractCheckAudioEntity extends BaseEntity {
     private Integer isInvalid;
     @Column
     @Comment("实际操作复检的质检员id，已复检状态有值，可能为管理员")
-    private Integer recheckUserId;
+    private Long recheckUserId;
     @Column
     @Comment("申请单号")
     private String applyCode;
     @Column
     @Comment("申诉分配的质检员id")
-    private Integer distributeUserId;
+    private Long distributeUserId;
 }

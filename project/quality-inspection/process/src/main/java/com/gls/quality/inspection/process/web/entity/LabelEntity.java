@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class LabelEntity extends BaseEntity {
     @Column
     @Comment("模型id")
-    private Integer modelId;
+    private Long modelId;
     @Column(length = 200)
     @Comment("语义类别")
     private String semanticCategory;

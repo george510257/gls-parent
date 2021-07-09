@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class UserPhoneAddressEntity extends BaseEntity {
     @Column
     @Comment("语音通话表ID")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column
     @Comment("城市")
     private String address;

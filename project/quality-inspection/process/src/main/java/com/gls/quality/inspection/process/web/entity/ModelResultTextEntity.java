@@ -22,13 +22,13 @@ import javax.persistence.Entity;
 public class ModelResultTextEntity extends BaseEntity {
     @Column
     @Comment("模型推理结果id")
-    private Integer modelResultId;
+    private Long modelResultId;
     @Column
     @Comment("质检会话id")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column
     @Comment("会话文本id")
-    private Integer extractCheckAudioTextId;
+    private Long extractCheckAudioTextId;
     @Column(length = 65535)
     @Comment("违规关键字")
     private String info;

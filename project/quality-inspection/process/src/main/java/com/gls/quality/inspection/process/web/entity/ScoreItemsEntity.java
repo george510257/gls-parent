@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class ScoreItemsEntity extends BaseEntity {
     @Column
     @Comment("模板ID")
-    private Integer scoreTemplateId;
+    private Long scoreTemplateId;
     @Column
     @Comment("类型  1.语义标签 2.语音标签 3.整通标签 4.复合标签")
     private Integer type;

@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class SpotCheckRuleEntity extends BaseEntity {
     @Column
     @Comment("抽检计划id")
-    private Integer spotCheckId;
+    private Long spotCheckId;
     @Column
     @Comment("抽取数量")
     private Integer spotCheckNumber;
@@ -31,7 +31,7 @@ public class SpotCheckRuleEntity extends BaseEntity {
     private Integer ruleType;
     @Column
     @Comment("评分项id")
-    private Integer scoreItemId;
+    private Long scoreItemId;
     @Column
     @Comment("评分项类型 1:评分项，2:组合评分项")
     private Integer scoreItemType;

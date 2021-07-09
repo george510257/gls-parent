@@ -22,16 +22,16 @@ import javax.persistence.Entity;
 public class ScoreTemplateEntity extends BaseEntity {
     @Column
     @Comment("评分模板id 6位自增 000001开始")
-    private Integer templateId;
+    private Long templateId;
     @Column
     @Comment("模版名称")
     private String modelName;
     @Column
     @Comment("模型id ")
-    private Integer modelId;
+    private Long modelId;
     @Column
     @Comment("系统用户id")
-    private Integer userId;
+    private Long userId;
     @Column(length = 50)
     @Comment("评分模板名称")
     private String templateName;

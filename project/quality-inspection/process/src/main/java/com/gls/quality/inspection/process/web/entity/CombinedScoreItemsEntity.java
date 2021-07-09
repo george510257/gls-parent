@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class CombinedScoreItemsEntity extends BaseEntity {
     @Column
     @Comment("评分模版ID")
-    private Integer scoreTemplateId;
+    private Long scoreTemplateId;
     @Column
     @Comment("评分项id，逗号分隔")
     private String scoreItemsIds;

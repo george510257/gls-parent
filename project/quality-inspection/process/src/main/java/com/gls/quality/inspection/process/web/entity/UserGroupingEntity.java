@@ -21,11 +21,8 @@ import javax.persistence.Entity;
 @Comment("用户分组表")
 public class UserGroupingEntity extends BaseEntity {
     @Column
-    @Comment("分组名称")
-    private String name;
-    @Column
     @Comment("父级id")
-    private Integer parentId;
+    private Long parentId;
     @Column
     @Comment("是否显示0不显示，1显示")
     private Integer display;

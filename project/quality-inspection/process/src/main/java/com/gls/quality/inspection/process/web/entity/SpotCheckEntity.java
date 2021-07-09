@@ -26,7 +26,7 @@ public class SpotCheckEntity extends BaseEntity {
     private String spotCheckName;
     @Column
     @Comment("质检计划id")
-    private Integer extractCheckId;
+    private Long extractCheckId;
     @Column
     @Comment("抽检截止时间")
     private Date deadline;

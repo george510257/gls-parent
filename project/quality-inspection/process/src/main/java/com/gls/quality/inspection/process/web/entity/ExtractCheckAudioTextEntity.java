@@ -44,7 +44,7 @@ public class ExtractCheckAudioTextEntity extends BaseEntity {
     private Integer end;
     @Column
     @Comment("语音表主键")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column
     @Comment("excel文本时间")
     private Date excelTime;

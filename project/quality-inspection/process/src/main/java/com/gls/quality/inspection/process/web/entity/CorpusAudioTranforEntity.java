@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class CorpusAudioTranforEntity extends BaseEntity {
     @Column
     @Comment("语料id")
-    private Integer corpusId;
+    private Long corpusId;
     @Column
     @Comment("句子id")
     private Integer lid;

@@ -28,7 +28,7 @@ public class RecommendExtQuestionEntity extends BaseEntity {
     private String industryCategoryIds;
     @Column
     @Comment("语义标签")
-    private Integer semanticLabelId;
+    private Long semanticLabelId;
     @Column(length = 6000)
     @Comment("句式")
     private String phrasing;

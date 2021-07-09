@@ -34,7 +34,7 @@ public class HotwordCustomerEntity extends BaseEntity {
     private Integer number;
     @Column
     @Comment("质检计划ID")
-    private Integer extractCheckId;
+    private Long extractCheckId;
     @Column
     @Comment("质检计划质检时间")
     private Date checkTime;

@@ -21,14 +21,11 @@ import javax.persistence.Entity;
 @Comment("配置-知识体系-行业分类")
 public class IndustryCategoryEntity extends BaseEntity {
     @Column
-    @Comment("行业名称")
-    private String name;
-    @Column
     @Comment("等级1-5")
     private Integer level;
     @Column
     @Comment("父ID")
-    private Integer parentId;
+    private Long parentId;
     @Column
     @Comment("是否显示0不显示，1显示")
     private Integer display;

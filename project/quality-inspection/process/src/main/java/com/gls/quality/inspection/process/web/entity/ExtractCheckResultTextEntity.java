@@ -22,13 +22,13 @@ import javax.persistence.Entity;
 public class ExtractCheckResultTextEntity extends BaseEntity {
     @Column
     @Comment("质检结果id")
-    private Integer extractCheckResultId;
+    private Long extractCheckResultId;
     @Column
     @Comment("质检会话id")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column
     @Comment("会话文本id")
-    private Integer extractCheckAudioTextId;
+    private Long extractCheckAudioTextId;
     @Column
     @Comment("违规关键字")
     private String info;

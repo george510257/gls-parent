@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class ModelResultEntity extends BaseEntity {
     @Column
     @Comment("语音通话表ID")
-    private Integer extractCheckAudioId;
+    private Long extractCheckAudioId;
     @Column(length = 100)
     @Comment("标签项")
     private String label;

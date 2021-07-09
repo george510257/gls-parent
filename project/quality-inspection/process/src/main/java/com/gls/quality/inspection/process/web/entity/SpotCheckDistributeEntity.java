@@ -22,17 +22,14 @@ import javax.persistence.Entity;
 public class SpotCheckDistributeEntity extends BaseEntity {
     @Column
     @Comment("抽检计划id")
-    private Integer spotCheckId;
+    private Long spotCheckId;
     @Column
     @Comment("质检员id")
-    private Integer userId;
+    private Long userId;
     @Column
     @Comment("分配比例")
     private Integer distributeRate;
     @Column
     @Comment("是否分配 0:待分配，1:已分配，2:已暂停")
     private Integer status;
-    @Column
-    @Comment("是否删除 0:未删除，1:已删除")
-    private Integer isDeleted;
 }

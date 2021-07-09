@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 public class IntentionAnalysisEntity extends BaseEntity {
     @Column
     @Comment("模型id")
-    private Integer modelId;
+    private Long modelId;
     @Column(length = 20)
     @Comment("整通意图")
     private String totalIntention;

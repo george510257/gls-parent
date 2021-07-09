@@ -20,12 +20,9 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("模型")
 public class ModelEntity extends BaseEntity {
-    @Column(length = 20)
-    @Comment("模型名称")
-    private String name;
     @Column
     @Comment("行业分类id")
-    private Integer industryCategoryId;
+    private Long industryCategoryId;
     @Column(length = 20)
     @Comment("行业分类")
     private String industryCategory;

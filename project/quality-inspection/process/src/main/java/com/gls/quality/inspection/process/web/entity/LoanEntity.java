@@ -23,7 +23,7 @@ import java.util.Date;
 public class LoanEntity extends BaseEntity {
     @Column
     @Comment("tb_check主键")
-    private Integer checkId;
+    private Long checkId;
     @Column
     @Comment("手机号")
     private String telNumber;

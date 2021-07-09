@@ -32,10 +32,10 @@ public class ExtractCheckEntity extends BaseEntity {
     private Integer differentiateRole;
     @Column
     @Comment("评分模版ID")
-    private Integer scoreTemplateId;
+    private Long scoreTemplateId;
     @Column
     @Comment("行业ID")
-    private Integer industryCategoryId;
+    private Long industryCategoryId;
     @Column
     @Comment("音频总时长单位秒")
     private Integer totalDuration;
@@ -53,7 +53,7 @@ public class ExtractCheckEntity extends BaseEntity {
     private Integer extractCheckSchedule;
     @Column
     @Comment("模型ID")
-    private Integer modelId;
+    private Long modelId;
     @Column(length = 1000)
     @Comment("文件URL（未知）")
     private String fileUrl;

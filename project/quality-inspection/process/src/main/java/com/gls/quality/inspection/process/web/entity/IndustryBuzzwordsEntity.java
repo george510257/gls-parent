@@ -23,7 +23,7 @@ import javax.persistence.Lob;
 public class IndustryBuzzwordsEntity extends BaseEntity {
     @Column
     @Comment("行业类型id")
-    private Integer industryCategoryId;
+    private Long industryCategoryId;
     @Column(length = 50)
     @Comment("行业类型多级id 逗号分隔")
     private String industryCategoryIds;

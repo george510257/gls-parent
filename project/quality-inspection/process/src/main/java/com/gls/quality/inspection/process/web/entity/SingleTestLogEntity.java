@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
 
 /**
  * @author george
@@ -23,7 +22,7 @@ import java.util.Date;
 public class SingleTestLogEntity extends BaseEntity {
     @Column
     @Comment("用户id")
-    private Integer userId;
+    private Long userId;
     @Column(length = 1024)
     @Comment("用户问")
     private String ask;
@@ -33,7 +32,4 @@ public class SingleTestLogEntity extends BaseEntity {
     @Column
     @Comment("对象 1.坐席 2.客户")
     private Integer role;
-    @Column
-    @Comment("")
-    private Date createTime;
 }
