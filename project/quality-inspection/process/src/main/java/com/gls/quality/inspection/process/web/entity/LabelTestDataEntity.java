@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,22 +19,16 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class LabelTestDataEntity extends BaseEntity {
-    @Column
     @Comment("模型id")
     private Long modelId;
-    @Column
     @Comment("状态")
     private Integer status;
-    @Column
     @Comment("整通通过率")
     private Float totalLabelPassingRate;
-    @Column
     @Comment("语音检测通过率")
     private Float voiceCheckPassingRate;
-    @Column
     @Comment("语义标签通过率")
     private Float semanticLabelPassingRate;
-    @Column
     @Comment("符合标签通过率")
     private Float complexLabelPassingRate;
 }

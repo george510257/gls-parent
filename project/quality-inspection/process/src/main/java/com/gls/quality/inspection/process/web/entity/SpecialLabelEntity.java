@@ -20,16 +20,13 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("特殊标签表(整通，复合)")
 public class SpecialLabelEntity extends BaseEntity {
-    @Column
     @Comment("模型id")
     private Long modelId;
-    @Column
     @Comment("标签类型 3:整通标签 4:复合标签")
     private Integer type;
     @Column(length = 1024)
     @Comment("通话id数组 例:[2333,2334,2335]")
     private String callIds;
-    @Column
     @Comment("状态 1:启用 2:禁用")
     private Integer status;
     @Column(length = 1024)

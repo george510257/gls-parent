@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,16 +19,12 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("配置-知识体系-行业分类")
 public class IndustryCategoryEntity extends BaseEntity {
-    @Column
     @Comment("等级1-5")
     private Integer level;
-    @Column
     @Comment("父ID")
     private Long parentId;
-    @Column
     @Comment("是否显示0不显示，1显示")
     private Integer display;
-    @Column
     @Comment("是否使用 0未使用，1已使用")
     private Integer isUsed;
 }

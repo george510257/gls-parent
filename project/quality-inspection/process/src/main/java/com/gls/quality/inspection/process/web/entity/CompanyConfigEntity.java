@@ -26,19 +26,14 @@ public class CompanyConfigEntity extends BaseEntity {
     @Column(length = 1000)
     @Comment("公司封面")
     private String imgCover;
-    @Column
     @Comment("转写并发数")
     private Integer translateConcurrent;
-    @Column
     @Comment("模型数量")
     private Integer modelNum;
-    @Column
     @Comment("管理员数量")
     private Integer adminNum;
-    @Column
     @Comment("客服数量")
     private Integer customerServiceNum;
-    @Column
     @Comment("质检员数量")
     private Integer inspectorNum;
 }

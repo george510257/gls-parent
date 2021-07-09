@@ -20,10 +20,8 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("v2-词库")
 public class DictionaryEntity extends BaseEntity {
-    @Column
     @Comment("模型id 0:通用 ")
     private Long modelId;
-    @Column
     @Comment("词集类型，1=>同义词 2=>同类词 3=>敏感词")
     private Integer type;
     @Column(length = 65535)

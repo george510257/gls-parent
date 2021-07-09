@@ -20,7 +20,6 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class SingleTestLogEntity extends BaseEntity {
-    @Column
     @Comment("用户id")
     private Long userId;
     @Column(length = 1024)
@@ -29,7 +28,6 @@ public class SingleTestLogEntity extends BaseEntity {
     @Column(length = 2048)
     @Comment("机器答")
     private String answer;
-    @Column
     @Comment("对象 1.坐席 2.客户")
     private Integer role;
 }

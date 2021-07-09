@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,13 +19,10 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class ResultTextSplitWordCustomerEntity extends BaseEntity {
-    @Column
     @Comment("出现的次数")
     private Integer number;
-    @Column
     @Comment("通话id")
     private Long extractCheckAudioId;
-    @Column
     @Comment("词语名称")
     private String word;
 }

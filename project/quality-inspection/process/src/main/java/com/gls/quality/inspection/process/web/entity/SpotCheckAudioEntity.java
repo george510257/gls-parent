@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,16 +19,12 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("抽检会话表")
 public class SpotCheckAudioEntity extends BaseEntity {
-    @Column
     @Comment("抽检计划id")
     private Long spotCheckId;
-    @Column
     @Comment("会话id")
     private Long extractCheckAudioId;
-    @Column
     @Comment("质检员id")
     private Long userId;
-    @Column
     @Comment("抽检会话状态 0:待处理，1:已处理，2:已失效 ")
     private Integer status;
 }

@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,22 +19,16 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class TotalTestTaskEntity extends BaseEntity {
-    @Column
     @Comment("用户id")
     private Long userId;
-    @Column
     @Comment("模型id")
     private Long modelId;
-    @Column
     @Comment("任务名称")
     private String testName;
-    @Column
     @Comment("测试类型 1语义标签，2复合标签，3整通标签")
     private Integer testType;
-    @Column
     @Comment("状态 0进行中，1已完成，2失败")
     private Integer status;
-    @Column
     @Comment("整通通过率")
     private Double passRate;
 }

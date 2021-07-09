@@ -20,7 +20,6 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class IntentionAnalysisEntity extends BaseEntity {
-    @Column
     @Comment("模型id")
     private Long modelId;
     @Column(length = 20)
@@ -35,7 +34,6 @@ public class IntentionAnalysisEntity extends BaseEntity {
     @Column(length = 128)
     @Comment("内容详情")
     private String contentDetail;
-    @Column
     @Comment("状态 1:启用 2:关闭")
     private Integer status;
 }

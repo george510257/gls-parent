@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,10 +19,8 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("用户手机地址")
 public class UserPhoneAddressEntity extends BaseEntity {
-    @Column
     @Comment("语音通话表ID")
     private Long extractCheckAudioId;
-    @Column
     @Comment("城市")
     private String address;
 }

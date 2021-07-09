@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
@@ -21,17 +20,13 @@ import javax.persistence.Lob;
 @EqualsAndHashCode(callSuper = true)
 @Comment("系统管理-默认设置-声道设置表")
 public class ConfigChannelEntity extends BaseEntity {
-    @Column
     @Comment("双声道单选框，0禁用，1启用")
     private Integer doubleChannelRadio;
-    @Column
     @Comment("双声道客服默认声道, 0左声道，1右声道")
     private Integer doubleChannelDefault;
-    @Column
     @Comment("单声道单选框，0禁用，1启用")
     private Integer singleChannelRadio;
     @Lob
-    @Column
     @Comment("单声道音频客服身份标志语句")
     private String singleChannelText;
 }

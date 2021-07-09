@@ -20,16 +20,13 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class TotalTestLogEntity extends BaseEntity {
-    @Column
     @Comment("整通测试任务id")
     private Long totalTestTaskId;
     @Column(length = 65535)
     @Comment("测试内容")
     private String testContent;
-    @Column
     @Comment("期望标签")
     private String expectLabel;
-    @Column
     @Comment("期望角色 1，客服  2，顾客")
     private Integer expectRole;
     @Column(length = 50)
@@ -38,16 +35,12 @@ public class TotalTestLogEntity extends BaseEntity {
     @Column(length = 500)
     @Comment("模型预测规则")
     private String recRule;
-    @Column
     @Comment("模型预测角色1，客服 2，顾客")
     private Integer recRole;
-    @Column
     @Comment("模型")
     private String module;
-    @Column
     @Comment("得分")
     private Double score;
-    @Column
     @Comment("是否通过 1.通过 0.不通过")
     private Integer pass;
 }

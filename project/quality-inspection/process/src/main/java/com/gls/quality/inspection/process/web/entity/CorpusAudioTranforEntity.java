@@ -20,25 +20,19 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("模型会话转写结果")
 public class CorpusAudioTranforEntity extends BaseEntity {
-    @Column
     @Comment("语料id")
     private Long corpusId;
-    @Column
     @Comment("句子id")
     private Integer lid;
-    @Column
     @Comment("开始时间")
     private Integer begin;
-    @Column
     @Comment("结束时间")
     private Integer end;
     @Column(length = 5000)
     @Comment("句子")
     private String onebest;
-    @Column
     @Comment("分数")
     private Double sc;
-    @Column
     @Comment("角色 0.坐席 1.客户")
     private Integer spk;
 }

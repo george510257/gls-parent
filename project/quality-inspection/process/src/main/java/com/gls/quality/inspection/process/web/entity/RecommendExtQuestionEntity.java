@@ -20,13 +20,10 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("推荐扩展问")
 public class RecommendExtQuestionEntity extends BaseEntity {
-    @Column
     @Comment("行业分类")
     private String industryCategory;
-    @Column
     @Comment("行业分类id，从父id到子id 1,2,3,4,5")
     private String industryCategoryIds;
-    @Column
     @Comment("语义标签")
     private Long semanticLabelId;
     @Column(length = 6000)

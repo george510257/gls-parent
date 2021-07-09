@@ -20,13 +20,10 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("模型推理结果会话表")
 public class ModelResultTextEntity extends BaseEntity {
-    @Column
     @Comment("模型推理结果id")
     private Long modelResultId;
-    @Column
     @Comment("质检会话id")
     private Long extractCheckAudioId;
-    @Column
     @Comment("会话文本id")
     private Long extractCheckAudioTextId;
     @Column(length = 65535)

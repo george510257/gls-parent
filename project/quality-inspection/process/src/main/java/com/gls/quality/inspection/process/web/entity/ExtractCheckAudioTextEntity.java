@@ -27,25 +27,18 @@ public class ExtractCheckAudioTextEntity extends BaseEntity {
     @Column(length = 65535)
     @Comment("修改后的文本")
     private String contentCorrect;
-    @Column
     @Comment("单句文本的转写准确率")
     private Integer checkRate;
-    @Column
     @Comment("说话人序号")
     private Integer spk;
-    @Column
     @Comment("说话人角色  1客服 2顾客")
     private Integer role;
-    @Column
     @Comment("句子开始（帧）")
     private Integer begin;
-    @Column
     @Comment("句子结束（帧）")
     private Integer end;
-    @Column
     @Comment("语音表主键")
     private Long extractCheckAudioId;
-    @Column
     @Comment("excel文本时间")
     private Date excelTime;
 }

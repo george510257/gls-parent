@@ -21,31 +21,24 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Comment("阳光推送数据")
 public class LoanEntity extends BaseEntity {
-    @Column
     @Comment("tb_check主键")
     private Long checkId;
-    @Column
     @Comment("手机号")
     private String telNumber;
-    @Column
     @Comment("拨打时间")
     private Date checkTime;
     @Column(length = 200)
     @Comment("电核/视频ID")
     private String checkNo;
-    @Column
     @Comment("电核/视频完成时间")
     private Date endTime;
     @Column(length = 16777215)
     @Comment("面签话术")
     private String faceMess;
-    @Column
     @Comment("电核/面签操作人")
     private String operateUser;
-    @Column
     @Comment("电核/面签操作人姓名")
     private String operateName;
-    @Column
     @Comment("所属机构所在分部")
     private String brIdPar;
     @Column(length = 225)
@@ -54,19 +47,15 @@ public class LoanEntity extends BaseEntity {
     @Column(length = 225)
     @Comment("审批组")
     private String groupId;
-    @Column
     @Comment("审批处室")
     private String groupName;
-    @Column
     @Comment("电核/面签审批结果")
     private String dhSpResult;
     @Column(length = 500)
     @Comment("文件url")
     private String fileUrl;
-    @Column
     @Comment("状态，0未被获取，1已获取")
     private Integer status;
-    @Column
     @Comment("产品大类：A:信贷 B:车贷 C:房贷")
     private String belType;
     @Column(length = 50)

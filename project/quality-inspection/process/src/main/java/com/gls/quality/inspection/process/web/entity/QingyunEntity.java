@@ -20,13 +20,11 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class QingyunEntity extends BaseEntity {
-    @Column
     @Comment("目录")
     private String dir;
-    @Column(unique = true, length = 255)
+    @Column(unique = true)
     @Comment("文件")
     private String fileUrl;
-    @Column
     @Comment("callid")
     private String checkNo;
 }

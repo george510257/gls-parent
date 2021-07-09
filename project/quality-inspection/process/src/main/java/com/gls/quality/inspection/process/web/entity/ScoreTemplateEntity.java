@@ -20,31 +20,23 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("评分-评分模板")
 public class ScoreTemplateEntity extends BaseEntity {
-    @Column
     @Comment("评分模板id 6位自增 000001开始")
     private Long templateId;
-    @Column
     @Comment("模版名称")
     private String modelName;
-    @Column
     @Comment("模型id ")
     private Long modelId;
-    @Column
     @Comment("系统用户id")
     private Long userId;
     @Column(length = 50)
     @Comment("评分模板名称")
     private String templateName;
-    @Column
     @Comment("基础分数")
     private Integer baseScore;
-    @Column
     @Comment("评分项数量")
     private Integer scoreItemsNumber;
-    @Column
     @Comment("状态0:未开启 1:开启")
     private Integer status;
-    @Column
     @Comment("质检得分底线 0表示最低为0分，1表示正常无底线")
     private Integer scoreBaseline;
 }

@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -22,20 +21,13 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class HotwordCustomerEntity extends BaseEntity {
-    @Id
-    @Column
-    @Comment("主键")
-    private Long id;
     @Column(length = 30)
     @Comment("词语名称")
     private String word;
-    @Column
     @Comment("出现的次数")
     private Integer number;
-    @Column
     @Comment("质检计划ID")
     private Long extractCheckId;
-    @Column
     @Comment("质检计划质检时间")
     private Date checkTime;
 }

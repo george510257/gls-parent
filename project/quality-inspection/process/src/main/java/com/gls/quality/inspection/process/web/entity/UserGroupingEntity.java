@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -20,16 +19,12 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("用户分组表")
 public class UserGroupingEntity extends BaseEntity {
-    @Column
     @Comment("父级id")
     private Long parentId;
-    @Column
     @Comment("是否显示0不显示，1显示")
     private Integer display;
-    @Column
     @Comment("等级0-10")
     private Integer level;
-    @Column
     @Comment("")
     private Integer show;
 }

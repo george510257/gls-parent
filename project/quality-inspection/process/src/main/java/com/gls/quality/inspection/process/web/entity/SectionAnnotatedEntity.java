@@ -20,7 +20,6 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class SectionAnnotatedEntity extends BaseEntity {
-    @Column
     @Comment("语料id")
     private Long corpusId;
     @Column(length = 512)

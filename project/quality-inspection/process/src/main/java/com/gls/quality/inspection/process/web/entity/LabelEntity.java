@@ -20,7 +20,6 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
 public class LabelEntity extends BaseEntity {
-    @Column
     @Comment("模型id")
     private Long modelId;
     @Column(length = 200)
@@ -29,10 +28,8 @@ public class LabelEntity extends BaseEntity {
     @Column(length = 200)
     @Comment("语义标签")
     private String semanticLabel;
-    @Column
     @Comment("语义角色 1:客服 2:客户")
     private Integer semanticRole;
-    @Column
     @Comment("状态 1:启用 2:禁用")
     private Integer status;
     @Column(length = 16777215)

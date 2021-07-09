@@ -30,9 +30,6 @@ public class OperateLogDetailsEntity extends BaseEntity {
     @Comment("记录的具体内容")
     private String logDetails;
     @Column(length = 32)
-    @Comment("创建人")
-    private String createBy;
-    @Column(length = 32)
     @Comment("账号名")
     private String username;
     @Column(length = 32)

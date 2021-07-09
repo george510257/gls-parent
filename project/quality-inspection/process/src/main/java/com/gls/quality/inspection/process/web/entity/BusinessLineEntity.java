@@ -23,7 +23,6 @@ public class BusinessLineEntity extends BaseEntity {
     @Column(length = 32)
     @Comment("产品大类：A:信贷，B:车贷，C:房贷，AB:信贷车贷")
     private String belType;
-    @Column
     @Comment("质检类型：1电核，2面签")
     private Integer checkType;
     @Column(length = 32)
@@ -32,13 +31,10 @@ public class BusinessLineEntity extends BaseEntity {
     @Column(length = 32)
     @Comment("缴费方式：期缴，趸交（信车房）")
     private String payType;
-    @Column
     @Comment("模型id")
     private Long modelId;
-    @Column
     @Comment("拉取数量上限")
     private Integer count;
-    @Column
     @Comment("备注")
     private String remark;
 }

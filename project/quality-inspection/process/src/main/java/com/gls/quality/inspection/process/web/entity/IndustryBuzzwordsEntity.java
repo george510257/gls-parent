@@ -21,17 +21,14 @@ import javax.persistence.Lob;
 @EqualsAndHashCode(callSuper = true)
 @Comment("配置-行业热词")
 public class IndustryBuzzwordsEntity extends BaseEntity {
-    @Column
     @Comment("行业类型id")
     private Long industryCategoryId;
     @Column(length = 50)
     @Comment("行业类型多级id 逗号分隔")
     private String industryCategoryIds;
     @Lob
-    @Column
     @Comment("热词")
     private String buzzwordsText;
-    @Column
     @Comment("热词数量")
     private Integer buzzwordsNumber;
 }

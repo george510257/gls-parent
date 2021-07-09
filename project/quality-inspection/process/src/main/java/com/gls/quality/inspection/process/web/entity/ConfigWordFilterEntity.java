@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
@@ -22,11 +21,9 @@ import javax.persistence.Lob;
 @Comment("系统管理-默认设置-过滤词汇")
 public class ConfigWordFilterEntity extends BaseEntity {
     @Lob
-    @Column
     @Comment("客服词云图过滤")
     private String serviceWordFilter;
     @Lob
-    @Column
     @Comment("客户词云图过滤")
     private String customerWordFilter;
 }

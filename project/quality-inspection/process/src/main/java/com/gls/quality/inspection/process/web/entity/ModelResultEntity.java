@@ -20,7 +20,6 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("模型推理结果表")
 public class ModelResultEntity extends BaseEntity {
-    @Column
     @Comment("语音通话表ID")
     private Long extractCheckAudioId;
     @Column(length = 100)
@@ -35,7 +34,6 @@ public class ModelResultEntity extends BaseEntity {
     @Column(length = 32)
     @Comment(" 标签来源：token：整通推理，single：单句推理")
     private String sourceType;
-    @Column
     @Comment("类型  1.语义标签 2.语音标签 3.整通标签 4.复合标签")
     private Integer type;
 }
