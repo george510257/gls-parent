@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,17 +18,24 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("")
 public class IntentionAnalysisEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("模型id")
     private Integer modelId;
+    @Column(length = 20)
+    @Comment("整通意图")
     private String totalIntention;
+    @Column(length = 65535)
+    @Comment("通话内容")
     private String content;
+    @Column(length = 20)
+    @Comment("提取标签")
     private String label;
+    @Column(length = 128)
+    @Comment("内容详情")
     private String contentDetail;
+    @Column
+    @Comment("状态 1:启用 2:关闭")
     private Integer status;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Timestamp deleteTime;
-    private Long companyId;
 }

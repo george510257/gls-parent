@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,12 +18,15 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("")
 public class ResultTextSplitWordEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("出现的次数")
     private Integer number;
+    @Column
+    @Comment("通话id")
     private Integer extractCheckAudioId;
+    @Column
+    @Comment("词语名称")
     private String word;
-    private Timestamp createTime;
-    private Long companyId;
 }

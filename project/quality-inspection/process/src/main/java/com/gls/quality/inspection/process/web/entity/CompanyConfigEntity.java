@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
@@ -17,15 +18,27 @@ import javax.persistence.Entity;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("公司(租户)配置表")
 public class CompanyConfigEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column(length = 1000)
+    @Comment("公司logo")
     private String imgLogo;
+    @Column(length = 1000)
+    @Comment("公司封面")
     private String imgCover;
-    private Byte translateConcurrent;
-    private Byte modelNum;
-    private Byte adminNum;
-    private Byte customerServiceNum;
-    private Byte inspectorNum;
+    @Column
+    @Comment("转写并发数")
+    private Integer translateConcurrent;
+    @Column
+    @Comment("模型数量")
+    private Integer modelNum;
+    @Column
+    @Comment("管理员数量")
+    private Integer adminNum;
+    @Column
+    @Comment("客服数量")
+    private Integer customerServiceNum;
+    @Column
+    @Comment("质检员数量")
+    private Integer inspectorNum;
 }

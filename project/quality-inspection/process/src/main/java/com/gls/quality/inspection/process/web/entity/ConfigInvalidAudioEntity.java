@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,15 +18,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("系统管理-默认设置-无效会话定义")
 public class ConfigInvalidAudioEntity extends BaseEntity {
-    private Integer id;
-    private Byte defineDurationRadio;
+    @Column
+    @Comment("根据时长定义单选框，0禁用，1启用")
+    private Integer defineDurationRadio;
+    @Column
+    @Comment("根据时长定义默认秒数")
     private Integer defineDurationSecond;
-    private Byte defineResultRadio;
-    private Byte defineRoundRadio;
+    @Column
+    @Comment("根据无转写结果定义单选框，0禁用，1启用")
+    private Integer defineResultRadio;
+    @Column
+    @Comment("根据对话轮次定义单选框，0禁用，1启用")
+    private Integer defineRoundRadio;
+    @Column
+    @Comment("对话轮次默认次数")
     private Integer defineRoundCount;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
 }

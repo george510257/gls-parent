@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,27 +18,57 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("质检结果表")
 public class ExtractCheckResultEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("语音通话表ID")
     private Integer extractCheckAudioId;
+    @Column(length = 100)
+    @Comment("违规项")
     private String violationsItem;
+    @Column
+    @Comment("扣分")
     private Double violationsScore;
+    @Column(length = 50)
+    @Comment("语义类别")
     private String category;
+    @Column(length = 50)
+    @Comment("语音标签违规项目在语音中的起始位置使用'-'分割，例23-59")
     private String paragraph;
+    @Column
+    @Comment("评分项ID")
     private Integer scoreItemId;
+    @Column
+    @Comment("评分项类型 1:评分项，2:组合评分项")
     private Integer scoreItemType;
-    private Byte scoreAttribute;
-    private Byte inspectionObject;
+    @Column
+    @Comment("评分类型 1表示加分项，0表示减分项，2中性项")
+    private Integer scoreAttribute;
+    @Column
+    @Comment("质检对象 1表示客服，2表示顾客，3整通")
+    private Integer inspectionObject;
+    @Column
+    @Comment("关键字信息")
     private String keyInfo;
-    private Byte type;
-    private Byte recheckStatus;
+    @Column
+    @Comment("类型  1.语义标签 2.语音标签 3.整通标签 4.复合标签")
+    private Integer type;
+    @Column
+    @Comment("复检状态1:通过，2不通过，0待申诉，3申诉中")
+    private Integer recheckStatus;
+    @Column(length = 10000)
+    @Comment("复检申述理由")
     private String representation;
-    private Byte isMissed;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Byte isDeleted;
-    private Byte isError;
-    private Long companyId;
+    @Column
+    @Comment("是否是漏检项 1是，0否，2整通漏检项")
+    private Integer isMissed;
+    @Column
+    @Comment("逻辑删除")
+    private Integer isDeleted;
+    @Column
+    @Comment("是否误检 1 是，0 否")
+    private Integer isError;
+    @Column(length = 16)
+    @Comment("评分策略")
     private String scoreStrategy;
 }

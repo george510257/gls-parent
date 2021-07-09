@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,17 +18,27 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("业务线表")
 public class BusinessLineEntity extends BaseEntity {
-    private Integer id;
+    @Column(length = 32)
+    @Comment("产品大类：A:信贷，B:车贷，C:房贷，AB:信贷车贷")
     private String belType;
+    @Column
+    @Comment("质检类型：1电核，2面签")
     private Integer checkType;
+    @Column(length = 32)
+    @Comment("贷款用途（信车房），生产经营，生活消费")
     private String purpose;
+    @Column(length = 32)
+    @Comment("缴费方式：期缴，趸交（信车房）")
     private String payType;
+    @Column
+    @Comment("模型id")
     private Integer modelId;
+    @Column
+    @Comment("拉取数量上限")
     private Integer count;
+    @Column
+    @Comment("备注")
     private String remark;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
 }

@@ -7,8 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -18,18 +19,36 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("特殊标签表(整通，复合)")
 public class SpecialLabelEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column
+    @Comment("模型id")
     private Integer modelId;
+    @Column(length = 20)
+    @Comment("标签名称")
     private String name;
+    @Column
+    @Comment("标签类型 3:整通标签 4:复合标签")
     private Integer type;
+    @Column(length = 1024)
+    @Comment("通话id数组 例:[2333,2334,2335]")
     private String callIds;
+    @Column
+    @Comment("状态 1:启用 2:禁用")
     private Integer status;
+    @Column(length = 1024)
+    @Comment("子标签数组 例子:['标签1', '标签2']")
     private String childLabel;
+    @Column(length = 512)
+    @Comment("重点信息")
     private String digest;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Timestamp deleteTime;
+    @Column
+    @Comment("")
+    private Date createTime;
+    @Column
+    @Comment("")
+    private Date updateTime;
+    @Column
+    @Comment("")
+    private Date deleteTime;
 }

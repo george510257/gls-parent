@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,16 +18,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("配置-知识体系-行业分类")
 public class IndustryCategoryEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("行业名称")
     private String name;
+    @Column
+    @Comment("等级1-5")
     private Integer level;
+    @Column
+    @Comment("父ID")
     private Integer parentId;
-    private Byte display;
-    private Byte isUsed;
-    private Byte isDeleted;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
+    @Column
+    @Comment("是否显示0不显示，1显示")
+    private Integer display;
+    @Column
+    @Comment("是否使用 0未使用，1已使用")
+    private Integer isUsed;
 }

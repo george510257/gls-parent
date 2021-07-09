@@ -1,11 +1,13 @@
 package com.gls.generate.code.service;
 
 import com.gls.generate.code.helper.GenerateHelper;
+import com.gls.generate.code.helper.JdbcHelper;
+import com.gls.generate.code.model.TableModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author george
@@ -15,11 +17,18 @@ import javax.annotation.Resource;
 public class GenerateCodeService {
     @Resource
     private GenerateHelper generateHelper;
+    @Resource
+    private JdbcHelper jdbcHelper;
 
-    @PostConstruct
-    public void generateQualityInspection() throws Exception {
-        generateHelper.runGenerateCode(
-                "com.gls.job.dashboard.web",
-                "E:\\code\\OpenSource\\Github\\gls-parent\\project\\job\\dashboard\\src\\main\\java\\com\\gls\\job\\dashboard\\web");
+    public void runGenerateCode(String basePackage, String path) throws Exception {
+        List<TableModel> tableModels = generateHelper.getTableModels(basePackage, path);
+        log.info("tableModels:{}", tableModels);
+        generateHelper.generateCode(path, tableModels);
+    }
+
+    public void runGenerateCodeEntity(String basePackage, String path, String schema) throws Exception {
+        List<TableModel> tableModels = jdbcHelper.getTableModels(basePackage, schema);
+        log.info("tableModels:{}", tableModels);
+        generateHelper.generateCodeEntity(path, tableModels);
     }
 }

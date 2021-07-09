@@ -8,7 +8,6 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,11 +17,6 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("公共一级分类")
 public class BaseCategoryEntity extends BaseEntity {
-    private Integer id;
-    private String name;
-    private Byte isDeleted;
-    private Timestamp createTime;
-    private Timestamp updateTime;
 }

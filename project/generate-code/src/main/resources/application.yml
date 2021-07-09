@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: gls-generate-code
+  datasource:
+    url: jdbc:mysql://172.31.124.65:3306/information_schema?serverTimezone=UTC&characterEncoding=utf8&useSSL=true
+    username: root
+    password: 9*zPZ%db
+    driver-class-name: com.mysql.cj.jdbc.Driver

@@ -7,8 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -18,13 +19,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("")
 public class SingleTestLogEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column
+    @Comment("用户id")
     private Integer userId;
+    @Column(length = 1024)
+    @Comment("用户问")
     private String ask;
+    @Column(length = 2048)
+    @Comment("机器答")
     private String answer;
+    @Column
+    @Comment("对象 1.坐席 2.客户")
     private Integer role;
-    private Timestamp createTime;
+    @Column
+    @Comment("")
+    private Date createTime;
 }

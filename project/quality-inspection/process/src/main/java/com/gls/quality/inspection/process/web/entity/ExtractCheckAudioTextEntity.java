@@ -7,8 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author george
@@ -18,19 +19,33 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("语音翻译文本")
 public class ExtractCheckAudioTextEntity extends BaseEntity {
-    private Integer id;
+    @Column(length = 65535)
+    @Comment("一句话的最佳内容文本")
     private String content;
+    @Column(length = 65535)
+    @Comment("修改后的文本")
     private String contentCorrect;
+    @Column
+    @Comment("单句文本的转写准确率")
     private Integer checkRate;
+    @Column
+    @Comment("说话人序号")
     private Integer spk;
-    private Byte role;
+    @Column
+    @Comment("说话人角色  1客服 2顾客")
+    private Integer role;
+    @Column
+    @Comment("句子开始（帧）")
     private Integer begin;
+    @Column
+    @Comment("句子结束（帧）")
     private Integer end;
+    @Column
+    @Comment("语音表主键")
     private Integer extractCheckAudioId;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Timestamp excelTime;
-    private Long companyId;
+    @Column
+    @Comment("excel文本时间")
+    private Date excelTime;
 }

@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * @author george
@@ -19,14 +21,21 @@ import javax.persistence.Entity;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Comment("")
-public class QingyunEntity extends BaseEntity {
+public class HotwordCustomerEntity extends BaseEntity {
+    @Id
     @Column
-    @Comment("目录")
-    private String dir;
-    @Column(unique = true, length = 255)
-    @Comment("文件")
-    private String fileUrl;
+    @Comment("主键")
+    private Long id;
+    @Column(length = 30)
+    @Comment("词语名称")
+    private String word;
     @Column
-    @Comment("callid")
-    private String checkNo;
+    @Comment("出现的次数")
+    private Integer number;
+    @Column
+    @Comment("质检计划ID")
+    private Integer extractCheckId;
+    @Column
+    @Comment("质检计划质检时间")
+    private Date checkTime;
 }

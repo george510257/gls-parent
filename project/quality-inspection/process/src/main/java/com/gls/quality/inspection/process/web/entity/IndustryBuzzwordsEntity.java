@@ -7,8 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import javax.persistence.Lob;
 
 /**
  * @author george
@@ -18,15 +19,19 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("配置-行业热词")
 public class IndustryBuzzwordsEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("行业类型id")
     private Integer industryCategoryId;
+    @Column(length = 50)
+    @Comment("行业类型多级id 逗号分隔")
     private String industryCategoryIds;
+    @Lob
+    @Column
+    @Comment("热词")
     private String buzzwordsText;
+    @Column
+    @Comment("热词数量")
     private Integer buzzwordsNumber;
-    private Byte isDeleted;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
 }

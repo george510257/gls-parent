@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,16 +18,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("抽检规则表")
 public class SpotCheckRuleEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("抽检计划id")
     private Integer spotCheckId;
+    @Column
+    @Comment("抽取数量")
     private Integer spotCheckNumber;
-    private Byte ruleType;
+    @Column
+    @Comment("抽取规则类型 1:随机，2:得分最低，3:违规项最多，4.指定违规项")
+    private Integer ruleType;
+    @Column
+    @Comment("评分项id")
     private Integer scoreItemId;
-    private Byte scoreItemType;
-    private Byte isDeleted;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
+    @Column
+    @Comment("评分项类型 1:评分项，2:组合评分项")
+    private Integer scoreItemType;
 }

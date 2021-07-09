@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,15 +18,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("抽检会话表")
 public class SpotCheckAudioEntity extends BaseEntity {
-    private Integer id;
+    @Column
+    @Comment("抽检计划id")
     private Integer spotCheckId;
+    @Column
+    @Comment("会话id")
     private Integer extractCheckAudioId;
+    @Column
+    @Comment("质检员id")
     private Integer userId;
-    private Byte status;
-    private Byte isDeleted;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
+    @Column
+    @Comment("抽检会话状态 0:待处理，1:已处理，2:已失效 ")
+    private Integer status;
+    @Column
+    @Comment("是否删除 0:未删除，1:已删除")
+    private Integer isDeleted;
 }

@@ -7,8 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
+import javax.persistence.Lob;
 
 /**
  * @author george
@@ -18,12 +19,14 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("系统管理-默认设置-过滤词汇")
 public class ConfigWordFilterEntity extends BaseEntity {
-    private Integer id;
+    @Lob
+    @Column
+    @Comment("客服词云图过滤")
     private String serviceWordFilter;
+    @Lob
+    @Column
+    @Comment("客户词云图过滤")
     private String customerWordFilter;
-    private Timestamp createTime;
-    private Timestamp updateTime;
-    private Long companyId;
 }

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,15 +18,24 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("操作日志")
 public class OperateLogDetailsEntity extends BaseEntity {
-    private Integer id;
+    @Column(length = 32)
+    @Comment("模块")
     private String module;
+    @Column(length = 32)
+    @Comment("操作名称")
     private String operateName;
+    @Column(length = 1000)
+    @Comment("记录的具体内容")
     private String logDetails;
+    @Column(length = 32)
+    @Comment("创建人")
     private String createBy;
-    private Timestamp createTime;
+    @Column(length = 32)
+    @Comment("账号名")
     private String username;
+    @Column(length = 32)
+    @Comment("真实姓名")
     private String realname;
-    private Long companyId;
 }

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,16 +18,27 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("")
 public class TotalTestTaskEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column
+    @Comment("用户id")
     private Integer userId;
+    @Column
+    @Comment("模型id")
     private Integer modelId;
+    @Column
+    @Comment("任务名称")
     private String testName;
-    private Byte testType;
+    @Column
+    @Comment("测试类型 1语义标签，2复合标签，3整通标签")
+    private Integer testType;
+    @Column
+    @Comment("状态 0进行中，1已完成，2失败")
     private Integer status;
+    @Column
+    @Comment("整通通过率")
     private Double passRate;
-    private Timestamp createTime;
-    private Byte isDeleted;
+    @Column
+    @Comment("逻辑删除 0：未删除，1：已删除")
+    private Integer isDeleted;
 }

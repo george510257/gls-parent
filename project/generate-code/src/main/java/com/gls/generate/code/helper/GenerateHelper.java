@@ -4,6 +4,8 @@ import cn.hutool.core.io.FileUtil;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.gls.generate.code.model.ColumnModel;
+import com.gls.generate.code.model.TableModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
@@ -11,13 +13,11 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author george
@@ -28,46 +28,59 @@ public class GenerateHelper {
     @Resource
     private Configuration freeMarkerConfiguration;
 
-    private String toLowerCaseFirstOne(String s) {
-        if (Character.isLowerCase(s.charAt(0))) {
-            return s;
-        } else {
-            return Character.toLowerCase(s.charAt(0)) + s.substring(1);
-        }
-    }
-
-    private String toUpperCaseFirstOne(String s) {
-        if (Character.isUpperCase(s.charAt(0))) {
-            return s;
-        } else {
-            return Character.toUpperCase(s.charAt(0)) + s.substring(1);
-        }
-    }
-
-    private void generate(Map<String, Object> root, String templateName, String saveUrl, String entityName) throws Exception {
+    public void generate(TableModel root, String templateName, String saveUrl, String entityName) throws Exception {
         //获取模板
         Template template = freeMarkerConfiguration.getTemplate(templateName);
         //输出文件
         printFile(root, template, saveUrl, entityName);
     }
 
-    private void printFile(Map<String, Object> root, Template template, String filePath, String fileName) throws Exception {
+    private void printFile(TableModel root, Template template, String filePath, String fileName) throws Exception {
         Writer out = FileUtil.getWriter(new File(filePath, fileName), StandardCharsets.UTF_8, false);
         template.process(root, out);
         out.close();
     }
 
-    public void runGenerateCode(String basePackage, String path) throws Exception {
+    public List<TableModel> getTableModels(String basePackage, String path) throws FileNotFoundException {
+        List<TableModel> tableModels = new ArrayList<>();
         List<String> entityFileNames = FileUtil.listFileNames(path + "\\entity");
-        log.info("entityFileNames: {}", entityFileNames);
         for (String entityFileName : entityFileNames) {
             String entityName = entityFileName.replaceAll("Entity.java", "");
-            Map<String, Object> root = new HashMap<>();
-            root.put("basePackageUrl", basePackage);
-            root.put("entityName", entityName);
-            root.put("entityNameLower", toLowerCaseFirstOne(entityName));
-            root.put("columns", getEntityColumns(path + "\\entity\\" + entityFileName));
-            //Converter
+            TableModel root = new TableModel();
+            root.setBasePackageUrl(basePackage)
+                    .setEntityName(entityName)
+                    .setEntityNameLower(StringHelper.toLowerCaseFirstOne(entityName))
+                    .setColumns(getColumnModels(path + "\\entity\\" + entityFileName));
+            tableModels.add(root);
+        }
+        return tableModels;
+    }
+
+    private List<ColumnModel> getColumnModels(String entityFilePath) throws FileNotFoundException {
+        List<ColumnModel> columns = new ArrayList<>();
+        CompilationUnit compilationUnit = StaticJavaParser.parse(FileUtil.file(entityFilePath));
+        compilationUnit.findAll(FieldDeclaration.class).forEach(fieldDeclaration -> {
+            fieldDeclaration.getVariables().forEach(variableDeclarator -> {
+                ColumnModel column = new ColumnModel();
+                String name = variableDeclarator.getNameAsString();
+                String type = variableDeclarator.getTypeAsString().replaceAll("Entity", "Model");
+                String typeEntityName = type.replaceAll("Model", "")
+                        .replaceAll("List", "")
+                        .replaceAll("<", "").replaceAll(">", "");
+                column.setName(name)
+                        .setNameUpper(StringHelper.toUpperCaseFirstOne(name))
+                        .setType(type)
+                        .setTypeEntityName(typeEntityName)
+                        .setTypeEntityNameLower(StringHelper.toLowerCaseFirstOne(typeEntityName));
+                columns.add(column);
+            });
+        });
+        return columns;
+    }
+
+    public void generateCode(String path, List<TableModel> result) throws Exception {
+        for (TableModel root : result) {
+            String entityName = root.getEntityName();
             generate(root, "Converter.ftl", path + "\\converter", entityName + "Converter.java");
             //Model
             generate(root, "Model.ftl", path + "\\model", entityName + "Model.java");
@@ -86,23 +99,10 @@ public class GenerateHelper {
         }
     }
 
-    private List<Map<String, String>> getEntityColumns(String entityFilePath) throws IOException {
-        List<Map<String, String>> columns = new ArrayList<>();
-        CompilationUnit compilationUnit = StaticJavaParser.parse(FileUtil.file(entityFilePath));
-        compilationUnit.findAll(FieldDeclaration.class).forEach(fieldDeclaration -> {
-            fieldDeclaration.getVariables().forEach(variableDeclarator -> {
-                Map<String, String> column = new HashMap<>();
-                String name = variableDeclarator.getNameAsString();
-                String type = variableDeclarator.getTypeAsString();
-                column.put("name", name);
-                column.put("nameUpper", toUpperCaseFirstOne(name));
-                column.put("type", type.replaceAll("Entity", "Model"));
-                String typeEntityName = type.replaceAll("Entity", "").replaceAll("List", "").replaceAll("<", "").replaceAll(">", "");
-                column.put("typeEntityName", typeEntityName);
-                column.put("typeEntityNameLower", toLowerCaseFirstOne(typeEntityName));
-                columns.add(column);
-            });
-        });
-        return columns;
+    public void generateCodeEntity(String path, List<TableModel> result) throws Exception {
+        for (TableModel root : result) {
+            String entityName = root.getEntityName();
+            generate(root, "Entity.ftl", path + "\\Entity", entityName + "Entity.java");
+        }
     }
 }

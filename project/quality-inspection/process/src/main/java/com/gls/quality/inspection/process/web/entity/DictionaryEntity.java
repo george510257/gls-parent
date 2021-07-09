@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,14 +18,18 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("v2-词库")
 public class DictionaryEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column
+    @Comment("模型id 0:通用 ")
     private Integer modelId;
-    private Byte type;
+    @Column
+    @Comment("词集类型，1=>同义词 2=>同类词 3=>敏感词")
+    private Integer type;
+    @Column(length = 20)
+    @Comment("词集名称")
     private String name;
+    @Column(length = 65535)
+    @Comment("词集内容，词之间用`,`分割，如`宝马,奔驰,奥迪`")
     private String dictContent;
-    private Timestamp createTime;
-    private Timestamp updateTime;
 }

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.sql.Timestamp;
 
 /**
  * @author george
@@ -18,14 +18,21 @@ import java.sql.Timestamp;
 @Accessors(chain = true)
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Comment("客户端信息表")
+@Comment("推荐扩展问")
 public class RecommendExtQuestionEntity extends BaseEntity {
-    private Integer id;
-    private Long companyId;
+    @Column
+    @Comment("行业分类")
     private String industryCategory;
+    @Column
+    @Comment("行业分类id，从父id到子id 1,2,3,4,5")
     private String industryCategoryIds;
+    @Column
+    @Comment("语义标签")
     private Integer semanticLabelId;
+    @Column(length = 6000)
+    @Comment("句式")
     private String phrasing;
+    @Column(length = 6000)
+    @Comment("涉及词集")
     private String wordSet;
-    private Timestamp createTime;
 }
