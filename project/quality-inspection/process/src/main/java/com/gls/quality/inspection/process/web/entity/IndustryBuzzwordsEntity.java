@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -22,7 +23,8 @@ import javax.persistence.Lob;
 @Comment("配置-行业热词")
 public class IndustryBuzzwordsEntity extends BaseEntity {
     @Comment("行业类型id")
-    private Long industryCategoryId;
+    @ManyToOne
+    private IndustryCategoryEntity industryCategory;
     @Column(length = 50)
     @Comment("行业类型多级id 逗号分隔")
     private String industryCategoryIds;

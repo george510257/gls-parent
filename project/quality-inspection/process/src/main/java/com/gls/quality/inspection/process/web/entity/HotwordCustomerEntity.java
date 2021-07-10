@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -27,7 +28,8 @@ public class HotwordCustomerEntity extends BaseEntity {
     @Comment("出现的次数")
     private Integer number;
     @Comment("质检计划ID")
-    private Long extractCheckId;
+    @ManyToOne
+    private ExtractCheckEntity extractCheck;
     @Comment("质检计划质检时间")
     private Date checkTime;
 }

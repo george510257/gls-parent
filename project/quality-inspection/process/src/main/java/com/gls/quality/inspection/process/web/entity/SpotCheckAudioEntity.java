@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,11 +21,14 @@ import javax.persistence.Entity;
 @Comment("抽检会话表")
 public class SpotCheckAudioEntity extends BaseEntity {
     @Comment("抽检计划id")
-    private Long spotCheckId;
+    @ManyToOne
+    private SpotCheckEntity spotCheck;
     @Comment("会话id")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Comment("质检员id")
-    private Long userId;
+    @ManyToOne
+    private UserEntity user;
     @Comment("抽检会话状态 0:待处理，1:已处理，2:已失效 ")
     private Integer status;
 }

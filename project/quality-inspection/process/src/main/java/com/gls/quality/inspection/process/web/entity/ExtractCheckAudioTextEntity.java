@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -38,7 +39,8 @@ public class ExtractCheckAudioTextEntity extends BaseEntity {
     @Comment("句子结束（帧）")
     private Integer end;
     @Comment("语音表主键")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Comment("excel文本时间")
     private Date excelTime;
 }

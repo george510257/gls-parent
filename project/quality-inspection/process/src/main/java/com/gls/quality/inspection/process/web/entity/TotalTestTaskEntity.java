@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,9 +21,11 @@ import javax.persistence.Entity;
 @Comment("")
 public class TotalTestTaskEntity extends BaseEntity {
     @Comment("用户id")
-    private Long userId;
+    @ManyToOne
+    private UserEntity user;
     @Comment("模型id")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Comment("任务名称")
     private String testName;
     @Comment("测试类型 1语义标签，2复合标签，3整通标签")

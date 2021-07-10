@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,10 +21,8 @@ import javax.persistence.Entity;
 @Comment("模型")
 public class ModelEntity extends BaseEntity {
     @Comment("行业分类id")
-    private Long industryCategoryId;
-    @Column(length = 20)
-    @Comment("行业分类")
-    private String industryCategory;
+    @ManyToOne
+    private IndustryCategoryEntity industryCategory;
     @Comment("模型状态 1.开启 2.关闭")
     private Integer status;
     @Comment("是否已发布，0：未发布：1已发布")

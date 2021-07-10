@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -22,7 +23,8 @@ public class ResultTextSplitWordCustomerEntity extends BaseEntity {
     @Comment("出现的次数")
     private Integer number;
     @Comment("通话id")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Comment("词语名称")
     private String word;
 }

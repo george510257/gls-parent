@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,7 +21,8 @@ import javax.persistence.Entity;
 @Comment("")
 public class LabelTestDataEntity extends BaseEntity {
     @Comment("模型id")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Comment("状态")
     private Integer status;
     @Comment("整通通过率")

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("模型会话转写结果")
 public class CorpusAudioTranforEntity extends BaseEntity {
     @Comment("语料id")
-    private Long corpusId;
+    @ManyToOne
+    private CorpusEntity corpus;
     @Comment("句子id")
     private Integer lid;
     @Comment("开始时间")

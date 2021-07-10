@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,7 +21,8 @@ import javax.persistence.Entity;
 @Comment("评分-评分模板-评分项")
 public class ScoreItemsEntity extends BaseEntity {
     @Comment("模板ID")
-    private Long scoreTemplateId;
+    @ManyToOne
+    private ScoreTemplateEntity scoreTemplate;
     @Comment("类型  1.语义标签 2.语音标签 3.整通标签 4.复合标签")
     private Integer type;
     @Comment("评分项")

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("")
 public class SectionAnnotatedEntity extends BaseEntity {
     @Comment("语料id")
-    private Long corpusId;
+    @ManyToOne
+    private CorpusEntity corpus;
     @Column(length = 512)
     @Comment("选择的句子序号,一个String,序号间用逗号分隔, 例: '1,3,4,5', 表示该标注选中了第1, 3, 4, 5行句子")
     private String selection;

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("特殊标签表(整通，复合)")
 public class SpecialLabelEntity extends BaseEntity {
     @Comment("模型id")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Comment("标签类型 3:整通标签 4:复合标签")
     private Integer type;
     @Column(length = 1024)

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,14 +21,16 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 @Comment("评分-评分模板")
 public class ScoreTemplateEntity extends BaseEntity {
-    @Comment("评分模板id 6位自增 000001开始")
-    private Long templateId;
+    @Comment("评分模板No. 6位自增 000001开始")
+    private Long templateNo;
     @Comment("模版名称")
     private String modelName;
     @Comment("模型id ")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Comment("系统用户id")
-    private Long userId;
+    @ManyToOne
+    private UserEntity user;
     @Column(length = 50)
     @Comment("评分模板名称")
     private String templateName;

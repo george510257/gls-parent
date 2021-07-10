@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -22,7 +23,8 @@ public class IndustryCategoryEntity extends BaseEntity {
     @Comment("等级1-5")
     private Integer level;
     @Comment("父ID")
-    private Long parentId;
+    @ManyToOne
+    private IndustryCategoryEntity parent;
     @Comment("是否显示0不显示，1显示")
     private Integer display;
     @Comment("是否使用 0未使用，1已使用")

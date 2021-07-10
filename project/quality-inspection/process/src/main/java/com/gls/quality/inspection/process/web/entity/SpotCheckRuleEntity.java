@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,13 +21,15 @@ import javax.persistence.Entity;
 @Comment("抽检规则表")
 public class SpotCheckRuleEntity extends BaseEntity {
     @Comment("抽检计划id")
-    private Long spotCheckId;
+    @ManyToOne
+    private SpotCheckEntity spotCheck;
     @Comment("抽取数量")
     private Integer spotCheckNumber;
     @Comment("抽取规则类型 1:随机，2:得分最低，3:违规项最多，4.指定违规项")
     private Integer ruleType;
     @Comment("评分项id")
-    private Long scoreItemId;
+    @ManyToOne
+    private ScoreItemsEntity scoreItems;
     @Comment("评分项类型 1:评分项，2:组合评分项")
     private Integer scoreItemType;
 }

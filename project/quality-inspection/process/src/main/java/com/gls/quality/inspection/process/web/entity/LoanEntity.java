@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -22,7 +23,8 @@ import java.util.Date;
 @Comment("阳光推送数据")
 public class LoanEntity extends BaseEntity {
     @Comment("tb_check主键")
-    private Long checkId;
+    @ManyToOne
+    private CheckEntity check;
     @Comment("手机号")
     private String telNumber;
     @Comment("拨打时间")
@@ -40,13 +42,13 @@ public class LoanEntity extends BaseEntity {
     @Comment("电核/面签操作人姓名")
     private String operateName;
     @Comment("所属机构所在分部")
-    private String brIdPar;
+    private String brNoPar;
     @Column(length = 225)
     @Comment("所属机构")
-    private String brId;
+    private String brNo;
     @Column(length = 225)
     @Comment("审批组")
-    private String groupId;
+    private String groupNo;
     @Comment("审批处室")
     private String groupName;
     @Comment("电核/面签审批结果")

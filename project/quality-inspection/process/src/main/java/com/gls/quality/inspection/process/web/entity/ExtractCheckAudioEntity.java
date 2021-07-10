@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -22,12 +23,13 @@ import java.util.Date;
 @Comment("质检计划单条语音表")
 public class ExtractCheckAudioEntity extends BaseEntity {
     @Comment("客服唯一标识")
-    private String customerServiceId;
+    private String customerServiceNo;
     @Comment("质检ID")
-    private Long extractCheckId;
+    @ManyToOne
+    private ExtractCheckEntity extractCheck;
     @Column(length = 64)
     @Comment("对话ID")
-    private String dialogueId;
+    private String dialogueNo;
     @Comment("0:待申诉、1:申诉中、2:已复检、3:已过申诉时间")
     private Integer status;
     @Column(length = 1000)
@@ -67,9 +69,11 @@ public class ExtractCheckAudioEntity extends BaseEntity {
     @Comment("是否是无效会话 1是，0否")
     private Integer isInvalid;
     @Comment("实际操作复检的质检员id，已复检状态有值，可能为管理员")
-    private Long recheckUserId;
+    @ManyToOne
+    private UserEntity recheckUser;
     @Comment("申请单号")
     private String applyCode;
     @Comment("申诉分配的质检员id")
-    private Long distributeUserId;
+    @ManyToOne
+    private UserEntity distributeUser;
 }

@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -22,15 +23,18 @@ import java.util.Date;
 @Comment("质检计划表")
 public class ExtractCheckEntity extends BaseEntity {
     @Comment("质检员ID，多个逗号拼接")
-    private String userId;
+    @ManyToOne
+    private UserEntity user;
     @Comment("质检计划名称")
     private String extractCheckName;
     @Comment("是否分角色转写，0:否，1:是")
     private Integer differentiateRole;
     @Comment("评分模版ID")
-    private Long scoreTemplateId;
+    @ManyToOne
+    private ScoreTemplateEntity scoreTemplate;
     @Comment("行业ID")
-    private Long industryCategoryId;
+    @ManyToOne
+    private IndustryCategoryEntity industryCategory;
     @Comment("音频总时长单位秒")
     private Integer totalDuration;
     @Comment("模型名称")
@@ -42,7 +46,8 @@ public class ExtractCheckEntity extends BaseEntity {
     @Comment("质检进度")
     private Integer extractCheckSchedule;
     @Comment("模型ID")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Column(length = 1000)
     @Comment("文件URL（未知）")
     private String fileUrl;

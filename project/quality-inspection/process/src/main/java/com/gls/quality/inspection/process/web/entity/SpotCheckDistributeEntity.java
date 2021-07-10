@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,9 +21,11 @@ import javax.persistence.Entity;
 @Comment("抽检分配表")
 public class SpotCheckDistributeEntity extends BaseEntity {
     @Comment("抽检计划id")
-    private Long spotCheckId;
+    @ManyToOne
+    private SpotCheckEntity spotCheck;
     @Comment("质检员id")
-    private Long userId;
+    @ManyToOne
+    private UserEntity user;
     @Comment("分配比例")
     private Integer distributeRate;
     @Comment("是否分配 0:待分配，1:已分配，2:已暂停")

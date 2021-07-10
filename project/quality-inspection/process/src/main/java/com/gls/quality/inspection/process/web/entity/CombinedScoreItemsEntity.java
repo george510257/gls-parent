@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("评分-评分模板-组合评分项")
 public class CombinedScoreItemsEntity extends BaseEntity {
     @Comment("评分模版ID")
-    private Long scoreTemplateId;
+    @ManyToOne
+    private ScoreTemplateEntity scoreTemplate;
     @Comment("评分项id，逗号分隔")
     private String scoreItemsIds;
     @Column(length = 500)

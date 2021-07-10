@@ -63,13 +63,13 @@ public class GenerateHelper {
             fieldDeclaration.getVariables().forEach(variableDeclarator -> {
                 ColumnModel column = new ColumnModel();
                 String name = variableDeclarator.getNameAsString();
-                String type = variableDeclarator.getTypeAsString().replaceAll("Entity", "Model");
-                String typeEntityName = type.replaceAll("Model", "")
+                String type = variableDeclarator.getTypeAsString();
+                String typeEntityName = type.replaceAll("Entity", "")
                         .replaceAll("List", "")
                         .replaceAll("<", "").replaceAll(">", "");
                 column.setName(name)
                         .setNameUpper(StringHelper.toUpperCaseFirstOne(name))
-                        .setType(type)
+                        .setType(type.replaceAll("Entity", "Model"))
                         .setTypeEntityName(typeEntityName)
                         .setTypeEntityNameLower(StringHelper.toLowerCaseFirstOne(typeEntityName));
                 columns.add(column);

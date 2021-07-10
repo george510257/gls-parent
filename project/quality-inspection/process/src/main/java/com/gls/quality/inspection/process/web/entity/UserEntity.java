@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -33,7 +34,8 @@ public class UserEntity extends BaseEntity {
     @Comment("用户角色 1.系统管理员  2.质检员 3.客服")
     private Integer userRole;
     @Comment("分组id")
-    private Long userGroupingId;
+    @ManyToOne
+    private UserGroupingEntity userGrouping;
     @Column(length = 50)
     @Comment("分组id及其所有父级id 用于前端组件使用")
     private String userGroupingIds;
@@ -41,7 +43,7 @@ public class UserEntity extends BaseEntity {
     @Comment("手机号")
     private String mobile;
     @Comment("客服唯一标识")
-    private String customerServiceId;
+    private String customerServiceNo;
     @Column(length = 50)
     @Comment("真实姓名")
     private String realName;

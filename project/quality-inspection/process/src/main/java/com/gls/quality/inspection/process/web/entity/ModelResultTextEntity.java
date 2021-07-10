@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,11 +22,14 @@ import javax.persistence.Entity;
 @Comment("模型推理结果会话表")
 public class ModelResultTextEntity extends BaseEntity {
     @Comment("模型推理结果id")
-    private Long modelResultId;
+    @ManyToOne
+    private ModelResultEntity modelResult;
     @Comment("质检会话id")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Comment("会话文本id")
-    private Long extractCheckAudioTextId;
+    @ManyToOne
+    private ExtractCheckAudioTextEntity extractCheckAudioText;
     @Column(length = 65535)
     @Comment("违规关键字")
     private String info;

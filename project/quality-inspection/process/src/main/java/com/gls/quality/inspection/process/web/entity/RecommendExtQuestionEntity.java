@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -25,7 +26,8 @@ public class RecommendExtQuestionEntity extends BaseEntity {
     @Comment("行业分类id，从父id到子id 1,2,3,4,5")
     private String industryCategoryIds;
     @Comment("语义标签")
-    private Long semanticLabelId;
+    @ManyToOne
+    private LabelEntity semanticLabel;
     @Column(length = 6000)
     @Comment("句式")
     private String phrasing;

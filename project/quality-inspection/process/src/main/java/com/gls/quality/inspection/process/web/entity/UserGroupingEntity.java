@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,7 +21,8 @@ import javax.persistence.Entity;
 @Comment("用户分组表")
 public class UserGroupingEntity extends BaseEntity {
     @Comment("父级id")
-    private Long parentId;
+    @ManyToOne
+    private UserGroupingEntity parent;
     @Comment("是否显示0不显示，1显示")
     private Integer display;
     @Comment("等级0-10")

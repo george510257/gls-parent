@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("质检结果表")
 public class ExtractCheckResultEntity extends BaseEntity {
     @Comment("语音通话表ID")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Column(length = 100)
     @Comment("违规项")
     private String violationsItem;
@@ -34,7 +36,8 @@ public class ExtractCheckResultEntity extends BaseEntity {
     @Comment("语音标签违规项目在语音中的起始位置使用'-'分割，例23-59")
     private String paragraph;
     @Comment("评分项ID")
-    private Long scoreItemId;
+    @ManyToOne
+    private ScoreItemsEntity scoreItems;
     @Comment("评分项类型 1:评分项，2:组合评分项")
     private Integer scoreItemType;
     @Comment("评分类型 1表示加分项，0表示减分项，2中性项")

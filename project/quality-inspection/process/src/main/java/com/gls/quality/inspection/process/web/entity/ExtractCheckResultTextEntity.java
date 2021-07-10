@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -20,11 +21,14 @@ import javax.persistence.Entity;
 @Comment("质检结果-会话文本")
 public class ExtractCheckResultTextEntity extends BaseEntity {
     @Comment("质检结果id")
-    private Long extractCheckResultId;
+    @ManyToOne
+    private ExtractCheckResultEntity extractCheckResult;
     @Comment("质检会话id")
-    private Long extractCheckAudioId;
+    @ManyToOne
+    private ExtractCheckAudioEntity extractCheckAudio;
     @Comment("会话文本id")
-    private Long extractCheckAudioTextId;
+    @ManyToOne
+    private ExtractCheckAudioTextEntity extractCheckAudioText;
     @Comment("违规关键字")
     private String info;
     @Comment("分数")

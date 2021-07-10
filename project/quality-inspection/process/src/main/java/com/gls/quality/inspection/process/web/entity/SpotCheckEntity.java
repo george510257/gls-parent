@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 /**
@@ -23,7 +24,8 @@ public class SpotCheckEntity extends BaseEntity {
     @Comment("抽检计划名称")
     private String spotCheckName;
     @Comment("质检计划id")
-    private Long extractCheckId;
+    @ManyToOne
+    private ExtractCheckEntity extractCheck;
     @Comment("抽检截止时间")
     private Date deadline;
     @Comment("抽检进度")

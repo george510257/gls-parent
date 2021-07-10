@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -21,7 +22,8 @@ import javax.persistence.Entity;
 @Comment("")
 public class SingleTestLogEntity extends BaseEntity {
     @Comment("用户id")
-    private Long userId;
+    @ManyToOne
+    private UserEntity user;
     @Column(length = 1024)
     @Comment("用户问")
     private String ask;

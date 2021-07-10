@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author george
@@ -32,7 +33,8 @@ public class BusinessLineEntity extends BaseEntity {
     @Comment("缴费方式：期缴，趸交（信车房）")
     private String payType;
     @Comment("模型id")
-    private Long modelId;
+    @ManyToOne
+    private ModelEntity model;
     @Comment("拉取数量上限")
     private Integer count;
     @Comment("备注")
