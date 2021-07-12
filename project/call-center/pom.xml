@@ -9,16 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gls.starter</groupId>
-    <artifactId>gls-starter</artifactId>
+    <groupId>com.gls.call.center</groupId>
+    <artifactId>gls-call-center</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>data/jpa</module>
-        <module>web</module>
-        <module>webflux</module>
-        <module>data/redis</module>
-        <module>freeswitch/esl</module>
+        <module>freeswitch</module>
     </modules>
-
 
 </project>

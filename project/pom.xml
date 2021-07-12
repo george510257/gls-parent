@@ -20,6 +20,7 @@
         <module>job</module>
         <module>quality-inspection</module>
         <module>generate-code</module>
+        <module>call-center</module>
     </modules>
 
     <dependencyManagement>
