@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -27,7 +28,7 @@ public class IntentionAnalysisEntity extends BaseEntity {
     @Column(length = 20)
     @Comment("整通意图")
     private String totalIntention;
-    @Column(length = 65535)
+    @Lob
     @Comment("通话内容")
     private String content;
     @Column(length = 20)

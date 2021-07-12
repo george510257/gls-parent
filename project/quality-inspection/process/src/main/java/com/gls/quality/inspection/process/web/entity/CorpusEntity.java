@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -24,7 +25,7 @@ public class CorpusEntity extends BaseEntity {
     @Comment("模型id")
     @ManyToOne
     private ModelEntity model;
-    @Column(length = 65535)
+    @Lob
     @Comment("语料内容")
     private String content;
     @Column(length = 1000)

@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -30,7 +30,7 @@ public class ModelResultTextEntity extends BaseEntity {
     @Comment("会话文本id")
     @ManyToOne
     private ExtractCheckAudioTextEntity extractCheckAudioText;
-    @Column(length = 65535)
+    @Lob
     @Comment("违规关键字")
     private String info;
 }

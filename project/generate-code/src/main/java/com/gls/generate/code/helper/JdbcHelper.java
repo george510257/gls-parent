@@ -79,7 +79,7 @@ public class JdbcHelper {
                     .setType(type)
                     .setTypeEntityName(typeEntityName)
                     .setTypeEntityNameLower(StringHelper.toLowerCaseFirstOne(typeEntityName))
-                    .setComment(columnComment.replaceAll("\"", "'"))
+                    .setComment(columnComment.replaceAll("\"", "\\\""))
                     .setColumnKey(columnKey)
                     .setReferencedTableName(referencedTableName)
                     .setLength(characterMaximumLength);

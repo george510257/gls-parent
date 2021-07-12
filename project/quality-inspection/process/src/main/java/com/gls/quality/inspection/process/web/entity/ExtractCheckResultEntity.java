@@ -33,7 +33,7 @@ public class ExtractCheckResultEntity extends BaseEntity {
     @Comment("语义类别")
     private String category;
     @Column(length = 50)
-    @Comment("语音标签违规项目在语音中的起始位置使用'-'分割，例23-59")
+    @Comment("语音标签违规项目在语音中的起始位置使用\"-\"分割，例23-59")
     private String paragraph;
     @Comment("评分项ID")
     @ManyToOne

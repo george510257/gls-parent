@@ -31,7 +31,7 @@ public class ModelResultEntity extends BaseEntity {
     @Comment("语义类别,语义标签才有值")
     private String category;
     @Column(length = 50)
-    @Comment("语音标签违规项目在语音中的起始位置使用'-'分割，例23-59")
+    @Comment("语音标签违规项目在语音中的起始位置使用\"-\"分割，例23-59")
     private String paragraph;
     @Column(length = 32)
     @Comment(" 标签来源：token：整通推理，single：单句推理")

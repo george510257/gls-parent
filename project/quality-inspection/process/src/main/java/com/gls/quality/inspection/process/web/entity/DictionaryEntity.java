@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
@@ -26,7 +26,7 @@ public class DictionaryEntity extends BaseEntity {
     private ModelEntity model;
     @Comment("词集类型，1=>同义词 2=>同类词 3=>敏感词")
     private Integer type;
-    @Column(length = 65535)
+    @Lob
     @Comment("词集内容，词之间用`,`分割，如`宝马,奔驰,奥迪`")
     private String dictContent;
 }

@@ -26,7 +26,7 @@ public class UserGroupingEntity extends BaseEntity {
     @Comment("是否显示0不显示，1显示")
     private Integer display;
     @Comment("等级0-10")
-    private Integer level;
+    private Integer levels;
     @Comment("")
-    private Integer show;
+    private Integer shows;
 }

@@ -32,7 +32,7 @@ public class SpecialLabelEntity extends BaseEntity {
     @Comment("状态 1:启用 2:禁用")
     private Integer status;
     @Column(length = 1024)
-    @Comment("子标签数组 例子:['标签1', '标签2']")
+    @Comment("子标签数组 例子:[\"标签1\", \"标签2\"]")
     private String childLabel;
     @Column(length = 512)
     @Comment("重点信息")

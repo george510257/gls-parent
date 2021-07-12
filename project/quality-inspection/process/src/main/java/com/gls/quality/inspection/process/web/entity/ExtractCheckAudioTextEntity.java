@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
@@ -22,10 +22,10 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Comment("语音翻译文本")
 public class ExtractCheckAudioTextEntity extends BaseEntity {
-    @Column(length = 65535)
+    @Lob
     @Comment("一句话的最佳内容文本")
     private String content;
-    @Column(length = 65535)
+    @Lob
     @Comment("修改后的文本")
     private String contentCorrect;
     @Comment("单句文本的转写准确率")
